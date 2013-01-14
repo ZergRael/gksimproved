@@ -1,0 +1,29 @@
+{
+  "name": "GKSimproved",
+  "version": "0.1.0",
+  "manifest_version": 2,
+  "description": "Améliorations et ajout de fonctions pour GKS",
+  "icons": { 
+    "16": "images/gks_improved-16.png",
+    "48": "images/gks_improved-48.png",
+    "128": "images/gks_improved-128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://gks.gs/*"],
+      "js": [
+        "jquery-1.8.3.min.js",
+        "gks_improved.js",
+        "torrent_list.js",
+        "snatched.js",
+        "forums.js"
+      ]
+    }
+  ],
+  "permissions": [ 
+    "storage"
+  ],
+  "web_accessible_resources": [
+    "images/loading.gif"
+  ]
+}
