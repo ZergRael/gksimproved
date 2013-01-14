@@ -36,10 +36,11 @@ if(loadModule) {
 
 	var endlessScrolling = opt.get(module.name, "endless_scrolling");
 	var scrollOffset = 160;
+	var backTopButtonOffset = 100;
 	var loadingPage = false;
 	var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
 	var jOnScroll = function() {
-		if(endlessScrolling) {
+		if(endlessScrolling && ! ignoreScrolling) {
 			dbg("[EndlessScrolling] Scrolled");
 			if((document.body.scrollTop + window.innerHeight > document.body.scrollHeight - scrollOffset) && !loadingPage) {
 				dbg("[EndlessScrolling] Loading next page");
@@ -67,6 +68,13 @@ if(loadModule) {
 					}
 				});
 			}
+
+			if(document.body.scrollTop > backTopButtonOffset) {
+				$("#backTopButton").show();
+			}
+			else {
+				$("#backTopButton").hide();
+			}
 		}
 	};
 
@@ -84,17 +92,6 @@ if(loadModule) {
 		});
 		dbg("[DeleteFilter] Ended filtering");
 		return data;
-	};
-	var unfilterDeleted = function(data) {
-		if(filteringDeleted) {
-			return;
-		}
-
-		dbg("[DeleteFilter] Unfiltering FL");
-		$(data).each(function() {
-			$(this).show();
-		});
-		dbg("[DeleteFilter] Ended unfiltering");
 	};
 
 	var bytesToInt = function(str) {
@@ -230,8 +227,10 @@ if(loadModule) {
 	});
 
 	dbg("[Init] Starting");
+	// Adding buttons
 	$(module.buttons).after(torrentButtons);
 
+	// Deleted torrents filtering
 	$("#filter_deleted").change(function() {
 		filteringDeleted = $(this).attr("checked") == "checked" ? true : false;
 		dbg("[DeleteFilter] is " + filteringDeleted);
@@ -240,11 +239,14 @@ if(loadModule) {
 			filterDeleted($(".table100 tbody tr"));
 		}
 		else {
-			unfilterDeleted($(".table100 tbody tr"));
+			dbg("[DeleteFilter] Unfiltering FL");
+			$(".table100 tbody tr").show();
+			dbg("[DeleteFilter] Ended unfiltering");
 		}
 	});
 	filterDeleted($(".table100 tbody tr"));
 	
+	// Endless scrolling
 	$("#endless_scrolling").change(function() {
 		endlessScrolling = $(this).attr("checked") == "checked" ? true : false;
 		dbg("[EndlessScrolling] is " + endlessScrolling);
@@ -252,6 +254,7 @@ if(loadModule) {
 	});
 	$(document).scroll(jOnScroll);
 
+	// Sort on column click
 	$(".sortCol").click(function() {
 		if(sort == $(this).attr("id")) {
 			order = (order == "desc" ? "asc" : "desc");
@@ -263,6 +266,7 @@ if(loadModule) {
 		sortData();
 	});
 
+	// No reason to show grabber if not on first page
 	if(!url.params || (url.params && !url.params.page)) {
 		$("#grabAllPages").click(grabAllPages);
 	}

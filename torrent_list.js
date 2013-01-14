@@ -45,10 +45,11 @@ if(loadModule) {
 
 	var endlessScrolling = opt.get(module.name, "endless_scrolling");;
 	var scrollOffset = 260;
+	var backTopButtonOffset = 100;
 	var loadingPage = false;
 	var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
 	var jOnScroll = function() {
-		if(endlessScrolling) {
+		if(endlessScrolling && ! ignoreScrolling) {
 			dbg("[EndlessScrolling] Scrolled");
 			if((document.body.scrollTop + window.innerHeight > document.body.scrollHeight - scrollOffset) && !loadingPage) {
 				dbg("[EndlessScrolling] Loading next page");
@@ -63,7 +64,7 @@ if(loadModule) {
 					dbg("[EndlessScrolling] Grab ended")
 					if(torrentsTR && torrentsTR.length) {
 						dbg("[EndlessScrolling] Got data - Inserting")
-						$("#torrent_list").append(filterFL(torrentsTR));
+						$("#torrent_list").append(filterFL(torrentsTR, true));
 						nextPage++;
 						loadingPage = false;
 						$("#page_loading").remove();
@@ -74,52 +75,61 @@ if(loadModule) {
 					}
 				});
 			}
+
+			if(document.body.scrollTop > backTopButtonOffset) {
+				$("#backTopButton").show();
+			}
+			else {
+				$("#backTopButton").hide();
+			}
 		}
 	};
 
 	var filteringFL = opt.get(module.name, "filtering_fl");;
-	var filterFL = function(data) {
+	var filterFL = function(data, removeHead) {
 		if(!filteringFL) {
 			return data;
 		}
 
 		dbg("[FLFilter] Scanning for FL");
-		var isFL = 1;
+		var hideNext = false;
+		var odd = true;
 		$(data).each(function() {
 			if($(this).hasClass("head_torrent")) {
+				// Remove head if ajax or already found
+				if(removeHead) {
+					$(this).hide();
+				}
+				else {
+					removeHead = true;
+				}
 				return;
 			}
 
-			isFL--;
-			$(this).find("img").each(function() {
-				if($(this).attr("src") && $(this).attr("src").indexOf("freeleech") != "-1") {
-					isFL = 2;
-				}
-			});
-			if(isFL <= 0) {
+			odd = !odd;
+
+			if(odd && hideNext) {
+				hideNext = false;
+				$(this).hide();
+				return;
+			}
+
+			if(!$(this).find("img[src*='freeleech.png']").length) {
+				hideNext = true;
 				$(this).hide();
 			}
 		});
 		dbg("[FLFilter] Ended filtering");
 		return data;
 	};
-	var unfilterFL = function(data) {
-		if(filteringFL) {
-			return;
-		}
-
-		dbg("[FLFilter] Unfiltering FL");
-		$(data).each(function() {
-			$(this).show();
-		});
-		dbg("[FLFilter] Ended unfiltering");
-	}
 
 	var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (filteringFL ? 'checked="checked" ' : ' ') + '/> Afficher les FL uniquement | <input id="endless_scrolling" type="checkbox" ' + (endlessScrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling | ';
 
 	dbg("[Init] Starting");
+	// Adding buttons
 	$(module.buttons).prepend(torrentButtons);
 
+	// FreeLeech torrents filtering
 	$("#filter_fl").change(function() {
 		filteringFL = $(this).attr("checked") == "checked" ? true : false;
 		dbg("[FilterFL] is " + filteringFL);
@@ -128,12 +138,14 @@ if(loadModule) {
 			filterFL($("#torrent_list tr"));
 		}
 		else {
-			unfilterFL($("#torrent_list tr"));
+			dbg("[FLFilter] Unfiltering FL");
+			$("#torrent_list tr").show();
+			dbg("[FLFilter] Ended unfiltering");
 		}
 	});
 	filterFL($("#torrent_list tr"));
 
-	
+	// Endless scrolling
 	$("#endless_scrolling").change(function() {
 		endlessScrolling = $(this).attr("checked") == "checked" ? true : false;
 		dbg("[EndlessScrolling] is " + endlessScrolling);

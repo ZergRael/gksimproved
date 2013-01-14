@@ -11,6 +11,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 var debug = false;
+// General debug function
 var _dbg = function (section, str) {
 	if(debug) {
 		var dd = new Date();
@@ -31,10 +32,7 @@ var dbg = function(str) {
 
 dbg("[Init] Loading general funcs");
 
-////////////////////////////////////
-// parseUrl(url)
 // Returns an array with splited url
-////////////////////////////////////
 var parseUrl = function (url) {
 	var host = url.match("^https:\\/\\/gks.gs");
 	if(!host) {
@@ -76,10 +74,8 @@ var parseUrl = function (url) {
 	return parsedUrl;
 };
 
-//////////////////////////////////////////////////////
-// craftUrl(parsedUrl)
+
 // Returns a complete url by concat data from parseUrl
-//////////////////////////////////////////////////////
 var craftUrl = function (parsedUrl) {
 	if(!parsedUrl.params) {
 		return parsedUrl.host + parsedUrl.path;
@@ -96,10 +92,7 @@ var craftUrl = function (parsedUrl) {
 	return craftUrl;
 };
 
-///////////////////////////////////
-// grabPage(url, callback)
 // Calls callback after ajax on url
-///////////////////////////////////
 var grabPage = function(url, callback) {
 	var nextUrl = craftUrl(url);
 	$.ajax({
@@ -108,6 +101,28 @@ var grabPage = function(url, callback) {
 		success: function(data) {
 			callback(data);
 		}
+	});
+};
+
+// Custom CSS insertion
+var insertCSS = function() {
+	dbg("Inserting custom CSS");
+	$("head").append("<style>" +
+		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:51px; height:51px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top.png") + ") no-repeat; } " +
+		"</style>");
+};
+
+// Custom divs insertion & funcs
+var ignoreScrolling = false;
+var insertDivs = function() {
+	$("#global").append('<a id="backTopButton" href="#"></a>');
+	$("#backTopButton").click(function() {
+		ignoreScrolling = true;
+		$("html, body").animate({ scrollTop: 0 }, 800, "swing", function() {
+			ignoreScrolling = false;
+		});
+		$(this).hide();
+		return false;
 	});
 };
 
@@ -161,6 +176,10 @@ var opt = {
 dbg("[Init] Loading modules");
 var url = parseUrl(window.location.href);
 opt.load();
+insertCSS();
+insertDivs();
+
+// url debug
 dbg(url);
 dbg(craftUrl(url));
 dbg("[Init] Ready");

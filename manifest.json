@@ -1,6 +1,6 @@
 {
   "name": "GKSimproved",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "manifest_version": 2,
   "description": "Améliorations et ajout de fonctions pour GKS",
   "icons": { 
@@ -24,6 +24,7 @@
     "storage"
   ],
   "web_accessible_resources": [
-    "images/loading.gif"
+    "images/loading.gif",
+    "images/to_top.png"
   ]
 }
