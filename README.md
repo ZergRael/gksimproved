@@ -1,4 +1,4 @@
-GKSsimproved
+GKSimproved
 ===========
 
 Améliore et facilite la navigation sur certaines parties de gks.gs
@@ -12,6 +12,10 @@ TODO.list
 - Amélioration de la charge CPU (pré-parsing / insertion blocs)
 
 TODO.done
+0.1.1a
+- BugFix: Coloration de twits en fin de message
+- BugFix: Coloration de twits après prévisu puis édition
+0.1.1
 - BugFix: Coloration de multiples twits sur un seul message
 - Optimisations - CPU sur filtrage
 - Moar comments

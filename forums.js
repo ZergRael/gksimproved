@@ -96,7 +96,8 @@ if(loadModule) {
 			var at = post.html().indexOf("@");
 			while(at != -1) {
 				var postContent_end = post.html().substring(at + 1)
-				pseudo_s = postContent_end.split(" ", 1)[0].toLowerCase();
+				pseudo_s = postContent_end.match(/[a-z0-9]+/i)[0].toLowerCase();
+				dbg(pseudo_s);
 
 				$.each(pseudos, function(k, v) {
 					if(k.toLowerCase() === pseudo_s.toLowerCase()) {
@@ -130,11 +131,24 @@ if(loadModule) {
 			dbg("[AutoCTwit] Editbox poped (" + postId + ") - Listening to keydown");
 			// Listen for twit autocomplete in editbox
 			$("#editbox" + postId).keydown(jOnKeydown);
-			// On edit validation
-			$("#bar" + postId + " input:nth(1)").click(function() {
-				// Can't track DOM modification event, just wait a reasonnable amount of time to colorize the edited message
-				setTimeout(colorizeTwits, 600, postId);
-			});
+
+			var bindEditButton = function() {
+				// On edit validation
+				$("#bar" + postId + " input:nth(1)").click(function() {
+					dbg("[TwitColorize] Edit is done - Colorize");
+					// Can't track DOM modification event, just wait a reasonnable amount of time to colorize the edited message
+					setTimeout(colorizeTwits, 1000, postId);
+				});
+			};
+			var bindPrevButton = function() {
+				$("#bar" + postId + " input:nth(0)").click(function() {
+					bindEditButton();
+					bindPrevButton();
+				});
+			};
+
+			bindEditButton();
+			bindPrevButton();
 		}
 	});
 
