@@ -56,10 +56,10 @@ if(loadModule) {
 
 				origPseudo = pseudo_s;
 				$.each(pseudos, function(k, v) {
-					if(k.toLowerCase().indexOf(pseudo_s) === 0) {
-						dbg("[AutoCTwit] Found a match : " + k);
-						lastTry = k.toLowerCase();
-						qp.val(qp_text.substring(0, at + 1) + k + qp_text.substring(at + 1 + pseudo_s.length, qp_text.length));
+					if(k.indexOf(pseudo_s) === 0) {
+						dbg("[AutoCTwit] Found a match : " + v.pseudo);
+						lastTry = k;
+						qp.val(qp_text.substring(0, at + 1) + v.pseudo + qp_text.substring(at + 1 + pseudo_s.length, qp_text.length));
 						return false;
 					}
 				});
@@ -67,14 +67,14 @@ if(loadModule) {
 			else if(origPseudo) {
 				var tryAnother = false;
 				$.each(pseudos, function(k, v) {
-					if(k.toLowerCase().indexOf(lastTry) === 0) {
+					if(k.indexOf(lastTry) === 0) {
 						tryAnother = true;
 						return;
 					}
-					if(tryAnother && k.toLowerCase().indexOf(origPseudo) === 0) {
-						dbg("[AutoCTwit] Found another match : " + k);
-						lastTry = k.toLowerCase();
-						qp.val(qp_text.substring(0, at + 1) + k + qp_text.substring(at + 1 + lastTry.length, qp_text.length));
+					if(tryAnother && k.indexOf(origPseudo) === 0) {
+						dbg("[AutoCTwit] Found another match : " + v.pseudo);
+						lastTry = k;
+						qp.val(qp_text.substring(0, at + 1) + v.pseudo + qp_text.substring(at + 1 + lastTry.length, qp_text.length));
 					}
 				});
 			}
@@ -93,23 +93,18 @@ if(loadModule) {
 		dbg("[TwitColorize] Colorization start");
 		postArea.each(function() {
 			var post = $(this);
-			var at = post.html().indexOf("@");
-			while(at != -1) {
-				var postContent_end = post.html().substring(at + 1)
-				pseudo_s = postContent_end.match(/[a-z0-9]+/i)[0].toLowerCase();
-				dbg(pseudo_s);
-
-				$.each(pseudos, function(k, v) {
-					if(k.toLowerCase() === pseudo_s.toLowerCase()) {
-						dbg("[TwitColorize] Found a match : " + k);
-						post.html(post.html().substring(0, at + 1) + '<a href="' + v.url + '"><span class="' + v.class + '">' + k + '</span></a>' + post.html().substring(at + 1 + pseudo_s.length, post.html().length));
-						return false;
-					}
-				});
-
-				at = post.html().indexOf("@", at + 1);
-			}
+			post.html(post.html().replace(/\B@([\w]+)/gi, function(match, m1) {
+				var user = pseudos[m1.toLowerCase()];
+				if(user) {
+					dbg("[TwitColorize] Found a match : " + m1);
+					return '@<a href="' + user.url + '"><span class="' + user.class + '">' + m1 + '</span></a>';
+				}
+				else {
+					return match;
+				}
+			}));
 		});
+		dbg("[TwitColorize] Colorization ended");
 	};
 
 	dbg("[Init] Starting");
@@ -124,7 +119,7 @@ if(loadModule) {
 	});
 	$("#quickpost").keydown(jOnKeydown);
 	// On edit button click
-	$("a[href^=#post]").on("click", function() {
+	$("#forums").on("click", "a[href^=#post]", function() {
 		var postId = $(this).attr("href").substr(5);
 		// If the editbox poped
 		if($("#editbox" + postId).length) {
@@ -132,12 +127,21 @@ if(loadModule) {
 			// Listen for twit autocomplete in editbox
 			$("#editbox" + postId).keydown(jOnKeydown);
 
+			var waitMore = function(postId) {
+				if($("#editbox" + postId).length) {
+					setTimeout(waitMore, 100, postId);
+					return;
+				}
+				else {
+					dbg("[TwitColorize] Edit is done - Colorize");
+					colorizeTwits(postId);
+				}
+			}
 			var bindEditButton = function() {
 				// On edit validation
 				$("#bar" + postId + " input:nth(1)").click(function() {
-					dbg("[TwitColorize] Edit is done - Colorize");
 					// Can't track DOM modification event, just wait a reasonnable amount of time to colorize the edited message
-					setTimeout(colorizeTwits, 1000, postId);
+					waitMore(postId);
 				});
 			};
 			var bindPrevButton = function() {
@@ -154,7 +158,7 @@ if(loadModule) {
 
 	// Building pseudos hashmap
 	$('span[class^=userclass]').each(function() {
-		pseudos[$(this).text()] = {class: $(this).attr("class"), url: $(this).parent().attr("href")};
+		pseudos[$(this).text().toLowerCase()] = { pseudo: $(this).text(), class: $(this).attr("class"), url: $(this).parent().attr("href") };
 	});
 
 	// Twit colorization
