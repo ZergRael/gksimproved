@@ -12,7 +12,7 @@ TODO.list
 - Amélioration de la charge CPU (pré-parsing / insertion blocs)
 
 TODO.done
-0.1.1a
+0.1.2
 - BugFix: Coloration de twits en fin de message
 - BugFix: Coloration de twits après prévisu puis édition
 0.1.1
