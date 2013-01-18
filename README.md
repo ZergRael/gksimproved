@@ -12,13 +12,15 @@ TODO.list
 - Amélioration de la charge CPU (pré-parsing / insertion blocs)
 
 TODO.done
-* 0.1.3
+- Gestion des modules
+- Implémentation d'un loader
+>> 0.1.3
 - BugFix: Meilleure détection des pseudos
 - BugFix: Coloration de twits après prévisu puis édition améliorée
-* 0.1.2
+>> 0.1.2
 - BugFix: Coloration de twits en fin de message
 - BugFix: Coloration de twits après prévisu puis édition
-* 0.1.1
+>> 0.1.1
 - BugFix: Coloration de multiples twits sur un seul message
 - Optimisations - CPU sur filtrage
 - Moar comments

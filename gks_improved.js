@@ -10,7 +10,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-var debug = false;
+var debug = true;
 // General debug function
 var _dbg = function (section, str) {
 	if(debug) {
@@ -27,7 +27,7 @@ var _dbg = function (section, str) {
 };
 
 var dbg = function(str) {
-	_dbg("Main", str);
+	_dbg("main", str);
 }
 
 dbg("[Init] Loading general funcs");
@@ -39,11 +39,11 @@ var parseUrl = function (url) {
 		return false;
 	}
 	var parsedUrl = {};
-	parsedUrl.host = host;
+	parsedUrl.host = (host ? host[0] : host);
 	url = url.replace(parsedUrl.host, "");
 
 	var path = url.match("/[a-z\./]*/?");
-	parsedUrl.path = path;
+	parsedUrl.path = (path ? path[0] : path);
 	url = url.replace(parsedUrl.path, "");
 
 	if(url.indexOf("?") == -1 && url.indexOf("&") == -1) {
@@ -54,8 +54,8 @@ var parseUrl = function (url) {
 
 	var hash = url.match("#.*$");
 	if(hash) {
-		url = url.replace(hash, "");
-		parsedUrl.hash = hash;
+		parsedUrl.hash = (hash ? hash[0] : hash);
+		url = url.replace(parsedUrl.hash, "");h
 	}
 
 	var urlSplit = url.split('&');
@@ -178,7 +178,7 @@ var url = parseUrl(window.location.href);
 opt.load();
 insertCSS();
 insertDivs();
-
+var modules = {};
 // url debug
 dbg(url);
 dbg(craftUrl(url));

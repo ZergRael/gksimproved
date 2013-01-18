@@ -14,9 +14,10 @@
       "js": [
         "jquery-1.8.3.min.js",
         "gks_improved.js",
-        "torrent_list.js",
-        "snatched.js",
-        "forums.js"
+        "torrent_list.module.js",
+        "snatched.module.js",
+        "twits.module.js",
+        "loader.js"
       ]
     }
   ],
