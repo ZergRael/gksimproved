@@ -33,56 +33,48 @@ modules.twits = {
 
 		var twit_auto_complete = opt.get(module_name, "twit_auto_complete");
 		var autocKey = 9;
-		var nChars = 1;
+		var iPseudo = false;
 		var pseudos = {};
-		var origPseudo = false;
-		var lastTry = false;
+		var pseudos_matchs = [];
 		var jOnKeydown = function(e) {
 			var qp = $(this)
 			var qp_text = qp.val();
-			if(twit_auto_complete && e.which == 9) {
+			if(twit_auto_complete && e.which == autocKey) {
 				dbg("[AutoCTwit] Trying to autoc");
-				var at = qp_text.lastIndexOf("@");
-				if(at == -1) {
+
+				var matchingAts = qp_text.match(/\B@\w+/g);
+				if(!matchingAts) {
 					return;
 				}
-				
-				e.preventDefault();
-				if(!origPseudo && (qp_text[at-1] == undefined || qp_text[at-1] == " " || qp_text[at-1] == "\n")) {
-					dbg("[AutoCTwit] Scanning DB");
-					var qp_text_end = qp_text.substring(at + 1)
-					pseudo_s = qp_text_end.split(" ", 1)[0].toLowerCase();
-					if(pseudo_s.length < nChars) {
-						return;
-					}
 
-					origPseudo = pseudo_s;
-					$.each(pseudos, function(k, v) {
-						if(k.indexOf(pseudo_s) === 0) {
-							dbg("[AutoCTwit] Found a match : " + v.pseudo);
-							lastTry = k;
-							qp.val(qp_text.substring(0, at + 1) + v.pseudo + qp_text.substring(at + 1 + pseudo_s.length, qp_text.length));
-							return false;
+				e.preventDefault();
+				var textToAutoc = matchingAts[matchingAts.length - 1]; // Take last match
+				if(iPseudo === false) {
+					dbg("[AutoCTwit] First tab - Build array");
+					var originalText = textToAutoc; // Save the original text in order to include in tab rotation
+					var lowerOriginalText = originalText.substring(1).toLowerCase(); // Pre lowerCase - Avoid it in loop
+					iPseudo = 0; // Reset pos in array - Indicates we're actively rotating through the array
+					pseudos_matchs = [];
+					$.each(pseudos, function(lowerPseudo, userData) {
+						if(lowerPseudo.indexOf(lowerOriginalText) === 0) {
+							pseudos_matchs.push("@" + userData.pseudo); // Simple array, easier to loop
 						}
 					});
+					pseudos_matchs.sort(); // Alphabetical sort
+					pseudos_matchs.unshift(originalText); // Insert original text at 0
 				}
-				else if(origPseudo) {
-					var tryAnother = false;
-					$.each(pseudos, function(k, v) {
-						if(k.indexOf(lastTry) === 0) {
-							tryAnother = true;
-							return;
-						}
-						if(tryAnother && k.indexOf(origPseudo) === 0) {
-							dbg("[AutoCTwit] Found another match : " + v.pseudo);
-							lastTry = k;
-							qp.val(qp_text.substring(0, at + 1) + v.pseudo + qp_text.substring(at + 1 + lastTry.length, qp_text.length));
-						}
-					});
+
+				if(pseudos_matchs.length == 1) {
+					return;
 				}
+
+				var nextIPseudo = (iPseudo >= pseudos_matchs.length - 1 ? 0 : iPseudo + 1); // Getting next i
+				dbg("[AutoCTwit] Found a match : " + pseudos_matchs[nextIPseudo]);
+				qp.val(qp_text.replace(new RegExp(pseudos_matchs[iPseudo] + "\\b"), pseudos_matchs[nextIPseudo])); // \b and \B are a complete mess, but it works pretty well
+				iPseudo = nextIPseudo;
 			}
 			else {
-				origPseudo = false;
+				iPseudo = false;
 			}
 		};
 
