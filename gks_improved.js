@@ -42,7 +42,7 @@ var parseUrl = function (url) {
 	parsedUrl.host = (host ? host[0] : host);
 	url = url.replace(parsedUrl.host, "");
 
-	var path = url.match("/[a-z\./]*/?");
+	var path = url.match(/[\-\w\.\/]*\/?/);
 	parsedUrl.path = (path ? path[0] : path);
 	url = url.replace(parsedUrl.path, "");
 
@@ -55,7 +55,7 @@ var parseUrl = function (url) {
 	var hash = url.match("#.*$");
 	if(hash) {
 		parsedUrl.hash = (hash ? hash[0] : hash);
-		url = url.replace(parsedUrl.hash, "");h
+		url = url.replace(parsedUrl.hash, "");
 	}
 
 	var urlSplit = url.split('&');
@@ -151,7 +151,7 @@ var opt = {
 			endless_scrolling: { defaultVal: false },
 			filtering_deleted: { defaultVal: true }
 		},
-		forums: {
+		twits: {
 			twit_auto_complete: { defaultVal: true },
 			twit_color: { defaultVal: true } 
 		}

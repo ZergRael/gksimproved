@@ -15,9 +15,11 @@
 modules.twits = {
 	name: "twits",
 	pages: [
-		{ path_name: "/forums.php", params: { action: 'viewtopic' } },
-		//{ path_name: "/blog/", params: { id: '*' } }
-
+		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { twit_color: { scanArea: "div[id^=content]" }, twit_autoc: { scanArea: "#quickpost" } } },
+		{ path_name: "/blog/", params: { id: '*' }, options: { twit_color: { scanArea: ".blog_comment" }, twit_autoc: { scanArea: "#new_blog_comm" } } }, // Not editable
+		{ path_name: "/torrent/\\d+/.*/?", options: { twit_color: { scanArea: ".comtable_content" } } },
+		{ path_name: "/com/", params: { id: '*' }, options: { twit_color: { scanArea: ".comtable_content" }, twit_autoc: { scanArea: "#quickpost" } } }
+		//{ path_name: "/com/", params: { editid: '*' }, options: { twit_autoc: { scanArea: "textarea" } } } // Can't autocomplete since we can't build pseudos hashmap
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -36,7 +38,6 @@ modules.twits = {
 		var origPseudo = false;
 		var lastTry = false;
 		var jOnKeydown = function(e) {
-			dbg("input");
 			var qp = $(this)
 			var qp_text = qp.val();
 			if(twit_auto_complete && e.which == 9) {
@@ -87,7 +88,7 @@ modules.twits = {
 
 		var twit_color = true;
 		var colorizeTwits = function(postId) {
-			var postArea = $("div[id^=content]");
+			var postArea = $(mOptions.twit_color.scanArea);
 			if(arguments.length) {
 				postArea = $("#content" + postId);
 			}
@@ -118,7 +119,9 @@ modules.twits = {
 			dbg("[AutoCTwit] is " + twit_auto_complete);
 			opt.set(module_name, "twit_auto_complete", twit_auto_complete);
 		});
-		$("#quickpost").keydown(jOnKeydown);
+		if(mOptions.twit_autoc) {
+			$(mOptions.twit_autoc.scanArea).keydown(jOnKeydown);
+		}
 		// On edit button click
 		$("#forums").on("click", "a[href^=#post]", function() {
 			var postId = $(this).attr("href").substr(5);
@@ -168,7 +171,9 @@ modules.twits = {
 			dbg("[TwitColorize] is " + twit_color);
 			opt.set(module_name, "twit_color", twit_color);
 		});
-		colorizeTwits();
+		if(mOptions.twit_color) {
+			colorizeTwits();
+		}
 
 		dbg("[Init] Ready");
 	}

@@ -14,6 +14,7 @@ TODO.list
 TODO.done
 - Gestion des modules
 - Implémentation d'un loader
+- Gestion twits sur les comments de blog posts & comments de torrents
 >> 0.1.3
 - BugFix: Meilleure détection des pseudos
 - BugFix: Coloration de twits après prévisu puis édition améliorée
