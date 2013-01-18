@@ -27,10 +27,13 @@ modules.global = {
 
 		var listenToCtrlEnter = function() {
 			dbg("[CtrlEnterValidator] Listening to keys");
-			$('textarea').keypress(function(e) {
-				dbg("keypressed >> ctrl : " + e.ctrlKey + " | " + e.which + " | " + e.keyCode);
+			$('textarea').live('keypress', function(e) {
 				if (e.ctrlKey && e.which == 10) {
-					$(this).closest('form').find('input[type=submit]').click();
+					var submitButton = $(this).closest('form').find('input[type=submit]');
+					if(!submitButton.length) {
+						submitButton = $(this).closest('tbody').find('input[value=" Envoyer "]');
+					}
+					submitButton.click();
 				}
 			});
 		}
