@@ -1,20 +1,24 @@
-[size=6]GKSimproved[/size]
+[center][img]https://s.gks.gs/img/img/01-2013/gks_improved_48.png[/img][size=6]GKSimproved[/size] [size=5](beta)[/size][/center]
 Salutations à tous.
 
-Après un petit weekend de glandouille, je me suis rendu compte qu'il manquait quelques fonctions pratiques sur le site.
+Après un petit weekend de glandouille, je me suis rendu compte qu'il manquait quelques fonctions pratiques sur le site :-/.
 
-C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un petit ensemble de scripts ajoutant les fonctions que je jugeais pratiques pour mon utilisation.
+C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un petit ensemble de scripts ajoutant les fonctions que je jugeais pratiques pour mon utilisation. Etant donné que ça fonctionne étonnamment bien chez moi, pourquoi pas le proposer ? :D
 
-Voici donc [b]GKSimproved[/b], une extension Chrome uniquement pour le moment.
+Voici donc [b]GKSimproved[/b], une extension Chrome uniquement pour le moment. C'est un premier jet en beta, mais j'ai besoin de quelques testeurs et les extensions Chrome sont faciles à désinstaller, vous ne risquez pas grand chose ;)
 
-Version actuelle : 0.1.0 - Licence GPLv3
-[size=5]Téléchargement[/size] : [url=]Page Chrome Webstore[/url] - [url=http://code.google.com/p/gksimproved/]Page GoogleCode[/url]
+Version actuelle : 0.1.3 - Licence GPLv3
+
+[size=6]Téléchargement[/size] :
+* [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
+* [url=https://github.com/ZergRael/gksimproved]Page GitHub[/url]
 
 [size=6]Présentation :[/size]
-L'extension Chrome se base sur un ensemble de scripts Javascript avec l'aide de la libraire jQuery. Cette librairie permet de simplifier le code tout en ajoutant des fonctions très pratiques.
+L'extension Chrome se base sur un ensemble de scripts Javascript avec l'aide de la libraire jQuery. Cette librairie permet de simplifier le code tout en ajoutant des fonctions très pratiques ainsi que quelques suggestions glanées sur le forum.
 
 L'ensemble de ces scripts ont été développés par moi même si j'ai récupéré quelques parties que j'avais déjà codé auparavant. Le code est entièrement sous licence GPLv3, donc gratuit et réutilisable.
 
+La plupart des options sont sauvegardées entre chaque utilisation.
 
 [size=6]Pages affectées :[/size]
 [b]* Listes de torrents :[/b]
@@ -24,30 +28,56 @@ L'ensemble de ces scripts ont été développés par moi même si j'ai récupér
 
 [url=https://s.gks.gs/img/img/01-2013/home.png][img]https://s.gks.gs/img/mini/01-2013/home.png[/img][/url] [url=https://s.gks.gs/img/img/01-2013/sphinx.png][img]https://s.gks.gs/img/mini/01-2013/sphinx.png[/img][/url]
 
-> Endless Scrolling : Arrivé en fin de page, la page suivante est ajoutée à la suite
-> FL uniquement : N'affiche que les torrents en Freeleech, le tri natif n'est pas concluant - Permet de garder un tri spécifique sur les FL
-> Récupérer toutes les pages : Affiche l'ensemble des pages des snatched en une seule liste
-> Tri par Nom, UL, DL, Real DL, SeedTime, Ratio	: Un clic sur la colonne associée trie les données - Peut-être lent en fonction de la taille de la liste
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+> [i]FL uniquement[/i] : N'affiche que les torrents en Freeleech, le tri natif n'est pas concluant - Permet de garder un tri spécifique sur les FL
+> [i]Récupérer toutes les pages[/i] : Affiche l'ensemble des pages des snatched en une seule liste
+> [i]Tri par Nom, UL, DL, Real DL, SeedTime, Ratio[/i]	: Un clic sur la colonne associée trie les données - Peut-être lent en fonction de la taille de la liste
 
 [b]* Snatched[/b]
 - /snatched/
 
 [url=https://s.gks.gs/img/img/01-2013/snatched.png][img]https://s.gks.gs/img/mini/01-2013/snatched.png[/img][/url]
 
-> Endless Scrolling : Arrivé en fin de page, la page suivante est ajoutée à la suite
-> Cacher les supprimés : Cache les torrents supprimés du tracker - Pas ceux que vous ne seedez plus
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+> [i]Cacher les supprimés[/i] : Cache les torrents supprimés du tracker - Pas ceux que vous ne seedez plus
 
 [b]* Topics de forums[/b]
 - /forums.php?action=viewtopic
 
 [url=https://s.gks.gs/img/img/01-2013/forums.png][img]https://s.gks.gs/img/mini/01-2013/forums.png[/img][/url]
 
-> Autocomplétion des Twits : Un '@' suivi de quelques lettres puis un tab permet de compléter automatiquement un twit en fonction des pseudos déjà présents sur la page - Les tab suivants tentent les autres pseudos correspondants
-> Coloration des Twits : Les twits déjà présents dans les posts sont colorés avec le lien associés en fonction des posteurs de la page - Les twits sur des pseudos non présents sur la page ne seront pas reconnus
+> [i]Autocomplétion des Twits[/i] : Un '@' suivi de quelques lettres puis un tab permet de compléter automatiquement un twit en fonction des pseudos déjà présents sur la page - Les tab suivants tentent les autres pseudos correspondants
+> [i]Coloration des Twits[/i] : Les twits déjà présents dans les posts sont colorés avec le lien associés en fonction des posteurs de la page - Les twits sur des pseudos non présents sur la page ne seront pas reconnus
 
-[size=6]TODO :[/size]
+[size=6]TODO list:[/size]
 - Moar comments
 - Améliorer les options
 - Optimisations
+- Amélioration de la charge CPU (pré-parsing / insertion blocs)
 
-- Proposez vos idées !
+- Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
+
+[size=6]Changelog :[/size]
+[b]* 0.1.4 - 19/01/2013[/b]
+- Gestion des modules
+- Implémentation d'un loader
+- Gestion twits sur les comments de blog posts & comments de torrents
+- Gestion du ctrl+enter pour valider les formulaires
+- Réécriture du moteur d'autocomplétion des twits
+[b]* 0.1.3 - 16/01/2013[/b]
+- BugFix: Détection des twits dans les messages
+- BugFix: Coloration des twits après édition plus rapide et précise
+[b]* 0.1.2 - 15/01/2013[/b]
+- BugFix: Coloration de twits en fin de message
+- BugFix: Coloration de twits après prévisu puis édition
+[b]* 0.1.1 - 15/01/2013[/b]
+- BugFix: Coloration de multiples twits sur un seul message
+- Optimisations - CPU sur filtrage
+- Moar comments
+- Gestion des headers de pages torrents en endless scrolling
+- Bouton pour remonter en haut de page sur l'endless scrolling
+- Auto-complétion twits à l'édition des posts
+- Coloration des twits après édition d'un post
+- Migration Github
+[b]* 0.1.0 - 14/01/2013[/b]
+- Release publique

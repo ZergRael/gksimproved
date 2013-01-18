@@ -12,9 +12,12 @@ TODO.list
 - Amélioration de la charge CPU (pré-parsing / insertion blocs)
 
 TODO.done
+>> 0.1.4
 - Gestion des modules
 - Implémentation d'un loader
 - Gestion twits sur les comments de blog posts & comments de torrents
+- Gestion du ctrl+enter pour valider les formulaires
+- Réécriture du moteur d'autocomplétion des twits
 >> 0.1.3
 - BugFix: Meilleure détection des pseudos
 - BugFix: Coloration de twits après prévisu puis édition améliorée
