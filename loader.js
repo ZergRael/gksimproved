@@ -18,14 +18,14 @@ $.each(modules, function(module_name, m) {
 		return;
 	}
 
-	$.each(m.pages, function(i, u) {
+	$.each(m.pages, function(i, p) {
 		if(m.loaded) {
 			return false;
 		}
 
-		if(u.path_name == url.path) {
-			if(!u.params) {
-				m.loadModule(u.options);
+		if(url.path.search("^" + p.path_name + "$") != -1) {
+			if(!p.params) {
+				m.loadModule(p.options);
 				return false;
 			}
 
@@ -33,22 +33,16 @@ $.each(modules, function(module_name, m) {
 				return;
 			}
 
-			$.each(u.params, function(q, v) {
-				if(m.loaded) {
-					return false;
-				}
-
-				var loadModule = false;
-				if(url.params[q]) {
-					if(url.params[q] == v) {
-						m.loadModule(u.options);
-						return false;
-					}
-				}
-				if(loadModule) {
-					m.loadModule();
+			var validParams = 0;
+			$.each(p.params, function(q, v) {
+				if(url.params[q] && (url.params[q] == v || v == '*')) {
+					validParams++;
 				}
 			});
+
+			if(Object.keys(p.params).length == validParams) {
+				m.loadModule(p.options);
+			}
 		}
 	});
 });
