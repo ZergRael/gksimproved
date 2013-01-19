@@ -10,7 +10,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-var debug = false;
+var debug = true;
 // General debug function
 var _dbg = function (section, str) {
 	if(debug) {
@@ -154,6 +154,9 @@ var opt = {
 		twits: {
 			twit_auto_complete: { defaultVal: true },
 			twit_color: { defaultVal: true } 
+		},
+		pins: {
+			filter_expensive: { defaultVal: false }
 		}
 	},
 	get: function(m, o) {

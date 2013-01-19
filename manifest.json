@@ -18,6 +18,7 @@
         "torrent_list.module.js",
         "snatched.module.js",
         "twits.module.js",
+        "pins.module.js",
         "loader.js"
       ]
     }
