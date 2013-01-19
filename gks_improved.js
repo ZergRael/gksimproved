@@ -157,6 +157,9 @@ var opt = {
 		},
 		pins: {
 			filter_expensive: { defaultVal: false }
+		},
+		forums : {
+			endless_scrolling: { defaultVal: false }
 		}
 	},
 	get: function(m, o) {
