@@ -15,7 +15,7 @@
 modules.pins = {
 	name: "pins",
 	pages: [
-		{ path_name: "/karma/", params: { tab: 'pins' }, options: { buttons: '#pins' } }
+		{ path_name: "/karma/", options: { tab: 'pins', buttons: '.nav' } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -48,26 +48,42 @@ modules.pins = {
 			});
 		}
 
+		var addPinsButtons = function() {
+			var buttons = '<div class="gksi_buttons"><input id="filter_expensive" type="checkbox" ' + (hidingExpensive ? 'checked="checked" ' : ' ') + '/> Cacher les pins trop chers</div>';
+			$(mOptions.buttons).after(buttons);
+
+			$("#filter_expensive").change(function() {
+				hidingExpensive = $(this).attr("checked") == "checked" ? true : false;
+				dbg("[HideExpensive] is " + hidingExpensive);
+				opt.set(module_name, "filter_expensive", hidingExpensive);
+
+				if(hidingExpensive) {
+					hideExpensivePins();
+				}
+				else {
+					dbg("[HideExpensive] Show them all");
+					$("#pins tbody td").show();
+				}
+			});
+			dbg("[HideExpensive] Ready");
+		}
+
 		dbg("[Init] Starting");
 		// Execute functions
 
-		var buttons = '<input id="filter_expensive" type="checkbox" ' + (hidingExpensive ? 'checked="checked" ' : ' ') + '/> Cacher les pins trop chers';
-		$(mOptions.buttons).before(buttons);
-
-		$("#filter_expensive").change(function() {
-			hidingExpensive = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[HideExpensive] is " + hidingExpensive);
-			opt.set(module_name, "filter_expensive", hidingExpensive);
-
-			if(hidingExpensive) {
+		$(".nav a").click(function() {
+			var tab = $(this).attr("href");
+			$(".gksi_buttons").remove();
+			if(tab == "#pins") {
+				addPinsButtons();
 				hideExpensivePins();
 			}
-			else {
-				dbg("[HideExpensive] Show them all");
-				$("#pins tbody td").show();
-			}
 		});
-		hideExpensivePins();
+
+		if(url.params && url.params.tab == mOptions.tab) {
+			addPinsButtons();
+			hideExpensivePins();
+		}
 
 		dbg("[Init] Ready");
 	}
