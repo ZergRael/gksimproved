@@ -12,10 +12,10 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-module_.twits = {
+modules.module_ = {
 	name: "module_",
 	pages: [
-		{ path_name: ".*" }
+		{ path_name: "/.*/", params: { query: 'value' }, options: { option: 'value' } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -30,6 +30,15 @@ module_.twits = {
 
 		dbg("[Init] Starting");
 		// Execute functions
+
+		var buttons = '<input id="but_id" type="checkbox" ' + (o ? 'checked="checked" ' : ' ') + '/> Text';
+		$(mOptions.buttons).before(buttons);
+
+		$("#but_id").change(function() {
+			o = $(this).attr("checked") == "checked" ? true : false;
+			dbg("[O] is " + o);
+			opt.set(module_name, "o", o);
+		});
 
 		dbg("[Init] Ready");
 	}
