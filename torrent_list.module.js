@@ -15,7 +15,7 @@
 modules.torrent_list = {
 	name: "torrent_list",
 	pages: [
-		{ path_name: "/", options: { buttons: '#sort', loading: '#pager_index' } },
+		{ path_name: "/", options: { buttons: '#sort', loading: '#pager_index', path: '/browse/' } },
 		{ path_name: "/browse/", options: { buttons: '#sort p', loading: '.pager_align' } },
 		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', loading: '.pager_align' } },
 	],
@@ -29,7 +29,7 @@ modules.torrent_list = {
 
 		dbg("[Init] Loading module");
 
-		var endlessScrolling = opt.get(module_name, "endless_scrolling");;
+		var endlessScrolling = opt.get(module_name, "endless_scrolling");
 		var scrollOffset = 260;
 		var backTopButtonOffset = 100;
 		var loadingPage = false;
@@ -42,6 +42,9 @@ modules.torrent_list = {
 					loadingPage = true;
 
 					var nextUrl = url;
+					if(mOptions.path) {
+						nextUrl.path = mOptions.path;
+					}
 					nextUrl.params = nextUrl.params ? nextUrl.params : {};
 					nextUrl.params.page = nextPage;
 					$(mOptions.loading).before('<p class="pager_align" id="page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>');
