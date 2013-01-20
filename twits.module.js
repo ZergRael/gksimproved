@@ -15,10 +15,10 @@
 modules.twits = {
 	name: "twits",
 	pages: [
-		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { twit_color: { scanArea: "div[id^=content]" }, twit_autoc: { scanArea: "#quickpost" } } },
-		{ path_name: "/blog/", params: { id: '*' }, options: { twit_color: { scanArea: ".blog_comment" }, twit_autoc: { scanArea: "#new_blog_comm" } } }, // Not editable
-		{ path_name: "/torrent/\\d+/.*/?", options: { twit_color: { scanArea: ".comtable_content" } } },
-		{ path_name: "/com/", params: { id: '*' }, options: { twit_color: { scanArea: ".comtable_content" }, twit_autoc: { scanArea: "#quickpost" } } }
+		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: ".bbsmiles", twit_color: { scanArea: "div[id^=content]" }, twit_autoc: { scanArea: "#quickpost" } } },
+		{ path_name: "/blog/", params: { id: '*' }, options: { buttons: ".bbsmiles", twit_color: { scanArea: ".blog_comment" }, twit_autoc: { scanArea: "#new_blog_comm" } } }, // Not editable
+		{ path_name: "/torrent/\\d+/.*/?", options: { buttons: "p[class=center]:last", twit_color: { scanArea: ".comtable_content" }, twit_autoc: { scanArea: "#quickpost" } } },
+		{ path_name: "/com/", params: { id: '*' }, options: { buttons: ".bbsmiles", twit_color: { scanArea: ".comtable_content" }, twit_autoc: { scanArea: "#quickpost" } } }
 		//{ path_name: "/com/", params: { editid: '*' }, options: { twit_autoc: { scanArea: "textarea" } } } // Can't autocomplete since we can't build pseudos hashmap
 	],
 	loaded: false,
@@ -78,7 +78,7 @@ modules.twits = {
 			}
 		};
 
-		var twit_color = true;
+		var twit_color = opt.get(module_name, "twit_color");
 		var colorizeTwits = function(postId) {
 			var postArea = $(mOptions.twit_color.scanArea);
 			if(arguments.length) {
@@ -103,13 +103,17 @@ modules.twits = {
 
 		dbg("[Init] Starting");
 		// Adding buttons
-		$(".bbsmiles").before('<div style="text-align:right;"><input type="checkbox" id="twit_autoc" ' + (twit_auto_complete ? 'checked="checked"' : '') + '/> Auto-complétion des twits | <input type="checkbox" id="twit_color" ' + (twit_color ? 'checked="checked"' : '') + '/> Coloration des twits <br /></style>')
+		$(mOptions.buttons).before('<div style="text-align:right;"><input type="checkbox" id="twit_autoc" ' + (twit_auto_complete ? 'checked="checked"' : '') + '/> Auto-complétion des twits | <input type="checkbox" id="twit_color" ' + (twit_color ? 'checked="checked"' : '') + '/> Coloration des twits <br /></style>')
 
 		// Twit autocomplete
 		$("#twit_autoc").change(function() {
 			twit_auto_complete = $(this).attr("checked") == "checked" ? true : false;
 			dbg("[AutoCTwit] is " + twit_auto_complete);
 			opt.set(module_name, "twit_auto_complete", twit_auto_complete);
+		});
+		$("#twit_autoc").bind("reactivateKeydownListenner", function() {
+			dbg("[AutoCTwit] Retry to bind");
+			$(mOptions.twit_autoc.scanArea).keydown(jOnKeydown);
 		});
 		if(mOptions.twit_autoc) {
 			$(mOptions.twit_autoc.scanArea).keydown(jOnKeydown);
