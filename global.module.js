@@ -28,7 +28,7 @@ modules.global = {
 		var listenToCtrlEnter = function() {
 			dbg("[CtrlEnterValidator] Listening to keys");
 			$('textarea').live('keypress', function(e) {
-				if (e.ctrlKey && e.which == 10) {
+				if ((e.metaKey || e.ctrlKey) && e.which == 10) {
 					var submitButton = $(this).closest('form').find('input[type=submit]');
 					if(!submitButton.length) {
 						submitButton = $(this).closest('tbody').find('input[value=" Envoyer "]');
@@ -41,7 +41,7 @@ modules.global = {
 		var listenToBBCodeShortcuts = function() {
 			dbg("[BBCodeShortcuts] Listening to keys");
 			$("form textarea").live('keydown', function(e) {
-				if(!e.ctrlKey) {
+				if(!e.ctrlKey && !e.metaKey) {
 					return;
 				}
 
