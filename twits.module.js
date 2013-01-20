@@ -103,7 +103,10 @@ modules.twits = {
 
 		dbg("[Init] Starting");
 		// Adding buttons
-		$(mOptions.buttons).before('<div style="text-align:right;"><input type="checkbox" id="twit_autoc" ' + (twit_auto_complete ? 'checked="checked"' : '') + '/> Auto-complétion des twits | <input type="checkbox" id="twit_color" ' + (twit_color ? 'checked="checked"' : '') + '/> Coloration des twits <br /></style>')
+		$(mOptions.buttons).before('<div id="gksi_twit_buttons" style="text-align:right;"><input type="checkbox" id="twit_autoc" ' + (twit_auto_complete ? 'checked="checked"' : '') + '/> Auto-complétion des twits | <input type="checkbox" id="twit_color" ' + (twit_color ? 'checked="checked"' : '') + '/> Coloration des twits <br /></style>');
+		if(!$(mOptions.twit_autoc.scanArea).length) {
+			$("#gksi_twit_buttons").hide();
+		}
 
 		// Twit autocomplete
 		$("#twit_autoc").change(function() {
@@ -114,6 +117,7 @@ modules.twits = {
 		$("#twit_autoc").bind("reactivateKeydownListenner", function() {
 			dbg("[AutoCTwit] Retry to bind");
 			$(mOptions.twit_autoc.scanArea).keydown(jOnKeydown);
+			$("#gksi_twit_buttons").show();
 		});
 		if(mOptions.twit_autoc) {
 			$(mOptions.twit_autoc.scanArea).keydown(jOnKeydown);
