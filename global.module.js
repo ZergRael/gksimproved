@@ -36,12 +36,45 @@ modules.global = {
 					submitButton.click();
 				}
 			});
-		}
+		};
+
+		var listenToBBCodeShortcuts = function() {
+			dbg("[BBCodeShortcuts] Listening to keys");
+			$("form textarea").live('keydown', function(e) {
+				if(!e.ctrlKey) {
+					return;
+				}
+
+				if(!$(".bbsmiles").length) {
+					return;
+				}
+
+				var bbcode = false;
+				switch(e.which) {
+					case 66: // B
+						bbcode = '.bbcode-b';
+						break;
+					case 73: // I
+						bbcode = '.bbcode-i';
+						break;
+					case 85: // U
+						bbcode = '.bbcode-u';
+						break;
+					default:
+						return;
+				}
+
+				e.preventDefault();
+				dbg("[BBCodeShortcuts] Got a BBCode key : " + bbcode);
+				$(bbcode).click();
+			});
+		};
 
 		dbg("[Init] Starting");
 		// Execute functions
 
 		listenToCtrlEnter();
+		listenToBBCodeShortcuts();
 
 		dbg("[Init] Ready");
 	}

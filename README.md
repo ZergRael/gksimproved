@@ -12,7 +12,11 @@ Voir topic associé.
 - Amélioration de la charge CPU (pré-parsing / insertion blocs)
 
 ### TODO.done
-- Option: Cacher les pins trop chers
+- Cacher les pins trop chers
+- BugFix: Endless scrolling sur la page d'accueil charge correctement les pages suivantes
+- Endless scrolling sur les listes de topics et topics
+- Quickpost sur les pages torrent pour poster directement des commentaires
+- Raccourcis BBCode sur les zones de texte qui acceptent le BBCode (Ctrl + B/U/I)
 
 **0.1.4**
 - Gestion des modules
