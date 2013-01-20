@@ -31,13 +31,19 @@ modules.torrent = {
 		appendNativeScript("https://s.gks.gs/static/js/forums.js?v=2");
 
 		var torrentId = url.path.match(/\/torrent\/(\d+)/)[1];
+		var torrentName = $("#contenu p[class=separate]:first").text().replace(/\s+$/, "");
 
 		var quick_comment = opt.get(module_name, "quick_comment");
+		var canComment = false;
 		var appendQuickComment = function() {
-			$("#quickpost").remove();
-			if(!quick_comment || !$(mOptions.loading).find('a').length) {
+			if(!$(mOptions.loading).find('a').length) {
 				return;
 			}
+			canComment = true;
+			if(!quick_comment) {
+				return;
+			}
+			$("#quickpost").remove();
 
 			dbg("[QuickComment] Grabbing quickcomment textarea");
 			$(mOptions.loading).hide();
@@ -49,6 +55,43 @@ modules.torrent = {
 				$(mOptions.loading).after($(data).find("#com"));
 				$("#twit_autoc").trigger("reactivateKeydownListenner");
 			});
+		};
+
+		var warnCantComment = function(pseudo) {
+			dbg("[WarnComment] Is the user allowing MPs ?");
+			$("#warn_cant_comment_area").html('<img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Tentative d\'envoi du MP');
+			grabPage({ host: url.host, path: "/mailbox/", params: { write: false, receiver: pseudo } }, function(data) {
+				if($(data).find("#mailbox_write textarea").length) {
+					dbg("[WarnComment] Sending MP");
+					var ak = $(data).find("input[name=ak]").val();
+					var mailbox_data = { action: "mail_new_send", ak: ak, msgsubject: "[Torrent #" + torrentId + "] Commentaires désactivés", to: pseudo, message_content: "Salutations !\n\nIl semblerait qu'un des torrents que vous avez posté n'accepte pas les commentaires :\n[url=" + craftUrl(url) + "]" + torrentName + "[/url]\n\nSerait-il possible d'y remédier ?\n[url=https://gks.gs/m/account/paranoia]Réglage de la paranoïa[/url]\n\nMerci :)"};
+					post({ host: url.host, path: "/mailbox/" }, mailbox_data, function() {
+						dbg("[WarnComment] MP sent");
+						$("#warn_cant_comment_area").text("Le MP a correctement été envoyé !");
+					});
+				}
+				else {
+					dbg("[WarnComment] Nope");
+					$("#warn_cant_comment_area").text("Cet utilisateur refuse aussi les MP !");
+				}
+			});
+		};
+
+		var proposeWarn = function() {
+			if(!canComment) {
+				var uploader = $("#contenu div[style] span[class^=userclass]");
+				dbg("[WarnComment] Can't find comments textarea");
+				if(uploader.length) {
+					$(mOptions.loading).append('<br /><span id="warn_cant_comment_area"><a href="#" id="warn_cant_comment">Prévenir l\'uploadeur par MP automatique ?</a></span>');
+					$("#warn_cant_comment").click(function() {
+						warnCantComment(uploader.text());
+						return false;
+					});
+				}
+				else {
+					$(mOptions.loading).append('<br />Impossible de prévenir l\'uploader (anonyme).');
+				}
+			}
 		};
 
 		dbg("[Init] Starting");
@@ -72,6 +115,7 @@ modules.torrent = {
 		});
 
 		appendQuickComment();
+		proposeWarn();
 
 		dbg("[Init] Ready");
 	}

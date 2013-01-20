@@ -108,6 +108,22 @@ var grabPage = function(urlObject, callback) {
 	});
 };
 
+var post = function(urlObject, postData, callback) {
+	var urlToGrab = craftUrl(urlObject);
+	dbg("[AjaxPost] " + urlToGrab);
+	$.ajax({
+		type: 'POST',
+		data: postData,
+		url: urlToGrab,
+		success: function(data) {
+			callback(data);
+		},
+		error: function(jXHR, status, thrown) {
+			dbg("[AjaxPost] " + status + " : " + thrown);
+		}
+	});
+};
+
 var appendNativeScript = function (jsFileName) {
 	var script = document.createElement("script");
 	script.type = "text/javascript";

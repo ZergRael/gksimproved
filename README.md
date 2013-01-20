@@ -15,6 +15,7 @@ Voir topic associé.
 - BugFix: Force le raccourci BBCode pour mac avec la touche cmd
 - BugFix: Cache les boutons de twits sur la page torrent quand les commentaires sont désactivés
 - Ajout du raccourci BBCode Ctrl+Q = [quote]
+- Ajout d'un système d'envoi de MP préformaté lorsque l'uploader d'un torrent n'autorise pas les commentaires. Le lien se situe en bas de page torrent.
 
 **0.1.5**
 - Cacher les pins trop chers
