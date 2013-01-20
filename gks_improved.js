@@ -93,15 +93,27 @@ var craftUrl = function (parsedUrl) {
 };
 
 // Calls callback after ajax on url
-var grabPage = function(url, callback) {
-	var nextUrl = craftUrl(url);
+var grabPage = function(urlObject, callback) {
+	var urlToGrab = craftUrl(urlObject);
+	dbg("[Ajax] " + urlToGrab);
 	$.ajax({
 		type: 'GET',
-		url: nextUrl,
+		url: urlToGrab,
 		success: function(data) {
 			callback(data);
+		},
+		error: function(jXHR, status, thrown) {
+			dbg("[Ajax] " + status + " : " + thrown);
 		}
 	});
+};
+
+var appendNativeScript = function (jsFileName) {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.src = jsFileName;
+	dbg("[NativeScript] Append " + jsFileName);
+	document.body.appendChild(script);
 };
 
 // Custom CSS insertion
@@ -158,8 +170,11 @@ var opt = {
 		pins: {
 			filter_expensive: { defaultVal: false }
 		},
-		forums : {
+		forums: {
 			endless_scrolling: { defaultVal: false }
+		},
+		torrent: {
+			quick_comment: { defaultVal: true }
 		}
 	},
 	get: function(m, o) {
