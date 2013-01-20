@@ -7,7 +7,7 @@ C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un
 
 Voici donc [b]GKSimproved[/b], une extension Chrome uniquement pour le moment. C'est un premier jet en beta, mais j'ai besoin de quelques testeurs et les extensions Chrome sont faciles à désinstaller, vous ne risquez pas grand chose ;)
 
-Version actuelle : 0.1.5 - 20/01/2013 - Licence GPLv3
+Version actuelle : 0.1.6 - 20/01/2013 - Licence GPLv3
 
 [size=6]Téléchargement[/size] :
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
@@ -62,6 +62,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Liste commentaires d'un torrent -- /torrent/\d+/
 
 > [i]Quick comment[/i] : Ajoute un formulaire d'envoi de commentaire directement sur la page du torrent
+> [i]Commentaires désactivés[/i] : Propose l'envoi d'un MP préformaté lorsque les commentaires d'un torrent sont désactivés. Permet de prévenir l'uploader avec l'ensemble des liens nécessaires en un seul clic, si ses MP sont activés.
 
 [b]* Karma store[/b]
 - Pin's store -- /karma/?tab=pins
@@ -71,7 +72,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 [b]* Partout ailleurs[/b]
 
 > [i]Validation des formulaires[/i] : Valide les formulaires (commentaires/posts/etc) avec ctrl+entrée
-> [i]Raccourcis BBCode[/i] : Permet d'ajouter les balises BBCode avec les raccourcis Ctrl + (b/u/i)
+> [i]Raccourcis BBCode[/i] : Permet d'ajouter les balises BBCode avec les raccourcis Ctrl + (b/u/i/q)
 
 [size=6]TODO list:[/size]
 - Moar comments
@@ -82,13 +83,18 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
 
 [size=6]Changelog :[/size]
+[b]* 0.1.6 - 20/01/2013[/b]
+- BugFix: Force le raccourci BBCode pour mac avec la touche cmd
+- BugFix: Cache les boutons de twits sur la page torrent quand les commentaires sont désactivés
+- Ajout du raccourci BBCode Ctrl+Q = [quote]
+- Ajout d'un système d'envoi de MP préformaté lorsque l'uploader d'un torrent n'autorise pas les commentaires. Le lien se situe en bas de page torrent.
+[spoil]
 [b]* 0.1.5 - 20/01/2013[/b]
 - Cacher les pins trop chers
 - BugFix: Endless scrolling sur la page d'accueil charge correctement les pages suivantes
 - Endless scrolling sur les listes de topics et topics
 - Quickpost sur les pages torrent pour poster directement des commentaires
 - Raccourcis BBCode sur les zones de texte qui acceptent le BBCode (Ctrl + B/U/I)
-[spoil]
 [b]* 0.1.4 - 19/01/2013[/b]
 - Gestion des modules
 - Implémentation d'un loader
