@@ -12,6 +12,7 @@ Voir topic associé.
 - Amélioration de la charge CPU (pré-parsing / insertion blocs)
 
 ### TODO.done
+**0.1.6**
 - BugFix: Force le raccourci BBCode pour mac avec la touche cmd
 - BugFix: Cache les boutons de twits sur la page torrent quand les commentaires sont désactivés
 - Ajout du raccourci BBCode Ctrl+Q = [quote]
