@@ -60,6 +60,9 @@ modules.global = {
 					case 85: // U
 						bbcode = '.bbcode-u';
 						break;
+					case 81: // Q
+						bbcode = '.bbcode-quote';
+						break;
 					default:
 						return;
 				}
