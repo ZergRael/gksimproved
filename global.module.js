@@ -27,8 +27,8 @@ modules.global = {
 
 		var listenToCtrlEnter = function() {
 			dbg("[CtrlEnterValidator] Listening to keys");
-			$('textarea').live('keypress', function(e) {
-				if ((e.metaKey || e.ctrlKey) && e.which == 10) {
+			$('textarea').live('keydown', function(e) {
+				if ((e.metaKey || e.ctrlKey) && e.which == 13) {
 					var submitButton = $(this).closest('form').find('input[type=submit]');
 					if(!submitButton.length) {
 						submitButton = $(this).closest('tbody').find('input[value=" Envoyer "]');
