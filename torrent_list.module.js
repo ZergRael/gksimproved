@@ -17,7 +17,7 @@ modules.torrent_list = {
 	pages: [
 		{ path_name: "/", options: { buttons: '#sort', loading: '#pager_index', path: '/browse/' } },
 		{ path_name: "/browse/", options: { buttons: '#sort p', loading: '.pager_align' } },
-		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', loading: '.pager_align' } },
+		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', loading: '.pager_align', canSuggest: true } },
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -112,6 +112,42 @@ modules.torrent_list = {
 			return data;
 		};
 
+		var maxSuggestLang = 4;
+		var suggestMore = function() {
+			var searchQuery = $("#searchinput").val();
+			if(searchQuery) {
+				dbg("[QuerySuggest] Query : " + searchQuery);
+				grabPage({ host: "https://thetabx.net", path: "/gksi/imdbproxy/get/" + encodeURIComponent(searchQuery) }, function(data) {
+					dbg("[QuerySuggest] Got data back");
+					var imdb = JSON.parse(data);
+					var suggestions = [];
+					$.each(imdb, function(lang, sections) {
+						dbg("[QuerySuggest] Scanning " + lang + " DB");
+						var iSuggests = 0;
+						$.each(sections, function(section, movies) {
+							$.each(movies, function(i, movie) {
+								suggestions.push(movie.title);
+								iSuggests++;
+								if(iSuggests >= maxSuggestLang) {
+									return false;
+								}
+							});
+							if(iSuggests >= maxSuggestLang) {
+								return false;
+							}
+						});
+					});
+					var suggestionsStr = "";
+					$.map(suggestions, function(movieName, i) {
+						if($.inArray(movieName, suggestions) === i) {
+							suggestionsStr += '<a href="' + craftUrl({ host: url.host, path: url.path, params: { q: encodeURIComponent(movieName) } }) + '">' + movieName + '</a><br />';
+						}
+					});
+					appendFrame({ title: "GKSi IMDB Suggestions", data: suggestionsStr, id: "suggest", relativeToId: "searchinput", top: -8, left: 400 });
+				}, 'json');
+			}
+		};
+
 		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (filteringFL ? 'checked="checked" ' : ' ') + '/> Afficher les FL uniquement | <input id="endless_scrolling" type="checkbox" ' + (endlessScrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling | ';
 
 		dbg("[Init] Starting");
@@ -141,6 +177,11 @@ modules.torrent_list = {
 			opt.set(module_name, "endless_scrolling", endlessScrolling);
 		});
 		$(document).scroll(jOnScroll);
+
+		var imdb_suggest = opt.get(module_name, "imdb_suggest");
+		if(mOptions.canSuggest && imdb_suggest) {
+			suggestMore();
+		}
 
 		dbg("[Init] Ready");
 	}

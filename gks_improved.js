@@ -132,12 +132,30 @@ var appendNativeScript = function (jsFileName) {
 	document.body.appendChild(script);
 };
 
+// { id, classes, title, data, relativeToId, top, left}
+var appendFrame = function(o) {
+	$("#navigation").append('<div id="gksi_' + o.id + '" class="gksi_frame' + (o.classes ? ' ' + o.classes : '') + '"><p class="separate">' + o.title + '</p><div id="gksi_' + o.id + '_data" class="gksi_frame_data">' + o.data + '</div></div>');
+	if(o.relativeToId) {
+		$(window).resize(function() {
+			var toOffset = $("#" + o.relativeToId).offset();
+			$("#gksi_" + o.id).offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
+		});
+		$(window).trigger("resize");
+	}
+};
+
 // Custom CSS insertion
 var insertCSS = function() {
 	dbg("Inserting custom CSS");
 	$("head").append("<style>" +
 		//"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:51px; height:51px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top.png") + ") no-repeat; } " +
 		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top_small.png") + ") no-repeat; } " +
+		//".gksi_frame { } " +
+		".gksi_frame_data { padding: 12px; } " +
+		"#gksi_suggest { position: absolute; } " +
+		//"#gksi_suggest_data { } " +
+		//"#gksi_options { } " +
+		//"#gksi_options_data { } " +
 		"</style>");
 };
 
@@ -173,28 +191,29 @@ var storage = {
 var opt = {
 	options: {
 		torrent_list: {
-			endless_scrolling: { defaultVal: false },
-			filtering_fl: { defaultVal: false }
+			endless_scrolling: 	{ defaultVal: false, showInOptions: false },
+			imdb_suggest: 		{ defaultVal: false, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
+			filtering_fl: 		{ defaultVal: false, showInOptions: false }
 		},
 		snatched: {
-			endless_scrolling: { defaultVal: false },
-			filtering_deleted: { defaultVal: true }
+			endless_scrolling: 	{ defaultVal: false, showInOptions: false },
+			filtering_deleted: 	{ defaultVal: true, showInOptions: false }
 		},
 		twits: {
-			twit_auto_complete: { defaultVal: true },
-			twit_color: { defaultVal: true } 
+			twit_auto_complete: { defaultVal: true, showInOptions: true, dispText: "Auto-complétion des twits" },
+			twit_color: 		{ defaultVal: true, showInOptions: true, dispText: "Coloration et lien automatique sur les twits" } 
 		},
 		pins: {
-			filter_expensive: { defaultVal: false }
+			filter_expensive: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's trop chers" }
 		},
 		forums: {
-			endless_scrolling: { defaultVal: false }
+			endless_scrolling: 	{ defaultVal: false, showInOptions: false }
 		},
 		torrent: {
-			quick_comment: { defaultVal: true }
+			quick_comment: 		{ defaultVal: true, showInOptions: true, dispText: "Afficher la boite de commentaire rapide sur les fiches torrent" }
 		},
 		request: {
-			endless_scrolling: { defaultVal: false }
+			endless_scrolling: 	{ defaultVal: false, showInOptions: false }
 		}
 	},
 	get: function(m, o) {
