@@ -191,6 +191,9 @@ var opt = {
 		},
 		torrent: {
 			quick_comment: { defaultVal: true }
+		},
+		request: {
+			endless_scrolling: { defaultVal: false }
 		}
 	},
 	get: function(m, o) {

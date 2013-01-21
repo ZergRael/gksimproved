@@ -21,6 +21,7 @@
         "twits.module.js",
         "pins.module.js",
         "forums.module.js",
+        "request.module.js",
         "loader.js"
       ]
     }

@@ -12,6 +12,9 @@ Voir topic associé.
 - Amélioration de la charge CPU (pré-parsing / insertion blocs)
 
 ### TODO.done
+- BugFix: Support mac pour la validation formulaire
+- Endless scrolling sur la page de requêtes
+
 **0.1.6**
 - BugFix: Force le raccourci BBCode pour mac avec la touche cmd
 - BugFix: Cache les boutons de twits sur la page torrent quand les commentaires sont désactivés
