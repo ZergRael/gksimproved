@@ -10,6 +10,7 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+**0.2.0**
 - BugFix: Support mac pour la validation formulaire
 - Endless scrolling sur la page de requêtes
 - Suggestions de recherche basées sur IMDB.fr et IMDB.com -- Utilise un système de cache perso
