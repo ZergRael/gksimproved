@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 modules.global = {
 	name: "global",
+	dText: "Global",
 	loaded: false,
 	loadModule: function(mOptions) {
 		this.loaded = true;
@@ -28,7 +29,11 @@ modules.global = {
 		var listenToCtrlEnter = function() {
 			dbg("[CtrlEnterValidator] Listening to keys");
 			$('textarea').live('keydown', function(e) {
-				if ((e.metaKey || e.ctrlKey) && e.which == 13) {
+				if(!opt.get(module_name, "form_validation") || (!e.ctrlKey && !e.metaKey)) {
+					return;
+				}
+
+				if (e.which == 13) {
 					var submitButton = $(this).closest('form').find('input[type=submit]');
 					if(!submitButton.length) {
 						submitButton = $(this).closest('tbody').find('input[value=" Envoyer "]');
@@ -41,7 +46,7 @@ modules.global = {
 		var listenToBBCodeShortcuts = function() {
 			dbg("[BBCodeShortcuts] Listening to keys");
 			$("form textarea").live('keydown', function(e) {
-				if(!e.ctrlKey && !e.metaKey) {
+				if(!opt.get(module_name, "bbcode_shortcuts") || (!e.ctrlKey && !e.metaKey)) {
 					return;
 				}
 
@@ -72,9 +77,63 @@ modules.global = {
 				$(bbcode).click();
 			});
 		};
+		
+		var createOptionsFrame = function() {
+			var optionsFrameData = "";
+			dbg("[Options] Building frame");
+			$.each(opt.options, function(module_name, options) {
+				optionsFrameData += '<div id="gksi_options_data_' + module_name + '"><div class="gksi_frame_section">' + modules[module_name].dText + '</div>';
+				$.each(options, function(option, oData) {
+					if(oData.showInOptions) {
+						optionsFrameData += '<input type="checkbox" id="gksi_' + module_name + '_' + option + '" ' + (opt.get(module_name, option) ? 'checked="checked"' : '') + '/>' + oData.dispText + '<br />';
+					}
+				});
+				optionsFrameData += '</div>';
+			});
+
+			// { id, classes, title, data, relativeToId, top, left}
+			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "centre", top: 8, left: 230 });
+
+			$.each(opt.options, function(module_name, options) {
+				if(!$("#gksi_options_data_" + module_name + " input").length) {
+					$("#gksi_options_data_" + module_name).remove();
+					return;
+				}
+				$.each(options, function(option, oData) {
+					if(oData.showInOptions) {
+						$("#gksi_" + module_name + "_" + option).change(function() {
+							opt.set(module_name, option, $(this).attr("checked") == "checked" ? true : false);
+							_dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
+							if(oData.callback) {
+								oData.callback(opt.get(module_name, option));
+							}
+						});
+					}
+				});
+			});
+			dbg("[Options] Frame ready");
+		};
 
 		dbg("[Init] Starting");
 		// Execute functions
+
+		var optionsFrameButtons = '<ul><a href="#" id="options_gksi">GKSi Options</a></ul>';
+		$("#navig_bloc_user").append(optionsFrameButtons);
+		$("#options_gksi").click(function() {
+			if($("#gksi_options").length) {
+				var optionsFrame = $("#gksi_options");
+				if(optionsFrame.is(":visible")) {
+					optionsFrame.hide();
+				}
+				else {
+					optionsFrame.show();
+				}
+			}
+			else {
+				createOptionsFrame();
+			}
+			return false;
+		});
 
 		listenToCtrlEnter();
 		listenToBBCodeShortcuts();

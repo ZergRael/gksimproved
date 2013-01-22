@@ -14,11 +14,12 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 modules.twits = {
 	name: "twits",
+	dText: "Twits",
 	pages: [
-		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: ".bbsmiles", twit_color: { scanArea: "div[id^=content]" }, twit_autoc: { scanArea: "#quickpost" } } },
-		{ path_name: "/blog/", params: { id: '*' }, options: { buttons: ".bbsmiles", twit_color: { scanArea: ".blog_comment" }, twit_autoc: { scanArea: "#new_blog_comm" } } }, // Not editable
-		{ path_name: "/torrent/\\d+/.*/?", options: { buttons: "p[class=center]:last", twit_color: { scanArea: ".comtable_content" }, twit_autoc: { scanArea: "#quickpost" } } },
-		{ path_name: "/com/", params: { id: '*' }, options: { buttons: ".bbsmiles", twit_color: { scanArea: ".comtable_content" }, twit_autoc: { scanArea: "#quickpost" } } }
+		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { twit_color: { scanArea: "div[id^=content]" }, twit_autoc: { scanArea: "#quickpost" } } },
+		{ path_name: "/blog/", params: { id: '*' }, options: { twit_color: { scanArea: ".blog_comment" }, twit_autoc: { scanArea: "#new_blog_comm" } } }, // Not editable
+		{ path_name: "/torrent/\\d+/.*/?", options: { twit_color: { scanArea: ".comtable_content" }, twit_autoc: { scanArea: "#quickpost" } } },
+		{ path_name: "/com/", params: { id: '*' }, options: { twit_color: { scanArea: ".comtable_content" }, twit_autoc: { scanArea: "#quickpost" } } }
 		//{ path_name: "/com/", params: { editid: '*' }, options: { twit_autoc: { scanArea: "textarea" } } } // Can't autocomplete since we can't build pseudos hashmap
 	],
 	loaded: false,
@@ -80,6 +81,9 @@ modules.twits = {
 
 		var twit_color = opt.get(module_name, "twit_color");
 		var colorizeTwits = function(postId) {
+			if(!twit_color) {
+				return;
+			}
 			var postArea = $(mOptions.twit_color.scanArea);
 			if(arguments.length) {
 				postArea = $("#content" + postId);
@@ -102,26 +106,16 @@ modules.twits = {
 		};
 
 		dbg("[Init] Starting");
-		// Adding buttons
-		$(mOptions.buttons).before('<div id="gksi_twit_buttons" style="text-align:right;"><input type="checkbox" id="twit_autoc" ' + (twit_auto_complete ? 'checked="checked"' : '') + '/> Auto-complétion des twits | <input type="checkbox" id="twit_color" ' + (twit_color ? 'checked="checked"' : '') + '/> Coloration des twits <br /></style>');
-		if(!$(mOptions.twit_autoc.scanArea).length) {
-			$("#gksi_twit_buttons").hide();
-		}
 
 		// Twit autocomplete
-		$("#twit_autoc").change(function() {
-			twit_auto_complete = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[AutoCTwit] is " + twit_auto_complete);
-			opt.set(module_name, "twit_auto_complete", twit_auto_complete);
-		});
 		$("#twit_autoc").bind("reactivateKeydownListenner", function() {
 			dbg("[AutoCTwit] Retry to bind");
 			$(mOptions.twit_autoc.scanArea).keydown(jOnKeydown);
-			$("#gksi_twit_buttons").show();
 		});
 		if(mOptions.twit_autoc) {
 			$(mOptions.twit_autoc.scanArea).keydown(jOnKeydown);
 		}
+
 		// On edit button click
 		$("#forums").on("click", "a[href^=#post]", function() {
 			var postId = $(this).attr("href").substr(5);
@@ -165,12 +159,14 @@ modules.twits = {
 			pseudos[$(this).text().toLowerCase()] = { pseudo: $(this).text(), class: $(this).attr("class"), url: $(this).parent().attr("href") };
 		});
 
-		// Twit colorization
-		$("#twit_color").change(function() {
-			twit_color = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[TwitColorize] is " + twit_color);
-			opt.set(module_name, "twit_color", twit_color);
+		opt.setCallback(module_name, "twit_color", function(state) {
+			twit_color = state;
 		});
+		opt.setCallback(module_name, "twit_auto_complete", function(state) {
+			twit_auto_complete = state;
+		});
+
+		// Twit colorization
 		if(mOptions.twit_color) {
 			colorizeTwits();
 		}

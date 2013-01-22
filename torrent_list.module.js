@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 modules.torrent_list = {
 	name: "torrent_list",
+	dText: "Liste torrents",
 	pages: [
 		{ path_name: "/", options: { buttons: '#sort', loading: '#pager_index', path: '/browse/' } },
 		{ path_name: "/browse/", options: { buttons: '#sort p', loading: '.pager_align' } },
@@ -29,13 +30,13 @@ modules.torrent_list = {
 
 		dbg("[Init] Loading module");
 
-		var endlessScrolling = opt.get(module_name, "endless_scrolling");
+		var endless_scrolling = opt.get(module_name, "endless_scrolling");
 		var scrollOffset = 260;
 		var backTopButtonOffset = 100;
 		var loadingPage = false;
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
 		var jOnScroll = function() {
-			if(endlessScrolling && ! ignoreScrolling) {
+			if(endless_scrolling && ! ignoreScrolling) {
 				dbg("[EndlessScrolling] Scrolled");
 				if((document.body.scrollTop + window.innerHeight > document.body.scrollHeight - scrollOffset) && !loadingPage) {
 					dbg("[EndlessScrolling] Loading next page");
@@ -74,9 +75,9 @@ modules.torrent_list = {
 			}
 		};
 
-		var filteringFL = opt.get(module_name, "filtering_fl");;
+		var filtering_fl = opt.get(module_name, "filtering_fl");;
 		var filterFL = function(data, removeHead) {
-			if(!filteringFL) {
+			if(!filtering_fl) {
 				return data;
 			}
 
@@ -112,6 +113,7 @@ modules.torrent_list = {
 			return data;
 		};
 
+		var imdb_suggest = opt.get(module_name, "imdb_suggest");
 		var maxSuggestLang = 4;
 		var suggestMore = function() {
 			var searchQuery = $("#searchinput").val();
@@ -148,7 +150,7 @@ modules.torrent_list = {
 			}
 		};
 
-		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (filteringFL ? 'checked="checked" ' : ' ') + '/> Afficher les FL uniquement | <input id="endless_scrolling" type="checkbox" ' + (endlessScrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling | ';
+		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (filtering_fl ? 'checked="checked" ' : ' ') + '/> Afficher les FL uniquement | <input id="endless_scrolling" type="checkbox" ' + (endless_scrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling | ';
 
 		dbg("[Init] Starting");
 		// Adding buttons
@@ -156,10 +158,10 @@ modules.torrent_list = {
 
 		// FreeLeech torrents filtering
 		$("#filter_fl").change(function() {
-			filteringFL = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[FilterFL] is " + filteringFL);
-			opt.set(module_name, "filtering_fl", filteringFL);
-			if(filteringFL) {
+			filtering_fl = $(this).attr("checked") == "checked" ? true : false;
+			dbg("[FilterFL] is " + filtering_fl);
+			opt.set(module_name, "filtering_fl", filtering_fl);
+			if(filtering_fl) {
 				filterFL($("#torrent_list tr"));
 			}
 			else {
@@ -172,13 +174,12 @@ modules.torrent_list = {
 
 		// Endless scrolling
 		$("#endless_scrolling").change(function() {
-			endlessScrolling = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[EndlessScrolling] is " + endlessScrolling);
-			opt.set(module_name, "endless_scrolling", endlessScrolling);
+			endless_scrolling = $(this).attr("checked") == "checked" ? true : false;
+			dbg("[EndlessScrolling] is " + endless_scrolling);
+			opt.set(module_name, "endless_scrolling", endless_scrolling);
 		});
 		$(document).scroll(jOnScroll);
 
-		var imdb_suggest = opt.get(module_name, "imdb_suggest");
 		if(mOptions.canSuggest && imdb_suggest) {
 			suggestMore();
 		}

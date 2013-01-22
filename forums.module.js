@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 modules.forums = {
 	name: "forums",
+	dText: "Forums",
 	pages: [
 		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { buttons: '.linkbox:first', loading: '.thin table', domList: '.thin tr:last', domData: 'tbody tr', scrollOffset: 180, endOfStream: 'No posts to display!' } },
 		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: '.linkbox:first', loading: '.thin table:last', domList: '.thin table:last', domData: '.thin table', scrollOffset: 600 } }

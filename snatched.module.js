@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 modules.snatched = {
 	name: "snatched",
+	dText: "Snatched",
 	pages: [
 		{ path_name: "/m/peers/snatched", options: { buttons: '#contenu > a:first', loading: '.pager_align' } }
 	],

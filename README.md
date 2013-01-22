@@ -7,13 +7,14 @@ Voir topic associé.
 
 ### TODO.list
 - Moar comments
-- Améliorer les options
 - Optimisations
-- Amélioration de la charge CPU (pré-parsing / insertion blocs)
 
 ### TODO.done
 - BugFix: Support mac pour la validation formulaire
 - Endless scrolling sur la page de requêtes
+- Suggestions de recherche basées sur IMDB.fr et IMDB.com -- Utilise un système de cache perso
+- Panneau d'options complet
+- Fluidification des changement dans les options
 
 **0.1.6**
 - BugFix: Force le raccourci BBCode pour mac avec la touche cmd

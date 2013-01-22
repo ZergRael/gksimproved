@@ -14,8 +14,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 modules.torrent = {
 	name: "torrent",
+	dText: "Fiche torrent",
 	pages: [
-		{ path_name: "/torrent/\\d+/.*/?", options: { buttons: '#torrent_comments', loading: '#torrent_comments p:last' } }
+		{ path_name: "/torrent/\\d+/.*/?", options: { loading: '#torrent_comments p:last' } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -97,13 +98,8 @@ modules.torrent = {
 		dbg("[Init] Starting");
 		// Execute functions
 
-		var buttons = '<input id="quick_comment" type="checkbox" ' + (quick_comment ? 'checked="checked" ' : ' ') + '/> Quick comment direct';
-		$(mOptions.buttons).before(buttons);
-
-		$("#quick_comment").change(function() {
-			quick_comment = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[QuickComment] is " + quick_comment);
-			opt.set(module_name, "quick_comment", quick_comment);
+		opt.setCallback(module_name, "quick_comment", function(state) {
+			quick_comment = state;
 
 			if(quick_comment) {
 				appendQuickComment();

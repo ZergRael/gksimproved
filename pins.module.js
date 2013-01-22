@@ -14,8 +14,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 modules.pins = {
 	name: "pins",
+	dText: "Pins",
 	pages: [
-		{ path_name: "/karma/", options: { tab: 'pins', buttons: '.nav' } }
+		{ path_name: "/karma/", options: { tab: 'pins' } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -34,9 +35,9 @@ modules.pins = {
 			karma = (kMatches[1] ? Number(kMatches[1]) * 1000 : 0) + (kMatches[2] ? Number(kMatches[2]) : 0) + (kMatches[3] ? Number(kMatches[3]) * 0.01 : 0);
 		}
 
-		var hidingExpensive = opt.get(module_name, "filter_expensive");
+		var filter_expensive = opt.get(module_name, "filter_expensive");
 		var hideExpensivePins = function() {
-			if(!hidingExpensive) {
+			if(!filter_expensive) {
 				return;
 			}
 
@@ -48,26 +49,6 @@ modules.pins = {
 			});
 		}
 
-		var addPinsButtons = function() {
-			var buttons = '<div class="gksi_buttons"><input id="filter_expensive" type="checkbox" ' + (hidingExpensive ? 'checked="checked" ' : ' ') + '/> Cacher les pins trop chers</div>';
-			$(mOptions.buttons).after(buttons);
-
-			$("#filter_expensive").change(function() {
-				hidingExpensive = $(this).attr("checked") == "checked" ? true : false;
-				dbg("[HideExpensive] is " + hidingExpensive);
-				opt.set(module_name, "filter_expensive", hidingExpensive);
-
-				if(hidingExpensive) {
-					hideExpensivePins();
-				}
-				else {
-					dbg("[HideExpensive] Show them all");
-					$("#pins tbody td").show();
-				}
-			});
-			dbg("[HideExpensive] Ready");
-		}
-
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -75,15 +56,25 @@ modules.pins = {
 			var tab = $(this).attr("href");
 			$(".gksi_buttons").remove();
 			if(tab == "#pins") {
-				addPinsButtons();
 				hideExpensivePins();
 			}
 		});
 
 		if(url.params && url.params.tab == mOptions.tab) {
-			addPinsButtons();
 			hideExpensivePins();
 		}
+
+		opt.setCallback(module_name, "filter_expensive", function(state) {
+			filter_expensive = state;
+
+			if(filter_expensive) {
+				hideExpensivePins();
+			}
+			else {
+				dbg("[HideExpensive] Show them all");
+				$("#pins tbody td").show();
+			}
+		});
 
 		dbg("[Init] Ready");
 	}

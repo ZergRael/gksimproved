@@ -134,7 +134,12 @@ var appendNativeScript = function (jsFileName) {
 
 // { id, classes, title, data, relativeToId, top, left}
 var appendFrame = function(o) {
-	$("#navigation").append('<div id="gksi_' + o.id + '" class="gksi_frame' + (o.classes ? ' ' + o.classes : '') + '"><p class="separate">' + o.title + '</p><div id="gksi_' + o.id + '_data" class="gksi_frame_data">' + o.data + '</div></div>');
+	$("#navigation").append('<div id="gksi_' + o.id + '" class="gksi_frame' + (o.classes ? ' ' + o.classes : '') + '"><p class="separate">' + o.title + '</p><div id="gksi_' + o.id + '_data" class="gksi_frame_data">' + o.data + '<div id="gksi_' + o.id + '_buttons" class="gksi_frame_buttons"><input type="button" id="gksi_' + o.id + '_close" class="fine" value=" Fermer "></div></div></div>');
+	$("#gksi_" + o.id + "_close").click(function() {
+		$("#gksi_" + o.id).remove();
+		return false;
+	});
+
 	if(o.relativeToId) {
 		$(window).resize(function() {
 			var toOffset = $("#" + o.relativeToId).offset();
@@ -150,11 +155,13 @@ var insertCSS = function() {
 	$("head").append("<style>" +
 		//"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:51px; height:51px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top.png") + ") no-repeat; } " +
 		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top_small.png") + ") no-repeat; } " +
-		//".gksi_frame { } " +
+		".gksi_frame { z-index: 10; } " +
+		".gksi_frame_section { border-bottom: 1px solid; font-weight: bold; padding-top: 6px; } " +
+		".gksi_frame_buttons { padding-top: 9px; text-align: center; } " +
 		".gksi_frame_data { padding: 12px; } " +
 		"#gksi_suggest { position: absolute; } " +
 		//"#gksi_suggest_data { } " +
-		//"#gksi_options { } " +
+		"#gksi_options { position: absolute; } " +
 		//"#gksi_options_data { } " +
 		"</style>");
 };
@@ -190,6 +197,10 @@ var storage = {
 // Options
 var opt = {
 	options: {
+		global: {
+			form_validation: 	{ defaultVal: true, showInOptions: true, dispText: "Validation des formulaires avec ctrl+entrée" },
+			bbcode_shortcuts: 	{ defaultVal: true, showInOptions: true, dispText: "Raccourcis BBCodes avec ctrl" }
+		},
 		torrent_list: {
 			endless_scrolling: 	{ defaultVal: false, showInOptions: false },
 			imdb_suggest: 		{ defaultVal: false, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
@@ -222,6 +233,9 @@ var opt = {
 	set: function(m, o, v) {
 		this.options[m][o].val = v;
 		storage.set(m, this.options[m]);
+	},
+	setCallback: function(m, o, c) {
+		this.options[m][o].callback = c;
 	},
 	load: function() {
 		$.each(this.options, function(m, opts) {

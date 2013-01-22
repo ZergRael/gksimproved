@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 modules.request = {
 	name: "request",
+	dText: "Requests",
 	pages: [
 		{ path_name: "/req/", options: { buttons: '#requests_head', loading: '.pager_align' } }
 	],
