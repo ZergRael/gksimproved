@@ -10,6 +10,9 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+- Montre toutes les images de badges
+- Affiche la progression sous les badges
+
 **0.2.0**
 - BugFix: Support mac pour la validation formulaire
 - Endless scrolling sur la page de requêtes

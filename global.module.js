@@ -114,6 +114,15 @@ modules.global = {
 			dbg("[Options] Frame ready");
 		};
 
+		var getKarmaTotal = function() {
+			var kMatches = $("#userlink .karma").text().match(/(\d*),?(\d+).(\d+)/);
+			return (kMatches[1] ? Number(kMatches[1]) * 1000 : 0) + (kMatches[2] ? Number(kMatches[2]) : 0) + (kMatches[3] ? Number(kMatches[3]) * 0.01 : 0);
+		}
+
+		var getUserId = function() {
+			return $("#userlink a:first").attr("href").match(/\d+/)[0];
+		}
+
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -137,6 +146,8 @@ modules.global = {
 
 		listenToCtrlEnter();
 		listenToBBCodeShortcuts();
+		this.karma = getKarmaTotal();
+		this.userId = getUserId();
 
 		dbg("[Init] Ready");
 	}

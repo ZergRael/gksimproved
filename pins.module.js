@@ -29,12 +29,6 @@ modules.pins = {
 		dbg("[Init] Loading module");
 		// Loading all functions used
 
-		var karma = false;
-		var getKarmaTotal = function() {
-			var kMatches = $(".karma").text().match(/(\d*),?(\d+).(\d+)/);
-			karma = (kMatches[1] ? Number(kMatches[1]) * 1000 : 0) + (kMatches[2] ? Number(kMatches[2]) : 0) + (kMatches[3] ? Number(kMatches[3]) * 0.01 : 0);
-		}
-
 		var filter_expensive = opt.get(module_name, "filter_expensive");
 		var hideExpensivePins = function() {
 			if(!filter_expensive) {

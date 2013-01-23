@@ -10,7 +10,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-var debug = false;
+var debug = true;
 // General debug function
 var _dbg = function (section, str) {
 	if(debug) {
@@ -162,6 +162,9 @@ var insertCSS = function() {
 		"#gksi_suggest { position: absolute; } " +
 		//"#gksi_suggest_data { } " +
 		"#gksi_options { position: absolute; } " +
+		".gksi_progress_area { display: inline-block; width: 100px; border-radius: 2px; padding: 1px; border: 1px solid gray; } " +
+		".gksi_progress_bar { background-color: orange; height: 14px; border-radius: 1px; } " +
+		".halfOpacity { opacity: 0.4; } " +
 		//"#gksi_options_data { } " +
 		"</style>");
 };
@@ -225,6 +228,10 @@ var opt = {
 		},
 		request: {
 			endless_scrolling: 	{ defaultVal: false, showInOptions: false }
+		},
+		badges: {
+			progress: 			{ defaultVal: false, showInOptions: true, dispText: "Afficher la progression sous les badges" },
+			show_img: 			{ defaultVal: false, showInOptions: true, dispText: "Afficher toutes les images des badges" }
 		}
 	},
 	get: function(m, o) {
