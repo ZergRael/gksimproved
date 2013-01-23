@@ -38,7 +38,7 @@ modules.torrent_list = {
 		var jOnScroll = function() {
 			if(endless_scrolling && ! ignoreScrolling) {
 				dbg("[EndlessScrolling] Scrolled");
-				if((document.body.scrollTop + window.innerHeight > document.body.scrollHeight - scrollOffset) && !loadingPage) {
+				if((document.documentElement.scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
 					dbg("[EndlessScrolling] Loading next page");
 					loadingPage = true;
 
@@ -66,7 +66,7 @@ modules.torrent_list = {
 					});
 				}
 
-				if(document.body.scrollTop > backTopButtonOffset) {
+				if(document.documentElement.scrollTop > backTopButtonOffset) {
 					$("#backTopButton").show();
 				}
 				else {

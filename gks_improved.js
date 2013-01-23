@@ -30,6 +30,16 @@ var dbg = function(str) {
 	_dbg("main", str);
 }
 
+if($.browser.mozilla) {
+	chrome = {
+		extension: {
+			getURL: function(str) {
+				return self.options[str];
+			}
+		}
+	};
+}
+
 dbg("[Init] Loading general funcs");
 
 // Returns an array with splited url
@@ -158,7 +168,7 @@ var insertCSS = function() {
 		".gksi_frame { z-index: 10; } " +
 		".gksi_frame_section { border-bottom: 1px solid; font-weight: bold; padding-top: 6px; } " +
 		".gksi_frame_buttons { padding-top: 9px; text-align: center; } " +
-		".gksi_frame_data { padding: 12px; } " +
+		".gksi_frame_data { padding: 12px; background-color: #f0f0f0;  } " +
 		"#gksi_suggest { position: absolute; } " +
 		//"#gksi_suggest_data { } " +
 		"#gksi_options { position: absolute; } " +

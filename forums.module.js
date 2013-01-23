@@ -40,7 +40,7 @@ modules.forums = {
 			}
 
 			dbg("[EndlessScrolling] Scrolled");
-			if((document.body.scrollTop + window.innerHeight > document.body.scrollHeight - mOptions.scrollOffset) && !loadingPage) {
+			if((document.documentElement.scrollTop + window.innerHeight > document.documentElement.scrollHeight - mOptions.scrollOffset) && !loadingPage) {
 				dbg("[EndlessScrolling] Loading next page (" + nextPage + ")");
 				loadingPage = true;
 
@@ -66,7 +66,7 @@ modules.forums = {
 				});
 			}
 
-			if(document.body.scrollTop > backTopButtonOffset) {
+			if(document.documentElement.scrollTop > backTopButtonOffset) {
 				$("#backTopButton").show();
 			}
 			else {

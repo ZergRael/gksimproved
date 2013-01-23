@@ -10,6 +10,7 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+- Extension Firefox
 - Montre toutes les images de badges
 - Affiche la progression sous les badges
 
