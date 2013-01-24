@@ -37,7 +37,7 @@ modules.badges = {
 		// Loading all functions used
 
 		var badgesData = [
-			{	// Snatched
+			{	// Snatched -- 0
 				badges: [ 
 					{ url: "firstsnatched", trigger: 1 },
 					{ url: "novicesnatched", trigger: 10 },
@@ -46,9 +46,9 @@ modules.badges = {
 					{ url: "mastersnatched", trigger: 1000 }
 				],
 				dom: "#contenu .separate em",
-				regex: /(\d+)/
+				regex: /([\d,]+)/
 			},
-			{	// Seeds
+			{	// Seeds -- 1
 				badges: [ 
 					{ url: "aurabegginer", trigger: 10 },
 					{ url: "aurarookie", trigger: 100 },
@@ -57,9 +57,9 @@ modules.badges = {
 					{ url: "auragod", trigger: 1000 }
 				],
 				dom: "#contenu .upload:first",
-				regex: /(\d+)/
+				regex: /([\d,]+)/
 			},
-			{	// Uploads
+			{	// Uploads -- 2
 				badges: [ 
 					{ url: "uploadbegginer", trigger: 1 },
 					{ url: "uploadrookie", trigger: 10 },
@@ -70,7 +70,7 @@ modules.badges = {
 				dom: "#contenu p:nth(17)",
 				regex: /(\d+)/
 			},
-			{	// Forum posts
+			{	// Forum posts -- 3
 				badges: [ 
 					{ url: "timide", trigger: 1 },
 					{ url: "forumeur", trigger: 100 },
@@ -78,9 +78,9 @@ modules.badges = {
 					{ url: "grandmalade", trigger: 1000 }
 				],
 				dom: "#contenu p:nth(10)",
-				regex: /(\d+) \//
+				regex: /([\d,]+) \//
 			},
-			{	// Twits received
+			{	// Twits received -- 4
 				badges: [ 
 					{ url: "followed", trigger: 50 },
 					{ url: "lightened", trigger: 100 },
@@ -89,9 +89,9 @@ modules.badges = {
 					{ url: "twitterowner", trigger: 1000 }
 				],
 				dom: "#contenu .separate",
-				regex: /(\d+)/
+				regex: /([\d,]+)/
 			},
-			{	// Requests added
+			{	// Requests added -- 5
 				badges: [ 
 					{ url: "firstrequest", trigger: 1 },
 					{ url: "requesttatator", trigger: 10 },
@@ -100,9 +100,9 @@ modules.badges = {
 					{ url: "requesteater", trigger: 200 }
 				],
 				dom: "#contenu p:nth(18)",
-				regex: /(\d+) \//
+				regex: /([\d,]+) \//
 			},
-			{	// Wiki edits
+			{	// Wiki edits -- 6
 				badges: [ 
 					{ url: "wikibeginner", trigger: 1 },
 					{ url: "wikiuser", trigger: 10 },
@@ -111,9 +111,9 @@ modules.badges = {
 					{ url: "wikimaster", trigger: 250 }
 				],
 				dom: "#contenu p:nth(16)",
-				regex: /\| (\d+)/
+				regex: /\| ([\d,]+)/
 			},
-			{	// DL/Ratio
+			{	// DL/Ratio -- 7
 				badges: [ 
 					{ url: "actionnaireovh" },
 					{ url: "hadopiwanted" },
@@ -124,7 +124,7 @@ modules.badges = {
 				],
 				dom: false
 			},
-			{	// Karma
+			{	// Karma -- 8
 				badges: [ 
 					{ url: "padawan", trigger: 1000 },
 					{ url: "karmafull", trigger: 10000 },
@@ -135,7 +135,7 @@ modules.badges = {
 				dom: false,
 				val: modules.global.karma
 			},
-			{	// Requests filled
+			{	// Requests filled -- 9
 				badges: [ 
 					{ url: "firstfiller", trigger: 1 },
 					{ url: "filleravise", trigger: 10 },
@@ -144,9 +144,9 @@ modules.badges = {
 					{ url: "fillermaster", trigger: 200 }
 				],
 				dom: "#contenu p:nth(18)",
-				regex: /\/ (\d+)/
+				regex: /\/ ([\d,]+)/
 			},
-			{	// IRC words
+			{	// IRC words -- 10
 				badges: [ 
 					{ url: "ircnoob", trigger: 1000 },
 					{ url: "ircuser", trigger: 5000 },
@@ -155,7 +155,7 @@ modules.badges = {
 					{ url: "ircgod", trigger: 100000 }
 				],
 				dom: "#contenu p:nth(19)",
-				regex: /(\d+)/
+				regex: /([\d,]+)/
 			}
 		];
 
@@ -186,6 +186,7 @@ modules.badges = {
 						}
 
 						if(b_s.val !== undefined) {
+							b_s.val = (typeof b_s.val == "String" ? Number(b_s.val.replace(",", "")) : b_s.val);
 							$(domTr).eq(i_section).find("td:not(:first)").each(function(i) {
 								var b = b_s.badges[i];
 								if(!b || !b.trigger) {
