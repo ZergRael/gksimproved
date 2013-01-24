@@ -191,7 +191,7 @@ modules.badges = {
 								if(!b || !b.trigger) {
 									return;
 								}
-								$(this).append('<div class="gksi_progress"><div class="gksi_progress_area"><div class="gksi_progress_bar" style="width: ' + (b_s.val > b.trigger ? b.trigger : b_s.val) / b.trigger * 100 + '%">' + (b_s.val > b.trigger ? b.trigger : Math.round(b_s.val)) + '/' + b.trigger + '</div></div></div>');
+								$(this).append('<div class="gksi_progress"><div class="gksi_progress_area"><div class="gksi_progress_bar' + (b_s.val >= b.trigger ? ' gksi_valid' : '') + '" style="width: ' + (b_s.val >= b.trigger ? b.trigger : b_s.val) / b.trigger * 100 + '%"></div><div class="gksi_progress_numbers">' + (b_s.val >= b.trigger ? b.trigger : Math.round(b_s.val)) + '/' + b.trigger + '</div></div></div>');
 							});
 						}
 					});

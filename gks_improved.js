@@ -163,7 +163,6 @@ var appendFrame = function(o) {
 var insertCSS = function() {
 	dbg("Inserting custom CSS");
 	$("head").append("<style>" +
-		//"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:51px; height:51px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top.png") + ") no-repeat; } " +
 		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top_small.png") + ") no-repeat; } " +
 		".gksi_frame { z-index: 10; } " +
 		".gksi_frame_section { border-bottom: 1px solid; font-weight: bold; padding-top: 6px; } " +
@@ -172,8 +171,10 @@ var insertCSS = function() {
 		"#gksi_suggest { position: absolute; } " +
 		//"#gksi_suggest_data { } " +
 		"#gksi_options { position: absolute; } " +
-		".gksi_progress_area { display: inline-block; width: 100px; border-radius: 2px; padding: 1px; border: 1px solid gray; } " +
-		".gksi_progress_bar { background-color: orange; height: 14px; border-radius: 1px; } " +
+		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; } " +
+		".gksi_progress_bar { background-color: orange; height: 11px; border-radius: 1px; margin-bottom: -11px; } " +
+		".gksi_progress_numbers { position: relative; } " +
+		".gksi_valid { background-color: lightgreen; } " +
 		".halfOpacity { opacity: 0.4; } " +
 		//"#gksi_options_data { } " +
 		"</style>");

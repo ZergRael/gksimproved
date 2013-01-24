@@ -11,6 +11,7 @@ Voir topic associé.
 
 ### TODO.done
 - Module badges actif aussi sur votre page publique de badges
+- Meilleur formatage des indicateurs sous les badges
 
 **0.2.1**
 - Extension Firefox
