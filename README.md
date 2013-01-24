@@ -10,9 +10,11 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+**0.2.1**
 - Extension Firefox
 - Montre toutes les images de badges
 - Affiche la progression sous les badges
+- Evite le chargement des pages inutiles avec l'endless scrolling
 
 **0.2.0**
 - BugFix: Support mac pour la validation formulaire

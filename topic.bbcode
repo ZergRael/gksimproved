@@ -5,16 +5,17 @@ Après un petit weekend de glandouille, je me suis rendu compte qu'il manquait q
 
 C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un petit ensemble de scripts ajoutant les fonctions que je jugeais pratiques pour mon utilisation. Etant donné que ça fonctionne étonnamment bien chez moi, pourquoi pas le proposer ? :D
 
-Voici donc [b]GKSimproved[/b], une extension Chrome uniquement pour le moment. C'est un premier jet en beta, mais j'ai besoin de quelques testeurs et les extensions Chrome sont faciles à désinstaller, vous ne risquez pas grand chose ;)
+Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. La période de beta va bientôt arriver à sa fin mais je suis toujours à la recherche d'un maximum de testeurs ;)
 
-Version actuelle : 0.2.0 - 22/01/2013 - Licence GPLv3
+Version actuelle : 0.2.1 - 24/01/2013 - Licence GPLv3
 
 [size=6]Téléchargement[/size] :
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
+* [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/][b]Extension Firefox[/b][/url]
 * [url=https://github.com/ZergRael/gksimproved]Page GitHub[/url]
 
 [size=6]Présentation :[/size]
-L'extension Chrome se base sur un ensemble de scripts Javascript avec l'aide de la libraire jQuery. Cette librairie permet de simplifier le code tout en ajoutant des fonctions très pratiques ainsi que quelques suggestions glanées sur le forum.
+L'extension se base sur un ensemble de scripts Javascript avec l'aide de la libraire jQuery. Cette librairie permet de simplifier le code tout en ajoutant des fonctions très pratiques ainsi que quelques suggestions glanées sur le forum.
 
 L'ensemble de ces scripts ont été développés par moi même si j'ai récupéré quelques parties que j'avais déjà codé auparavant. Le code est entièrement sous licence GPLv3, donc gratuit et réutilisable.
 
@@ -75,7 +76,13 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
 
-[b]* Partout ailleurs[/b]
+[b]* Badges[/b]
+- Liste des badges acquis -- /m/badges/
+
+> [i]Progression[/i] : Affiche votre progression vers l'obtention de ce badge
+> [i]Tous les badges[/i] : Affiche toutes les images de badges même si vous ne les avez pas (semi-transparents)
+
+[b]* Sur l'ensemble du site[/b]
 
 > [i]Validation des formulaires[/i] : Valide les formulaires (commentaires/posts/etc) avec ctrl+entrée
 > [i]Raccourcis BBCode[/i] : Permet d'ajouter les balises BBCode avec les raccourcis Ctrl + (b/u/i/q)
@@ -87,13 +94,18 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
 
 [size=6]Changelog :[/size]
+[b]* 0.2.1 - 24/01/2013[/b]
+- Extension Firefox
+- Montre toutes les images de badges
+- Affiche la progression sous les badges
+- Evite le chargement des pages inutiles avec l'endless scrolling
+[spoil]
 [b]* 0.2.0 - 22/01/2013[/b]
 - BugFix: Support mac pour la validation formulaire
 - Endless scrolling sur la page de requêtes
 - Suggestions de recherche basées sur IMDB.fr et IMDB.com -- Utilise un système de cache perso
 - Panneau d'options complet
 - Fluidification des changement dans les options
-[spoil]
 [b]* 0.1.6 - 20/01/2013[/b]
 - BugFix: Force le raccourci BBCode pour mac avec la touche cmd
 - BugFix: Cache les boutons de twits sur la page torrent quand les commentaires sont désactivés
