@@ -18,7 +18,7 @@ modules.torrent_list = {
 	pages: [
 		{ path_name: "/", options: { buttons: '#sort', loading: '#pager_index', path: '/browse/' } },
 		{ path_name: "/browse/", options: { buttons: '#sort p', loading: '.pager_align' } },
-		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', loading: '.pager_align', canSuggest: true } },
+		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', loading: '.pager_align', canSuggest: true, lastPage: ".pager_align" } },
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -36,9 +36,9 @@ modules.torrent_list = {
 		var loadingPage = false;
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
 		var jOnScroll = function() {
-			if(endless_scrolling && ! ignoreScrolling) {
+			if(endless_scrolling && !ignoreScrolling && (!maxPage || nextPage < maxPage)) {
 				dbg("[EndlessScrolling] Scrolled");
-				if((document.documentElement.scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
+				if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
 					dbg("[EndlessScrolling] Loading next page");
 					loadingPage = true;
 
@@ -66,12 +66,23 @@ modules.torrent_list = {
 					});
 				}
 
-				if(document.documentElement.scrollTop > backTopButtonOffset) {
+				if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop > backTopButtonOffset) {
 					$("#backTopButton").show();
 				}
 				else {
 					$("#backTopButton").hide();
 				}
+			}
+		};
+
+		var maxPage = false;
+		var getMaxPage = function() {
+			var pagesList = $(mOptions.lastPage);
+			if(!pagesList.length) {
+				maxPage = true;
+			}
+			else {
+				maxPage = Number(pagesList.text().match(/(\d+) ?$/)[1]);
 			}
 		};
 
@@ -155,6 +166,10 @@ modules.torrent_list = {
 		dbg("[Init] Starting");
 		// Adding buttons
 		$(mOptions.buttons).prepend(torrentButtons);
+
+		if(mOptions.lastPage) {
+			getMaxPage();
+		}
 
 		// FreeLeech torrents filtering
 		$("#filter_fl").change(function() {

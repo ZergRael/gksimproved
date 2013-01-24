@@ -16,8 +16,8 @@ modules.forums = {
 	name: "forums",
 	dText: "Forums",
 	pages: [
-		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { buttons: '.linkbox:first', loading: '.thin table', domList: '.thin tr:last', domData: 'tbody tr', scrollOffset: 180, endOfStream: 'No posts to display!' } },
-		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: '.linkbox:first', loading: '.thin table:last', domList: '.thin table:last', domData: '.thin table', scrollOffset: 600 } }
+		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { buttons: '.linkbox:first', loading: '.thin table', domList: '.thin tr:last', domData: 'tbody tr', scrollOffset: 180, endOfStream: 'No posts to display!', lastPage: '.linkbox:nth(2)' } },
+		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: '.linkbox:first', loading: '.thin table:last', domList: '.thin table:last', domData: '.thin table', scrollOffset: 600, lastPage: '.linkbox:first' } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -35,12 +35,12 @@ modules.forums = {
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 2);
 		var endless_scrolling = opt.get(module_name, "endless_scrolling");
 		var jOnScroll = function() {
-			if(!endless_scrolling || ignoreScrolling) {
+			if(!endless_scrolling || ignoreScrolling || maxPage === true || nextPage > maxPage) {
 				return;
 			}
 
 			dbg("[EndlessScrolling] Scrolled");
-			if((document.documentElement.scrollTop + window.innerHeight > document.documentElement.scrollHeight - mOptions.scrollOffset) && !loadingPage) {
+			if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - mOptions.scrollOffset) && !loadingPage) {
 				dbg("[EndlessScrolling] Loading next page (" + nextPage + ")");
 				loadingPage = true;
 
@@ -66,7 +66,7 @@ modules.forums = {
 				});
 			}
 
-			if(document.documentElement.scrollTop > backTopButtonOffset) {
+			if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop > backTopButtonOffset) {
 				$("#backTopButton").show();
 			}
 			else {
@@ -74,8 +74,29 @@ modules.forums = {
 			}
 		}
 
+		var maxPage = false;
+		var getMaxPage = function() {
+			var pagesList = $(mOptions.lastPage);
+			if(!pagesList.length || !pagesList.text().match(/\S/)) {
+				maxPage = true;
+			}
+			else {
+				var bracketsPage = pagesList.text().match(/\[(\d+)\]\s*$/);
+				if(!bracketsPage) {
+					maxPage = true
+				}
+				else {
+					maxPage = Number(bracketsPage[1]);
+				}
+			}
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
+
+		if(mOptions.lastPage) {
+			getMaxPage();
+		}
 
 		var buttons = '<div class="gksi_buttons"><input id="endless_scrolling" type="checkbox" ' + (endless_scrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling</div>';
 		$(mOptions.buttons).before(buttons);

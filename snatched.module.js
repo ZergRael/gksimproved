@@ -16,7 +16,7 @@ modules.snatched = {
 	name: "snatched",
 	dText: "Snatched",
 	pages: [
-		{ path_name: "/m/peers/snatched", options: { buttons: '#contenu > a:first', loading: '.pager_align' } }
+		{ path_name: "/m/peers/snatched", options: { buttons: '#contenu > a:first', loading: '.pager_align', lastPage: ".pager_align:first" } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -34,9 +34,9 @@ modules.snatched = {
 		var loadingPage = false;
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
 		var jOnScroll = function() {
-			if(endlessScrolling && ! ignoreScrolling) {
+			if(endlessScrolling && !ignoreScrolling && (!maxPage || nextPage < maxPage)) {
 				dbg("[EndlessScrolling] Scrolled");
-				if((document.documentElement.scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
+				if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
 					dbg("[EndlessScrolling] Loading next page");
 					loadingPage = true;
 
@@ -63,12 +63,23 @@ modules.snatched = {
 					});
 				}
 
-				if(document.documentElement.scrollTop > backTopButtonOffset) {
+				if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop > backTopButtonOffset) {
 					$("#backTopButton").show();
 				}
 				else {
 					$("#backTopButton").hide();
 				}
+			}
+		};
+
+		var maxPage = false;
+		var getMaxPage = function() {
+			var pagesList = $(mOptions.lastPage);
+			if(!pagesList.length) {
+				maxPage = true;
+			}
+			else {
+				maxPage = Number(pagesList.text().match(/(\d+) ?$/)[1]);
 			}
 		};
 
@@ -180,18 +191,17 @@ modules.snatched = {
 			nextUrl.cancelQ = true;
 			nextUrl.params = nextUrl.params ? nextUrl.params : {};
 
-			var maxPage = Number($(".pager_align").first().text().split("|").pop()) - 1;
-			if(maxPage == 0) {
+			if(maxPage === true) {
 				dbg("[AllPagesGrab] Not enough pages");
 				return;
 			}
 
 			dbg("[AllPagesGrab] Grabbing started");
 			$(mOptions.loading).before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Hachage positronique de l\'ensemble des pages</p>');
-			for(var i = 1; i <= maxPage; i++) {
+			for(var i = 1; i < maxPage; i++) {
 				nextUrl.params.page = i;
 				dbg("[AllPagesGrab] Grabbing page " + i);
-				var pageLoaded = 0;
+				var pageLoaded = 1;
 				grabPage(nextUrl, function(data) {
 					torrentsTR = $(data).find(".table100 tbody tr")
 					if(torrentsTR && torrentsTR.length) {
@@ -213,7 +223,7 @@ modules.snatched = {
 			
 		};
 
-		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (filteringDeleted ? 'checked="checked" ' : ' ') + '/> Cacher les supprimés | <input id="endless_scrolling" type="checkbox" ' + (endlessScrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling | <a href="javascript:false" id="grabAllPages">Récupérer toutes les pages</a>';
+		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (filteringDeleted ? 'checked="checked" ' : ' ') + '/> Cacher les supprimés | <input id="endless_scrolling" type="checkbox" ' + (endlessScrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling' + (nextPage == 1 ? ' | <a href="javascript:false" id="grabAllPages">Récupérer toutes les pages</a>' : '');
 		var colSortButtons = [ {n: 1, id: "sortName", nom: "Nom"}, {n: 3, id: "sortUL", nom: "UL"}, {n: 4, id: "sortDL", nom: "DL"}, {n: 5, id: "sortRDL", nom: "Real DL"}, {n: 6, id: "sortST", nom: "SeedTime"}, {n: 7, id: "sortRatio", nom: "Ratio"}
 		];
 		$.each(colSortButtons, function(k, v) {
@@ -223,6 +233,10 @@ modules.snatched = {
 		dbg("[Init] Starting");
 		// Adding buttons
 		$(mOptions.buttons).after(torrentButtons);
+
+		if(mOptions.lastPage) {
+			getMaxPage();
+		}
 
 		// Deleted torrents filtering
 		$("#filter_deleted").change(function() {
