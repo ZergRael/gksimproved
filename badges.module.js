@@ -16,7 +16,8 @@ modules.badges = {
 	name: "badges",
 	dText: "Badges",
 	pages: [
-		{ path_name: "/m/badges/", options: { option: 'value' } }
+		{ path_name: "/m/badges/" },
+		{ path_name: "/badges/\\d+", options: { checkId: true } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -25,6 +26,12 @@ modules.badges = {
 		var dbg = function(str) {
 			_dbg(module_name, str);
 		};
+
+		if(mOptions.checkId) {
+			if(url.path.match(/(\d+)/)[1] != modules.global.userId) {
+				return;
+			}
+		}
 
 		dbg("[Init] Loading module");
 		// Loading all functions used

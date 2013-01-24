@@ -10,6 +10,8 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+- Module badges actif aussi sur votre page publique de badges
+
 **0.2.1**
 - Extension Firefox
 - Montre toutes les images de badges
