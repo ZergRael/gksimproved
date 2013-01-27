@@ -150,7 +150,7 @@ var appendFrame = function(o) {
 		return false;
 	});
 
-	if(o.relativeToId) {
+	if(o.relativeToId && getComputedStyle($("#gksi_" + o.id).get(0), null).top == "auto") {
 		$(window).resize(function() {
 			var toOffset = $("#" + o.relativeToId).offset();
 			$("#gksi_" + o.id).offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });

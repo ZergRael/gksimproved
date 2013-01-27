@@ -13,6 +13,7 @@ Voir topic associé.
 - Module badges actif aussi sur votre page publique de badges
 - Meilleur formatage des indicateurs sous les badges
 - Correction de l'endless scrolling sur la dernière page
+- Autorise les modifications sur la positions des frames GKSi
 
 **0.2.1**
 - Extension Firefox
