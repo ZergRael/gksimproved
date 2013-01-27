@@ -34,41 +34,48 @@ modules.snatched = {
 		var loadingPage = false;
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
 		var jOnScroll = function() {
-			if(endlessScrolling && !ignoreScrolling && (!maxPage || nextPage < maxPage)) {
-				dbg("[EndlessScrolling] Scrolled");
-				if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
-					dbg("[EndlessScrolling] Loading next page");
-					loadingPage = true;
+			if(!endless_scrolling || ignoreScrolling) {
+				return;
+			}
 
-					var nextUrl = url;
-					nextUrl.cancelQ = true;
-					nextUrl.params = nextUrl.params ? nextUrl.params : {};
-					nextUrl.params.page = nextPage;
-					$(mOptions.loading).before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>');
-					grabPage(nextUrl, function(data) {
-						torrentsTR = $(data).find(".table100 tbody tr")
-						dbg("[EndlessScrolling] Grab ended")
-						if(torrentsTR && torrentsTR.length) {
-							dbg("[EndlessScrolling] Got data - Inserting")
-							$(".table100 tbody").append(filterDeleted(torrentsTR));
-							sortData();
-							nextPage++;
-							loadingPage = false;
-							$(".page_loading").remove();
-						}
-						else {
-							dbg("[EndlessScrolling] No more data");
-							$(".page_loading").text("Plus rien en vue cap'tain !");
-						}
-					});
-				}
+			if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop > backTopButtonOffset) {
+				$("#backTopButton").show();
+			}
+			else {
+				$("#backTopButton").hide();
+			}
 
-				if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop > backTopButtonOffset) {
-					$("#backTopButton").show();
-				}
-				else {
-					$("#backTopButton").hide();
-				}
+			if(maxPage === true || nextPage >= maxPage) {
+				return;
+			}
+
+			//if(endlessScrolling && !ignoreScrolling && (!maxPage || nextPage < maxPage)) {
+			dbg("[EndlessScrolling] Scrolled");
+			if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
+				dbg("[EndlessScrolling] Loading next page");
+				loadingPage = true;
+
+				var nextUrl = url;
+				nextUrl.cancelQ = true;
+				nextUrl.params = nextUrl.params ? nextUrl.params : {};
+				nextUrl.params.page = nextPage;
+				$(mOptions.loading).before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>');
+				grabPage(nextUrl, function(data) {
+					torrentsTR = $(data).find(".table100 tbody tr")
+					dbg("[EndlessScrolling] Grab ended")
+					if(torrentsTR && torrentsTR.length) {
+						dbg("[EndlessScrolling] Got data - Inserting")
+						$(".table100 tbody").append(filterDeleted(torrentsTR));
+						sortData();
+						nextPage++;
+						loadingPage = false;
+						$(".page_loading").remove();
+					}
+					else {
+						dbg("[EndlessScrolling] No more data");
+						$(".page_loading").text("Plus rien en vue cap'tain !");
+					}
+				});
 			}
 		};
 

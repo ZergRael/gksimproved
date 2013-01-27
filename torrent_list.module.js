@@ -36,42 +36,49 @@ modules.torrent_list = {
 		var loadingPage = false;
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
 		var jOnScroll = function() {
-			if(endless_scrolling && !ignoreScrolling && (!maxPage || nextPage < maxPage)) {
-				dbg("[EndlessScrolling] Scrolled");
-				if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
-					dbg("[EndlessScrolling] Loading next page");
-					loadingPage = true;
+			if(!endless_scrolling || ignoreScrolling) {
+				return;
+			}
 
-					var nextUrl = url;
-					if(mOptions.path) {
-						nextUrl.path = mOptions.path;
+			if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop > backTopButtonOffset) {
+				$("#backTopButton").show();
+			}
+			else {
+				$("#backTopButton").hide();
+			}
+
+			if(maxPage === true || nextPage >= maxPage) {
+				return;
+			}
+
+			//if(endless_scrolling && !ignoreScrolling && (!maxPage || nextPage < maxPage)) {
+			dbg("[EndlessScrolling] Scrolled");
+			if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
+				dbg("[EndlessScrolling] Loading next page");
+				loadingPage = true;
+
+				var nextUrl = url;
+				if(mOptions.path) {
+					nextUrl.path = mOptions.path;
+				}
+				nextUrl.params = nextUrl.params ? nextUrl.params : {};
+				nextUrl.params.page = nextPage;
+				$(mOptions.loading).before('<p class="pager_align" id="page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>');
+				grabPage(nextUrl, function(data) {
+					torrentsTR = $(data).find("#torrent_list tr")
+					dbg("[EndlessScrolling] Grab ended")
+					if(torrentsTR && torrentsTR.length) {
+						dbg("[EndlessScrolling] Got data - Inserting")
+						$("#torrent_list").append(filterFL(torrentsTR, true));
+						nextPage++;
+						loadingPage = false;
+						$("#page_loading").remove();
 					}
-					nextUrl.params = nextUrl.params ? nextUrl.params : {};
-					nextUrl.params.page = nextPage;
-					$(mOptions.loading).before('<p class="pager_align" id="page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>');
-					grabPage(nextUrl, function(data) {
-						torrentsTR = $(data).find("#torrent_list tr")
-						dbg("[EndlessScrolling] Grab ended")
-						if(torrentsTR && torrentsTR.length) {
-							dbg("[EndlessScrolling] Got data - Inserting")
-							$("#torrent_list").append(filterFL(torrentsTR, true));
-							nextPage++;
-							loadingPage = false;
-							$("#page_loading").remove();
-						}
-						else {
-							dbg("[EndlessScrolling] No more data");
-							$("#page_loading").text("Plus rien en vue cap'tain !");
-						}
-					});
-				}
-
-				if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop > backTopButtonOffset) {
-					$("#backTopButton").show();
-				}
-				else {
-					$("#backTopButton").hide();
-				}
+					else {
+						dbg("[EndlessScrolling] No more data");
+						$("#page_loading").text("Plus rien en vue cap'tain !");
+					}
+				});
 			}
 		};
 

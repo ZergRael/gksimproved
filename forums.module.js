@@ -35,7 +35,18 @@ modules.forums = {
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 2);
 		var endless_scrolling = opt.get(module_name, "endless_scrolling");
 		var jOnScroll = function() {
-			if(!endless_scrolling || ignoreScrolling || maxPage === true || nextPage > maxPage) {
+			if(!endless_scrolling || ignoreScrolling) {
+				return;
+			}
+
+			if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop > backTopButtonOffset) {
+				$("#backTopButton").show();
+			}
+			else {
+				$("#backTopButton").hide();
+			}
+
+			if(maxPage === true || nextPage > maxPage) {
 				return;
 			}
 
@@ -64,13 +75,6 @@ modules.forums = {
 						$("#page_loading").text("Plus rien en vue cap'tain !");
 					}
 				});
-			}
-
-			if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop > backTopButtonOffset) {
-				$("#backTopButton").show();
-			}
-			else {
-				$("#backTopButton").hide();
 			}
 		}
 
