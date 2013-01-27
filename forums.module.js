@@ -17,7 +17,7 @@ modules.forums = {
 	dText: "Forums",
 	pages: [
 		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { buttons: '.linkbox:first', loading: '.thin table', domList: '.thin tr:last', domData: 'tbody tr', scrollOffset: 180, endOfStream: 'No posts to display!', lastPage: '.linkbox:nth(2)' } },
-		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: '.linkbox:first', loading: '.thin table:last', domList: '.thin table:last', domData: '.thin table', scrollOffset: 600, lastPage: '.linkbox:first' } }
+		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: '.linkbox:first', loading: '.thin table:last', domList: '.thin table:last', domData: '.thin table', scrollOffset: 600, lastPage: '.linkbox:first', canHideSig : true } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -64,7 +64,7 @@ modules.forums = {
 					dbg("[EndlessScrolling] Grab ended")
 					if(dataGrabbed && dataGrabbed.length && !(mOptions.endOfStream && dataGrabbed.text().indexOf(mOptions.endOfStream) != -1)) {
 						dbg("[EndlessScrolling] Got data - Inserting")
-						$(mOptions.domList).after(dataGrabbed);
+						$(mOptions.domList).after(filterSignatures(dataGrabbed));
 						nextPage++;
 						loadingPage = false;
 						$(".colhead:not(:first)").remove();
@@ -95,6 +95,24 @@ modules.forums = {
 			}
 		};
 
+		var filterSignatures = function(data) {
+			if(!mOptions.canHideSig) {
+				return data;
+			}
+
+			dbg("[hide_signatures] Processing data");
+			data.each(function() {
+				$(this).html($(this).html().replace("- - - - -", '<a class="toggleSignature" href="#">- - - - -</a><div class="signature">'));
+				$(this).append("</div>");
+				if(opt.get(module_name, "hide_signatures")) {
+					$(this).find(".signature").hide();
+				}
+			});
+
+			dbg("[hide_signatures] Process ended");
+			return data;
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -111,6 +129,15 @@ modules.forums = {
 			opt.set(module_name, "endless_scrolling", endless_scrolling);
 		});
 		$(document).scroll(jOnScroll);
+
+		filterSignatures($(".body div"));
+		if(mOptions.canHideSig) {
+			$(".toggleSignature").live("click", function() {
+				dbg("[hide_signatures] Toggle signature");
+				$(this).parent().find(".signature").toggle();
+				return false;
+			});
+		}
 
 		dbg("[Init] Ready");
 	}

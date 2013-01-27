@@ -232,7 +232,8 @@ var opt = {
 			filter_expensive: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's trop chers" }
 		},
 		forums: {
-			endless_scrolling: 	{ defaultVal: false, showInOptions: false }
+			endless_scrolling: 	{ defaultVal: false, showInOptions: false },
+			hide_signatures: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut" }
 		},
 		torrent: {
 			quick_comment: 		{ defaultVal: true, showInOptions: true, dispText: "Afficher la boite de commentaire rapide sur les fiches torrent" }

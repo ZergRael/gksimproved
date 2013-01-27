@@ -14,6 +14,7 @@ Voir topic associé.
 - Meilleur formatage des indicateurs sous les badges
 - Correction de l'endless scrolling sur la dernière page
 - Autorise les modifications sur la positions des frames GKSi
+- Cacheur de signatures sur les forums
 
 **0.2.1**
 - Extension Firefox
