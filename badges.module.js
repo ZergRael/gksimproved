@@ -16,7 +16,7 @@ modules.badges = {
 	name: "badges",
 	dText: "Badges",
 	pages: [
-		{ path_name: "/m/badges/" },
+		{ path_name: "/m/badges/", options: {} },
 		{ path_name: "/badges/\\d+", options: { checkId: true } }
 	],
 	loaded: false,
@@ -110,8 +110,8 @@ modules.badges = {
 					{ url: "wikicrazy", trigger: 100 },
 					{ url: "wikimaster", trigger: 250 }
 				],
-				dom: "#contenu p:nth(16)",
-				regex: /\| ([\d,]+)/
+				dom: "#contenu",
+				regex: /([\d,]+) Wiki/
 			},
 			{	// DL/Ratio -- 7
 				badges: [ 
@@ -154,7 +154,7 @@ modules.badges = {
 					{ url: "ircexpert", trigger: 50000 },
 					{ url: "ircgod", trigger: 100000 }
 				],
-				dom: "#contenu p:nth(19)",
+				dom: "#contenu p:nth(20)",
 				regex: /([\d,]+)/
 			}
 		];
@@ -183,6 +183,7 @@ modules.badges = {
 						var b_s = badgesData[i_section];
 						if(b_s.dom) {
 							b_s.val = $(data).find(b_s.dom).text().match(b_s.regex)[1];
+							dbg("[progress] Got value [" + b_s.val + "] for section " + i_section);
 						}
 
 						if(b_s.val !== undefined) {
@@ -198,6 +199,8 @@ modules.badges = {
 					});
 				});
 			});
+
+			dbg("[progress] Ended requests");
 		};
 
 		var show_img = opt.get(module_name, "show_img");
