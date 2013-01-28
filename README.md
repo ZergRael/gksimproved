@@ -10,6 +10,7 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+**0.2.3**
 - Module badges actif aussi sur votre page publique de badges
 - Meilleur formatage des indicateurs sous les badges
 - Correction de l'endless scrolling sur la dernière page
@@ -17,6 +18,7 @@ Voir topic associé.
 - Cacheur de signatures sur les forums
 - Pause sur l'endless scrolling lorsqu'on scrolle jusqu'en bas de la page
 - Endless scrolling & auto-refresh sur la page des logs
+- Correction de la colorisation des twits à l'endless scrolling sur les forums
 
 **0.2.1**
 - Extension Firefox

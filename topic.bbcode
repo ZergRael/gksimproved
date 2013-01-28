@@ -7,7 +7,7 @@ C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un
 
 Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. Toujours en beta mais un jour peut-être une version stable arrivera ;)
 
-Version actuelle : 0.2.1 - 24/01/2013 - Licence GPLv3
+Version actuelle : 0.2.3 - 28/01/2013 - Licence GPLv3
 
 [size=6]Téléchargement[/size] :
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
@@ -59,6 +59,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Posts d'un topic -- /forums.php?action=viewtopic
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+> [i]Cacheur de signatures[/i] : Cache les signatures par défaut. Chaque signature peut être affichée ou non individuellement
 
 [b]* Torrents[/b]
 - Liste commentaires d'un torrent -- /torrent/\d+/
@@ -76,8 +77,14 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
 
+[b]* Logs[/b]
+- Page des logs -- /logs/
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+
 [b]* Badges[/b]
 - Liste des badges acquis -- /m/badges/
+- Liste des badges acquis -- /badges/<user_id>
 
 > [i]Progression[/i] : Affiche votre progression vers l'obtention de ce badge
 > [i]Tous les badges[/i] : Affiche toutes les images de badges même si vous ne les avez pas (semi-transparents)
@@ -94,12 +101,21 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
 
 [size=6]Changelog :[/size]
+[b]* 0.2.3 - 28/01/2013[/b]
+- Module badges actif aussi sur votre page publique de badges
+- Meilleur formatage des indicateurs sous les badges
+- Correction de l'endless scrolling sur la dernière page
+- Autorise les modifications sur la positions des frames GKSi
+- Cacheur de signatures sur les forums
+- Pause sur l'endless scrolling lorsqu'on scrolle jusqu'en bas de la page
+- Endless scrolling & auto-refresh sur la page des logs
+- Correction de la colorisation des twits à l'endless scrolling sur les forums
+[spoil]
 [b]* 0.2.1 - 24/01/2013[/b]
 - Extension Firefox
 - Montre toutes les images de badges
 - Affiche la progression sous les badges
 - Evite le chargement des pages inutiles avec l'endless scrolling
-[spoil]
 [b]* 0.2.0 - 22/01/2013[/b]
 - BugFix: Support mac pour la validation formulaire
 - Endless scrolling sur la page de requêtes
