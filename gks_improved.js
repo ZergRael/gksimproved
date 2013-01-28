@@ -151,34 +151,9 @@ var appendFrame = function(o) {
 	});
 
 
-	if(o.relativeToId) {
-	/*	foundStyleMod = false;
-		$.each(document.styleSheets, function(styleSheetI, styleSheet) {
-			if(!styleSheet.cssRules) {
-				return;
-			}
-			$.each(styleSheet.cssRules, function(ruleName, rule) {
-				if(rule.type == 1 && rule.selectorText == ("#gksi_" + o.id)) {
-					$.each(rule.style, function(styleName, style) {
-						if(style == "top") {
-							foundStyleMod = true;
-							return false;
-						}
-					});
-				}
-				if(foundStyleMod) {
-					return false;
-				}
-			});
-			if(foundStyleMod) {
-				return false;
-			}
-		});
-		dbg(foundStyleMod);
-		if(foundStyleMod) {
-			return;
-		}*/
-
+	dbg("jQueryCss : " + $("#gksi_" + o.id).css("top"));
+	dbg("computedStyle : " + getComputedStyle($("#gksi_" + o.id).get(0), null).getPropertyValue("top"))
+	if(o.relativeToId && $("#gksi_" + o.id).css("top") != "auto") {
 		$(window).resize(function() {
 			var toOffset = $("#" + o.relativeToId).offset();
 			$("#gksi_" + o.id).offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
@@ -199,12 +174,12 @@ var insertCSS = function() {
 		"#gksi_suggest { position: absolute; } " +
 		//"#gksi_suggest_data { } " +
 		"#gksi_options { position: absolute; } " +
+		//"#gksi_options_data { } " +
 		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; } " +
 		".gksi_progress_bar { background-color: orange; height: 11px; border-radius: 1px; margin-bottom: -11px; } " +
 		".gksi_progress_numbers { position: relative; } " +
 		".gksi_valid { background-color: lightgreen; } " +
 		".halfOpacity { opacity: 0.4; } " +
-		//"#gksi_options_data { } " +
 		"</style>");
 };
 
