@@ -150,7 +150,35 @@ var appendFrame = function(o) {
 		return false;
 	});
 
-	if(o.relativeToId && getComputedStyle($("#gksi_" + o.id).get(0), null).top == "auto") {
+
+	if(o.relativeToId) {
+	/*	foundStyleMod = false;
+		$.each(document.styleSheets, function(styleSheetI, styleSheet) {
+			if(!styleSheet.cssRules) {
+				return;
+			}
+			$.each(styleSheet.cssRules, function(ruleName, rule) {
+				if(rule.type == 1 && rule.selectorText == ("#gksi_" + o.id)) {
+					$.each(rule.style, function(styleName, style) {
+						if(style == "top") {
+							foundStyleMod = true;
+							return false;
+						}
+					});
+				}
+				if(foundStyleMod) {
+					return false;
+				}
+			});
+			if(foundStyleMod) {
+				return false;
+			}
+		});
+		dbg(foundStyleMod);
+		if(foundStyleMod) {
+			return;
+		}*/
+
 		$(window).resize(function() {
 			var toOffset = $("#" + o.relativeToId).offset();
 			$("#gksi_" + o.id).offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
