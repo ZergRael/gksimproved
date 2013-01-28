@@ -30,9 +30,10 @@ modules.request = {
 		// Loading all functions used
 
 		var endless_scrolling = opt.get(module_name, "endless_scrolling");
-		var scrollOffset = 160;
+		var scrollOffset = 200;
 		var backTopButtonOffset = 100;
 		var loadingPage = false;
+		var wentToPageBottom = false;
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
 		var jOnScroll = function() {
 			if(!endless_scrolling || ignoreScrolling) {
@@ -50,7 +51,11 @@ modules.request = {
 				return;
 			}
 
-			//if(endless_scrolling && !ignoreScrolling && (!maxPage || nextPage < maxPage)) {
+			if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight >= document.documentElement.scrollHeight) {
+				dbg("[EndlessScrolling] Stop inserting, got to page bottom");
+				wentToPageBottom = true;
+			}
+
 			dbg("[EndlessScrolling] Scrolled");
 			if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
 				dbg("[EndlessScrolling] Loading next page");
@@ -64,11 +69,7 @@ modules.request = {
 					snatchedTR = $(data).find("#requests_list tbody tr:not(:first)")
 					dbg("[EndlessScrolling] Grab ended")
 					if(snatchedTR && snatchedTR.length) {
-						dbg("[EndlessScrolling] Got data - Inserting")
-						$("#requests_list tbody").append(snatchedTR);
-						nextPage++;
-						loadingPage = false;
-						$(".page_loading").remove();
+						insertAjaxData(snatchedTR);
 					}
 					else {
 						dbg("[EndlessScrolling] No more data");
@@ -76,6 +77,25 @@ modules.request = {
 					}
 				});
 			}
+		};
+
+		var insertAjaxData = function(data) {
+			if(wentToPageBottom) {
+				dbg("[EndlessScrolling] Waiting for user confirmation in order to insert more");
+				$(".page_loading").html('<a href="#" class="resume_endless_scrolling">Reprendre l\'endless scrolling</a>');
+				$(".resume_endless_scrolling").click(function(e) {
+					wentToPageBottom = false;
+					e.preventDefault();
+					insertAjaxData(data);
+					return false;
+				});
+				return;
+			}
+			dbg("[EndlessScrolling] Got data - Inserting")
+			$("#requests_list tbody").append(data);
+			nextPage++;
+			loadingPage = false;
+			$(".page_loading").remove();
 		};
 
 		var maxPage = false;

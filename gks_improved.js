@@ -153,7 +153,7 @@ var appendFrame = function(o) {
 
 	dbg("jQueryCss : " + $("#gksi_" + o.id).css("top"));
 	dbg("computedStyle : " + getComputedStyle($("#gksi_" + o.id).get(0), null).getPropertyValue("top"))
-	if(o.relativeToId && $("#gksi_" + o.id).css("top") != "auto") {
+	if(o.relativeToId && $("#gksi_" + o.id).css("top") == "auto") {
 		$(window).resize(function() {
 			var toOffset = $("#" + o.relativeToId).offset();
 			$("#gksi_" + o.id).offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
@@ -180,6 +180,7 @@ var insertCSS = function() {
 		".gksi_progress_numbers { position: relative; } " +
 		".gksi_valid { background-color: lightgreen; } " +
 		".halfOpacity { opacity: 0.4; } " +
+		".resume_endless_scrolling { font-size: 1.4em; font-weight: bold; } " +
 		"</style>");
 };
 

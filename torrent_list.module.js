@@ -34,6 +34,7 @@ modules.torrent_list = {
 		var scrollOffset = 260;
 		var backTopButtonOffset = 100;
 		var loadingPage = false;
+		var wentToPageBottom = false;
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
 		var jOnScroll = function() {
 			if(!endless_scrolling || ignoreScrolling) {
@@ -51,7 +52,11 @@ modules.torrent_list = {
 				return;
 			}
 
-			//if(endless_scrolling && !ignoreScrolling && (!maxPage || nextPage < maxPage)) {
+			if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight >= document.documentElement.scrollHeight) {
+				dbg("[EndlessScrolling] Stop inserting, got to page bottom");
+				wentToPageBottom = true;
+			}
+
 			dbg("[EndlessScrolling] Scrolled");
 			if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
 				dbg("[EndlessScrolling] Loading next page");
@@ -68,11 +73,7 @@ modules.torrent_list = {
 					torrentsTR = $(data).find("#torrent_list tr")
 					dbg("[EndlessScrolling] Grab ended")
 					if(torrentsTR && torrentsTR.length) {
-						dbg("[EndlessScrolling] Got data - Inserting")
-						$("#torrent_list").append(filterFL(torrentsTR, true));
-						nextPage++;
-						loadingPage = false;
-						$("#page_loading").remove();
+						insertAjaxData(torrentsTR);
 					}
 					else {
 						dbg("[EndlessScrolling] No more data");
@@ -80,6 +81,24 @@ modules.torrent_list = {
 					}
 				});
 			}
+		};
+
+		var insertAjaxData = function(data) {
+			if(wentToPageBottom) {
+				dbg("[EndlessScrolling] Waiting for user confirmation in order to insert more");
+				$(".page_loading").html('<a href="#" class="resume_endless_scrolling">Reprendre l\'endless scrolling</a>');
+				$(".resume_endless_scrolling").click(function() {
+					wentToPageBottom = false;
+					insertAjaxData(data);
+					return false;
+				});
+				return;
+			}
+			dbg("[EndlessScrolling] Got data - Inserting")
+			$("#torrent_list").append(filterFL(data, true));
+			nextPage++;
+			loadingPage = false;
+			$("#page_loading").remove();
 		};
 
 		var maxPage = false;
