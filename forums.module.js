@@ -96,6 +96,7 @@ modules.forums = {
 			loadingPage = false;
 			$(".colhead:not(:first)").remove();
 			$(".page_loading").remove();
+			$(document).trigger("recolorTwits");
 		};
 
 		var maxPage = false;

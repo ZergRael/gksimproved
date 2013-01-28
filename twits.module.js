@@ -116,6 +116,12 @@ modules.twits = {
 			$(mOptions.twit_autoc.scanArea).keydown(jOnKeydown);
 		}
 
+		if(mOptions.twit_color) {
+			$(document).bind("recolorTwits", function() {
+				colorizeTwits();
+			});
+		}
+
 		// On edit button click
 		$("#forums").on("click", "a[href^=#post]", function() {
 			var postId = $(this).attr("href").substr(5);
