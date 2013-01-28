@@ -31,7 +31,7 @@ var dbg = function(str) {
 }
 
 if($.browser.mozilla) {
-	chrome = {
+	var chrome = {
 		extension: {
 			getURL: function(str) {
 				return self.options[str];
@@ -150,10 +150,7 @@ var appendFrame = function(o) {
 		return false;
 	});
 
-
-	dbg("jQueryCss : " + $("#gksi_" + o.id).css("top"));
-	dbg("computedStyle : " + getComputedStyle($("#gksi_" + o.id).get(0), null).getPropertyValue("top"))
-	if(o.relativeToId && $("#gksi_" + o.id).css("top") == "auto") {
+	if(o.relativeToId && !opt.get("global", "allow_frame_css")) {
 		$(window).resize(function() {
 			var toOffset = $("#" + o.relativeToId).offset();
 			$("#gksi_" + o.id).offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
@@ -217,7 +214,8 @@ var opt = {
 	options: {
 		global: {
 			form_validation: 	{ defaultVal: true, showInOptions: true, dispText: "Validation des formulaires avec ctrl+entrée" },
-			bbcode_shortcuts: 	{ defaultVal: true, showInOptions: true, dispText: "Raccourcis BBCodes avec ctrl" }
+			bbcode_shortcuts: 	{ defaultVal: true, showInOptions: true, dispText: "Raccourcis BBCodes avec ctrl" },
+			allow_frame_css: 	{ defaultVal: false, showInOptions: true, dispText: "Laisser le CSS positionner les fenêtres GKSi" }
 		},
 		torrent_list: {
 			endless_scrolling: 	{ defaultVal: false, showInOptions: false },
@@ -248,6 +246,10 @@ var opt = {
 		badges: {
 			progress: 			{ defaultVal: false, showInOptions: true, dispText: "Afficher la progression sous les badges" },
 			show_img: 			{ defaultVal: false, showInOptions: true, dispText: "Afficher toutes les images des badges" }
+		},
+		logs: {
+			endless_scrolling: 	{ defaultVal: false, showInOptions: false },
+			auto_refresh: 		{ defaultVal: false, showInOptions: false }
 		}
 	},
 	get: function(m, o) {
@@ -262,7 +264,7 @@ var opt = {
 	},
 	load: function() {
 		$.each(this.options, function(m, opts) {
-			values = storage.get(m);
+			var values = storage.get(m);
 			$.each(opts, function(o, v) {
 				opt.options[m][o].val = (values && values[o] != undefined ? values[o] : v.defaultVal);
 			});

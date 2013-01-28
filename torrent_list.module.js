@@ -68,7 +68,7 @@ modules.torrent_list = {
 				}
 				nextUrl.params = nextUrl.params ? nextUrl.params : {};
 				nextUrl.params.page = nextPage;
-				$(mOptions.loading).before('<p class="pager_align" id="page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>');
+				$(mOptions.loading).before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>');
 				grabPage(nextUrl, function(data) {
 					torrentsTR = $(data).find("#torrent_list tr")
 					dbg("[EndlessScrolling] Grab ended")
@@ -77,7 +77,7 @@ modules.torrent_list = {
 					}
 					else {
 						dbg("[EndlessScrolling] No more data");
-						$("#page_loading").text("Plus rien en vue cap'tain !");
+						$(".page_loading").text("Plus rien en vue cap'tain !");
 					}
 				});
 			}
@@ -98,7 +98,7 @@ modules.torrent_list = {
 			$("#torrent_list").append(filterFL(data, true));
 			nextPage++;
 			loadingPage = false;
-			$("#page_loading").remove();
+			$(".page_loading").remove();
 		};
 
 		var maxPage = false;

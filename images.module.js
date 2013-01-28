@@ -1,3 +1,4 @@
+
 // This file is part of GKSimproved.
 
 // This program is free software: you can redistribute it and/or modify
@@ -12,12 +13,10 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-modules.forums = {
-	name: "forums",
-	dText: "Forums",
+modules.images = {
+	name: "images",
 	pages: [
-		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { buttons: '.linkbox:first', loading: '.thin table', domList: '.thin tr:last', domData: 'tbody tr', scrollOffset: 180, stopInsertBottomOffset: 100, endOfStream: 'No posts to display!', lastPage: '.linkbox:nth(2)' } },
-		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: '.linkbox:first', loading: '.thin table:last', domList: '.thin table:last', domData: '.thin table', scrollOffset: 600, stopInsertBottomOffset: 100, lastPage: '.linkbox:first', canHideSig : true } }
+		{ path_name: "/m/images/(page)?", options: { buttons: '#imageslist', loading: '.pager_align', lastPage: '.pager_align' } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -30,11 +29,12 @@ modules.forums = {
 		dbg("[Init] Loading module");
 		// Loading all functions used
 
+		var endless_scrolling = opt.get(module_name, "endless_scrolling");
+		var scrollOffset = 260;
 		var backTopButtonOffset = 100;
 		var loadingPage = false;
 		var wentToPageBottom = false;
-		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 2);
-		var endless_scrolling = opt.get(module_name, "endless_scrolling");
+		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
 		var jOnScroll = function() {
 			if(!endless_scrolling || ignoreScrolling) {
 				return;
@@ -47,7 +47,7 @@ modules.forums = {
 				$("#backTopButton").hide();
 			}
 
-			if(maxPage === true || nextPage > maxPage) {
+			if(maxPage === true || nextPage >= maxPage) {
 				return;
 			}
 
@@ -57,19 +57,22 @@ modules.forums = {
 			}
 
 			dbg("[EndlessScrolling] Scrolled");
-			if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - mOptions.scrollOffset) && !loadingPage) {
-				dbg("[EndlessScrolling] Loading next page (" + nextPage + ")");
+			if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
+				dbg("[EndlessScrolling] Loading next page");
 				loadingPage = true;
 
 				var nextUrl = url;
+				if(mOptions.path) {
+					nextUrl.path = mOptions.path;
+				}
 				nextUrl.params = nextUrl.params ? nextUrl.params : {};
 				nextUrl.params.page = nextPage;
-				$(mOptions.loading).after('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>');
+				$(mOptions.loading).before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>');
 				grabPage(nextUrl, function(data) {
-					dataGrabbed = $(data).find(mOptions.domData)
+					imagesDiv = $(data).find("#imageslist div");
 					dbg("[EndlessScrolling] Grab ended")
-					if(dataGrabbed && dataGrabbed.length && !(mOptions.endOfStream && dataGrabbed.text().indexOf(mOptions.endOfStream) != -1)) {
-						insertAjaxData(dataGrabbed);
+					if(imagesDiv && imagesDiv.length) {
+						insertAjaxData(imagesDiv);
 					}
 					else {
 						dbg("[EndlessScrolling] No more data");
@@ -77,7 +80,7 @@ modules.forums = {
 					}
 				});
 			}
-		}
+		};
 
 		var insertAjaxData = function(data) {
 			if(wentToPageBottom) {
@@ -90,74 +93,41 @@ modules.forums = {
 				});
 				return;
 			}
-			dbg("[EndlessScrolling] Got data - Inserting")
-			$(mOptions.domList).after(filterSignatures(data));
+			dbg("[EndlessScrolling] Got data - Inserting");
+			$("#imageslist").append(data);
 			nextPage++;
 			loadingPage = false;
-			$(".colhead:not(:first)").remove();
 			$(".page_loading").remove();
 		};
 
 		var maxPage = false;
 		var getMaxPage = function() {
 			var pagesList = $(mOptions.lastPage);
-			if(!pagesList.length || !pagesList.text().match(/\S/)) {
+			if(!pagesList.length) {
 				maxPage = true;
 			}
 			else {
-				var bracketsPage = pagesList.text().match(/\[(\d+)\]\s*$/);
-				if(!bracketsPage) {
-					maxPage = true
-				}
-				else {
-					maxPage = Number(bracketsPage[1]);
-				}
+				maxPage = Number(pagesList.text().match(/(\d+) ?$/)[1]);
 			}
-		};
-
-		var filterSignatures = function(data) {
-			if(!mOptions.canHideSig) {
-				return data;
-			}
-
-			dbg("[hide_signatures] Processing data");
-			data.each(function() {
-				$(this).html($(this).html().replace("- - - - -", '<a class="toggleSignature" href="#">- - - - -</a><div class="signature">'));
-				$(this).append("</div>");
-				if(opt.get(module_name, "hide_signatures")) {
-					$(this).find(".signature").hide();
-				}
-			});
-
-			dbg("[hide_signatures] Process ended");
-			return data;
+			dbg("[max_page] " + maxPage);
 		};
 
 		dbg("[Init] Starting");
 		// Execute functions
 
+		var buttons = '<input id="endless_scrolling" type="checkbox" ' + (endless_scrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling';
+		$(mOptions.buttons).before(buttons);
+
 		if(mOptions.lastPage) {
 			getMaxPage();
 		}
 
-		var buttons = '<div class="gksi_buttons"><input id="endless_scrolling" type="checkbox" ' + (endless_scrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling</div>';
-		$(mOptions.buttons).before(buttons);
-
 		$("#endless_scrolling").change(function() {
 			endless_scrolling = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[EndlessScrolling] is " + endless_scrolling);
+			dbg("[endless_scrolling] is " + endless_scrolling);
 			opt.set(module_name, "endless_scrolling", endless_scrolling);
 		});
 		$(document).scroll(jOnScroll);
-
-		filterSignatures($(".body div"));
-		if(mOptions.canHideSig) {
-			$(".toggleSignature").live("click", function() {
-				dbg("[hide_signatures] Toggle signature");
-				$(this).parent().find(".signature").toggle();
-				return false;
-			});
-		}
 
 		dbg("[Init] Ready");
 	}

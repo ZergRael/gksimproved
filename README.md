@@ -16,6 +16,7 @@ Voir topic associé.
 - Autorise les modifications sur la positions des frames GKSi
 - Cacheur de signatures sur les forums
 - Pause sur l'endless scrolling lorsqu'on scrolle jusqu'en bas de la page
+- Endless scrolling & auto-refresh sur la page des logs
 
 **0.2.1**
 - Extension Firefox

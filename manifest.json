@@ -23,6 +23,7 @@
         "forums.module.js",
         "request.module.js",
         "badges.module.js",
+        "logs.module.js",
         "loader.js"
       ]
     }
