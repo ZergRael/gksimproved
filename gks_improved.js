@@ -272,6 +272,9 @@ var opt = {
 	setCallback: function(m, o, c) {
 		this.options[m][o].callback = c;
 	},
+	setData: function(m, o, name, data) {
+		this.options[m][o][name] = data;
+	},
 	load: function() {
 		$.each(this.options, function(m, opts) {
 			var values = storage.get(m);

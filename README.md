@@ -27,6 +27,7 @@ Voir topic associé.
 - Liste de torrents : Correction de l'endless scrolling
 - Options : Ajout de liens vers le topic adapté
 - Endless scrolling : Ajouté sur /m/images/
+- Endless scrolling : Tooltip dans les options indiquant les pages affectées
 
 **0.2.3**
 - Module badges actif aussi sur votre page publique de badges

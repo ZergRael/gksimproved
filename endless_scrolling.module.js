@@ -168,6 +168,15 @@ modules.endless_scrolling = {
 		dbg("[endless_scrolling] url relative pages : " + (url.params && url.params.page ? url.params.page : 0) + "/" + maxPage);
 		$(document).scroll(jOnScroll);
 
+		var generateTooltip = function() {
+			return modules[module_name].pages.map(function(page){
+				return page.path_name + (page.params ? '?' + $.map(page.params, function(value, query) {
+					return query + '=' + value;
+				}).join('&') : '');
+			}).join('\n');
+		};
+		opt.setData(module_name, "endless_scrolling", "tooltip", generateTooltip());
+
 		dbg("[Init] Ready");
 	},
 };

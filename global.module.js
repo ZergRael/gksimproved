@@ -85,7 +85,7 @@ modules.global = {
 				optionsFrameData += '<div id="gksi_options_data_' + module_name + '"><div class="gksi_frame_section">' + modules[module_name].dText + '</div>';
 				$.each(options, function(option, oData) {
 					if(oData.showInOptions) {
-						optionsFrameData += '<input type="checkbox" id="gksi_' + module_name + '_' + option + '" ' + (opt.get(module_name, option) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option + '">' + oData.dispText + '</label><br />';
+						optionsFrameData += '<input type="checkbox" id="gksi_' + module_name + '_' + option + '" ' + (opt.get(module_name, option) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
 					}
 				});
 				optionsFrameData += '</div>';
