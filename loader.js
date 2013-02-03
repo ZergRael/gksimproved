@@ -46,3 +46,4 @@ $.each(modules, function(module_name, m) {
 		}
 	});
 });
+$(document).trigger("scroll");

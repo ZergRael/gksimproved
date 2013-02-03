@@ -218,13 +218,15 @@ var opt = {
 			bbcode_shortcuts: 	{ defaultVal: true, showInOptions: true, dispText: "Raccourcis BBCodes avec ctrl" },
 			allow_frame_css: 	{ defaultVal: false, showInOptions: true, dispText: "Laisser le CSS positionner les fenêtres GKSi" }
 		},
+		endless_scrolling : {
+			endless_scrolling: 	{ defaultVal: true, showInOptions: true, dispText: "Endless scrolling sur les pages compatibles" },
+			pause_scrolling: 	{ defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page" },
+		},
 		torrent_list: {
-			endless_scrolling: 	{ defaultVal: false, showInOptions: false },
 			imdb_suggest: 		{ defaultVal: false, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
 			filtering_fl: 		{ defaultVal: false, showInOptions: false }
 		},
 		snatched: {
-			endless_scrolling: 	{ defaultVal: false, showInOptions: false },
 			filtering_deleted: 	{ defaultVal: true, showInOptions: false }
 		},
 		twits: {
@@ -235,21 +237,16 @@ var opt = {
 			filter_expensive: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's trop chers" }
 		},
 		forums: {
-			endless_scrolling: 	{ defaultVal: false, showInOptions: false },
 			hide_signatures: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut" }
 		},
 		torrent: {
 			quick_comment: 		{ defaultVal: true, showInOptions: true, dispText: "Afficher la boite de commentaire rapide sur les fiches torrent" }
-		},
-		request: {
-			endless_scrolling: 	{ defaultVal: false, showInOptions: false }
 		},
 		badges: {
 			progress: 			{ defaultVal: false, showInOptions: true, dispText: "Afficher la progression sous les badges" },
 			show_img: 			{ defaultVal: false, showInOptions: true, dispText: "Afficher toutes les images des badges" }
 		},
 		logs: {
-			endless_scrolling: 	{ defaultVal: false, showInOptions: false },
 			auto_refresh: 		{ defaultVal: false, showInOptions: false }
 		}
 	},

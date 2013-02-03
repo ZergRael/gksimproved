@@ -108,7 +108,7 @@ modules.twits = {
 		dbg("[Init] Starting");
 
 		// Twit autocomplete
-		$("#twit_autoc").bind("reactivateKeydownListenner", function() {
+		$(document).on("reactivate_keydown_listenner", function() {
 			dbg("[AutoCTwit] Retry to bind");
 			$(mOptions.twit_autoc.scanArea).keydown(jOnKeydown);
 		});
@@ -117,7 +117,7 @@ modules.twits = {
 		}
 
 		if(mOptions.twit_color) {
-			$(document).bind("recolorTwits", function() {
+			$(document).on("recolor_twits", function() {
 				colorizeTwits();
 			});
 		}

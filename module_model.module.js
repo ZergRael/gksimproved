@@ -35,9 +35,8 @@ modules.module_ = {
 		$(mOptions.buttons).before(buttons);
 
 		$("#but_id").change(function() {
-			o = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[O] is " + o);
-			opt.set(module_name, "o", o);
+			opt.set(module_name, "o", $(this).attr("checked") == "checked" ? true : false);
+			dbg("[o] is " + o);
 		});
 
 		dbg("[Init] Ready");

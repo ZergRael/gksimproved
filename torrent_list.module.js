@@ -16,9 +16,9 @@ modules.torrent_list = {
 	name: "torrent_list",
 	dText: "Liste torrents",
 	pages: [
-		{ path_name: "/", options: { buttons: '#sort', loading: '#pager_index', path: '/browse/' } },
-		{ path_name: "/browse/", options: { buttons: '#sort p', loading: '.pager_align', lastPage: ".pager_align" } },
-		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', loading: '.pager_align', canSuggest: true, lastPage: ".pager_align" } },
+		{ path_name: "/", options: { buttons: '#sort' } },
+		{ path_name: "/browse/", options: { buttons: '#sort p' } },
+		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canSuggest: true } },
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -30,98 +30,16 @@ modules.torrent_list = {
 
 		dbg("[Init] Loading module");
 
-		var endless_scrolling = opt.get(module_name, "endless_scrolling");
-		var scrollOffset = 260;
-		var backTopButtonOffset = 100;
-		var loadingPage = false;
-		var wentToPageBottom = false;
-		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
-		var jOnScroll = function() {
-			if(!endless_scrolling || ignoreScrolling) {
+		var filterFL = function() {
+			if(!opt.get(module_name, "filtering_fl")) {
 				return;
-			}
-
-			if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop > backTopButtonOffset) {
-				$("#backTopButton").show();
-			}
-			else {
-				$("#backTopButton").hide();
-			}
-
-			if(maxPage !== false && (maxPage === true || nextPage >= maxPage)) {
-				return;
-			}
-
-			if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight >= document.documentElement.scrollHeight) {
-				dbg("[EndlessScrolling] Stop inserting, got to page bottom");
-				wentToPageBottom = true;
-			}
-
-			dbg("[EndlessScrolling] Scrolled");
-			if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
-				dbg("[EndlessScrolling] Loading next page");
-				loadingPage = true;
-
-				var nextUrl = url;
-				if(mOptions.path) {
-					nextUrl.path = mOptions.path;
-				}
-				nextUrl.params = nextUrl.params ? nextUrl.params : {};
-				nextUrl.params.page = nextPage;
-				$(mOptions.loading).before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>');
-				grabPage(nextUrl, function(data) {
-					torrentsTR = $(data).find("#torrent_list tr")
-					dbg("[EndlessScrolling] Grab ended")
-					if(torrentsTR && torrentsTR.length) {
-						insertAjaxData(torrentsTR);
-					}
-					else {
-						dbg("[EndlessScrolling] No more data");
-						$(".page_loading").text("Plus rien en vue cap'tain !");
-					}
-				});
-			}
-		};
-
-		var insertAjaxData = function(data) {
-			if(wentToPageBottom) {
-				dbg("[EndlessScrolling] Waiting for user confirmation in order to insert more");
-				$(".page_loading").html('<a href="#" class="resume_endless_scrolling">Reprendre l\'endless scrolling</a>');
-				$(".resume_endless_scrolling").click(function() {
-					wentToPageBottom = false;
-					insertAjaxData(data);
-					return false;
-				});
-				return;
-			}
-			dbg("[EndlessScrolling] Got data - Inserting")
-			$("#torrent_list").append(filterFL(data, true));
-			nextPage++;
-			loadingPage = false;
-			$(".page_loading").remove();
-		};
-
-		var maxPage = false;
-		var getMaxPage = function() {
-			var pagesList = $(mOptions.lastPage);
-			if(!pagesList.length) {
-				maxPage = true;
-			}
-			else {
-				maxPage = Number(pagesList.text().match(/(\d+) ?$/)[1]);
-			}
-		};
-
-		var filtering_fl = opt.get(module_name, "filtering_fl");;
-		var filterFL = function(data, removeHead) {
-			if(!filtering_fl) {
-				return data;
 			}
 
 			dbg("[FLFilter] Scanning for FL");
 			var hideNext = false;
 			var odd = true;
-			$(data).each(function() {
+			var removeHead = false;
+			$("tbody tr").each(function() {
 				if($(this).hasClass("head_torrent")) {
 					// Remove head if ajax or already found
 					if(removeHead) {
@@ -134,23 +52,29 @@ modules.torrent_list = {
 				}
 
 				odd = !odd;
-
+				
 				if(odd && hideNext) {
 					hideNext = false;
 					$(this).hide();
 					return;
 				}
 
-				if(!$(this).find("img[src*='freeleech.png']").length) {
+				var imgs = $(this).find("img");
+				var hideMe = true;
+				$.each(imgs, function() {
+					if($(this).attr("alt") == "FreeLeech") {
+						hideMe = false;
+						return false;
+					}
+				});
+				if(hideMe) {
 					hideNext = true;
 					$(this).hide();
 				}
 			});
 			dbg("[FLFilter] Ended filtering");
-			return data;
 		};
 
-		var imdb_suggest = opt.get(module_name, "imdb_suggest");
 		var maxSuggestLang = 4;
 		var suggestMore = function() {
 			var searchQuery = $("#searchinput").val();
@@ -187,23 +111,18 @@ modules.torrent_list = {
 			}
 		};
 
-		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (filtering_fl ? 'checked="checked" ' : ' ') + '/> Afficher les FL uniquement | <input id="endless_scrolling" type="checkbox" ' + (endless_scrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling | ';
+		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/> Afficher les FL uniquement | ';
 
 		dbg("[Init] Starting");
 		// Adding buttons
 		$(mOptions.buttons).prepend(torrentButtons);
 
-		if(mOptions.lastPage) {
-			getMaxPage();
-		}
-
 		// FreeLeech torrents filtering
 		$("#filter_fl").change(function() {
-			filtering_fl = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[FilterFL] is " + filtering_fl);
-			opt.set(module_name, "filtering_fl", filtering_fl);
-			if(filtering_fl) {
-				filterFL($("#torrent_list tr"));
+			opt.set(module_name, "filtering_fl", $(this).attr("checked") == "checked" ? true : false);
+			dbg("[FilterFL] is " + opt.get(module_name, "filtering_fl"));
+			if(opt.get(module_name, "filtering_fl")) {
+				filterFL();
 			}
 			else {
 				dbg("[FLFilter] Unfiltering FL");
@@ -211,19 +130,16 @@ modules.torrent_list = {
 				dbg("[FLFilter] Ended unfiltering");
 			}
 		});
-		filterFL($("#torrent_list tr"));
+		filterFL();
 
-		// Endless scrolling
-		$("#endless_scrolling").change(function() {
-			endless_scrolling = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[EndlessScrolling] is " + endless_scrolling);
-			opt.set(module_name, "endless_scrolling", endless_scrolling);
-		});
-		$(document).scroll(jOnScroll);
-
-		if(mOptions.canSuggest && imdb_suggest) {
+		if(mOptions.canSuggest && opt.get(module_name, "imdb_suggest")) {
 			suggestMore();
 		}
+
+		$(document).on("endless_scrolling_insertion_done", function() {
+			dbg("[endless_scrolling] Module specific functions");
+			filterFL();
+		});
 
 		dbg("[Init] Ready");
 	}

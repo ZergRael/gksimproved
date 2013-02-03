@@ -28,101 +28,40 @@ modules.snatched = {
 
 		dbg("[Init] Loading module");
 
-		var endlessScrolling = opt.get(module_name, "endless_scrolling");
-		var scrollOffset = 190;
-		var backTopButtonOffset = 100;
-		var loadingPage = false;
-		var wentToPageBottom = false;
-		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 1);
-		var jOnScroll = function() {
-			if(!endless_scrolling || ignoreScrolling) {
+		var filterDeleted = function() {
+			if(!opt.get(module_name, "filtering_deleted")) {
 				return;
-			}
-
-			if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop > backTopButtonOffset) {
-				$("#backTopButton").show();
-			}
-			else {
-				$("#backTopButton").hide();
-			}
-
-			if(maxPage === true || nextPage >= maxPage) {
-				return;
-			}
-
-			if(document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight >= document.documentElement.scrollHeight) {
-				dbg("[EndlessScrolling] Stop inserting, got to page bottom");
-				wentToPageBottom = true;
-			}
-
-			dbg("[EndlessScrolling] Scrolled");
-			if((document[$.browser.mozilla ? "documentElement" : "body"].scrollTop + window.innerHeight > document.documentElement.scrollHeight - scrollOffset) && !loadingPage) {
-				dbg("[EndlessScrolling] Loading next page");
-				loadingPage = true;
-
-				var nextUrl = url;
-				nextUrl.cancelQ = true;
-				nextUrl.params = nextUrl.params ? nextUrl.params : {};
-				nextUrl.params.page = nextPage;
-				$(mOptions.loading).before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>');
-				grabPage(nextUrl, function(data) {
-					torrentsTR = $(data).find(".table100 tbody tr")
-					dbg("[EndlessScrolling] Grab ended")
-					if(torrentsTR && torrentsTR.length) {
-						insertAjaxData(torrentsTR);
-					}
-					else {
-						dbg("[EndlessScrolling] No more data");
-						$(".page_loading").text("Plus rien en vue cap'tain !");
-					}
-				});
-			}
-		};
-
-		var insertAjaxData = function(data) {
-			if(wentToPageBottom) {
-				dbg("[EndlessScrolling] Waiting for user confirmation in order to insert more");
-				$(".page_loading").html('<a href="#" class="resume_endless_scrolling">Reprendre l\'endless scrolling</a>');
-				$(".resume_endless_scrolling").click(function() {
-					wentToPageBottom = false;
-					insertAjaxData(data);
-					return false;
-				});
-				return;
-			}
-			dbg("[EndlessScrolling] Got data - Inserting")
-			$(".table100 tbody").append(filterDeleted(data));
-			sortData();
-			nextPage++;
-			loadingPage = false;
-			$(".page_loading").remove();
-		};
-
-		var maxPage = false;
-		var getMaxPage = function() {
-			var pagesList = $(mOptions.lastPage);
-			if(!pagesList.length) {
-				maxPage = true;
-			}
-			else {
-				maxPage = Number(pagesList.text().match(/(\d+) ?$/)[1]);
-			}
-		};
-
-		var filteringDeleted = opt.get(module_name, "filtering_deleted");
-		var filterDeleted = function(data) {
-			if(!filteringDeleted) {
-				return data;
 			}
 
 			dbg("[DeleteFilter] Scanning for deleted");
-			$(data).each(function() {
+			$(".table100 tbody tr").each(function() {
 				if($(this).find("td").first().text() == "Torrent Supprimé") {
 					$(this).hide();
 				}
 			});
 			dbg("[DeleteFilter] Ended filtering");
-			return data;
+		};
+
+		var maxPage = false;
+		var getMaxPage = function() {
+			if(!mOptions.lastPage) {
+				return;
+			}
+
+			var pagesList = $(mOptions.lastPage);
+			if(!pagesList.length || !pagesList.text().match(/\S/)) {
+				maxPage = true;
+			}
+			else {
+				var lastPageRegex = mOptions.lastPageRegex ? mOptions.lastPageRegex : /(\d+) ?$/;
+				var lastPageMatch = pagesList.text().match(lastPageRegex);
+				if(!lastPageMatch) {
+					maxPage = true
+				}
+				else {
+					maxPage = Number(lastPageMatch[1]) + (mOptions.pageModifier ? mOptions.pageModifier : 0);
+				}
+			}
 		};
 
 		var bytesToInt = function(str) {
@@ -232,7 +171,7 @@ modules.snatched = {
 					torrentsTR = $(data).find(".table100 tbody tr")
 					if(torrentsTR && torrentsTR.length) {
 						dbg("[AllPagesGrab] Got data - Inserting")
-						$(".table100 tbody").append(filterDeleted(torrentsTR));
+						$(".table100 tbody").append(torrentsTR);
 					}
 					else {
 						dbg("[AllPagesGrab] No more data");
@@ -242,6 +181,7 @@ modules.snatched = {
 					if(pageLoaded == maxPage) {
 						$(".page_loading").remove();
 						dbg("[AllPagesGrab] Grabbing ended");
+						filterDeleted();
 						sortData();
 					}
 				});
@@ -249,7 +189,7 @@ modules.snatched = {
 			
 		};
 
-		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (filteringDeleted ? 'checked="checked" ' : ' ') + '/> Cacher les supprimés | <input id="endless_scrolling" type="checkbox" ' + (endlessScrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling' + (nextPage == 1 ? ' | <a href="#" id="grabAllPages">Récupérer toutes les pages</a>' : '');
+		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/> Cacher les supprimés | ' + (nextPage == 1 ? ' | <a href="#" id="grabAllPages">Récupérer toutes les pages</a>' : '');
 		var colSortButtons = [ {n: 1, id: "sortName", nom: "Nom"}, {n: 3, id: "sortUL", nom: "UL"}, {n: 4, id: "sortDL", nom: "DL"}, {n: 5, id: "sortRDL", nom: "Real DL"}, {n: 6, id: "sortST", nom: "SeedTime"}, {n: 7, id: "sortRatio", nom: "Ratio"}
 		];
 		$.each(colSortButtons, function(k, v) {
@@ -260,17 +200,14 @@ modules.snatched = {
 		// Adding buttons
 		$(mOptions.buttons).after(torrentButtons);
 
-		if(mOptions.lastPage) {
-			getMaxPage();
-		}
+		getMaxPage();
 
 		// Deleted torrents filtering
 		$("#filter_deleted").change(function() {
-			filteringDeleted = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[DeleteFilter] is " + filteringDeleted);
-			opt.set(module_name, "filtering_deleted", filteringDeleted);
-			if(filteringDeleted) {
-				filterDeleted($(".table100 tbody tr"));
+			opt.set(module_name, "filtering_deleted", $(this).attr("checked") == "checked" ? true : false);
+			dbg("[DeleteFilter] is " + opt.get(module_name, "filtering_deleted"));
+			if(opt.get(module_name, "filtering_deleted")) {
+				filterDeleted();
 			}
 			else {
 				dbg("[DeleteFilter] Unfiltering FL");
@@ -278,15 +215,7 @@ modules.snatched = {
 				dbg("[DeleteFilter] Ended unfiltering");
 			}
 		});
-		filterDeleted($(".table100 tbody tr"));
-		
-		// Endless scrolling
-		$("#endless_scrolling").change(function() {
-			endlessScrolling = $(this).attr("checked") == "checked" ? true : false;
-			dbg("[EndlessScrolling] is " + endlessScrolling);
-			opt.set(module_name, "endless_scrolling", endlessScrolling);
-		});
-		$(document).scroll(jOnScroll);
+		filterDeleted();
 
 		// Sort on column click
 		$(".sortCol").click(function() {
@@ -304,6 +233,12 @@ modules.snatched = {
 		if(nextPage == 1) {
 			$("#grabAllPages").click(grabAllPages);
 		}
+
+		$(document).on("endless_scrolling_insertion_done", function() {
+			dbg("[endless_scrolling] Module specific functions");
+			filterDeleted();
+			sortData();
+		});
 
 		dbg("[Init] Ready");
 	}

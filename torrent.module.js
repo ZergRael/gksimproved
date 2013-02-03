@@ -54,7 +54,8 @@ modules.torrent = {
 			grabPage(urlQuickComment, function(data) {
 				$(".page_loading").remove();
 				$(mOptions.loading).after($(data).find("#com"));
-				$("#twit_autoc").trigger("reactivateKeydownListenner");
+				$(document).trigger("reactivate_keydown_listenner");
+				dbg("[QuickComment] Quickcomment ready");
 			});
 		};
 
