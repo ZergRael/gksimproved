@@ -192,7 +192,7 @@ modules.snatched = {
 			return false;
 		};
 
-		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/> Cacher les supprimés ' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
+		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/><label for="filter_deleted">Cacher les supprimés</label> ' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
 		var colSortButtons = [ {n: 1, id: "sortName", nom: "Nom"}, {n: 3, id: "sortUL", nom: "UL"}, {n: 4, id: "sortDL", nom: "DL"}, {n: 5, id: "sortRDL", nom: "Real DL"}, {n: 6, id: "sortST", nom: "SeedTime"}, {n: 7, id: "sortRatio", nom: "Ratio"}
 		];
 		$.each(colSortButtons, function(k, v) {

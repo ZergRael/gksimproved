@@ -31,7 +31,7 @@ modules.module_ = {
 		dbg("[Init] Starting");
 		// Execute functions
 
-		var buttons = '<input id="but_id" type="checkbox" ' + (o ? 'checked="checked" ' : ' ') + '/> Text';
+		var buttons = '<input id="but_id" type="checkbox" ' + (o ? 'checked="checked" ' : ' ') + '/><label for="but_id">Text</label>';
 		$(mOptions.buttons).before(buttons);
 
 		$("#but_id").change(function() {

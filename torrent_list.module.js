@@ -111,7 +111,7 @@ modules.torrent_list = {
 			}
 		};
 
-		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/> Afficher les FL uniquement | ';
+		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Afficher les FL uniquement</label> | ';
 
 		dbg("[Init] Starting");
 		// Adding buttons

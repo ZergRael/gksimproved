@@ -65,7 +65,7 @@ modules.logs = {
 		dbg("[Init] Starting");
 		// Execute functions
 
-		var buttons = '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/> Auto refresh (60secs) | ';
+		var buttons = '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/><label for="auto_refresh">Auto refresh (60secs)</label> | ';
 		$(mOptions.buttons).prepend(buttons);
 
 		$("#auto_refresh").change(function() {
