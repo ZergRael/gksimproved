@@ -249,7 +249,7 @@ modules.snatched = {
 			
 		};
 
-		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (filteringDeleted ? 'checked="checked" ' : ' ') + '/> Cacher les supprimés | <input id="endless_scrolling" type="checkbox" ' + (endlessScrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling' + (nextPage == 1 ? ' | <a href="javascript:false" id="grabAllPages">Récupérer toutes les pages</a>' : '');
+		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (filteringDeleted ? 'checked="checked" ' : ' ') + '/> Cacher les supprimés | <input id="endless_scrolling" type="checkbox" ' + (endlessScrolling ? 'checked="checked" ' : ' ') + '/> Endless scrolling' + (nextPage == 1 ? ' | <a href="#" id="grabAllPages">Récupérer toutes les pages</a>' : '');
 		var colSortButtons = [ {n: 1, id: "sortName", nom: "Nom"}, {n: 3, id: "sortUL", nom: "UL"}, {n: 4, id: "sortDL", nom: "DL"}, {n: 5, id: "sortRDL", nom: "Real DL"}, {n: 6, id: "sortST", nom: "SeedTime"}, {n: 7, id: "sortRatio", nom: "Ratio"}
 		];
 		$.each(colSortButtons, function(k, v) {
@@ -301,7 +301,7 @@ modules.snatched = {
 		});
 
 		// No reason to show grabber if not on first page
-		if(!url.params || (url.params && !url.params.page)) {
+		if(nextPage == 1) {
 			$("#grabAllPages").click(grabAllPages);
 		}
 

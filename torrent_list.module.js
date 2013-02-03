@@ -17,7 +17,7 @@ modules.torrent_list = {
 	dText: "Liste torrents",
 	pages: [
 		{ path_name: "/", options: { buttons: '#sort', loading: '#pager_index', path: '/browse/' } },
-		{ path_name: "/browse/", options: { buttons: '#sort p', loading: '.pager_align' } },
+		{ path_name: "/browse/", options: { buttons: '#sort p', loading: '.pager_align', lastPage: ".pager_align" } },
 		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', loading: '.pager_align', canSuggest: true, lastPage: ".pager_align" } },
 	],
 	loaded: false,
@@ -48,7 +48,7 @@ modules.torrent_list = {
 				$("#backTopButton").hide();
 			}
 
-			if(maxPage === true || nextPage >= maxPage) {
+			if(maxPage !== false && (maxPage === true || nextPage >= maxPage)) {
 				return;
 			}
 

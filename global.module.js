@@ -91,8 +91,9 @@ modules.global = {
 				optionsFrameData += '</div>';
 			});
 
-			// { id, classes, title, data, relativeToId, top, left}
-			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "centre", top: 8, left: 230 });
+			// { id, classes, title, data, relativeToId, top, left, underButtonsText }
+			var copyright = '<a href="/forums.php?action=viewtopic&topicid=6336">GKSi</a> by <a href="/users/2360140">ZergRael</a>'
+			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "centre", top: 8, left: 230, underButtonsText: copyright });
 
 			$.each(opt.options, function(module_name, options) {
 				if(!$("#gksi_options_data_" + module_name + " input").length) {

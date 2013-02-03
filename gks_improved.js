@@ -10,7 +10,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-var debug = false;
+var debug = true;
 // General debug function
 var _dbg = function (section, str) {
 	if(debug) {
@@ -144,7 +144,7 @@ var appendNativeScript = function (jsFileName) {
 
 // { id, classes, title, data, relativeToId, top, left}
 var appendFrame = function(o) {
-	$("#navigation").append('<div id="gksi_' + o.id + '" class="gksi_frame' + (o.classes ? ' ' + o.classes : '') + '"><p class="separate">' + o.title + '</p><div id="gksi_' + o.id + '_data" class="gksi_frame_data">' + o.data + '<div id="gksi_' + o.id + '_buttons" class="gksi_frame_buttons"><input type="button" id="gksi_' + o.id + '_close" class="fine" value=" Fermer "></div></div></div>');
+	$("#navigation").append('<div id="gksi_' + o.id + '" class="gksi_frame' + (o.classes ? ' ' + o.classes : '') + '"><p class="separate">' + o.title + '</p><div id="gksi_' + o.id + '_data" class="gksi_frame_data">' + o.data + '<div id="gksi_' + o.id + '_buttons" class="gksi_frame_buttons"><input type="button" id="gksi_' + o.id + '_close" class="fine" value=" Fermer "></div>' + (o.underButtonsText ? '<div id="gksi_copyright">' + o.underButtonsText + '</div>': '') + '</div></div>');
 	$("#gksi_" + o.id + "_close").click(function() {
 		$("#gksi_" + o.id).remove();
 		return false;
@@ -172,6 +172,7 @@ var insertCSS = function() {
 		//"#gksi_suggest_data { } " +
 		"#gksi_options { position: absolute; } " +
 		//"#gksi_options_data { } " +
+		"#gksi_copyright { text-align: right; font-size: 0.8em; margin-top: -11px; } " +
 		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; } " +
 		".gksi_progress_bar { background-color: orange; height: 11px; border-radius: 1px; margin-bottom: -11px; } " +
 		".gksi_progress_numbers { position: relative; } " +
