@@ -40,7 +40,7 @@ modules.endless_scrolling = {
 		{ path_name: "/req/", options: { 
 			loading: '.pager_align', lastPage: '.pager_align', domExtract: "#requests_list tbody tr:not(:first)", domInsertion: "#requests_list tbody", pageModifier: -1
 		} },
-		{ path_name: "/m/images/(page)?", options: {
+		{ path_name: "/m/images/", options: {
 			loading: '.pager_align', lastPage: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, pageModifier: -1
 		} }
 	
