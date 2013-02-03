@@ -39,6 +39,9 @@ modules.endless_scrolling = {
 		} },
 		{ path_name: "/req/", options: { 
 			loading: '.pager_align', lastPage: '.pager_align', domExtract: "#requests_list tbody tr:not(:first)", domInsertion: "#requests_list tbody", pageModifier: -1
+		} },
+		{ path_name: "/m/images/(page)?", options: {
+			loading: '.pager_align', lastPage: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, pageModifier: -1
 		} }
 	
 	],
@@ -162,7 +165,7 @@ modules.endless_scrolling = {
 		// Execute functions
 
 		getMaxPage();
-		dbg("[endless_scrolling] maxPage : " + maxPage);
+		dbg("[endless_scrolling] url relative pages : " + (url.params && url.params.page ? url.params.page : 0) + "/" + maxPage);
 		$(document).scroll(jOnScroll);
 
 		dbg("[Init] Ready");

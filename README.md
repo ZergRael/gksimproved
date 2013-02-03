@@ -8,8 +8,26 @@ Voir topic associé.
 ### TODO.list
 - Moar comments
 - Optimisations
+- Adapter le numéro de page en fonction de l'avancée dans l'endless scrolling
+- Endless scrolling sur /my/torrents
+- Endless scrolling sur /m/comments/onuploads
+- Scrapping IMDB
+- Modification du MP auto en cas de commentaires désactivés
+- Marqueur dernier torrent vu
 
 ### TODO.done
+- Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox
+- Snatched : Multiple bug fixes - javascript:false
+- Snatched : Evite l'endless scrolling lorsque la page est complétement chargée 
+- Snatched : Evite la récupération complète après endless scrolling / récupération complète
+- Pins : Ajout d'un filtre sur les pins déjà achetés
+- Endless scrolling : Ajout d'un module spécifique, plus facile à gérer
+- Filtres : Optimisations, principalement sur le FL (30ms pour filtrer 1000 torrents) - Le reste des ralentissements est du au navigateur
+- Request : Module supprimé pour l'instant vu qu'il n'avait que l'endless scrolling qui a été déplacé dans le module adapté
+- Liste de torrents : Correction de l'endless scrolling
+- Options : Ajout de liens vers le topic adapté
+- Endless scrolling : Ajouté sur /m/images/
+
 **0.2.3**
 - Module badges actif aussi sur votre page publique de badges
 - Meilleur formatage des indicateurs sous les badges

@@ -56,17 +56,28 @@ var parseUrl = function (url) {
 	parsedUrl.path = (path ? path[0] : path);
 	url = url.replace(parsedUrl.path, "");
 
-	if(url.indexOf("?") == -1 && url.indexOf("&") == -1) {
-		return parsedUrl;
-	}
-
-	url = url.replace("?", "");
-
 	var hash = url.match("#.*$");
 	if(hash) {
 		parsedUrl.hash = (hash ? hash[0] : hash);
 		url = url.replace(parsedUrl.hash, "");
 	}
+
+	if(url.indexOf("?") == -1 && url.indexOf("&") == -1 && url.indexOf("=") == -1) {
+		return parsedUrl;
+	}
+
+	if(url.indexOf("?") == -1) {
+		parsedUrl.cancelQ = true;
+		if(url.indexOf("&") == -1) {
+			parsedUrl.cancelAmp = true;
+			lastPathBit = parsedUrl.path.match(/\/(\w*)$/);
+			if(lastPathBit.length) {
+				parsedUrl.path = parsedUrl.path.replace(lastPathBit[1], "");
+				url = lastPathBit[1] + url;
+			}
+		}
+	}
+	url = url.replace("?", "");
 
 	var urlSplit = url.split('&');
 	if(!urlSplit.length) {
@@ -91,7 +102,7 @@ var craftUrl = function (parsedUrl) {
 		return parsedUrl.host + parsedUrl.path;
 	}
 
-	var craftUrl = parsedUrl.host + parsedUrl.path + (parsedUrl.cancelQ ? "&" : '?');
+	var craftUrl = parsedUrl.host + parsedUrl.path + (parsedUrl.cancelQ ? (parsedUrl.cancelAmp ? "" : "&") : '?');
 	var i = 0;
 	$.each(parsedUrl.params, function (k, v) {
 		craftUrl += (i == 0 ? '' : '&') + k + (v ? "=" + v : '');
