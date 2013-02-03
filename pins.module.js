@@ -29,44 +29,70 @@ modules.pins = {
 		dbg("[Init] Loading module");
 		// Loading all functions used
 
-		var filter_expensive = opt.get(module_name, "filter_expensive");
+		var tagPins = function() {
+			$("#pins tbody td").each(function() {
+				if($(this).text().indexOf("Pas assez de Karma") != -1) {
+					$(this).addClass("tooExpensive");
+				}
+				if($(this).text().indexOf("Vous l'avez !") != -1) {
+					$(this).addClass("alreadyBought");
+				}
+			});
+		};
+
 		var hideExpensivePins = function() {
-			if(!filter_expensive) {
+			if(!opt.get(module_name, "filter_expensive")) {
 				return;
 			}
 
 			dbg("[HideExpensive] Hiding some");
-			$("#pins tbody td").each(function() {
-				if($(this).text().indexOf("Pas assez de Karma") != -1) {
-					$(this).hide();
-				}
-			});
-		}
+			$(".tooExpensive").hide();
+		};
+
+		var hideBoughtPins = function() {
+			if(!opt.get(module_name, "filter_bought")) {
+				return;
+			}
+
+			dbg("[HideBought] Hiding some");
+			$(".alreadyBought").hide();
+		};
 
 		dbg("[Init] Starting");
 		// Execute functions
 
 		$(".nav a").click(function() {
 			var tab = $(this).attr("href");
-			$(".gksi_buttons").remove();
 			if(tab == "#pins") {
+				tagPins();
 				hideExpensivePins();
+				hideBoughtPins();
 			}
 		});
 
 		if(url.params && url.params.tab == mOptions.tab) {
+			tagPins();
 			hideExpensivePins();
+			hideBoughtPins();
 		}
 
 		opt.setCallback(module_name, "filter_expensive", function(state) {
-			filter_expensive = state;
-
-			if(filter_expensive) {
+			if(state) {
 				hideExpensivePins();
 			}
 			else {
 				dbg("[HideExpensive] Show them all");
-				$("#pins tbody td").show();
+				$("#pins tbody td.tooExpensive").show();
+			}
+		});
+
+		opt.setCallback(module_name, "filter_bought", function(state) {
+			if(state) {
+				hideBoughtPins();
+			}
+			else {
+				dbg("[HideBought] Show them all");
+				$("#pins tbody td.alreadyBought").show();
 			}
 		});
 

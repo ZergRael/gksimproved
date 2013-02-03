@@ -234,7 +234,8 @@ var opt = {
 			twit_color: 		{ defaultVal: true, showInOptions: true, dispText: "Coloration et lien automatique sur les twits" } 
 		},
 		pins: {
-			filter_expensive: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's trop chers" }
+			filter_expensive: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's trop chers" },
+			filter_bought: 		{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's déjà achetés" }
 		},
 		forums: {
 			hide_signatures: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut" }
