@@ -32,7 +32,7 @@ modules.endless_scrolling = {
 			loading: '.thin table:last', loadingAfter: true, domExtract: '.thin table', domInsertion: '.thin table:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100, lastPage: '.linkbox:first', lastPageRegex: /\[(\d+)\]\s*$/
 		} },
 		{ path_name: "/m/peers/snatched", options: { 
-			loading: '.pager_align', lastPage: ".pager_align:first", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", pageModifier: -1
+			loading: '.pager_align', lastPage: ".pager_align:first", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1
 		} },
 		{ path_name: "/logs/", options: { 
 			loading: '.pager_align', lastPage: '.pager_align', domExtract: "tbody tr", domInsertion: "tbody", pageModifier: -1
@@ -81,8 +81,7 @@ modules.endless_scrolling = {
 		var wentToPageBottom = false;
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 2 + (mOptions.pageModifier ? mOptions.pageModifier : 0));
 		var jOnScroll = function() {
-			//dbg("Scrolled : " + opt.get(module_name, "endless_scrolling"));
-			if(!opt.get(module_name, "endless_scrolling") || ignoreScrolling) {
+			if(!opt.get(module_name, "endless_scrolling") || ignoreScrolling || avoidEndlessScrolling) {
 				return;
 			}
 
@@ -110,6 +109,7 @@ modules.endless_scrolling = {
 				var nextUrl = url;
 				nextUrl.path = mOptions.path ? mOptions.path : nextUrl.path;
 				nextUrl.params = nextUrl.params ? nextUrl.params : {};
+				nextUrl.cancelQ = (mOptions.cancelQ ? mOptions.cancelQ : (nextUrl.cancelQ ? nextUrl.cancelQ : false));
 				nextUrl.params.page = nextPage;
 				var loadingP = '<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>';
 				if(mOptions.loadingAfter) {

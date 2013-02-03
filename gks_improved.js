@@ -183,7 +183,7 @@ var insertCSS = function() {
 };
 
 // Custom divs insertion & funcs
-var ignoreScrolling = false;
+var ignoreScrolling = false, avoidEndlessScrolling = false;
 var insertDivs = function() {
 	$("#global").append('<a id="backTopButton" href="#"></a>');
 	$("#backTopButton").click(function() {

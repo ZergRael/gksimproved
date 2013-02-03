@@ -28,6 +28,7 @@ modules.snatched = {
 
 		dbg("[Init] Loading module");
 
+		var canGrabAllPages = (!url.params || url.params.page == 0);
 		var filterDeleted = function() {
 			if(!opt.get(module_name, "filtering_deleted")) {
 				return;
@@ -148,7 +149,6 @@ modules.snatched = {
 		};
 
 		var grabAllPages = function() {
-			$("#endless_scrolling").attr("disabled", "disabled");
 			loadingPage = true;
 
 			dbg("[AllPagesGrab] Loading all pages");
@@ -186,14 +186,17 @@ modules.snatched = {
 					}
 				});
 			}
-			
+			dbg("[AllPagesGrab] Stop endless scrolling");
+			$("#grabAllPagesSpan").remove();
+			avoidEndlessScrolling = true;
+			return false;
 		};
 
-		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/> Cacher les supprimés | ' + (nextPage == 1 ? ' | <a href="#" id="grabAllPages">Récupérer toutes les pages</a>' : '');
+		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/> Cacher les supprimés ' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
 		var colSortButtons = [ {n: 1, id: "sortName", nom: "Nom"}, {n: 3, id: "sortUL", nom: "UL"}, {n: 4, id: "sortDL", nom: "DL"}, {n: 5, id: "sortRDL", nom: "Real DL"}, {n: 6, id: "sortST", nom: "SeedTime"}, {n: 7, id: "sortRatio", nom: "Ratio"}
 		];
 		$.each(colSortButtons, function(k, v) {
-			$(".table100 thead tr th:nth-child(" + v.n + ")").html('<a id="' + v.id + '" class="sortCol" href="javascript:false;">' + v.nom + '</a>');
+			$(".table100 thead tr th:nth-child(" + v.n + ")").html('<a id="' + v.id + '" class="sortCol" href="#">' + v.nom + '</a>');
 		});
 
 		dbg("[Init] Starting");
@@ -227,10 +230,11 @@ modules.snatched = {
 				order = "asc";
 			}
 			sortData();
+			return false;
 		});
 
 		// No reason to show grabber if not on first page
-		if(nextPage == 1) {
+		if(canGrabAllPages) {
 			$("#grabAllPages").click(grabAllPages);
 		}
 
@@ -238,6 +242,8 @@ modules.snatched = {
 			dbg("[endless_scrolling] Module specific functions");
 			filterDeleted();
 			sortData();
+			canGrabAllPages = false;
+			$("#grabAllPagesSpan").remove();
 		});
 
 		dbg("[Init] Ready");
