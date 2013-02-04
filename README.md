@@ -13,8 +13,11 @@ Voir topic associé.
 - Endless scrolling sur /m/comments/onuploads
 - Scrapping IMDB
 - Marqueur dernier torrent vu
+- Pause ES au focus textarea
 
 ### TODO.done
+- Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
+
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox
 - Snatched : Multiple bug fixes - javascript:false
