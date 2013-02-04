@@ -11,7 +11,7 @@ $package_content = get-content ..\ff_gksi\package.json
 $package_content | foreach-object { if($_ -match '"version": "(\d+\.\d+\.\d+)"') { $old_vers = $matches[1]; }}
 set-content ..\ff_gksi\package.json ($package_content -replace $old_vers, $vers)
 echo "Activate Firefox SDK"
-cd "..\addon-sdk-1.12\"
+cd "..\addon-sdk-1.13.1\"
 $env:Path += ";C:\Python27\"
 .\bin\activate.ps1
 echo "Build .xpi"
