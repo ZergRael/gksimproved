@@ -153,13 +153,36 @@ var appendNativeScript = function (jsFileName) {
 	document.body.appendChild(script);
 };
 
-// { id, classes, title, data, relativeToId, top, left}
+// { id, classes, title, data, relativeToId, top, left, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ] } 
 var appendFrame = function(o) {
-	$("#navigation").append('<div id="gksi_' + o.id + '" class="gksi_frame' + (o.classes ? ' ' + o.classes : '') + '"><p class="separate">' + o.title + '</p><div id="gksi_' + o.id + '_data" class="gksi_frame_data">' + o.data + '<div id="gksi_' + o.id + '_buttons" class="gksi_frame_buttons"><input type="button" id="gksi_' + o.id + '_close" class="fine" value=" Fermer "></div>' + (o.underButtonsText ? '<div id="gksi_copyright">' + o.underButtonsText + '</div>': '') + '</div></div>');
+	var additionnalButtons = '';
+	if(o.buttons) {
+		 $.each(o.buttons, function(i, button) {
+			additionnalButtons += '<input type="button" id="gksi_' + o.id + '_' + button.b_id + '" class="fine" value=" ' + button.b_text + ' "> ';
+		})
+	}
+
+	var gksi_frame = '<div id="gksi_' + o.id + '" class="gksi_frame' + (o.classes ? ' ' + o.classes : '') + '"><p class="separate">' + o.title + '</p>' +
+		'<div id="gksi_' + o.id + '_data" class="gksi_frame_data">' + o.data +
+		'<div id="gksi_' + o.id + '_buttons" class="gksi_frame_buttons">' + (additionnalButtons.length ? additionnalButtons : '' ) + '<input type="button" id="gksi_' + o.id + '_close" class="fine" value=" Fermer "></div>' +
+		(o.underButtonsText ? '<div id="gksi_copyright">' + o.underButtonsText + '</div>': '') +
+		'</div></div>';
+
+	$("#navigation").append(gksi_frame);
 	$("#gksi_" + o.id + "_close").click(function() {
 		$("#gksi_" + o.id).remove();
 		return false;
 	});
+	if(additionnalButtons.length) {
+		$.each(o.buttons, function(i, button) {
+			if(button.b_callback) {
+				$("#gksi_" + o.id + "_" + button.b_id).click(function() {
+					button.b_callback($("#gksi_" + o.id + "_data"), "#gksi_" + o.id);
+					return false;
+				});
+			}
+		});
+	}
 
 	if(o.relativeToId && !opt.get("global", "allow_frame_css")) {
 		$(window).resize(function() {
@@ -175,13 +198,13 @@ var insertCSS = function() {
 	dbg("Inserting custom CSS");
 	$("head").append("<style>" +
 		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top_small.png") + ") no-repeat; } " +
-		".gksi_frame { z-index: 10; } " +
+		".gksi_frame { z-index: 10; position: absolute; } " +
 		".gksi_frame_section { border-bottom: 1px solid; font-weight: bold; padding-top: 6px; } " +
 		".gksi_frame_buttons { padding-top: 9px; text-align: center; } " +
-		".gksi_frame_data { padding: 12px; background-color: #f0f0f0;  } " +
-		"#gksi_suggest { position: absolute; } " +
+		".gksi_frame_data { width: auto; padding: 12px; background-color: #f0f0f0;  } " +
+		//"#gksi_suggest { } " +
 		//"#gksi_suggest_data { } " +
-		"#gksi_options { position: absolute; } " +
+		//"#gksi_options { } " +
 		//"#gksi_options_data { } " +
 		"#gksi_copyright { text-align: right; font-size: 0.8em; margin-top: -11px; } " +
 		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; } " +
@@ -190,6 +213,9 @@ var insertCSS = function() {
 		".gksi_valid { background-color: lightgreen; } " +
 		".halfOpacity { opacity: 0.4; } " +
 		".resume_endless_scrolling { font-size: 1.4em; font-weight: bold; } " +
+		".gksi_edit_title { display: block; width: 100%; margin-top: 12px; } " +
+		".gksi_edit_textarea { display: block; width: 100%; min-height: 240px; min-width: 360px; margin-right: -4px!important; } " +
+		".bold { font-weight: bold; } " +
 		"</style>");
 };
 
@@ -252,7 +278,9 @@ var opt = {
 			hide_signatures: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut" }
 		},
 		torrent: {
-			quick_comment: 		{ defaultVal: true, showInOptions: true, dispText: "Afficher la boite de commentaire rapide sur les fiches torrent" }
+			quick_comment: 		{ defaultVal: true, showInOptions: true, dispText: "Afficher la boite de commentaire rapide sur les fiches torrent" },
+			comment_mp_title: 	{ defaultVal: "[Torrent #%id_torrent%] Commentaires désactivés", showInOptions: false },
+			comment_mp_text: 	{ defaultVal: "Salutations !\n\nIl semblerait qu'un des torrents que vous avez posté n'accepte pas les commentaires :\n[url=%url_torrent%]%titre_torrent%[/url]\n\nSerait-il possible d'y remédier ?\n[url=https://gks.gs/m/account/paranoia]Réglage de la paranoïa[/url]\n\nMerci :)", showInOptions: false }
 		},
 		badges: {
 			progress: 			{ defaultVal: false, showInOptions: true, dispText: "Afficher la progression sous les badges" },

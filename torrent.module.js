@@ -59,14 +59,17 @@ modules.torrent = {
 			});
 		};
 
-		var warnCantComment = function(pseudo) {
+		var warnCantComment = function() {
 			dbg("[WarnComment] Is the user allowing MPs ?");
 			$("#warn_cant_comment_area").html('<img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Tentative d\'envoi du MP');
-			grabPage({ host: url.host, path: "/mailbox/", params: { write: false, receiver: pseudo } }, function(data) {
+			//.
+			pseudo_up = "ZergRael";
+			//.
+			grabPage({ host: url.host, path: "/mailbox/", params: { write: false, receiver: pseudo_up } }, function(data) {
 				if($(data).find("#mailbox_write textarea").length) {
 					dbg("[WarnComment] Sending MP");
 					var ak = $(data).find("input[name=ak]").val();
-					var mailbox_data = { action: "mail_new_send", ak: ak, msgsubject: "[Torrent #" + torrentId + "] Commentaires désactivés", to: pseudo, message_content: "Salutations !\n\nIl semblerait qu'un des torrents que vous avez posté n'accepte pas les commentaires :\n[url=" + craftUrl(url) + "]" + torrentName + "[/url]\n\nSerait-il possible d'y remédier ?\n[url=https://gks.gs/m/account/paranoia]Réglage de la paranoïa[/url]\n\nMerci :)"};
+					var mailbox_data = { action: "mail_new_send", ak: ak, msgsubject: replaceCommentText(opt.get(module_name, "comment_mp_title")), to: pseudo_up, message_content: replaceCommentText(opt.get(module_name, "comment_mp_text")) };
 					post({ host: url.host, path: "/mailbox/" }, mailbox_data, function() {
 						dbg("[WarnComment] MP sent");
 						$("#warn_cant_comment_area").text("Le MP a correctement été envoyé !");
@@ -79,14 +82,34 @@ modules.torrent = {
 			});
 		};
 
+		var replacementText = {
+			id_torrent: { val: torrentId, text: "Id du torrent" },
+			titre_torrent: { val: torrentName, text: "Titre du torrent" },
+			url_torrent: { val: craftUrl(url), text: "URL de la fiche torrent" },
+			pseudo: { text: "Pseudo de l'uploadeur" }
+		};
+		var replaceCommentText = function(text) {
+			$.each(replacementText, function(k, v) {
+				text = text.replace(new RegExp("%" + k + "%", "g"), v.val);
+			});
+			return text;
+		};
+
+		var pseudo_up = false;
 		var proposeWarn = function() {
 			if(!canComment) {
 				var uploader = $("#contenu div[style] span[class^=userclass]");
 				dbg("[WarnComment] Can't find comments textarea");
 				if(uploader.length) {
-					$(mOptions.loading).append('<br /><span id="warn_cant_comment_area"><a href="#" id="warn_cant_comment">Prévenir l\'uploadeur par MP automatique ?</a></span>');
+					$(mOptions.loading).append('<br /><span id="warn_cant_comment_area"><a href="#" id="warn_cant_comment">Prévenir l\'uploadeur par MP automatique ?</a> - <a href="#" id="edit_cant_comment_mp">Editer le MP à envoyer</a></span>');
+					pseudo_up = uploader.text();
+					replacementText.pseudo.val = pseudo_up;
 					$("#warn_cant_comment").click(function() {
-						warnCantComment(uploader.text());
+						warnCantComment();
+						return false;
+					});
+					$("#edit_cant_comment_mp").click(function() {
+						buildCantCommentEditFrame();
 						return false;
 					});
 				}
@@ -94,6 +117,32 @@ modules.torrent = {
 					$(mOptions.loading).append('<br />Impossible de prévenir l\'uploader (anonyme).');
 				}
 			}
+		};
+
+		var buildCantCommentEditFrame = function() {
+			dbg("[edit_mp_comment] Building frame");
+			// { id, classes, title, data, relativeToId, top, left, buttons = [ /* close is by default */ { id, text, callback} ] } 
+			//var appendFrame = function(o)
+			var edit_replacements_available = "Remplacements possibles :<br />";
+			$.each(replacementText, function(replacement, data) {
+				edit_replacements_available += '<span class="bold">%' + replacement + '%</span> = ' + data.text + ' (exemple: ' + data.val + ')<br />';
+			});
+			edit_replacements_available += "Les remplacements %patate% non reconnus ne seront pas modifiés";
+			var edit_frame_data = '<div>' + edit_replacements_available + '</div><input type="text" id="gksi_edit_cant_comment_title" class="gksi_edit_title" value="' + opt.get(module_name, "comment_mp_title") + '"><textarea id="gksi_edit_cant_comment_text" class="gksi_edit_textarea">' + opt.get(module_name, "comment_mp_text") + '</textarea>';
+			var save_callback = function(data, frame_id) {
+				dbg("[edit_mp_comment] Checking data");
+				var edit_title = $(data).find("#gksi_edit_cant_comment_title");
+				var edit_text = $(data).find("#gksi_edit_cant_comment_text");
+				if(edit_title.length && edit_text.length) {
+					dbg("[edit_mp_comment] Saving data");
+					opt.set(module_name, "comment_mp_title", edit_title.val());
+					opt.set(module_name, "comment_mp_text", edit_text.val());
+				}
+				$(frame_id).remove();
+			};
+			var edit_frame = { id: "edit_cant_comment_mp", title: "GKSi : Edition du MP à envoyer", data: edit_frame_data, relativeToId: "torrent_comments", top: -400, left: 0, buttons: [ { b_id: "save", b_text: "Enregistrer", b_callback: save_callback } ] };
+			appendFrame(edit_frame);
+			dbg("[edit_mp_comment] Frame built");
 		};
 
 		dbg("[Init] Starting");

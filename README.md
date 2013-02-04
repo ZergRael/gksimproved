@@ -12,7 +12,6 @@ Voir topic associé.
 - Endless scrolling sur /my/torrents
 - Endless scrolling sur /m/comments/onuploads
 - Scrapping IMDB
-- Modification du MP auto en cas de commentaires désactivés
 - Marqueur dernier torrent vu
 
 ### TODO.done
@@ -28,6 +27,7 @@ Voir topic associé.
 - Options : Ajout de liens vers le topic adapté
 - Endless scrolling : Ajouté sur /m/images/
 - Endless scrolling : Tooltip dans les options indiquant les pages affectées
+- Torrent : Ajout d'une fenêtre de modification du MP auto en cas de commentaires désactivés
 
 **0.2.3**
 - Module badges actif aussi sur votre page publique de badges
