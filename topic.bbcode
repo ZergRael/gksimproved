@@ -7,7 +7,7 @@ C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un
 
 Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. Toujours en beta mais un jour peut-être une version stable arrivera ;)
 
-Version actuelle : 0.2.3 - 28/01/2013 - Licence GPLv3
+Version actuelle : 0.2.4 - 04/02/2013 - Licence GPLv3
 
 [size=6]Téléchargement[/size] :
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
@@ -65,12 +65,13 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Liste commentaires d'un torrent -- /torrent/\d+/
 
 > [i]Quick comment[/i] : Ajoute un formulaire d'envoi de commentaire directement sur la page du torrent
-> [i]Commentaires désactivés[/i] : Propose l'envoi d'un MP préformaté lorsque les commentaires d'un torrent sont désactivés. Permet de prévenir l'uploader avec l'ensemble des liens nécessaires en un seul clic, si ses MP sont activés.
+> [i]Commentaires désactivés[/i] : Propose l'envoi d'un MP préformaté lorsque les commentaires d'un torrent sont désactivés. Permet de prévenir l'uploader avec l'ensemble des liens nécessaires en un seul clic, si ses MP sont activés. Editable.
 
 [b]* Karma store[/b]
 - Pin's store -- /karma/?tab=pins
 
 > [i]Cacher les pin's trop chers[/i] : Cache les pins que vous ne pouvez pas acheter avec le karma actuel
+> [i]Cacher les pin's déjà achetés[/i] : Cache les pins que vous avez déjà acheté
 
 [b]* Requests[/b]
 - Liste des requêtes -- /req/
@@ -101,6 +102,21 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
 
 [size=6]Changelog :[/size]
+[b]* 0.2.4 - 04/02/2013[/b]
+- Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox
+- Snatched : Multiple bug fixes - javascript:false
+- Snatched : Evite l'endless scrolling lorsque la page est complétement chargée 
+- Snatched : Evite la récupération complète après endless scrolling / récupération complète
+- Pins : Ajout d'un filtre sur les pins déjà achetés
+- Endless scrolling : Ajout d'un module spécifique, plus facile à gérer
+- Filtres : Optimisations, principalement sur le FL (30ms pour filtrer 1000 torrents) - Le reste des ralentissements est du au navigateur
+- Request : Module supprimé pour l'instant vu qu'il n'avait que l'endless scrolling qui a été déplacé dans le module adapté
+- Liste de torrents : Correction de l'endless scrolling
+- Options : Ajout de liens vers le topic adapté
+- Endless scrolling : Ajouté sur /m/images/
+- Endless scrolling : Tooltip dans les options indiquant les pages affectées
+- Torrent : Ajout d'une fenêtre de modification du MP auto en cas de commentaires désactivés
+[spoil]
 [b]* 0.2.3 - 28/01/2013[/b]
 - Module badges actif aussi sur votre page publique de badges
 - Meilleur formatage des indicateurs sous les badges
@@ -110,7 +126,6 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Pause sur l'endless scrolling lorsqu'on scrolle jusqu'en bas de la page
 - Endless scrolling & auto-refresh sur la page des logs
 - Correction de la colorisation des twits à l'endless scrolling sur les forums
-[spoil]
 [b]* 0.2.1 - 24/01/2013[/b]
 - Extension Firefox
 - Montre toutes les images de badges

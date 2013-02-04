@@ -15,6 +15,7 @@ Voir topic associé.
 - Marqueur dernier torrent vu
 
 ### TODO.done
+**0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox
 - Snatched : Multiple bug fixes - javascript:false
 - Snatched : Evite l'endless scrolling lorsque la page est complétement chargée 

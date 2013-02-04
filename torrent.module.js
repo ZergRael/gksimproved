@@ -62,9 +62,6 @@ modules.torrent = {
 		var warnCantComment = function() {
 			dbg("[WarnComment] Is the user allowing MPs ?");
 			$("#warn_cant_comment_area").html('<img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Tentative d\'envoi du MP');
-			//.
-			pseudo_up = "ZergRael";
-			//.
 			grabPage({ host: url.host, path: "/mailbox/", params: { write: false, receiver: pseudo_up } }, function(data) {
 				if($(data).find("#mailbox_write textarea").length) {
 					dbg("[WarnComment] Sending MP");
