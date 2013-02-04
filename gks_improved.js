@@ -155,6 +155,7 @@ var appendNativeScript = function (jsFileName) {
 
 // { id, classes, title, data, relativeToId, top, left, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ] } 
 var appendFrame = function(o) {
+	// Build custom buttons
 	var additionnalButtons = '';
 	if(o.buttons) {
 		 $.each(o.buttons, function(i, button) {
@@ -162,13 +163,17 @@ var appendFrame = function(o) {
 		})
 	}
 
+	// Build entire frame
 	var gksi_frame = '<div id="gksi_' + o.id + '" class="gksi_frame' + (o.classes ? ' ' + o.classes : '') + '"><p class="separate">' + o.title + '</p>' +
 		'<div id="gksi_' + o.id + '_data" class="gksi_frame_data">' + o.data +
 		'<div id="gksi_' + o.id + '_buttons" class="gksi_frame_buttons">' + (additionnalButtons.length ? additionnalButtons : '' ) + '<input type="button" id="gksi_' + o.id + '_close" class="fine" value=" Fermer "></div>' +
 		(o.underButtonsText ? '<div id="gksi_copyright">' + o.underButtonsText + '</div>': '') +
 		'</div></div>';
 
+	// Binding
 	$("#navigation").append(gksi_frame);
+
+	// Buttons managment and callbacks
 	$("#gksi_" + o.id + "_close").click(function() {
 		$("#gksi_" + o.id).remove();
 		return false;
@@ -184,6 +189,7 @@ var appendFrame = function(o) {
 		});
 	}
 
+	// Position correction on resize
 	if(o.relativeToId && !opt.get("global", "allow_frame_css")) {
 		$(window).resize(function() {
 			var toOffset = $("#" + o.relativeToId).offset();
@@ -191,17 +197,36 @@ var appendFrame = function(o) {
 		});
 		$(window).trigger("resize");
 	}
-};
+
+	// Background-color correction
+	var transparentCss = "rgba(0, 0, 0, 0)";
+	if($(".gksi_frame_data").css("background-color") == transparentCss) {
+		dbg("[frame_builder] Can't find background-color");
+		var cssTries = [ "#navigation", "#centre", "#navig_bloc_user", "#header" ];
+		$.each(cssTries, function(i, cssId) {
+			if($(cssId).css("background-color") != transparentCss) {
+				dbg("[frame_builder] Took " + cssId + " background-color");
+				appendCSS('.gksi_frame_data { background-color: ' + $(cssId).css("background-color") + '; } ');
+				return false;
+			}
+		});
+	}
+};			
 
 // Custom CSS insertion
+var appendCSS = function(css) {
+	$("#gksi_css").append(css);
+};
+
+// Default GKSi CSS
 var insertCSS = function() {
 	dbg("Inserting custom CSS");
-	$("head").append("<style>" +
+	$("head").append("<style id='gksi_css'>" +
 		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top_small.png") + ") no-repeat; } " +
 		".gksi_frame { z-index: 10; position: absolute; } " +
 		".gksi_frame_section { border-bottom: 1px solid; font-weight: bold; padding-top: 6px; } " +
 		".gksi_frame_buttons { padding-top: 9px; text-align: center; } " +
-		".gksi_frame_data { width: auto; padding: 12px; background-color: #f0f0f0;  } " +
+		".gksi_frame_data { width: auto; padding: 12px; } " +
 		//"#gksi_suggest { } " +
 		//"#gksi_suggest_data { } " +
 		//"#gksi_options { } " +

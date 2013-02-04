@@ -17,6 +17,7 @@ Voir topic associé.
 
 ### TODO.done
 - Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
+- Correction de la couleur de la fenêtre d'options + adaptation en fonction du CSS (mwerf)
 
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox
