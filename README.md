@@ -16,8 +16,9 @@ Voir topic associé.
 - Pause ES au focus textarea
 
 ### TODO.done
-- Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
-- Correction de la couleur de la fenêtre d'options + adaptation en fonction du CSS (mwerf)
+- Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
+- Options : Correction de la couleur de la fenêtre d'options + adaptation en fonction du CSS (mwerf)
+- Endless scrolling : Pause lorsqu'une textarea est sélectionnée - Forums
 
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox

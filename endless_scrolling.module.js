@@ -177,6 +177,11 @@ modules.endless_scrolling = {
 		};
 		opt.setData(module_name, "endless_scrolling", "tooltip", generateTooltip());
 
+		$("textarea").focus(function() {
+			dbg("[endless_scrolling] Focused textarea - Pause endless scrolling");
+			wentToPageBottom = true;
+		});
+
 		dbg("[Init] Ready");
 	},
 };
