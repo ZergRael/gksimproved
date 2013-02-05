@@ -13,7 +13,6 @@ Voir topic associé.
 - Endless scrolling sur /m/comments/onuploads
 - Scrapping IMDB
 - Marqueur dernier torrent vu
-- Pause ES au focus textarea
 
 ### TODO.done
 - Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
