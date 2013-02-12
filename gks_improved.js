@@ -105,7 +105,7 @@ var craftUrl = function (parsedUrl) {
 	var craftUrl = parsedUrl.host + parsedUrl.path + (parsedUrl.cancelQ ? (parsedUrl.cancelAmp ? "" : "&") : '?');
 	var i = 0;
 	$.each(parsedUrl.params, function (k, v) {
-		craftUrl += (i == 0 ? '' : '&') + k + (v ? "=" + v : '');
+		craftUrl += (i == 0 ? '' : '&') + k + (v != undefined ? "=" + v : '');
 		i++;
 	});
 	craftUrl += (parsedUrl.hash ? parsedUrl.hash : '');
@@ -120,8 +120,10 @@ var grabPage = function(urlObject, callback) {
 	$.ajax({
 		type: 'GET',
 		url: urlToGrab,
-		success: function(data) {
-			callback(data);
+		success: function(data, status, jXHR) {
+			var ajaxedUrl = parseUrl(this.url);
+			var page_number = ajaxedUrl && ajaxedUrl.params && ajaxedUrl.params.page || 0;
+			callback(data, Number(page_number));
 		},
 		error: function(jXHR, status, thrown) {
 			dbg("[Ajax] " + status + " : " + thrown);
@@ -136,7 +138,7 @@ var post = function(urlObject, postData, callback) {
 		type: 'POST',
 		data: postData,
 		url: urlToGrab,
-		success: function(data) {
+		success: function(data, status, jqXHR) {
 			callback(data);
 		},
 		error: function(jXHR, status, thrown) {
@@ -282,7 +284,8 @@ var opt = {
 		},
 		endless_scrolling : {
 			endless_scrolling: 	{ defaultVal: true, showInOptions: true, dispText: "Endless scrolling sur les pages compatibles" },
-			pause_scrolling: 	{ defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page" },
+			adapt_url: 			{ defaultVal: true, showInOptions: true, dispText: "Adapter l'url en fonction de la page vue avec l'ES" },
+			pause_scrolling: 	{ defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page" }
 		},
 		torrent_list: {
 			imdb_suggest: 		{ defaultVal: false, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
