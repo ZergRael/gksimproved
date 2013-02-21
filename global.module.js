@@ -126,8 +126,7 @@ modules.global = {
 			if(!$("#userlink .karma").length) {
 				return -1;
 			}
-			var kMatches = $("#userlink .karma").text().match(/(\d*),?(\d+).(\d+)/);
-			return (kMatches[1] ? Number(kMatches[1]) * 1000 : 0) + (kMatches[2] ? Number(kMatches[2]) : 0) + (kMatches[3] ? Number(kMatches[3]) * 0.01 : 0);
+			return Number($("#userlink .karma").text().replace(',', ''));
 		}
 
 		var getUserId = function() {
