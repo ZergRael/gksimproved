@@ -22,6 +22,7 @@ Voir topic associé.
 - Endless scrolling : Adaptation de l'url en fonction du scrolling
 - Snatched : Cacher les torrents en seed (MacGeek)
 - Snatched : Cacher les torrents non completés
+- Options : Amélioration de la construction de la fenêtre
 
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox

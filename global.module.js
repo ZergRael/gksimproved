@@ -77,18 +77,24 @@ modules.global = {
 				$(bbcode).click();
 			});
 		};
-		
+
 		var createOptionsFrame = function() {
 			var optionsFrameData = "";
 			dbg("[Options] Building frame");
 			$.each(opt.options, function(module_name, options) {
-				optionsFrameData += '<div id="gksi_options_data_' + module_name + '"><div class="gksi_frame_section">' + modules[module_name].dText + '</div>';
+				var optionsSection = '<div id="gksi_options_data_' + module_name + '"><div class="gksi_frame_section">' + modules[module_name].dText + '</div>';
+				var showSection = false;
 				$.each(options, function(option, oData) {
 					if(oData.showInOptions) {
-						optionsFrameData += '<input type="checkbox" id="gksi_' + module_name + '_' + option + '" ' + (opt.get(module_name, option) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
+						optionsSection += '<input type="checkbox" id="gksi_' + module_name + '_' + option + '" ' + (opt.get(module_name, option) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
+						showSection = true;
 					}
 				});
-				optionsFrameData += '</div>';
+				optionsSection += '</div>';
+				if(showSection) {
+					// If there is no options to be shown for this section, just skip the whole div
+					optionsFrameData += optionsSection;
+				}
 			});
 
 			// { id, classes, title, data, relativeToId, top, left, underButtonsText }
@@ -96,10 +102,11 @@ modules.global = {
 			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "navigation", top: 8, left: 230, underButtonsText: copyright });
 
 			$.each(opt.options, function(module_name, options) {
-				if(!$("#gksi_options_data_" + module_name + " input").length) {
-					$("#gksi_options_data_" + module_name).remove();
+				if(!$("#gksi_options_data_" + module_name).length) {
+					// Since the section is not even shown, don't cycle through all options
 					return;
 				}
+
 				$.each(options, function(option, oData) {
 					if(oData.showInOptions) {
 						$("#gksi_" + module_name + "_" + option).change(function() {
