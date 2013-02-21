@@ -293,7 +293,8 @@ var opt = {
 		},
 		snatched: {
 			filtering_deleted: 	{ defaultVal: true, showInOptions: false },
-			filtering_seed:     {defaultVal: false, showInOption: false}
+			filtering_seed: 	{ defaultVal: false, showInOption: false },
+			filtering_no_comp: 	{ defaultVal: false, showInOption: false }
 		},
 		twits: {
 			twit_auto_complete: { defaultVal: true, showInOptions: true, dispText: "Auto-complétion des twits" },

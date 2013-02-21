@@ -20,6 +20,8 @@ Voir topic associé.
 - Options : Correction de la couleur de la fenêtre d'options + adaptation en fonction du CSS (mwerf)
 - Endless scrolling : Pause lorsqu'une textarea est sélectionnée - Forums
 - Endless scrolling : Adaptation de l'url en fonction du scrolling
+- Snatched : Cacher les torrents en seed (MacGeek)
+- Snatched : Cacher les torrents non completés
 
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox

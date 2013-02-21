@@ -28,33 +28,64 @@ modules.snatched = {
 
 		dbg("[Init] Loading module");
 
-		var canGrabAllPages = (!url.params || url.params.page == 0);
+		var tagTorrents = function() {
+			dbg("[TorrentTag] Scanning");
+			$(".table100 tbody tr").each(function() {
+				var t = $(this);
+				$(this).find("td").each(function(i) {
+					if(i == 0 && $(this).text() == "Torrent Supprimé") {
+						t.addClass("t_deleted");
+					}
+					if(i == 1 && $(this).find('img').attr('src') == "https://s.gks.gs/static/themes/sifuture/img/validate.png") {
+						t.addClass("t_seeding");
+					}
+					if(i == 5 && $(this).text() == "Non Complété") {
+						t.addClass("t_not_completed");
+					}
+				})
+			});
+			dbg("[TorrentTag] Ended scanning");
+		};
+
 		var filterDeleted = function() {
-			if(!opt.get(module_name, "filtering_deleted")){
+			if(!opt.get(module_name, "filtering_deleted")) {
 				return;
 			}
 
 			dbg("[DeleteFilter] Scanning for deleted");
-			$(".table100 tbody tr").each(function() {
-				if($(this).find("td").first().text() == "Torrent Supprimé") {
-					$(this).hide();
-				}
-			});
+			$(".t_deleted").hide();
 			dbg("[DeleteFilter] Ended filtering");
 		};
 
-		var filterInSeed = function(){
-    		if(!opt.get(module_name, "filtering_seed")){
-        		return;
-    		}
-    		dbg("[SeedFilter] Scanning for seeding");
-    		$(".table100 tbody tr").each(function() {
-				if($(this).find("td").eq(1).find('img').attr('src') == "https://s.gks.gs/static/themes/sifuture/img/validate.png" ) {
-					$(this).hide();
+		var filterInSeed = function() {
+			if(!opt.get(module_name, "filtering_seed")) {
+				return;
+			}
+
+			dbg("[SeedFilter] Scanning for seeding");
+			$(".t_seeding").hide();
+			dbg("[SeedFilter] Ended filtering");
+		};
+
+		var filterNonCompleted = function() {
+			if(!opt.get(module_name, "filtering_no_comp")) {
+				return;
+			}
+
+			dbg("[NCFilter] Scanning for non completed");
+			$(".t_not_completed").hide();
+			dbg("[NCFilter] Ended filtering");
+		};
+
+		var unFilter = function() {
+			$(".table100 tbody tr").each(function() {
+				var t = $(this);
+				if(!((t.hasClass("t_deleted") && opt.get(module_name, "filtering_deleted")) || (t.hasClass("t_seeding") && opt.get(module_name, "filtering_seed")) || (t.hasClass("t_not_completed") && opt.get(module_name, "filtering_no_comp")))) {
+					t.show();
 				}
 			});
-			dbg("[SeedFilter] Ended filtering");
-		}
+		};
+
 		var maxPage = false;
 		var getMaxPage = function() {
 			if(!mOptions.lastPage) {
@@ -160,6 +191,7 @@ modules.snatched = {
 			$(".table100 tbody").html($(".table100 tbody tr").sort(sortFunc));
 		};
 
+		var canGrabAllPages = (!url.params || url.params.page == 0);
 		var grabAllPages = function() {
 			loadingPage = true;
 
@@ -193,7 +225,10 @@ modules.snatched = {
 					if(pageLoaded == maxPage) {
 						$(".page_loading").remove();
 						dbg("[AllPagesGrab] Grabbing ended");
+						tagTorrents();
 						filterDeleted();
+						filterInSeed();
+						filterNonCompleted();
 						sortData();
 					}
 				});
@@ -204,7 +239,7 @@ modules.snatched = {
 			return false;
 		};
 
-		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/><label for="filter_deleted">Cacher les supprimés</label> ' + ' | <input id="filter_seed" type="checkbox" ' + (opt.get(module_name, "filtering_seed") ? 'checked="checked" ' : ' ') + '/><label for="filter_seed">Cacher les torrents en seed</label> ' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
+		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/><label for="filter_deleted">Cacher les supprimés</label> ' + ' | <input id="filter_seed" type="checkbox" ' + (opt.get(module_name, "filtering_seed") ? 'checked="checked" ' : ' ') + '/><label for="filter_seed">Cacher les torrents en seed</label> ' + ' | <input id="filter_no_comp" type="checkbox" ' + (opt.get(module_name, "filtering_no_comp") ? 'checked="checked" ' : ' ') + '/><label for="filter_no_comp">Cacher les non completés</label> ' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
 		var colSortButtons = [ {n: 1, id: "sortName", nom: "Nom"}, {n: 3, id: "sortUL", nom: "UL"}, {n: 4, id: "sortDL", nom: "DL"}, {n: 5, id: "sortRDL", nom: "Real DL"}, {n: 6, id: "sortST", nom: "SeedTime"}, {n: 7, id: "sortRatio", nom: "Ratio"}
 		];
 		$.each(colSortButtons, function(k, v) {
@@ -216,6 +251,7 @@ modules.snatched = {
 		$(mOptions.buttons).after(torrentButtons);
 
 		getMaxPage();
+		tagTorrents();
 
 		// Deleted torrents filtering
 		$("#filter_deleted").change(function() {
@@ -225,8 +261,8 @@ modules.snatched = {
 				filterDeleted();
 			}
 			else {
-				dbg("[DeleteFilter] Unfiltering FL");
-				$(".table100 tbody tr").show();
+				dbg("[DeleteFilter] Unfiltering deleted");
+				unFilter();
 				dbg("[DeleteFilter] Ended unfiltering");
 			}
 		});
@@ -240,11 +276,26 @@ modules.snatched = {
 			}
 			else {
 				dbg("[SeedFilter] Unfiltering Seeding");
-				$(".table100 tbody tr").show();
+				unFilter();
 				dbg("[SeedFilter] Ended unfiltering");
 			}
 		});
 		filterInSeed();
+
+		$("#filter_no_comp").change(function() {
+			opt.set(module_name, "filtering_no_comp", $(this).attr("checked") == "checked" ? true : false);
+			dbg("[NCFilter] is " + opt.get(module_name, "filtering_no_comp"));
+			if(opt.get(module_name, "filtering_no_comp")) {
+				filterNonCompleted();
+			}
+			else {
+				dbg("[NCFilter] Unfiltering non completed");
+				unFilter();
+				dbg("[NCFilter] Ended unfiltering");
+			}
+		});
+		filterNonCompleted();
+
 		// Sort on column click
 		$(".sortCol").click(function() {
 			if(sort == $(this).attr("id")) {
@@ -265,8 +316,10 @@ modules.snatched = {
 
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
+			tagTorrents();
 			filterDeleted();
 			filterInSeed();
+			filterNonCompleted();
 			sortData();
 			canGrabAllPages = false;
 			$("#grabAllPagesSpan").remove();
