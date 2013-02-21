@@ -32,15 +32,13 @@ modules.twits = {
 
 		dbg("[Init] Loading module");
 
-		var twit_auto_complete = opt.get(module_name, "twit_auto_complete");
 		var autocKey = 9;
 		var iPseudo = false;
-		var pseudos = {};
 		var pseudos_matchs = [];
 		var jOnKeydown = function(e) {
 			var qp = $(this)
 			var qp_text = qp.val();
-			if(twit_auto_complete && e.which == autocKey) {
+			if(opt.get(module_name, "twit_auto_complete") && e.which == autocKey) {
 				dbg("[AutoCTwit] Trying to autoc");
 
 				var matchingAts = qp_text.match(/\B@\w+/g);
@@ -79,9 +77,8 @@ modules.twits = {
 			}
 		};
 
-		var twit_color = opt.get(module_name, "twit_color");
 		var colorizeTwits = function(postId) {
-			if(!twit_color) {
+			if(!opt.get(module_name, "twit_color")) {
 				return;
 			}
 			var postArea = $(mOptions.twit_color.scanArea);
@@ -103,6 +100,14 @@ modules.twits = {
 				}));
 			});
 			dbg("[TwitColorize] Colorization ended");
+		};
+
+		var pseudos = {};
+		var buildPseudosHashmap = function() {
+			pseudos = {};
+			$('span[class^=userclass]').each(function() {
+				pseudos[$(this).text().toLowerCase()] = { pseudo: $(this).text(), class: $(this).attr("class"), url: $(this).parent().attr("href") };
+			});
 		};
 
 		dbg("[Init] Starting");
@@ -161,21 +166,16 @@ modules.twits = {
 		});
 
 		// Building pseudos hashmap
-		$('span[class^=userclass]').each(function() {
-			pseudos[$(this).text().toLowerCase()] = { pseudo: $(this).text(), class: $(this).attr("class"), url: $(this).parent().attr("href") };
-		});
-
-		opt.setCallback(module_name, "twit_color", function(state) {
-			twit_color = state;
-		});
-		opt.setCallback(module_name, "twit_auto_complete", function(state) {
-			twit_auto_complete = state;
-		});
+		buildPseudosObject();
 
 		// Twit colorization
 		if(mOptions.twit_color) {
 			colorizeTwits();
 		}
+
+		$(document).on("endless_scrolling_insertion_done", function() {
+			buildPseudosHashmap();
+		});
 
 		dbg("[Init] Ready");
 	}
