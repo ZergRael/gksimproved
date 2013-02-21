@@ -87,6 +87,7 @@ modules.logs = {
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
 			$(".date_head:not(:first)").parent().remove();
+			$(document).trigger("es_dom_process_done");
 		});
 
 		dbg("[Init] Ready");

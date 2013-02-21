@@ -230,6 +230,7 @@ modules.snatched = {
 						filterInSeed();
 						filterNonCompleted();
 						sortData();
+						$(document).trigger("es_dom_process_done");
 					}
 				});
 			}
@@ -259,11 +260,13 @@ modules.snatched = {
 			dbg("[DeleteFilter] is " + opt.get(module_name, "filtering_deleted"));
 			if(opt.get(module_name, "filtering_deleted")) {
 				filterDeleted();
+				$(document).trigger("es_dom_process_done");
 			}
 			else {
 				dbg("[DeleteFilter] Unfiltering deleted");
 				unFilter();
 				dbg("[DeleteFilter] Ended unfiltering");
+				$(document).trigger("es_dom_process_done");
 			}
 		});
 		filterDeleted();
@@ -273,11 +276,13 @@ modules.snatched = {
 			dbg("[SeedFilter] is " + opt.get(module_name, "filtering_seed"));
 			if(opt.get(module_name, "filtering_seed")) {
 				filterInSeed();
+				$(document).trigger("es_dom_process_done");
 			}
 			else {
 				dbg("[SeedFilter] Unfiltering Seeding");
 				unFilter();
 				dbg("[SeedFilter] Ended unfiltering");
+				$(document).trigger("es_dom_process_done");
 			}
 		});
 		filterInSeed();
@@ -287,11 +292,13 @@ modules.snatched = {
 			dbg("[NCFilter] is " + opt.get(module_name, "filtering_no_comp"));
 			if(opt.get(module_name, "filtering_no_comp")) {
 				filterNonCompleted();
+				$(document).trigger("es_dom_process_done");
 			}
 			else {
 				dbg("[NCFilter] Unfiltering non completed");
 				unFilter();
 				dbg("[NCFilter] Ended unfiltering");
+				$(document).trigger("es_dom_process_done");
 			}
 		});
 		filterNonCompleted();
@@ -323,6 +330,7 @@ modules.snatched = {
 			sortData();
 			canGrabAllPages = false;
 			$("#grabAllPagesSpan").remove();
+			$(document).trigger("es_dom_process_done");
 		});
 
 		dbg("[Init] Ready");

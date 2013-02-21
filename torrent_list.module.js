@@ -123,11 +123,13 @@ modules.torrent_list = {
 			dbg("[FilterFL] is " + opt.get(module_name, "filtering_fl"));
 			if(opt.get(module_name, "filtering_fl")) {
 				filterFL();
+				$(document).trigger("es_dom_process_done");
 			}
 			else {
 				dbg("[FLFilter] Unfiltering FL");
 				$("#torrent_list tr").show();
 				dbg("[FLFilter] Ended unfiltering");
+				$(document).trigger("es_dom_process_done");
 			}
 		});
 		filterFL();
@@ -139,6 +141,7 @@ modules.torrent_list = {
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
 			filterFL();
+			$(document).trigger("es_dom_process_done");
 		});
 
 		dbg("[Init] Ready");

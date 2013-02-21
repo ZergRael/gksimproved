@@ -38,10 +38,10 @@ modules.endless_scrolling = {
 			loading: '.pager_align', lastPage: '.pager_align', domExtract: "tbody tr", domInsertion: "tbody", pageModifier: -1
 		} },
 		{ path_name: "/req/", options: { 
-			loading: '.pager_align', lastPage: '.pager_align', domExtract: "#requests_list tbody tr:not(:first)", domInsertion: "#requests_list tbody", pageModifier: -1
+			loading: '.pager_align', lastPage: '.pager_align', domExtract: "#requests_list tbody tr:not(:first)", domInsertion: "#requests_list tbody", pageModifier: -1, notListeningToTrigger: true
 		} },
 		{ path_name: "/m/images/", options: {
-			loading: '.pager_align', lastPage: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, pageModifier: -1
+			loading: '.pager_align', lastPage: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, pageModifier: -1, notListeningToTrigger: true
 		} }
 	
 	],
@@ -100,9 +100,7 @@ modules.endless_scrolling = {
 				});
 
 				if(lookingAtPage != previousLookedPage) {
-					dbg("[auto_page_adapt] Looking at page " + lookingAtPage);
-
-					dbg(insertedOffsets);
+					dbg("[adapt_url] Looking at page " + lookingAtPage);
 					var thisUrl = url;
 					thisUrl.params = thisUrl.params || {};
 					thisUrl.params.page = lookingAtPage;
@@ -127,11 +125,11 @@ modules.endless_scrolling = {
 			}
 
 			if(opt.get(module_name, "pause_scrolling") && scrollTop + window.innerHeight >= document.documentElement.scrollHeight) {
-				dbg("[EndlessScrolling] Stop inserting, got to page bottom");
+				dbg("[pause_scrolling] Stop inserting, got to page bottom");
 				wentToPageBottom = true;
 			}
 
-			dbg("[EndlessScrolling] Scrolled");
+			//dbg("[EndlessScrolling] Scrolled");
 			if((scrollTop + window.innerHeight > document.documentElement.scrollHeight - (mOptions.scrollOffset ? mOptions.scrollOffset : defaultScrollOffset)) && !loadingPage) {
 				dbg("[EndlessScrolling] Loading next page");
 				loadingPage = true;
@@ -165,7 +163,7 @@ modules.endless_scrolling = {
 		var insertedOffsets = {0: previousLookedPage};
 		var insertAjaxData = function(data, page_n) {
 			if(wentToPageBottom) {
-				dbg("[EndlessScrolling] Waiting for user confirmation in order to insert more");
+				dbg("[pause_scrolling] Waiting for user confirmation in order to insert more");
 				$(".page_loading").html('<a href="#" class="resume_endless_scrolling">Reprendre l\'endless scrolling</a>');
 				$(".resume_endless_scrolling").click(function(e) {
 					wentToPageBottom = false;
@@ -184,36 +182,45 @@ modules.endless_scrolling = {
 				$(mOptions.domInsertion).append(processedData);
 			}
 			
-			rebuildInsertedOffsets();
-			dbg(insertedOffsets);
 			nextPage++;
 			loadingPage = false;
 			$(".page_loading").remove();
 			$(document).trigger("endless_scrolling_insertion_done");
-			dbg("[EndlessScrolling] Ended");
+			if(mOptions.notListeningToTrigger) {
+				rebuildInsertedOffsets();
+			}
+			dbg("[EndlessScrolling] Insertion ended");
 		};
 
 		var processData = function(data, page_n) {
-			dbg("[data_processor] Found first");
+			dbg("[data_processor] Found first dom element - Tagging it");
 			data.first().addClass("dom_page_start").data("page", page_n);
 			return data;
 		};
 
+		// Triggered by es_dom_process_done
 		var rebuildInsertedOffsets = function() {
+			dbg("[adapt_url] Rebuilding offets");
 			insertedOffsets = {0: insertedOffsets[0]};
 			$(".dom_page_start").each(function() {
-				dbg("Rewriting for page : " + $(this).data("page"));
-				insertedOffsets[$(this).offset().top] = $(this).data("page");
+				var line = $(this);
+				if(!line.is(":visible")) {
+					line = line.nextAll(":visible").first();
+				}
+
+				insertedOffsets[line.offset().top] = $(this).data("page");
 			});
-		}
+			dbg("[adapt_url] Offsets ready");
+		};
 
 		dbg("[Init] Starting");
 		// Execute functions
 
 		getMaxPage();
-		dbg("[endless_scrolling] url relative pages : " + (url.params && url.params.page ? url.params.page : 0) + "/" + maxPage);
+		dbg("[EndlessScrolling] url relative pages : " + (url.params && url.params.page ? url.params.page : 0) + "/" + maxPage);
 		$(document).scroll(jOnScroll);
 
+		// Tooltip generation for options menu
 		var generateTooltip = function() {
 			return modules[module_name].pages.map(function(page){
 				return page.path_name + (page.params ? '?' + $.map(page.params, function(value, query) {
@@ -223,21 +230,21 @@ modules.endless_scrolling = {
 		};
 		opt.setData(module_name, "endless_scrolling", "tooltip", generateTooltip());
 
+		// Auto endless scrolling pause if any textarea has been focused - mostly forums usage
 		$("textarea").focus(function() {
-			dbg("[endless_scrolling] Focused textarea - Pause endless scrolling");
-			wentToPageBottom = true;
-		});
-
-		opt.setCallback(module_name, "adapt_url", function(state) {
-			// Rebuild offsets hashmap
-			// Listen to (live) clicks on .pager_align
-			if(state) {
-				rebuildInsertedOffsets();
+			if(!wentToPageBottom) {
+				dbg("[EndlessScrolling] Focused textarea - Pause endless scrolling");
+				wentToPageBottom = true;
 			}
 		});
 
+		// Remap href links to scroll instead of load a new page
 		if(mOptions.lastPage) {
 			$(mOptions.lastPage + " a").on("click", function() {
+				if(!opt.get(module_name, "adapt_url")) {
+					return;
+				}
+
 				var href = $(this).attr("href");
 				var hrefPage = href.match(/page=(\d+)/);
 				if(hrefPage.length) {
@@ -257,6 +264,11 @@ modules.endless_scrolling = {
 				}
 			});
 		}
+
+		// Listen to after dom modifications by other modules
+		$(document).on("es_dom_process_done", function() {
+			rebuildInsertedOffsets();
+		});
 
 		dbg("[Init] Ready");
 	},

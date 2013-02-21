@@ -64,6 +64,7 @@ modules.forums = {
 			$(".colhead:not(:first)").remove();
 			$(document).trigger("recolor_twits");
 			filterSignatures();
+			$(document).trigger("es_dom_process_done");
 		});
 
 		dbg("[Init] Ready");
