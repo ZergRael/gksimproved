@@ -155,7 +155,7 @@ var appendNativeScript = function (jsFileName) {
 	document.body.appendChild(script);
 };
 
-// { id, classes, title, data, relativeToId, top, left, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ] } 
+// { id, classes, title, data, relativeToId, top, left, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ] }
 var appendFrame = function(o) {
 	// Build custom buttons
 	var additionnalButtons = '';
@@ -213,7 +213,7 @@ var appendFrame = function(o) {
 			}
 		});
 	}
-};			
+};
 
 // Custom CSS insertion
 var appendCSS = function(css) {
@@ -292,11 +292,12 @@ var opt = {
 			filtering_fl: 		{ defaultVal: false, showInOptions: false }
 		},
 		snatched: {
-			filtering_deleted: 	{ defaultVal: true, showInOptions: false }
+			filtering_deleted: 	{ defaultVal: true, showInOptions: false },
+			filtering_seed:     {defaultVal: false, showInOption: false}
 		},
 		twits: {
 			twit_auto_complete: { defaultVal: true, showInOptions: true, dispText: "Auto-complétion des twits" },
-			twit_color: 		{ defaultVal: true, showInOptions: true, dispText: "Coloration et lien automatique sur les twits" } 
+			twit_color: 		{ defaultVal: true, showInOptions: true, dispText: "Coloration et lien automatique sur les twits" }
 		},
 		pins: {
 			filter_expensive: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's trop chers" },
