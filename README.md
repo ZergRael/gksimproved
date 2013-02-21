@@ -25,6 +25,8 @@ Voir topic associé.
 - Options : Amélioration de la construction de la fenêtre
 - Badges : Amélioration du détecteur pour les valeurs de 1k+
 - Global : Amélioration du détecteur de karma
+- Main : Debug et commentaires
+- Endless scrolling : Commentaires
 
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox
