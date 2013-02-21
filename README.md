@@ -1,6 +1,7 @@
 GKSimproved
 ===========
 
+
 Améliore et facilite la navigation sur certaines parties de gks.gs
 
 Voir topic associé.

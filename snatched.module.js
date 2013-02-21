@@ -30,7 +30,7 @@ modules.snatched = {
 
 		var canGrabAllPages = (!url.params || url.params.page == 0);
 		var filterDeleted = function() {
-			if(!opt.get(module_name, "filtering_deleted")) {
+			if(!opt.get(module_name, "filtering_deleted")){
 				return;
 			}
 
@@ -43,6 +43,18 @@ modules.snatched = {
 			dbg("[DeleteFilter] Ended filtering");
 		};
 
+		var filterInSeed = function(){
+    		if(!opt.get(module_name, "filtering_seed")){
+        		return;
+    		}
+    		dbg("[SeedFilter] Scanning for seeding");
+    		$(".table100 tbody tr").each(function() {
+				if($(this).find("td").eq(1).find('img').attr('src') == "https://s.gks.gs/static/themes/sifuture/img/validate.png" ) {
+					$(this).hide();
+				}
+			});
+			dbg("[SeedFilter] Ended filtering");
+		}
 		var maxPage = false;
 		var getMaxPage = function() {
 			if(!mOptions.lastPage) {
@@ -192,7 +204,7 @@ modules.snatched = {
 			return false;
 		};
 
-		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/><label for="filter_deleted">Cacher les supprimés</label> ' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
+		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/><label for="filter_deleted">Cacher les supprimés</label> ' + ' | <input id="filter_seed" type="checkbox" ' + (opt.get(module_name, "filtering_seed") ? 'checked="checked" ' : ' ') + '/><label for="filter_seed">Cacher les torrents en seed</label> ' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
 		var colSortButtons = [ {n: 1, id: "sortName", nom: "Nom"}, {n: 3, id: "sortUL", nom: "UL"}, {n: 4, id: "sortDL", nom: "DL"}, {n: 5, id: "sortRDL", nom: "Real DL"}, {n: 6, id: "sortST", nom: "SeedTime"}, {n: 7, id: "sortRatio", nom: "Ratio"}
 		];
 		$.each(colSortButtons, function(k, v) {
@@ -220,6 +232,19 @@ modules.snatched = {
 		});
 		filterDeleted();
 
+		$("#filter_seed").change(function() {
+			opt.set(module_name, "filtering_seed", $(this).attr("checked") == "checked" ? true : false);
+			dbg("[SeedFilter] is " + opt.get(module_name, "filtering_seed"));
+			if(opt.get(module_name, "filtering_seed")) {
+				filterInSeed();
+			}
+			else {
+				dbg("[SeedFilter] Unfiltering Seeding");
+				$(".table100 tbody tr").show();
+				dbg("[SeedFilter] Ended unfiltering");
+			}
+		});
+		filterInSeed();
 		// Sort on column click
 		$(".sortCol").click(function() {
 			if(sort == $(this).attr("id")) {
@@ -241,6 +266,7 @@ modules.snatched = {
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
 			filterDeleted();
+			filterInSeed();
 			sortData();
 			canGrabAllPages = false;
 			$("#grabAllPagesSpan").remove();
