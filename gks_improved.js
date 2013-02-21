@@ -10,12 +10,14 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-var debug = true;
+var DEBUG = true;
+
 // General debug function
 var _dbg = function (section, str) {
-	if(debug) {
+	if(DEBUG) {
 		var dd = new Date();
-		var debugPrepend = "[" + dd.getHours() + ":" + dd.getMinutes() + ":" + dd.getSeconds() + ":" + dd.getMilliseconds() + "] [" + section + "] ";
+		var h = dd.getHours(), m = dd.getMinutes(), s = dd.getSeconds(), ms = dd.getMilliseconds();
+		var debugPrepend = "[" + (h < 10 ? '0' + h : h) + ":" + (m < 10 ? '0' + m : m) + ":" + (s < 10 ? '0' + s : s) + ":" + (ms < 100 ? '0' + (ms < 10 ? '0' + ms : ms) : ms) + "] [" + section + "] ";
 		if(typeof str == "object") {
 			console.log(debugPrepend);
 			console.log(str);
@@ -26,10 +28,12 @@ var _dbg = function (section, str) {
 	}
 };
 
+// Debug print function for the main, will be overwriten in modules
 var dbg = function(str) {
 	_dbg("main", str);
-}
+};
 
+// Firefox hacks to simulate chrome APIs
 if($.browser.mozilla) {
 	var chrome = {
 		extension: {
@@ -42,8 +46,9 @@ if($.browser.mozilla) {
 
 dbg("[Init] Loading general funcs");
 
-// Returns an array with splited url
+// Returns an url object from url string - Usable by craftUrl
 var parseUrl = function (url) {
+	// No need to parse any external link
 	var host = url.match("^https:\\/\\/gks.gs");
 	if(!host) {
 		return false;
@@ -52,38 +57,50 @@ var parseUrl = function (url) {
 	parsedUrl.host = (host ? host[0] : host);
 	url = url.replace(parsedUrl.host, "");
 
+	// Parse the path from the url string (/m/account/)
 	var path = url.match(/[\-\w\.\/]*\/?/);
 	parsedUrl.path = (path ? path[0] : path);
 	url = url.replace(parsedUrl.path, "");
 
+	// The hashtag thingie (#post_121212)
 	var hash = url.match("#.*$");
 	if(hash) {
 		parsedUrl.hash = (hash ? hash[0] : hash);
 		url = url.replace(parsedUrl.hash, "");
 	}
 
+	// Since the urls have a strange build patern between pages, we continue to parse even if it is malformed
 	if(url.indexOf("?") == -1 && url.indexOf("&") == -1 && url.indexOf("=") == -1) {
 		return parsedUrl;
 	}
 
 	if(url.indexOf("?") == -1) {
+		// Here, we know the url is malformed, we are going for some hacks
+		// Inform the url builder that we won't need a '?' in url
 		parsedUrl.cancelQ = true;
 		if(url.indexOf("&") == -1) {
+			// It's now the url hell, there is at least 1 param since we found a '=', even hackier !
+			// Inform the url builder that we won't need a '&' in url
 			parsedUrl.cancelAmp = true;
+			// Extract the last word from path, we know it was in fact a param
 			lastPathBit = parsedUrl.path.match(/\/(\w*)$/);
 			if(lastPathBit.length) {
+				// Remove it from path
 				parsedUrl.path = parsedUrl.path.replace(lastPathBit[1], "");
+				// Prepend it to the rest of url string in order to pass the params parser
 				url = lastPathBit[1] + url;
 			}
 		}
 	}
 	url = url.replace("?", "");
 
+	// Usual params split
 	var urlSplit = url.split('&');
 	if(!urlSplit.length) {
 		return false;
 	}
 
+	// Extract params and values
 	parsedUrl.params = {};
 	$.each(urlSplit, function (k, v) {
 		if(v == "") {
@@ -96,24 +113,30 @@ var parseUrl = function (url) {
 };
 
 
-// Returns a complete url by concat data from parseUrl
+// Returns an url string form an url object - Form parseUrl()
 var craftUrl = function (parsedUrl) {
 	if(!parsedUrl.params) {
 		return parsedUrl.host + parsedUrl.path;
 	}
 
+	// As seen before, some hacks for malformed urls
 	var craftUrl = parsedUrl.host + parsedUrl.path + (parsedUrl.cancelQ ? (parsedUrl.cancelAmp ? "" : "&") : '?');
+
+	// Build the params
 	var i = 0;
 	$.each(parsedUrl.params, function (k, v) {
+		// We don't always have values for each param, but append it anyway
 		craftUrl += (i == 0 ? '' : '&') + k + (v != undefined ? "=" + v : '');
 		i++;
 	});
+
+	// Append the hashtag thingie
 	craftUrl += (parsedUrl.hash ? parsedUrl.hash : '');
 
 	return craftUrl;
 };
 
-// Calls callback after ajax on url
+// Ajax_GET an url object, then callback with data and page_number
 var grabPage = function(urlObject, callback) {
 	var urlToGrab = craftUrl(urlObject);
 	dbg("[Ajax] " + urlToGrab);
@@ -131,6 +154,7 @@ var grabPage = function(urlObject, callback) {
 	});
 };
 
+// Ajax_POST an url object, then callback with data
 var post = function(urlObject, postData, callback) {
 	var urlToGrab = craftUrl(urlObject);
 	dbg("[AjaxPost] " + urlToGrab);
@@ -147,6 +171,7 @@ var post = function(urlObject, postData, callback) {
 	});
 };
 
+// Import a javascript file from the site if we need it elsewhere (jQ function doesn't seem to work as intended)
 var appendNativeScript = function (jsFileName) {
 	var script = document.createElement("script");
 	script.type = "text/javascript";
@@ -155,6 +180,7 @@ var appendNativeScript = function (jsFileName) {
 	document.body.appendChild(script);
 };
 
+// Builds our specific frames from a frame object :
 // { id, classes, title, data, relativeToId, top, left, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ] }
 var appendFrame = function(o) {
 	// Build custom buttons
@@ -172,14 +198,16 @@ var appendFrame = function(o) {
 		(o.underButtonsText ? '<div id="gksi_copyright">' + o.underButtonsText + '</div>': '') +
 		'</div></div>';
 
-	// Binding
+	// Append
 	$("#navigation").append(gksi_frame);
 
-	// Buttons managment and callbacks
+	// Close button
 	$("#gksi_" + o.id + "_close").click(function() {
 		$("#gksi_" + o.id).remove();
 		return false;
 	});
+
+	// Custom buttons management and callbacks
 	if(additionnalButtons.length) {
 		$.each(o.buttons, function(i, button) {
 			if(button.b_callback) {
@@ -204,20 +232,17 @@ var appendFrame = function(o) {
 	var transparentCss = "rgba(0, 0, 0, 0)";
 	if($(".gksi_frame_data").css("background-color") == transparentCss) {
 		dbg("[frame_builder] Can't find background-color");
+		// Go up as much as needed to find some non-transparent color
 		var cssTries = [ "#navigation", "#centre", "#navig_bloc_user", "#header" ];
 		$.each(cssTries, function(i, cssId) {
 			if($(cssId).css("background-color") != transparentCss) {
 				dbg("[frame_builder] Took " + cssId + " background-color");
+				// Instead of creating style on frame, let's append to our custom CSS area
 				appendCSS('.gksi_frame_data { background-color: ' + $(cssId).css("background-color") + '; } ');
 				return false;
 			}
 		});
 	}
-};
-
-// Custom CSS insertion
-var appendCSS = function(css) {
-	$("#gksi_css").append(css);
 };
 
 // Default GKSi CSS
@@ -246,9 +271,15 @@ var insertCSS = function() {
 		"</style>");
 };
 
+// Custom CSS insertion, mostly used by the frame builder
+var appendCSS = function(css) {
+	$("#gksi_css").append(css);
+};
+
 // Custom divs insertion & funcs
 var ignoreScrolling = false, avoidEndlessScrolling = false;
 var insertDivs = function() {
+	// The back to top button - We build it on init and show it when needed
 	$("#global").append('<a id="backTopButton" href="#"></a>');
 	$("#backTopButton").click(function() {
 		ignoreScrolling = true;
@@ -262,13 +293,16 @@ var insertDivs = function() {
 
 // Storage functions
 var storage = {
+	// Inserts a complete module in localStorage
 	set: function(module, opts) {
+		// This tempStore is used to avoid storage of the whole module, we only need values, not dispText..
 		var tempStore = {};
 		$.each(opts, function(o, v) {
 			tempStore[o] = v.val;
 		});
 		localStorage.setItem(module, JSON.stringify(tempStore));
 	},
+	// Returns a complete module, only used by opt.load()
 	get: function(module) {
 		return JSON.parse(localStorage.getItem(module));
 	}
@@ -320,19 +354,24 @@ var opt = {
 			auto_refresh: 		{ defaultVal: false, showInOptions: false }
 		}
 	},
+	// Returns value for module(m) & option(o)
 	get: function(m, o) {
 		return this.options[m][o].val;
 	},
+	// Sets value(v) for module(m) & option(o)
 	set: function(m, o, v) {
 		this.options[m][o].val = v;
 		storage.set(m, this.options[m]);
 	},
+	// Sets on change callback(c) for module(m) & option(o)
 	setCallback: function(m, o, c) {
 		this.options[m][o].callback = c;
 	},
+	// Appends pure nammed(name) data to module(m) & option(o)
 	setData: function(m, o, name, data) {
 		this.options[m][o][name] = data;
 	},
+	// Populate all options values by extracting from localStorage or default value
 	load: function() {
 		$.each(this.options, function(m, opts) {
 			var values = storage.get(m);
@@ -344,12 +383,18 @@ var opt = {
 };
 
 dbg("[Init] Loading modules");
+// Parse our url string from the browser
 var url = parseUrl(window.location.href);
+// Load all options
 opt.load();
+// Insert custom CSS and divs
 insertCSS();
 insertDivs();
+// Each module will be inserted in the modules object for an easier inter-modules communication
 var modules = {};
-// url debug
+// Print some url debug to make sure the parser is not going nuts
 dbg(url);
 dbg(craftUrl(url));
+// Each .module.js from the manifest will now be read by the javascript engine
+// then the loader will launch them if the url is matching
 dbg("[Init] Ready");
