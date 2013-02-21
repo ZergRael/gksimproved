@@ -183,11 +183,11 @@ modules.badges = {
 						var b_s = badgesData[i_section];
 						if(b_s.dom) {
 							b_s.val = $(data).find(b_s.dom).text().match(b_s.regex)[1];
-							dbg("[progress] Got value [" + b_s.val + "] for section " + i_section);
+							dbg("[progress] " + i_section + " >> Got value [" + b_s.val + "](" + typeof b_s.val + ")");
 						}
 
 						if(b_s.val !== undefined) {
-							b_s.val = (typeof b_s.val == "String" ? Number(b_s.val.replace(",", "")) : b_s.val);
+							b_s.val = (typeof b_s.val == "string" || typeof b_s.val == "String" ? Number(b_s.val.replace(",", "")) : b_s.val);
 							$(domTr).eq(i_section).find("td:not(:first)").each(function(i) {
 								var b = b_s.badges[i];
 								if(!b || !b.trigger) {
