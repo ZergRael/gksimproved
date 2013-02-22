@@ -319,58 +319,60 @@ var storage = {
 var opt = {
 	options: {
 		global: {
-			form_validation: 	{ defaultVal: true, showInOptions: true, dispText: "Validation des formulaires avec ctrl+entrée" },
-			bbcode_shortcuts: 	{ defaultVal: true, showInOptions: true, dispText: "Raccourcis BBCodes avec ctrl" },
-			allow_frame_css: 	{ defaultVal: false, showInOptions: true, dispText: "Laisser le CSS positionner les fenêtres GKSi" }
+			form_validation:    { defaultVal: true, showInOptions: true, dispText: "Validation des formulaires avec ctrl+entrée" },
+			bbcode_shortcuts:   { defaultVal: true, showInOptions: true, dispText: "Raccourcis BBCodes avec ctrl" },
+			allow_frame_css:    { defaultVal: false, showInOptions: true, dispText: "Laisser le CSS positionner les fenêtres GKSi" }
 		},
 		endless_scrolling : {
-			endless_scrolling: 	{ defaultVal: true, showInOptions: true, dispText: "Endless scrolling sur les pages compatibles", sub_options: {
-				main: { defaultVal: true, showInOptions: true, dispText: "Page d'accueil", tooltip: "https://gks.gs/" },
-				browse: { defaultVal: true, showInOptions: true, dispText: "Torrents : Parcourir", tooltip: "https://gks.gs/browse/" },
-				sphinx: { defaultVal: true, showInOptions: true, dispText: "Torrents : Recherche", tooltip: "https://gks.gs/sphinx/" },
-				viewforum: { defaultVal: true, showInOptions: true, dispText: "Forums : Liste des topics", tooltip: "https://gks.gs/forums.php?action=viewforum" },
-				viewtopic: { defaultVal: true, showInOptions: true, dispText: "Forums : Lecture de topic", tooltip: "https://gks.gs/forums.php?action=viewtopic" },
-				snatched: { defaultVal: true, showInOptions: true, dispText: "Snatched : Liste", tooltip: "https://gks.gs/m/peers/snatched" },
-				logs: { defaultVal: true, showInOptions: true, dispText: "Logs : Liste", tooltip: "https://gks.gs/logs/" },
-				req: { defaultVal: true, showInOptions: true, dispText: "Requests : Liste", tooltip: "https://gks.gs/req/" },
-				images: { defaultVal: true, showInOptions: true, dispText: "Images : Liste", tooltip: "https://gks.gs/m/images/" }
+			endless_scrolling:  { defaultVal: true, showInOptions: true, dispText: "Endless scrolling sur les pages compatibles", sub_options: {
+				main:        { defaultVal: true, showInOptions: true, dispText: "Page d'accueil", tooltip: "https://gks.gs/" },
+				browse:      { defaultVal: true, showInOptions: true, dispText: "Torrents : Parcourir", tooltip: "https://gks.gs/browse/" },
+				sphinx:      { defaultVal: true, showInOptions: true, dispText: "Torrents : Recherche", tooltip: "https://gks.gs/sphinx/" },
+				viewforum:   { defaultVal: true, showInOptions: true, dispText: "Forums : Liste des topics", tooltip: "https://gks.gs/forums.php?action=viewforum" },
+				viewtopic:   { defaultVal: true, showInOptions: true, dispText: "Forums : Lecture de topic", tooltip: "https://gks.gs/forums.php?action=viewtopic" },
+				snatched:    { defaultVal: true, showInOptions: true, dispText: "Snatched : Liste", tooltip: "https://gks.gs/m/peers/snatched" },
+				logs:        { defaultVal: true, showInOptions: true, dispText: "Logs : Liste", tooltip: "https://gks.gs/logs/" },
+				req:         { defaultVal: true, showInOptions: true, dispText: "Requests : Liste", tooltip: "https://gks.gs/req/" },
+				images:      { defaultVal: true, showInOptions: true, dispText: "Images : Liste", tooltip: "https://gks.gs/m/images/" },
+				uploads:     { defaultVal: true, showInOptions: true, dispText: "Uploads : Liste", tooltip: "https://gks.gs/m/uploads/" }/*,
+				up_comments: { defaultVal: true, showInOptions: true, dispText: "Uploads : Commentaires", tooltip: "https://gks.gs/m/comments/onuploads" }*/
 			} },
-			adapt_url: 			{ defaultVal: true, showInOptions: true, dispText: "Adapter l'url en fonction de la page vue avec l'ES" },
-			pause_scrolling: 	{ defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page" }
+			adapt_url:          { defaultVal: true, showInOptions: true, dispText: "Adapter l'url en fonction de la page vue avec l'ES" },
+			pause_scrolling:    { defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page" }
 		},
 		torrent_list: {
-			imdb_suggest: 		{ defaultVal: false, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
-			filtering_fl: 		{ defaultVal: false, showInOptions: false },
-			age_column: 		{ defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent"}
+			imdb_suggest:       { defaultVal: false, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
+			filtering_fl:       { defaultVal: false, showInOptions: false },
+			age_column:         { defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent"}
 		},
 		snatched: {
-			filtering_deleted: 	{ defaultVal: true, showInOptions: false },
-			filtering_seed: 	{ defaultVal: false, showInOption: false },
-			filtering_no_comp: 	{ defaultVal: false, showInOption: false }
+			filtering_deleted:  { defaultVal: true, showInOptions: false },
+			filtering_seed:     { defaultVal: false, showInOption: false },
+			filtering_no_comp:  { defaultVal: false, showInOption: false }
 		},
 		twits: {
 			twit_auto_complete: { defaultVal: true, showInOptions: true, dispText: "Auto-complétion des twits" },
-			twit_color: 		{ defaultVal: true, showInOptions: true, dispText: "Coloration et lien automatique sur les twits" }
+			twit_color:         { defaultVal: true, showInOptions: true, dispText: "Coloration et lien automatique sur les twits" }
 		},
 		pins: {
-			filter_expensive: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's trop chers" },
-			filter_bought: 		{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's déjà achetés" },
-			sort_price: 		{ defaultVal: false, showInOptions: true, dispText: "Trier les pins par prix" }
+			filter_expensive:   { defaultVal: false, showInOptions: true, dispText: "Cacher les pin's trop chers" },
+			filter_bought:      { defaultVal: false, showInOptions: true, dispText: "Cacher les pin's déjà achetés" },
+			sort_price:         { defaultVal: false, showInOptions: true, dispText: "Trier les pins par prix" }
 		},
 		forums: {
-			hide_signatures: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut" }
+			hide_signatures:    { defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut" }
 		},
 		torrent: {
-			quick_comment: 		{ defaultVal: true, showInOptions: true, dispText: "Afficher la boite de commentaire rapide sur les fiches torrent" },
-			comment_mp_title: 	{ defaultVal: "[Torrent #%id_torrent%] Commentaires désactivés", showInOptions: false },
-			comment_mp_text: 	{ defaultVal: "Salutations !\n\nIl semblerait qu'un des torrents que vous avez posté n'accepte pas les commentaires :\n[url=%url_torrent%]%titre_torrent%[/url]\n\nSerait-il possible d'y remédier ?\n[url=https://gks.gs/m/account/paranoia]Réglage de la paranoïa[/url]\n\nMerci :)", showInOptions: false }
+			quick_comment:      { defaultVal: true, showInOptions: true, dispText: "Afficher la boite de commentaire rapide sur les fiches torrent" },
+			comment_mp_title:   { defaultVal: "[Torrent #%id_torrent%] Commentaires désactivés", showInOptions: false },
+			comment_mp_text:    { defaultVal: "Salutations !\n\nIl semblerait qu'un des torrents que vous avez posté n'accepte pas les commentaires :\n[url=%url_torrent%]%titre_torrent%[/url]\n\nSerait-il possible d'y remédier ?\n[url=https://gks.gs/m/account/paranoia]Réglage de la paranoïa[/url]\n\nMerci :)", showInOptions: false }
 		},
 		badges: {
-			progress: 			{ defaultVal: false, showInOptions: true, dispText: "Afficher la progression sous les badges" },
-			show_img: 			{ defaultVal: false, showInOptions: true, dispText: "Afficher toutes les images des badges" }
+			progress:           { defaultVal: false, showInOptions: true, dispText: "Afficher la progression sous les badges" },
+			show_img:           { defaultVal: false, showInOptions: true, dispText: "Afficher toutes les images des badges" }
 		},
 		logs: {
-			auto_refresh: 		{ defaultVal: false, showInOptions: false }
+			auto_refresh:       { defaultVal: false, showInOptions: false }
 		}
 	},
 	// Returns value for module(m) & option(o)

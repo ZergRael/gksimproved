@@ -20,16 +20,16 @@ modules.endless_scrolling = {
 			opt_name: "main", loading: '#pager_index', path: '/browse/', domExtract: "#torrent_list tr", domInsertion: "#torrent_list"
 		} },
 		{ path_name: "/browse/", options: { 
-			opt_name: "browse", loading: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list" , lastPage: ".pager_align", pageModifier: -1
+			opt_name: "browse", loading: '.pager_align', lastPage: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list" , pageModifier: -1
 		} },
 		{ path_name: "/sphinx/", options: { 
-			opt_name: "sphinx", loading: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", canSuggest: true, lastPage: ".pager_align", pageModifier: -1
+			opt_name: "sphinx", loading: '.pager_align', lastPage: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", canSuggest: true, pageModifier: -1
 		} },
 		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { 
-			opt_name: "viewforum", loading: '.thin table', loadingAfter: true, domExtract: 'tbody tr', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 180, stopInsertBottomOffset: 100, lastPage: '.linkbox:nth(2)', lastPageRegex: /\[(\d+)\]\s*$/, endOfStream: 'No posts to display!'
+			opt_name: "viewforum", loading: '.thin table', lastPage: '.linkbox:nth(2)', loadingAfter: true, domExtract: 'tbody tr', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 180, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/, endOfStream: 'No posts to display!'
 		} },
 		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { 
-			opt_name: "viewtopic", loading: '.thin table:last', loadingAfter: true, domExtract: '.thin table', domInsertion: '.thin table:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100, lastPage: '.linkbox', lastPageRegex: /\[(\d+)\]\s*$/
+			opt_name: "viewtopic", loading: '.thin table:last', lastPage: '.linkbox', loadingAfter: true, domExtract: '.thin table', domInsertion: '.thin table:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/
 		} },
 		{ path_name: "/m/peers/snatched", options: { 
 			opt_name: "snatched", loading: '.pager_align', lastPage: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1
@@ -41,8 +41,14 @@ modules.endless_scrolling = {
 			opt_name: "req", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#requests_list tbody tr:not(:first)", domInsertion: "#requests_list tbody", pageModifier: -1, notListeningToTrigger: true
 		} },
 		{ path_name: "/m/images/", options: {
-			opt_name: "images", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, pageModifier: -1, notListeningToTrigger: true
-		} }
+			opt_name: "images", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, cancelAmp: true, pageModifier: -1, notListeningToTrigger: true
+		} },
+		{ path_name: "/m/uploads/", options: {
+			opt_name: "uploads", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", cancelQ: true, cancelAmp: true, pageModifier: -1, notListeningToTrigger: true
+		} }/*,
+		{ path_name: "/m/comments/onuploads", options: {
+			opt_name: "up_comments", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, pageModifier: -1, notListeningToTrigger: true
+		} }*/
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -150,7 +156,8 @@ modules.endless_scrolling = {
 				var nextUrl = url;
 				nextUrl.path = mOptions.path ? mOptions.path : nextUrl.path;
 				nextUrl.params = nextUrl.params ? nextUrl.params : {};
-				nextUrl.cancelQ = (mOptions.cancelQ ? mOptions.cancelQ : (nextUrl.cancelQ ? nextUrl.cancelQ : false));
+				nextUrl.cancelQ = mOptions.cancelQ || nextUrl.cancelQ || false;
+				nextUrl.cancelAmp = mOptions.cancelAmp || nextUrl.cancelAmp || false;
 				nextUrl.params.page = nextPage;
 				var loadingP = '<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Réticulation des méta-données de la page suivante</p>';
 

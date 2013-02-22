@@ -31,6 +31,7 @@ Voir topic associé.
 - Endless scrolling : Options spécifiques par page
 - Twits : Auto-complétion bien plus robuste, basée sur la position du curseur plutôt que des regex hasardeuses
 - Twits : Ajout automatique d'un espace si une des complétions convient, la détection des twits de GKS nécessite cet espace pour fonctionner
+- Endless scrolling : Ajout sur /m/uploads/
 
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox
