@@ -166,7 +166,7 @@ modules.twits = {
 		});
 
 		// Building pseudos hashmap
-		buildPseudosObject();
+		buildPseudosHashmap();
 
 		// Twit colorization
 		if(mOptions.twit_color) {
