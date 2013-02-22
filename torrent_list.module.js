@@ -75,6 +75,19 @@ modules.torrent_list = {
 			dbg("[FLFilter] Ended filtering");
 		};
 
+		var addAgeColumn = function() {
+			$("tbody tr").each(function() {
+				if($(this).hasClass("head_torrent")) {
+					// Insert age head <td>
+				}
+				else {
+					// Regex the date
+					// Calculate age
+					// Insert <td>
+				}
+			});
+		};
+
 		var maxSuggestLang = 4;
 		var suggestMore = function() {
 			var searchQuery = $("#searchinput").val();
@@ -138,9 +151,14 @@ modules.torrent_list = {
 			suggestMore();
 		}
 
+		if(opt.get(module_name, "age_column")) {
+			addAgeColumn();
+		}
+
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
 			filterFL();
+			addAgeColumn();
 			$(document).trigger("es_dom_process_done");
 		});
 

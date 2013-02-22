@@ -55,7 +55,7 @@ modules.twits = {
 					dbg("[AutoCTwit] Finding the right match [" + atPseudo + "] " + matchStart + " <= " + selStart + " <= " + (matchStart + (atPseudo.length + 1)));
 					if(matchStart <= selStart && selStart <= matchStart + (atPseudo.length + 1)) {
 						matchingAtToAuto = i;
-						dbg("[AutoCTwit] Got it ! [" + matchStart + "]");
+						dbg("[AutoCTwit] Got it !");
 						return false;
 					}
 					lastMatchEnd = matchStart + (atPseudo.length + 1); // Avoid matching the same occurence multiple times and force cycling
@@ -87,8 +87,7 @@ modules.twits = {
 
 				iPseudo = iPseudo >= pseudos_matchs.length - 1 ? 0 : iPseudo + 1;
 				dbg("[AutoCTwit] Found a match : [" + textToAutoc + "] > " + pseudos_matchs[iPseudo]);
-				qp.val(qp_text.substr(0, matchStart) + pseudos_matchs[iPseudo] + (iPseudo == 0 ? '' : ' ') + qp_text.substr(matchStart + textToAutoc.length + (iPseudo == 1 ? 0 : 1)))
-				//qp.val(qp_text.replace(textToAutoc + (iPseudo == 1 ? '' : ' '), pseudos_matchs[iPseudo] + (iPseudo == 0 ? '' : ' '))); // \b and \B are a complete mess, but it works pretty well
+				qp.val(qp_text.substr(0, matchStart) + pseudos_matchs[iPseudo] + (iPseudo == 0 ? '' : ' ') + qp_text.substr(matchStart + textToAutoc.length + (iPseudo == 1 ? 0 : 1)));
 			}
 			else {
 				iPseudo = false;
