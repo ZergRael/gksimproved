@@ -9,7 +9,6 @@ Voir topic associé.
 ### TODO.list
 - Moar comments
 - Optimisations
-- Adapter le numéro de page en fonction de l'avancée dans l'endless scrolling
 - Endless scrolling sur /my/torrents
 - Endless scrolling sur /m/comments/onuploads
 - Scrapping IMDB
@@ -29,7 +28,7 @@ Voir topic associé.
 - Endless scrolling : Commentaires
 - Twits : Amélioration de l'autocomplétion suite un endless scrolling
 - Pins : Option de tri par prix
-
+- Endless scrolling : Options spécifiques par page
 
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox

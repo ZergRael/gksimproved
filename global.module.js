@@ -78,6 +78,20 @@ modules.global = {
 			});
 		};
 
+		var createOptionInput = function(module_name, option_name, oData) {
+			var oHtml = '<input type="checkbox" id="gksi_' + module_name + '_' + option_name + '" ' + (opt.get(module_name, option_name) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option_name + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
+			if(oData.sub_options) {
+				oHtml += '<div id="gksi_' + module_name + '_s_' + option_name + '" class="gksi_options_sub">';
+				$.each(oData.sub_options, function(s_option, s_oData) {
+					if(s_oData.showInOptions) {
+						oHtml += '<input type="checkbox" id="gksi_' + module_name + '_' + option_name + '_' + s_option + '" ' + (opt.sub_get(module_name, option_name, s_option) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option_name + '_' + s_option + '"' + (s_oData.tooltip ? ' title="' + s_oData.tooltip + '"' : '') + '>' + s_oData.dispText + '</label><br />';
+					}
+				});
+				oHtml += '</div>';
+			}
+			return oHtml;
+		}
+
 		var createOptionsFrame = function() {
 			var optionsFrameData = "";
 			dbg("[Options] Building frame");
@@ -86,7 +100,7 @@ modules.global = {
 				var showSection = false;
 				$.each(options, function(option, oData) {
 					if(oData.showInOptions) {
-						optionsSection += '<input type="checkbox" id="gksi_' + module_name + '_' + option + '" ' + (opt.get(module_name, option) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
+						optionsSection += createOptionInput(module_name, option, oData);
 						showSection = true;
 					}
 				});
@@ -115,7 +129,28 @@ modules.global = {
 							if(oData.callback) {
 								oData.callback(opt.get(module_name, option));
 							}
+							if(oData.sub_options) {
+								if(opt.get(module_name, option)) {
+									$("#gksi_" + module_name + "_s_" + option).slideDown();
+								}
+								else {
+									$("#gksi_" + module_name + "_s_" + option).slideUp();
+								}
+							}
 						});
+						if(oData.sub_options) {
+							$.each(oData.sub_options, function(s_option, s_oData) {
+								$("#gksi_" + module_name + "_" + option + "_" + s_option).change(function() {
+									if(s_oData.showInOptions) {
+										opt.sub_set(module_name, option, s_option, $(this).attr("checked") == "checked" ? true : false);
+										_dbg(module_name, "[" + option + "][" + s_option + "] is " + opt.sub_get(module_name, option, s_option));
+									}
+								});
+							});
+							if(!opt.get(module_name, option)) {
+								$("#gksi_" + module_name + "_s_" + option).hide();
+							}
+						}
 					}
 				});
 			});

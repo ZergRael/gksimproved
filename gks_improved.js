@@ -258,6 +258,8 @@ var insertCSS = function() {
 		//"#gksi_suggest_data { } " +
 		//"#gksi_options { } " +
 		//"#gksi_options_data { } " +
+		".gksi_options_sub { font-size: 0.9em; padding-left: 12px; } " +
+		".gksi_options_sub input { margin:2px; } " +
 		"#gksi_copyright { text-align: right; font-size: 0.8em; margin-top: -11px; } " +
 		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; } " +
 		".gksi_progress_bar { background-color: orange; height: 11px; border-radius: 1px; margin-bottom: -11px; } " +
@@ -299,6 +301,11 @@ var storage = {
 		var tempStore = {};
 		$.each(opts, function(o, v) {
 			tempStore[o] = v.val;
+			if(v.sub_options) {
+				$.each(v.sub_options, function(s_o, s_v) {
+					tempStore[o + '_' + s_o] = s_v.val;
+				});
+			}
 		});
 		localStorage.setItem(module, JSON.stringify(tempStore));
 	},
@@ -317,7 +324,17 @@ var opt = {
 			allow_frame_css: 	{ defaultVal: false, showInOptions: true, dispText: "Laisser le CSS positionner les fenêtres GKSi" }
 		},
 		endless_scrolling : {
-			endless_scrolling: 	{ defaultVal: true, showInOptions: true, dispText: "Endless scrolling sur les pages compatibles" },
+			endless_scrolling: 	{ defaultVal: true, showInOptions: true, dispText: "Endless scrolling sur les pages compatibles", sub_options: {
+				main: { defaultVal: true, showInOptions: true, dispText: "Page d'accueil", tooltip: "https://gks.gs/" },
+				browse: { defaultVal: true, showInOptions: true, dispText: "Torrents : Parcourir", tooltip: "https://gks.gs/browse/" },
+				sphinx: { defaultVal: true, showInOptions: true, dispText: "Torrents : Recherche", tooltip: "https://gks.gs/sphinx/" },
+				viewforum: { defaultVal: true, showInOptions: true, dispText: "Forums : Liste des topics", tooltip: "https://gks.gs/forums.php?action=viewforum" },
+				viewtopic: { defaultVal: true, showInOptions: true, dispText: "Forums : Lecture de topic", tooltip: "https://gks.gs/forums.php?action=viewtopic" },
+				snatched: { defaultVal: true, showInOptions: true, dispText: "Snatched : Liste", tooltip: "https://gks.gs/m/peers/snatched" },
+				logs: { defaultVal: true, showInOptions: true, dispText: "Logs : Liste", tooltip: "https://gks.gs/logs/" },
+				req: { defaultVal: true, showInOptions: true, dispText: "Requests : Liste", tooltip: "https://gks.gs/req/" },
+				images: { defaultVal: true, showInOptions: true, dispText: "Images : Liste", tooltip: "https://gks.gs/m/images/" }
+			} },
 			adapt_url: 			{ defaultVal: true, showInOptions: true, dispText: "Adapter l'url en fonction de la page vue avec l'ES" },
 			pause_scrolling: 	{ defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page" }
 		},
@@ -359,9 +376,18 @@ var opt = {
 	get: function(m, o) {
 		return this.options[m][o].val;
 	},
+	// Returns value for module(m) & option(o) & sub option(s)
+	sub_get: function(m, o, s) {
+		return this.options[m][o].sub_options[s].val;
+	},
 	// Sets value(v) for module(m) & option(o)
 	set: function(m, o, v) {
 		this.options[m][o].val = v;
+		storage.set(m, this.options[m]);
+	},
+	// Sets value(v) for module(m) & option(o) & sub option(s)
+	sub_set: function(m, o, s, v) {
+		this.options[m][o].sub_options[s].val = v;
 		storage.set(m, this.options[m]);
 	},
 	// Sets on change callback(c) for module(m) & option(o)
@@ -378,7 +404,13 @@ var opt = {
 			var values = storage.get(m);
 			$.each(opts, function(o, v) {
 				opt.options[m][o].val = (values && values[o] != undefined ? values[o] : v.defaultVal);
+				if(v.sub_options) {
+					$.each(v.sub_options, function(s_o, s_v) {
+						opt.options[m][o].sub_options[s_o].val = (values && values[o + '_' + s_o] != undefined ? values[o + '_' + s_o] : s_v.defaultVal);
+					});
+				}
 			});
+			dbg(opt.options[m]);
 		});
 	}
 };

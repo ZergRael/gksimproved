@@ -17,31 +17,31 @@ modules.endless_scrolling = {
 	dText: "Endless scrolling",
 	pages: [
 		{ path_name: "/", options: { 
-			loading: '#pager_index', path: '/browse/', domExtract: "#torrent_list tr", domInsertion: "#torrent_list"
+			opt_name: "main", loading: '#pager_index', path: '/browse/', domExtract: "#torrent_list tr", domInsertion: "#torrent_list"
 		} },
 		{ path_name: "/browse/", options: { 
-			loading: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list" , lastPage: ".pager_align", pageModifier: -1
+			opt_name: "browse", loading: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list" , lastPage: ".pager_align", pageModifier: -1
 		} },
 		{ path_name: "/sphinx/", options: { 
-			loading: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", canSuggest: true, lastPage: ".pager_align", pageModifier: -1
+			opt_name: "sphinx", loading: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", canSuggest: true, lastPage: ".pager_align", pageModifier: -1
 		} },
 		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { 
-			loading: '.thin table', loadingAfter: true, domExtract: 'tbody tr', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 180, stopInsertBottomOffset: 100, lastPage: '.linkbox:nth(2)', lastPageRegex: /\[(\d+)\]\s*$/, endOfStream: 'No posts to display!'
+			opt_name: "viewforum", loading: '.thin table', loadingAfter: true, domExtract: 'tbody tr', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 180, stopInsertBottomOffset: 100, lastPage: '.linkbox:nth(2)', lastPageRegex: /\[(\d+)\]\s*$/, endOfStream: 'No posts to display!'
 		} },
 		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { 
-			loading: '.thin table:last', loadingAfter: true, domExtract: '.thin table', domInsertion: '.thin table:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100, lastPage: '.linkbox', lastPageRegex: /\[(\d+)\]\s*$/
+			opt_name: "viewtopic", loading: '.thin table:last', loadingAfter: true, domExtract: '.thin table', domInsertion: '.thin table:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100, lastPage: '.linkbox', lastPageRegex: /\[(\d+)\]\s*$/
 		} },
 		{ path_name: "/m/peers/snatched", options: { 
-			loading: '.pager_align', lastPage: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1
+			opt_name: "snatched", loading: '.pager_align', lastPage: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1
 		} },
 		{ path_name: "/logs/", options: { 
-			loading: '.pager_align', lastPage: '.pager_align', domExtract: "tbody tr", domInsertion: "tbody", pageModifier: -1
+			opt_name: "logs", loading: '.pager_align', lastPage: '.pager_align', domExtract: "tbody tr", domInsertion: "tbody", pageModifier: -1
 		} },
 		{ path_name: "/req/", options: { 
-			loading: '.pager_align', lastPage: '.pager_align', domExtract: "#requests_list tbody tr:not(:first)", domInsertion: "#requests_list tbody", pageModifier: -1, notListeningToTrigger: true
+			opt_name: "req", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#requests_list tbody tr:not(:first)", domInsertion: "#requests_list tbody", pageModifier: -1, notListeningToTrigger: true
 		} },
 		{ path_name: "/m/images/", options: {
-			loading: '.pager_align', lastPage: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, pageModifier: -1, notListeningToTrigger: true
+			opt_name: "images", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, pageModifier: -1, notListeningToTrigger: true
 		} }
 	],
 	loaded: false,
@@ -86,7 +86,7 @@ modules.endless_scrolling = {
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 2 + (mOptions.pageModifier ? mOptions.pageModifier : 0));
 		var previousLookedPage = nextPage - 1;
 		var jOnScroll = function() {
-			if(!opt.get(module_name, "endless_scrolling")) {
+			if(!opt.get(module_name, "endless_scrolling") || !opt.sub_get(module_name, "endless_scrolling", mOptions.opt_name)) {
 				return;
 			}
 
@@ -266,16 +266,6 @@ modules.endless_scrolling = {
 		getMaxPage();
 		dbg("[EndlessScrolling] url relative pages : " + (url.params && url.params.page ? url.params.page : 0) + "/" + maxPage);
 		$(document).scroll(jOnScroll);
-
-		// Tooltip generation for options menu
-		var generateTooltip = function() {
-			return modules[module_name].pages.map(function(page){
-				return page.path_name + (page.params ? '?' + $.map(page.params, function(value, query) {
-					return query + '=' + value;
-				}).join('&') : '');
-			}).join('\n');
-		};
-		opt.setData(module_name, "endless_scrolling", "tooltip", generateTooltip());
 
 		// Auto endless scrolling pause if any textarea has been focused - mostly forums usage
 		$("textarea").focus(function() {
