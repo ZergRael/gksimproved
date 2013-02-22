@@ -27,6 +27,9 @@ Voir topic associé.
 - Global : Amélioration du détecteur de karma
 - Main : Debug et commentaires
 - Endless scrolling : Commentaires
+- Twits : Amélioration de l'autocomplétion suite un endless scrolling
+- Pins : Option de tri par prix
+
 
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox

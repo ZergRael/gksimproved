@@ -336,7 +336,8 @@ var opt = {
 		},
 		pins: {
 			filter_expensive: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's trop chers" },
-			filter_bought: 		{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's déjà achetés" }
+			filter_bought: 		{ defaultVal: false, showInOptions: true, dispText: "Cacher les pin's déjà achetés" },
+			sort_price: 		{ defaultVal: false, showInOptions: true, dispText: "Trier les pins par prix" }
 		},
 		forums: {
 			hide_signatures: 	{ defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut" }
