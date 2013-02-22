@@ -410,7 +410,6 @@ var opt = {
 					});
 				}
 			});
-			dbg(opt.options[m]);
 		});
 	}
 };

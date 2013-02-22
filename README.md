@@ -29,6 +29,8 @@ Voir topic associé.
 - Twits : Amélioration de l'autocomplétion suite un endless scrolling
 - Pins : Option de tri par prix
 - Endless scrolling : Options spécifiques par page
+- Twits : Auto-complétion bien plus robuste, basée sur la position du curseur plutôt que des regex hasardeuses
+- Twits : Ajout automatique d'un espace si une des complétions convient, la détection des twits de GKS nécessite cet espace pour fonctionner
 
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox
