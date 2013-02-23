@@ -1,0 +1,177 @@
+[center][img]https://s.gks.gs/img/img/01-2013/gks_improved_48.png[/img][size=6]GKSimproved[/size] [size=5](beta)[/size][/center]
+Salutations à tous.
+
+Après un petit weekend de glandouille, je me suis rendu compte qu'il manquait quelques fonctions pratiques sur le site :-/.
+
+C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un petit ensemble de scripts ajoutant les fonctions que je jugeais pratiques pour mon utilisation. Etant donné que ça fonctionne étonnamment bien chez moi, pourquoi pas le proposer ? :D
+
+Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. Toujours en beta mais un jour peut-être une version stable arrivera ;)
+
+Version actuelle : 0.2.4 - 04/02/2013 - Licence GPLv3
+
+[size=6]Téléchargement[/size] :
+* [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
+* [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/][b]Extension Firefox[/b][/url]
+* [url=https://github.com/ZergRael/gksimproved]Page GitHub[/url]
+
+[size=6]Présentation :[/size]
+L'extension se base sur un ensemble de scripts Javascript avec l'aide de la libraire jQuery. Cette librairie permet de simplifier le code tout en ajoutant des fonctions très pratiques ainsi que quelques suggestions glanées sur le forum.
+
+L'ensemble de ces scripts ont été développés par moi même si j'ai récupéré quelques parties que j'avais déjà codé auparavant. Le code est entièrement sous licence GPLv3, donc gratuit et réutilisable.
+
+La plupart des options sont sauvegardées entre chaque utilisation.
+
+[size=6]Pages affectées :[/size]
+[b]* Listes de torrents :[/b]
+- Page d'accueil -- /
+- Recherche torrents -- /sphinx/
+- Navigation torrents -- /browse/
+
+[url=https://s.gks.gs/img/img/01-2013/home.png][img]https://s.gks.gs/img/mini/01-2013/home.png[/img][/url] [url=https://s.gks.gs/img/img/01-2013/sphinx.png][img]https://s.gks.gs/img/mini/01-2013/sphinx.png[/img][/url]
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+> [i]FL uniquement[/i] : N'affiche que les torrents en Freeleech, le tri natif n'est pas concluant - Permet de garder un tri spécifique sur les FL
+> [i]Récupérer toutes les pages[/i] : Affiche l'ensemble des pages des snatched en une seule liste
+> [i]Tri par Nom, UL, DL, Real DL, SeedTime, Ratio[/i]	: Un clic sur la colonne associée trie les données - Peut-être lent en fonction de la taille de la liste
+> [i]Suggestions IMDB[/i] : Suggestions de recherche basées sur IMDB.fr et IMDB.com -- Utilise un système de cache perso
+
+[b]* Snatched[/b]
+- Page des snatched -- /snatched/
+
+[url=https://s.gks.gs/img/img/01-2013/snatched.png][img]https://s.gks.gs/img/mini/01-2013/snatched.png[/img][/url]
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+> [i]Cacher les supprimés[/i] : Cache les torrents supprimés du tracker - Pas ceux que vous ne seedez plus
+
+[b]* Twits[/b]
+- Posts d'un topic -- /forums.php?action=viewtopic
+- Liste commentaires d'un post du blog -- /blog/id=*
+- Liste commentaires d'un torrent -- /torrent/\d+/
+- Ajout de commentaire sur un torrent -- /com/id=*
+
+[url=https://s.gks.gs/img/img/01-2013/forums.png][img]https://s.gks.gs/img/mini/01-2013/forums.png[/img][/url]
+
+> [i]Autocomplétion des Twits[/i] : Un '@' suivi de quelques lettres puis un tab permet de compléter automatiquement un twit en fonction des pseudos déjà présents sur la page - Les tab suivants tentent les autres pseudos correspondants
+> [i]Coloration des Twits[/i] : Les twits déjà présents dans les posts sont colorés avec le lien associés en fonction des posteurs de la page - Les twits sur des pseudos non présents sur la page ne seront pas reconnus
+
+[b]* Forums[/b]
+- Liste des topics -- /forums.php?action=viewforum
+- Posts d'un topic -- /forums.php?action=viewtopic
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+> [i]Cacheur de signatures[/i] : Cache les signatures par défaut. Chaque signature peut être affichée ou non individuellement
+
+[b]* Torrents[/b]
+- Liste commentaires d'un torrent -- /torrent/\d+/
+
+> [i]Quick comment[/i] : Ajoute un formulaire d'envoi de commentaire directement sur la page du torrent
+> [i]Commentaires désactivés[/i] : Propose l'envoi d'un MP préformaté lorsque les commentaires d'un torrent sont désactivés. Permet de prévenir l'uploader avec l'ensemble des liens nécessaires en un seul clic, si ses MP sont activés. Editable.
+
+[b]* Karma store[/b]
+- Pin's store -- /karma/?tab=pins
+
+> [i]Cacher les pin's trop chers[/i] : Cache les pins que vous ne pouvez pas acheter avec le karma actuel
+> [i]Cacher les pin's déjà achetés[/i] : Cache les pins que vous avez déjà acheté
+
+[b]* Requests[/b]
+- Liste des requêtes -- /req/
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+
+[b]* Logs[/b]
+- Page des logs -- /logs/
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+
+[b]* Badges[/b]
+- Liste des badges acquis -- /m/badges/
+- Liste des badges acquis -- /badges/<user_id>
+
+> [i]Progression[/i] : Affiche votre progression vers l'obtention de ce badge
+> [i]Tous les badges[/i] : Affiche toutes les images de badges même si vous ne les avez pas (semi-transparents)
+
+[b]* Sur l'ensemble du site[/b]
+
+> [i]Validation des formulaires[/i] : Valide les formulaires (commentaires/posts/etc) avec ctrl+entrée
+> [i]Raccourcis BBCode[/i] : Permet d'ajouter les balises BBCode avec les raccourcis Ctrl + (b/u/i/q)
+
+[size=6]TODO list:[/size]
+- Moar comments
+- Optimisations
+
+- Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
+
+[size=6]Changelog :[/size]
+[b]* 0.2.4 - 04/02/2013[/b]
+- Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox
+- Snatched : Multiple bug fixes - javascript:false
+- Snatched : Evite l'endless scrolling lorsque la page est complétement chargée 
+- Snatched : Evite la récupération complète après endless scrolling / récupération complète
+- Pins : Ajout d'un filtre sur les pins déjà achetés
+- Endless scrolling : Ajout d'un module spécifique, plus facile à gérer
+- Filtres : Optimisations, principalement sur le FL (30ms pour filtrer 1000 torrents) - Le reste des ralentissements est du au navigateur
+- Request : Module supprimé pour l'instant vu qu'il n'avait que l'endless scrolling qui a été déplacé dans le module adapté
+- Liste de torrents : Correction de l'endless scrolling
+- Options : Ajout de liens vers le topic adapté
+- Endless scrolling : Ajouté sur /m/images/
+- Endless scrolling : Tooltip dans les options indiquant les pages affectées
+- Torrent : Ajout d'une fenêtre de modification du MP auto en cas de commentaires désactivés
+[spoil]
+[b]* 0.2.3 - 28/01/2013[/b]
+- Module badges actif aussi sur votre page publique de badges
+- Meilleur formatage des indicateurs sous les badges
+- Correction de l'endless scrolling sur la dernière page
+- Autorise les modifications sur la positions des frames GKSi
+- Cacheur de signatures sur les forums
+- Pause sur l'endless scrolling lorsqu'on scrolle jusqu'en bas de la page
+- Endless scrolling & auto-refresh sur la page des logs
+- Correction de la colorisation des twits à l'endless scrolling sur les forums
+[b]* 0.2.1 - 24/01/2013[/b]
+- Extension Firefox
+- Montre toutes les images de badges
+- Affiche la progression sous les badges
+- Evite le chargement des pages inutiles avec l'endless scrolling
+[b]* 0.2.0 - 22/01/2013[/b]
+- BugFix: Support mac pour la validation formulaire
+- Endless scrolling sur la page de requêtes
+- Suggestions de recherche basées sur IMDB.fr et IMDB.com -- Utilise un système de cache perso
+- Panneau d'options complet
+- Fluidification des changement dans les options
+[b]* 0.1.6 - 20/01/2013[/b]
+- BugFix: Force le raccourci BBCode pour mac avec la touche cmd
+- BugFix: Cache les boutons de twits sur la page torrent quand les commentaires sont désactivés
+- Ajout du raccourci BBCode Ctrl+Q = [ quote ]
+- Ajout d'un système d'envoi de MP préformaté lorsque l'uploader d'un torrent n'autorise pas les commentaires. Le lien se situe en bas de page torrent.
+[b]* 0.1.5 - 20/01/2013[/b]
+- Cacher les pins trop chers
+- BugFix: Endless scrolling sur la page d'accueil charge correctement les pages suivantes
+- Endless scrolling sur les listes de topics et topics
+- Quickpost sur les pages torrent pour poster directement des commentaires
+- Raccourcis BBCode sur les zones de texte qui acceptent le BBCode (Ctrl + B/U/I)
+[b]* 0.1.4 - 19/01/2013[/b]
+- Gestion des modules
+- Implémentation d'un loader
+- Gestion twits sur les comments de blog posts & comments de torrents
+- Gestion du ctrl+enter pour valider les formulaires
+- Réécriture du moteur d'autocomplétion des twits
+[b]* 0.1.3 - 16/01/2013[/b]
+- BugFix: Détection des twits dans les messages
+- BugFix: Coloration des twits après édition plus rapide et précise
+[b]* 0.1.2 - 15/01/2013[/b]
+- BugFix: Coloration de twits en fin de message
+- BugFix: Coloration de twits après prévisu puis édition
+[b]* 0.1.1 - 15/01/2013[/b]
+- BugFix: Coloration de multiples twits sur un seul message
+- Optimisations - CPU sur filtrage
+- Moar comments
+- Gestion des headers de pages torrents en endless scrolling
+- Bouton pour remonter en haut de page sur l'endless scrolling
+- Auto-complétion twits à l'édition des posts
+- Coloration des twits après édition d'un post
+- Migration Github
+[b]* 0.1.0 - 14/01/2013[/b]
+- Release publique
+[/spoil]
+
+[size=6]Remerciements :[/size]
+Merci à l'ensemble des utilisateurs ayant proposé leurs suggestions pour améliorer l'addon :D

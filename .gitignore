@@ -1,6 +1,5 @@
 test_data/
 
-*.bbcode
 *.zip
 
 .DS_Store
