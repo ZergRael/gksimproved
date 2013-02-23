@@ -119,8 +119,8 @@ modules.endless_scrolling = {
 				}
 			}
 
-			// ignoreScrolling when backToTop button is pushed || we already grabbed all pages
-			if(ignoreScrolling || avoidEndlessScrolling) {
+			// ignore scrolling when backToTop button is pushed
+			if(ignoreScrolling) {
 				return;
 			}
 
@@ -130,6 +130,11 @@ modules.endless_scrolling = {
 			}
 			else {
 				$("#backTopButton").hide();
+			}
+
+			// ignore scrolling we already grabbed all pages
+			if(avoidEndlessScrolling) {
+				return;
 			}
 
 			// If we know what page we're at && (we are at last page || the next page is obviously out of boundary)

@@ -37,6 +37,7 @@ Voir topic associé.
 - Torrent list : Possibilité d'ajouter automatiquement les torrents associés à la meilleure traduction d'IMDB lorsque peu ou pas de résultats
 - Options : Structuration des options pour éviter d'activer une option sans son parent
 - Forums : Le cacheur de signature est devenu optionnel
+- Torrent list : Ajout d'un marqueur de torrent (manuel) permettant de retrouver le dernier torrent vu
 
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox

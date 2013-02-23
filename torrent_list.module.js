@@ -17,7 +17,7 @@ modules.torrent_list = {
 	dText: "Liste torrents",
 	pages: [
 		{ path_name: "/", options: { buttons: '#sort' } },
-		{ path_name: "/browse/", options: { buttons: '#sort p' } },
+		{ path_name: "/browse/", options: { buttons: '#sort p', canMark: true } },
 		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canSuggest: true } },
 	],
 	loaded: false,
@@ -153,6 +153,7 @@ modules.torrent_list = {
 						}
 					});
 					appendFrame({ title: "GKSi IMDB Suggestions", data: suggestionsStr, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
+
 					if(opt.get(module_name, "imdb_auto_add") && modules.endless_scrolling.maxPage === true) {
 						dbg("[QueryTranslate] Looks like we can grab bestTranslation [" + imdb.translateBest + "] results");
 						var bestMatchUrl = url;
@@ -184,11 +185,78 @@ modules.torrent_list = {
 			}
 		};
 
+		var findTorrent = function() {
+			$("#find_marked_torrent_span").remove();
+			var foundMarkedTorrent = false;
+			var torrentIdMark = opt.get(module_name, "torrent_marker");
+			var torrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
+			$("tbody tr").find("td:nth(1) a").each(function() {
+				torrentId = Number($(this).attr("href").match(/\/torrent\/(\d+)\//)[1]);
+				if(torrentId <= torrentIdMark) {
+					dbg("[TorrentMark] Found it !");
+					foundMarkedTorrent = true;
+					$(".page_loading").remove();
+					$(this).parent().addClass("torrent_mark_found");
+					$(document).scrollTop($(this).offset().top - 20);
+					return false;
+				}
+			});
+			if(!foundMarkedTorrent) {
+				var urlFinder = url;
+				url.params = url.params || {};
+				url.params.page = Number(url.params.page || 0) + 1;
+				dbg("[TorrentMark] Grabbing next page");
+				grabPage(urlFinder, function(data) {
+					var insertionData = $(data).find("#torrent_list tr");
+					if(insertionData.length) {
+						dbg("[TorrentMark] Insert torrents");
+						$("#torrent_list").append(insertionData);
+						filterFL();
+						addAgeColumn();
+						dbg("[TorrentMark] Blocking endless scrolling");
+						avoidEndlessScrolling = true;
+						findTorrent();
+					}
+				});
+			}
+		};
+
+		var findMarkedTorrent = '<span id="find_marked_torrent_span"><a id="find_marked_torrent" href="#">Retrouver le torrent marqué</a> | </span>';
+		var markFirstTorrent = '<span id="mark_first_torrent_span"><a id="mark_first_torrent" href="#">Marquer le premier torrent</a> | </span>';
 		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Afficher les FL uniquement</label> | ';
 
 		dbg("[Init] Starting");
+
 		// Adding buttons
+		if(mOptions.canMark && (!url.params || !url.params.page || url.params.page == 0) && (!url.params || !url.params.sort || (url.params.sort == "id" && (!url.params.order || url.params.order == "desc")))) {
+			var torrentIdMark = opt.get(module_name, "torrent_marker");
+			var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
+			if(torrentIdMark === false) {
+				dbg("[TorrentMark] No marked torrent");
+				findMarkedTorrent = '';
+			}
+			else if(firstTorrentId - torrentIdMark > 2000) {
+				findMarkedTorrent = '(Torrent marqué trop ancien pour être retrouvé) | '
+			}
+			torrentButtons = findMarkedTorrent + markFirstTorrent + torrentButtons;
+		}
 		$(mOptions.buttons).prepend(torrentButtons);
+
+		// Torrent marking
+		$("#mark_first_torrent").click(function() {
+			var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
+			dbg("[TorrentMark] Marking torrent [" + firstTorrentId + "]");
+			opt.set(module_name, "torrent_marker", firstTorrentId);
+			return false;
+		});
+
+		// Torrent mark finding
+		$("#find_marked_torrent").click(function() {
+			dbg("[TorrentMark] Looking for torrent mark");
+			$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Désencapsulation des torrents à la recherche du marqueur</p>');
+			findTorrent();
+			return false;
+		});
 
 		// FreeLeech torrents filtering
 		$("#filter_fl").change(function() {
@@ -214,6 +282,7 @@ modules.torrent_list = {
 
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
+			$("#find_marked_torrent_span").remove();
 			filterFL();
 			addAgeColumn();
 			$(document).trigger("es_dom_process_done");
