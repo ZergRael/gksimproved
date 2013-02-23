@@ -1,2 +1,13 @@
-# The bbcode backups are here for archive purpose, git shouldn't care of these
+test_data/
+
 *.bbcode
+*.zip
+
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
