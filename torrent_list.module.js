@@ -36,26 +36,9 @@ modules.torrent_list = {
 			}
 
 			dbg("[FLFilter] Scanning for FL");
-			var hideNext = false;
-			var odd = true;
 			var removeHead = false;
-			$("tbody tr").each(function() {
-				if($(this).hasClass("head_torrent")) {
-					// Remove head if ajax or already found
-					if(removeHead) {
-						$(this).hide();
-					}
-					else {
-						removeHead = true;
-					}
-					return;
-				}
-
-				odd = !odd;
-				
-				if(odd && hideNext) {
-					hideNext = false;
-					$(this).hide();
+			$("tbody tr:not(:first)").each(function() {
+				if($(this).find(".alt1").length) {
 					return;
 				}
 
@@ -68,8 +51,10 @@ modules.torrent_list = {
 					}
 				});
 				if(hideMe) {
-					hideNext = true;
 					$(this).hide();
+					if(!$(this).hasClass("head_torrent")) {
+						$(this).next().hide();
+					}
 				}
 			});
 			dbg("[FLFilter] Ended filtering");
