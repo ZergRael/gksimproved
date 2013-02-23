@@ -265,11 +265,13 @@ modules.torrent_list = {
 			dbg("[FilterFL] is " + opt.get(module_name, "filtering_fl"));
 			if(opt.get(module_name, "filtering_fl")) {
 				filterFL();
+				$("#find_marked_torrent_span").hide();
 				$(document).trigger("es_dom_process_done");
 			}
 			else {
 				dbg("[FLFilter] Unfiltering FL");
 				$("#torrent_list tr").show();
+				$("#find_marked_torrent_span").show();
 				dbg("[FLFilter] Ended unfiltering");
 				$(document).trigger("es_dom_process_done");
 			}
