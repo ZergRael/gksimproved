@@ -45,10 +45,7 @@ modules.endless_scrolling = {
 		} },
 		{ path_name: "/m/uploads/", options: {
 			opt_name: "uploads", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", cancelQ: true, cancelAmp: true, pageModifier: -1, notListeningToTrigger: true
-		} }/*,
-		{ path_name: "/m/comments/onuploads", options: {
-			opt_name: "up_comments", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, pageModifier: -1, notListeningToTrigger: true
-		} }*/
+		} }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
