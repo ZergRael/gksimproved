@@ -33,6 +33,8 @@ Voir topic associé.
 - Twits : Ajout automatique d'un espace si une des complétions convient, la détection des twits de GKS nécessite cet espace pour fonctionner
 - Endless scrolling : Ajout sur /m/uploads/
 - Torrent list : Ajout d'une colonne d'age optionnelle
+- Torrent list : Correction des résultats des suggestions IMDB
+- Torrent list : Possibilité d'ajouter automatiquement les torrents associés à la meilleure traduction d'IMDB lorsque peu ou pas de résultats
 
 **0.2.4**
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox

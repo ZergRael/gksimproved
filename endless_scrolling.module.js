@@ -268,6 +268,7 @@ modules.endless_scrolling = {
 		// Execute functions
 
 		getMaxPage();
+		this.maxPage = maxPage;
 		dbg("[EndlessScrolling] url relative pages : " + (url.params && url.params.page ? url.params.page : 0) + "/" + maxPage);
 		$(document).scroll(jOnScroll);
 

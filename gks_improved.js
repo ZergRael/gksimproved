@@ -353,6 +353,7 @@ var opt = {
 		},
 		torrent_list: {
 			imdb_suggest:       { defaultVal: false, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
+			imdb_auto_add:      { defaultVal: false, showInOptions: true, dispText: "Ajouter le résultat de la meilleure correspondance IMDB" },
 			filtering_fl:       { defaultVal: false, showInOptions: false },
 			age_column:         { defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent"}
 		},
