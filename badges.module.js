@@ -167,9 +167,8 @@ modules.badges = {
 			{ url: "/m/account/", sections: [6] }
 		];
 
-		var progress = opt.get(module_name, "progress");
 		var show_progress = function() {
-			if(!progress) {
+			if(!opt.get(module_name, "progress")) {
 				return;
 			}
 
@@ -203,9 +202,8 @@ modules.badges = {
 			dbg("[progress] Ended requests");
 		};
 
-		var show_img = opt.get(module_name, "show_img");
 		var show_missing_images = function() {
-			if(!show_img) {
+			if(!opt.get(module_name, "show_img")) {
 				return;
 			}
 
@@ -233,18 +231,17 @@ modules.badges = {
 
 		show_progress();
 		opt.setCallback(module_name, "progress", function(state) {
-			progress = state;
-			if(progress) {
+			if(state) {
 				show_progress();
 			}
 			else {
 				$(".gksi_progress").remove();
 			}
 		})
+
 		show_missing_images();
 		opt.setCallback(module_name, "show_img", function(state) {
-			show_img = state;
-			if(show_img) {
+			if(state) {
 				show_missing_images();
 			}
 			else {

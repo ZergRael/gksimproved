@@ -263,6 +263,7 @@ var insertCSS = function() {
 		//"#gksi_options_data { } " +
 		".gksi_options_sub { font-size: 0.9em; padding-left: 12px; } " +
 		".gksi_options_sub input { margin:2px; } " +
+		".gksi_option_required { text-decoration: underline; } " +
 		"#gksi_copyright { text-align: right; font-size: 0.8em; margin-top: -11px; } " +
 		".gksi_edit_title { display: block; width: 100%; margin-top: 12px; } " +
 		".gksi_edit_textarea { display: block; width: 100%; min-height: 240px; min-width: 360px; margin-right: -4px!important; } " +
@@ -348,12 +349,12 @@ var opt = {
 				images:      { defaultVal: true, showInOptions: true, dispText: "Images : Liste", tooltip: "https://gks.gs/m/images/" },
 				uploads:     { defaultVal: true, showInOptions: true, dispText: "Uploads : Liste", tooltip: "https://gks.gs/m/uploads/" }
 			} },
-			adapt_url:          { defaultVal: true, showInOptions: true, dispText: "Adapter l'url en fonction de la page vue avec l'ES" },
-			pause_scrolling:    { defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page" }
+			adapt_url:          { defaultVal: true, showInOptions: true, dispText: "Adapter l'url en fonction de la page vue avec l'ES", parent: "endless_scrolling" },
+			pause_scrolling:    { defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page", parent: "endless_scrolling" }
 		},
 		torrent_list: {
 			imdb_suggest:       { defaultVal: false, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
-			imdb_auto_add:      { defaultVal: false, showInOptions: true, dispText: "Ajouter le résultat de la meilleure correspondance IMDB" },
+			imdb_auto_add:      { defaultVal: false, showInOptions: true, dispText: "Ajouter le résultat de la meilleure correspondance IMDB", parent: "imdb_suggest" },
 			filtering_fl:       { defaultVal: false, showInOptions: false },
 			age_column:         { defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent"}
 		},
@@ -372,7 +373,8 @@ var opt = {
 			sort_price:         { defaultVal: false, showInOptions: true, dispText: "Trier les pins par prix" }
 		},
 		forums: {
-			hide_signatures:    { defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut" }
+			hidable_sigs:       { defaultVal: false, showInOptions: true, dispText: "Rendre les signatures masquables" },
+			hide_signatures:    { defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut", parent: "hidable_sigs" }
 		},
 		torrent: {
 			quick_comment:      { defaultVal: true, showInOptions: true, dispText: "Afficher la boite de commentaire rapide sur les fiches torrent" },

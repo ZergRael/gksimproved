@@ -31,7 +31,7 @@ modules.forums = {
 		// Loading all functions used
 
 		var filterSignatures = function() {
-			if(!mOptions.canHideSig) {
+			if(!mOptions.canHideSig || !opt.get(module_name, "hidable_sigs")) {
 				return;
 			}
 

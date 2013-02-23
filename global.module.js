@@ -78,19 +78,30 @@ modules.global = {
 			});
 		};
 
+		var getOptionChilds = function(module_name, parent) {
+			var childs = [];
+			$.each(opt.options[module_name], function(option, oData) {
+				if(oData.parent && oData.parent == parent) {
+					childs.push(option);
+					childs.concat(getOptionChilds(module_name, option));
+				}
+			});
+			return childs;
+		};
+
 		var createOptionInput = function(module_name, option_name, oData) {
-			var oHtml = '<input type="checkbox" id="gksi_' + module_name + '_' + option_name + '" ' + (opt.get(module_name, option_name) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option_name + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
+			var oHtml = '<span id="gksi_' + module_name + '_' + option_name + '_span"><input type="checkbox" id="gksi_' + module_name + '_' + option_name + '" ' + (oData.parent && !opt.get(module_name, oData.parent) ? 'disabled="disabled" ': '') + (opt.get(module_name, option_name) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option_name + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br /></span>';
 			if(oData.sub_options) {
 				oHtml += '<div id="gksi_' + module_name + '_s_' + option_name + '" class="gksi_options_sub">';
 				$.each(oData.sub_options, function(s_option, s_oData) {
 					if(s_oData.showInOptions) {
-						oHtml += '<input type="checkbox" id="gksi_' + module_name + '_' + option_name + '_' + s_option + '" ' + (opt.sub_get(module_name, option_name, s_option) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option_name + '_' + s_option + '"' + (s_oData.tooltip ? ' title="' + s_oData.tooltip + '"' : '') + '>' + s_oData.dispText + '</label><br />';
+						oHtml += '<span id="gksi_' + module_name + '_' + option_name + '_' + s_option + '_span"><input type="checkbox" id="gksi_' + module_name + '_' + option_name + '_' + s_option + '" ' + (opt.sub_get(module_name, option_name, s_option) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option_name + '_' + s_option + '"' + (s_oData.tooltip ? ' title="' + s_oData.tooltip + '"' : '') + '>' + s_oData.dispText + '</label><br /></span>';
 					}
 				});
 				oHtml += '</div>';
 			}
 			return oHtml;
-		}
+		};
 
 		var createOptionsFrame = function() {
 			var optionsFrameData = "";
@@ -123,21 +134,38 @@ modules.global = {
 
 				$.each(options, function(option, oData) {
 					if(oData.showInOptions) {
+						var childs = getOptionChilds(module_name, option);
+
 						$("#gksi_" + module_name + "_" + option).change(function() {
-							opt.set(module_name, option, $(this).attr("checked") == "checked" ? true : false);
+							var state = $(this).attr("checked") == "checked" ? true : false;
+							opt.set(module_name, option, state);
 							_dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
 							if(oData.callback) {
-								oData.callback(opt.get(module_name, option));
+								oData.callback(state);
 							}
 							if(oData.sub_options) {
-								if(opt.get(module_name, option)) {
+								if(state) {
 									$("#gksi_" + module_name + "_s_" + option).slideDown();
 								}
 								else {
 									$("#gksi_" + module_name + "_s_" + option).slideUp();
 								}
 							}
+
+							if(childs.length) {
+								$.each(childs, function(i, child) {
+									if(state) {
+										$("#gksi_" + module_name + "_" + child).attr("disabled", false);
+									}
+									else {
+										$("#gksi_" + module_name + "_" + child).attr("checked", false);
+										$("#gksi_" + module_name + "_" + child).triggerHandler("change");
+										$("#gksi_" + module_name + "_" + child).attr("disabled", true);
+									}
+								});
+							}
 						});
+
 						if(oData.sub_options) {
 							$.each(oData.sub_options, function(s_option, s_oData) {
 								$("#gksi_" + module_name + "_" + option + "_" + s_option).change(function() {
@@ -151,6 +179,14 @@ modules.global = {
 								$("#gksi_" + module_name + "_s_" + option).hide();
 							}
 						}
+
+						if(oData.parent) {
+							$("#gksi_" + module_name + "_" + option + "_span").hover(function() {
+								$("#gksi_" + module_name + "_" + oData.parent + "_span").addClass("gksi_option_required");
+							}, function() {
+								$("#gksi_" + module_name + "_" + oData.parent + "_span").removeClass("gksi_option_required");
+							});
+						}
 					}
 				});
 			});
@@ -162,14 +198,14 @@ modules.global = {
 				return -1;
 			}
 			return Number($("#userlink .karma").text().replace(',', ''));
-		}
+		};
 
 		var getUserId = function() {
 			if(!$("#userlink a:first").length) {
 				return -1;
 			}
 			return $("#userlink a:first").attr("href").match(/\d+/)[0];
-		}
+		};
 
 		dbg("[Init] Starting");
 		// Execute functions
