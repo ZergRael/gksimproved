@@ -76,16 +76,74 @@ modules.torrent_list = {
 		};
 
 		var addAgeColumn = function() {
-			$("tbody tr").each(function() {
+			if(!opt.get(module_name, "age_column")) {
+				return;
+			}
+
+			dbg("[AgeCol] Started dating torrents");
+			var alreadyDated = false;
+			$("tbody tr").each(function() { // Process all data & skip already dated, is strangely faster than processing data before insertion
 				if($(this).hasClass("head_torrent")) {
-					// Insert age head <td>
+					if($(this).find("td:nth(2)").hasClass("age_torrent_head")) { // If this td head is already dated, assume the same for the whole page
+						dbg("[AgeCol] Already dated page");
+						alreadyDated = true;
+						return;
+					}
+					dbg("[AgeCol] Date calculation");
+					$(this).find("td:nth(1)").after('<td class="age_torrent_head">Age</td>');
+					alreadyDated = false;
 				}
 				else {
-					// Regex the date
-					// Calculate age
-					// Insert <td>
+					if(alreadyDated) { // Wait until we get to the new page
+						return;
+					}
+
+					var tds = $(this).find("td");
+					if(tds.first().hasClass("alt1")) { // Don't mind the hidden td
+						return;
+					}
+					var ageTdNumber = 0;
+					if(tds.eq(1).hasClass("name_torrent_1")) { // Keep background-color alternance
+						ageTdNumber = 1;
+					}
+
+					var dateMatch = $(this).next().text().match(/(\d+)\/(\d+)\/(\d+) à (\d+):(\d+)/);
+					if(!dateMatch.length) { // This should never happen
+						return;
+					}
+
+					// Calculation is done by taking the first not-now date section, in order Y/M/D/h/m
+					// At first match, just take the difference between now and torrent date
+					// If there's only one unit difference && the date section underneath is still viable, fallback to this smaller date section
+					// eg: Date[torrent] = 1/1/2013 23:59, Date[now] = 2/1/2013 1:01 => day_difference() == 1 => fallback to hours => (24 + 1 - 23) => 2h
+					// In fact, it's 1h02m but it's closer than 1day
+					// In the same thinking process, it can return 24h since it's still viable and more precise than 1day -- Won't return > 24h
+					var now = new Date();
+					var age = "";
+					if(now.getFullYear() > dateMatch[3]) {
+						age = (now.getFullYear() - dateMatch[3]) == 1 && (now.getMonth() + 1 - dateMatch[2]) <= 0 ? (12 + now.getMonth() + 1 - dateMatch[2]) + "mo" : (now.getFullYear() - dateMatch[3]) + "a";
+					}
+					else if(now.getMonth() + 1 > dateMatch[2]) {
+						age = (now.getMonth() + 1 - dateMatch[2]) == 1 && (now.getDate() - dateMatch[1]) <= 0 ? ((new Date(dateMatch[3], dateMatch[2] + 1, 0).getDate()) + now.getDate() - dateMatch[1]) + "j" : (now.getMonth() + 1 - dateMatch[2]) + "mo";
+					}
+					else if(now.getDate() > dateMatch[1]) {
+						age = (now.getDate() - dateMatch[1]) == 1 && (now.getHours() - dateMatch[4]) <= 0 ? (24 + now.getHours() - dateMatch[4]) + "h" : (now.getDate() - dateMatch[1]) + "j";
+					}
+					else if(now.getHours() > dateMatch[4]) {
+						age = (now.getHours() - dateMatch[4]) == 1 && (now.getMinutes() - dateMatch[5]) <= 0 ? (60 + now.getMinutes() - dateMatch[5]) + "min" : (now.getHours() - dateMatch[4]) + "h";
+					}
+					else if(now.getMinutes() > dateMatch[5]) {
+						age = (now.getMinutes() - dateMatch[5]) + "min";
+					}
+					else {
+						age = "frais";
+					}
+
+					// Append our age td
+					tds.eq(1).after('<td class="age_torrent_' + ageTdNumber + '">' + age + '</td>');
 				}
 			});
+			dbg("[AgeCol] Ended");
 		};
 
 		var maxSuggestLang = 4;
@@ -146,13 +204,10 @@ modules.torrent_list = {
 			}
 		});
 		filterFL();
+		addAgeColumn();
 
 		if(mOptions.canSuggest && opt.get(module_name, "imdb_suggest")) {
 			suggestMore();
-		}
-
-		if(opt.get(module_name, "age_column")) {
-			addAgeColumn();
 		}
 
 		$(document).on("endless_scrolling_insertion_done", function() {

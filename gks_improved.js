@@ -249,7 +249,10 @@ var appendFrame = function(o) {
 var insertCSS = function() {
 	dbg("Inserting custom CSS");
 	$("head").append("<style id='gksi_css'>" +
+		// Back to top button
 		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top_small.png") + ") no-repeat; } " +
+
+		// Frames
 		".gksi_frame { z-index: 10; position: absolute; } " +
 		".gksi_frame_section { border-bottom: 1px solid; font-weight: bold; padding-top: 6px; } " +
 		".gksi_frame_buttons { padding-top: 9px; text-align: center; } " +
@@ -261,14 +264,23 @@ var insertCSS = function() {
 		".gksi_options_sub { font-size: 0.9em; padding-left: 12px; } " +
 		".gksi_options_sub input { margin:2px; } " +
 		"#gksi_copyright { text-align: right; font-size: 0.8em; margin-top: -11px; } " +
+		".gksi_edit_title { display: block; width: 100%; margin-top: 12px; } " +
+		".gksi_edit_textarea { display: block; width: 100%; min-height: 240px; min-width: 360px; margin-right: -4px!important; } " +
+
+		// Badges
 		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; } " +
 		".gksi_progress_bar { background-color: orange; height: 11px; border-radius: 1px; margin-bottom: -11px; } " +
 		".gksi_progress_numbers { position: relative; } " +
 		".gksi_valid { background-color: lightgreen; } " +
+
+		// Torrent list columns
+		".age_torrent_head { width: 40px; text-align: center; font-weight: bold; } " +
+		".age_torrent_0 { width: 40px; text-align: center; } " +
+		".age_torrent_1 { width: 40px; text-align: center; background-color: #f6f6f6; } " +
+
+		// Misc
 		".halfOpacity { opacity: 0.4; } " +
 		".resume_endless_scrolling { font-size: 1.4em; font-weight: bold; } " +
-		".gksi_edit_title { display: block; width: 100%; margin-top: 12px; } " +
-		".gksi_edit_textarea { display: block; width: 100%; min-height: 240px; min-width: 360px; margin-right: -4px!important; } " +
 		".bold { font-weight: bold; } " +
 		"</style>");
 };
