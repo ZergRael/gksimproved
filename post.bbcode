@@ -1,0 +1,49 @@
+[size=4][b]Nouvelle version dispo ![/b][/size]
+
+[b]* 0.2.5 - 23/02/2013[/b]
+- Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
+- Options : Correction de la couleur de la fenêtre d'options + adaptation en fonction du CSS (mwerf)
+- Options : Structuration des options pour éviter d'activer une option sans son parent
+- Endless scrolling : Pause lorsqu'une textarea est sélectionnée - Forums
+- Endless scrolling : Adaptation de l'url en fonction du scrolling
+- Endless scrolling : Options spécifiques par page
+- Endless scrolling : Ajout sur /m/uploads/
+- Snatched : Cacher les torrents en seed (by MacGeek)
+- Snatched : Cacher les torrents non completés
+- Pins : Option de tri par prix
+- Twits : Auto-complétion bien plus robuste, basée sur la position du curseur plutôt que des regex hasardeuses
+- Twits : Ajout automatique d'un espace si une des complétions convient, la détection des twits de GKS nécessite cet espace pour fonctionner
+- Torrent list : Ajout d'une colonne d'age optionnelle
+- Torrent list : Correction des résultats des suggestions IMDB
+- Torrent list : Possibilité d'ajouter automatiquement les torrents associés à la meilleure traduction d'IMDB lorsque peu ou pas de résultats
+- Torrent list : Ajout d'un marqueur de torrent (manuel) permettant de retrouver le dernier torrent vu
+- Forums : Le cacheur de signature est devenu optionnel
+- Diverses améliorations (construction des fenêtres, détecteur de karma, détecteur de valeurs badges 1k+, autocomplétion après endless-scrolling)
+
+Ceux possédant déjà l'extension verront Chrome/Firefox la mettre à jour d'ici le prochain reboot.
+Les curieux, c'est ici : [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf]Page Chrome Webstore[/url] - [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/]Extension Firefox[/url]
+
+Si la mise à jour Firefox n'est pas effectuée automatiquement : [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/versions/?page=1#version-0.2.5]lien direct[/url]
+
+N'hésitez pas à proposer vos suggestions :)
+
+[b]Quelques explications[/b]
+* [u]La fenêtre d'options[/u]
+Si quelqu'un à une idée pour rendre la fenêtre d'options mieux foutues, je dirai pas non. La longue liste de pages pour l'ES est pas géniale et ça allonge bien trop les options :-/
+
+* [u]Marqueur de torrents[/u]
+L'idée du marqueur de torrents provient de @Bartowski ( https://gks.gs/forums.php?action=viewtopic&topicid=6533&topicname=Torrent.de.la.veille#post325776 )
+Dans "Parcourir" ( https://gks.gs/browse/ ) il est possible de marquer le premier torrent de la liste.
+Ainsi, en revenant un peu plus tard, un second bouton apparaît permettant de retrouver ce torrent (ou, s'il a été supprimé, un torrent du même age) en recherchant dans les 2000 derniers torrents postés.
+Si le marqueur n'est pas trop ancien, le système va ajouter toutes les pages jusqu'a trouver le torrent, le colorer et forcer le browser à scroller jusque là.
+
+Les boutons ne seront affichés que lorsque la première page est affichée et qu'il n'y a pas eu d'endless scrolling, de tri ou de filtrage. En clair, il suffit de cliquer sur l'onglet "Parcourir".
+Je me suis permis de laisser une limite assez élevée pour le finder (2000 torrents, ce qui représente 20 à 21 pages selon les suppressions, environ une semaine d'uploads selon les stats), vu que la recherche par id ne pompe probablement pas trop sur la DB.
+Beta is beta, c'est assez expérimental :P
+@modos : Si ça pose souci, les "How about no" sont acceptés ;)
+
+* [u]Suggestions IMDB[/u]
+J'ai amélioré les suggestions en passant par un scrapping des résultats du site d'IMDB, ça reste assez funky mais peut aider quelques fois.
+L'idée de l'ajout des torrents correspondant à la meilleure traduction par IMDB vient de @Thales0796
+C'est encore plus funky mais il arrive que ça marche ( [url=https://gks.gs/sphinx/?q=les+%C3%A9vad%C3%A9s]Les évadés[/url] qui ne renvoit qu'un seul résultat alors que 3 torrents sont aussi dispo avec le titre VO ou encore [url=https://gks.gs/sphinx/?q=La%2025%C3%A8me%20heure]La 25ème heure[/url] qui ne renvoit rien mais 4 torrents sur le titre VO). Oubliez pas d'activer l'option avant de tester :P
+Certes, c'est plus simple de rechercher aussi dans les descriptions et ça fonctionne souvent beaucoup mieux, mais c'était un petit challenge quand même :D

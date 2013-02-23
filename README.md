@@ -15,6 +15,7 @@ Voir topic associé.
 - Marqueur dernier torrent vu
 
 ### TODO.done
+**0.2.5**
 - Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
 - Options : Correction de la couleur de la fenêtre d'options + adaptation en fonction du CSS (mwerf)
 - Endless scrolling : Pause lorsqu'une textarea est sélectionnée - Forums

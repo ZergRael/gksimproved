@@ -1,13 +1,13 @@
 [center][img]https://s.gks.gs/img/img/01-2013/gks_improved_48.png[/img][size=6]GKSimproved[/size] [size=5](beta)[/size][/center]
-Salutations à tous.
+Salutations à tous !
 
-Après un petit weekend de glandouille, je me suis rendu compte qu'il manquait quelques fonctions pratiques sur le site :-/.
+Après un petit weekend de glandouille, je me suis rendu compte qu'il manquait quelques fonctions pratiques sur le site :-/
 
 C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un petit ensemble de scripts ajoutant les fonctions que je jugeais pratiques pour mon utilisation. Etant donné que ça fonctionne étonnamment bien chez moi, pourquoi pas le proposer ? :D
 
 Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. Toujours en beta mais un jour peut-être une version stable arrivera ;)
 
-Version actuelle : 0.2.4 - 04/02/2013 - Licence GPLv3
+Version actuelle : 0.2.5 - 23/02/2013 - Licence GPLv3
 
 [size=6]Téléchargement[/size] :
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
@@ -23,9 +23,9 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 
 [size=6]Pages affectées :[/size]
 [b]* Listes de torrents :[/b]
-- Page d'accueil -- /
-- Recherche torrents -- /sphinx/
-- Navigation torrents -- /browse/
+- Page d'accueil -- https://gks.gs/
+- Recherche torrents -- https://gks.gs/sphinx/
+- Navigation torrents -- https://gks.gs/browse/
 
 [url=https://s.gks.gs/img/img/01-2013/home.png][img]https://s.gks.gs/img/mini/01-2013/home.png[/img][/url] [url=https://s.gks.gs/img/img/01-2013/sphinx.png][img]https://s.gks.gs/img/mini/01-2013/sphinx.png[/img][/url]
 
@@ -34,20 +34,26 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Récupérer toutes les pages[/i] : Affiche l'ensemble des pages des snatched en une seule liste
 > [i]Tri par Nom, UL, DL, Real DL, SeedTime, Ratio[/i]	: Un clic sur la colonne associée trie les données - Peut-être lent en fonction de la taille de la liste
 > [i]Suggestions IMDB[/i] : Suggestions de recherche basées sur IMDB.fr et IMDB.com -- Utilise un système de cache perso
+> [i]Traduction IMDB[/i] : Ajout des torrents correspondant à la meilleure traduction d'IMDB si peu de résultats
+> [i]Colonne d'age[/i] : Colonne d'age calculée à partir de la date du torrent
+> [i]Marqueur de torrents[/i] : Marquage du dernier torrent vu pour afficher tous les torrents non vu à partir de ce marqueur
 
 [b]* Snatched[/b]
-- Page des snatched -- /snatched/
+- Page des snatched -- https://gks.gs/snatched/
 
 [url=https://s.gks.gs/img/img/01-2013/snatched.png][img]https://s.gks.gs/img/mini/01-2013/snatched.png[/img][/url]
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
 > [i]Cacher les supprimés[/i] : Cache les torrents supprimés du tracker - Pas ceux que vous ne seedez plus
+> [i]Cacher les torrents en seed[/i] : N'affiche que les torrents qui ne sont plus seedés - Retrouve les H&R
+> [i]Cacher les non completés[/i] : N'affiche que les torrents que vous avez téléchargé entièrement
+> [i]Tri par colonne[/i] : Permet de trier les snatched par UL/DL/Seedtime/Ratio
 
 [b]* Twits[/b]
-- Posts d'un topic -- /forums.php?action=viewtopic
-- Liste commentaires d'un post du blog -- /blog/id=*
-- Liste commentaires d'un torrent -- /torrent/\d+/
-- Ajout de commentaire sur un torrent -- /com/id=*
+- Posts d'un topic -- /forums.php?action=viewtopic&topicid=<id_topic>
+- Liste commentaires d'un post du blog -- /blog/id=<id_post_blog>
+- Liste commentaires d'un torrent -- /torrent/<id_torrent>/
+- Ajout de commentaire sur un torrent -- /com/id=<id_torrent>
 
 [url=https://s.gks.gs/img/img/01-2013/forums.png][img]https://s.gks.gs/img/mini/01-2013/forums.png[/img][/url]
 
@@ -55,40 +61,52 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Coloration des Twits[/i] : Les twits déjà présents dans les posts sont colorés avec le lien associés en fonction des posteurs de la page - Les twits sur des pseudos non présents sur la page ne seront pas reconnus
 
 [b]* Forums[/b]
-- Liste des topics -- /forums.php?action=viewforum
-- Posts d'un topic -- /forums.php?action=viewtopic
+- Liste des topics -- /forums.php?action=viewforum&forumid=<id_forum>
+- Posts d'un topic -- /forums.php?action=viewtopic&topicid=<id_topic>
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
-> [i]Cacheur de signatures[/i] : Cache les signatures par défaut. Chaque signature peut être affichée ou non individuellement
+> [i]Cacheur de signatures[/i] : Permet de cacher les signatures au clic
+> [i]Cacher les signatures auto[/i] : Cache toutes les signatures - Ré-affichables au clic
 
 [b]* Torrents[/b]
-- Liste commentaires d'un torrent -- /torrent/\d+/
+- Liste commentaires d'un torrent -- /torrent/<id_torrent>/
 
 > [i]Quick comment[/i] : Ajoute un formulaire d'envoi de commentaire directement sur la page du torrent
-> [i]Commentaires désactivés[/i] : Propose l'envoi d'un MP préformaté lorsque les commentaires d'un torrent sont désactivés. Permet de prévenir l'uploader avec l'ensemble des liens nécessaires en un seul clic, si ses MP sont activés. Editable.
+> [i]Commentaires désactivés[/i] : Propose l'envoi d'un MP préformaté (éditable) lorsque les commentaires d'un torrent sont désactivés. Permet de prévenir l'uploader avec l'ensemble des liens nécessaires en un seul clic, si ses MP sont activés.
 
 [b]* Karma store[/b]
-- Pin's store -- /karma/?tab=pins
+- Pin's store -- https://gks.gs/karma/?tab=pins
 
 > [i]Cacher les pin's trop chers[/i] : Cache les pins que vous ne pouvez pas acheter avec le karma actuel
 > [i]Cacher les pin's déjà achetés[/i] : Cache les pins que vous avez déjà acheté
-
-[b]* Requests[/b]
-- Liste des requêtes -- /req/
-
-> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
-
-[b]* Logs[/b]
-- Page des logs -- /logs/
-
-> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+> [i]Tri par prix[/i] : Trie les pin's par prix
 
 [b]* Badges[/b]
-- Liste des badges acquis -- /m/badges/
+- Liste des badges acquis -- https://gks.gs/m/badges/
 - Liste des badges acquis -- /badges/<user_id>
 
 > [i]Progression[/i] : Affiche votre progression vers l'obtention de ce badge
 > [i]Tous les badges[/i] : Affiche toutes les images de badges même si vous ne les avez pas (semi-transparents)
+
+[b]* Requests[/b]
+- Liste des requêtes -- https://gks.gs/req/
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+
+[b]* Logs[/b]
+- Page des logs -- https://gks.gs/logs/
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+
+[b]* Images[/b]
+- Liste des images -- https://gks.gs/m/images/
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+
+[b]* Uploads[/b]
+- Liste des uploads -- https://gks.gs/m/uploads/
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
 
 [b]* Sur l'ensemble du site[/b]
 
@@ -102,6 +120,26 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
 
 [size=6]Changelog :[/size]
+[b]* 0.2.5 - 23/02/2013[/b]
+- Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
+- Options : Correction de la couleur de la fenêtre d'options + adaptation en fonction du CSS (mwerf)
+- Options : Structuration des options pour éviter d'activer une option sans son parent
+- Endless scrolling : Pause lorsqu'une textarea est sélectionnée - Forums
+- Endless scrolling : Adaptation de l'url en fonction du scrolling
+- Endless scrolling : Options spécifiques par page
+- Endless scrolling : Ajout sur /m/uploads/
+- Snatched : Cacher les torrents en seed (MacGeek)
+- Snatched : Cacher les torrents non completés
+- Pins : Option de tri par prix
+- Twits : Auto-complétion bien plus robuste, basée sur la position du curseur plutôt que des regex hasardeuses
+- Twits : Ajout automatique d'un espace si une des complétions convient, la détection des twits de GKS nécessite cet espace pour fonctionner
+- Torrent list : Ajout d'une colonne d'age optionnelle
+- Torrent list : Correction des résultats des suggestions IMDB
+- Torrent list : Possibilité d'ajouter automatiquement les torrents associés à la meilleure traduction d'IMDB lorsque peu ou pas de résultats
+- Torrent list : Ajout d'un marqueur de torrent (manuel) permettant de retrouver le dernier torrent vu
+- Forums : Le cacheur de signature est devenu optionnel
+- Diverses améliorations (construction des fenêtres, détecteur de karma, détecteur de valeurs badges 1k+, autocomplétion après endless-scrolling)
+[spoil]
 [b]* 0.2.4 - 04/02/2013[/b]
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox
 - Snatched : Multiple bug fixes - javascript:false
@@ -116,7 +154,6 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Endless scrolling : Ajouté sur /m/images/
 - Endless scrolling : Tooltip dans les options indiquant les pages affectées
 - Torrent : Ajout d'une fenêtre de modification du MP auto en cas de commentaires désactivés
-[spoil]
 [b]* 0.2.3 - 28/01/2013[/b]
 - Module badges actif aussi sur votre page publique de badges
 - Meilleur formatage des indicateurs sous les badges
@@ -175,3 +212,4 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 
 [size=6]Remerciements :[/size]
 Merci à l'ensemble des utilisateurs ayant proposé leurs suggestions pour améliorer l'addon :D
+Tout particulièrement à MacGeek qui a apporté quelques portions de code
