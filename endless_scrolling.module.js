@@ -17,10 +17,10 @@ modules.endless_scrolling = {
 	dText: "Endless scrolling",
 	pages: [
 		{ path_name: "/", options: { 
-			opt_name: "main", loading: '#pager_index', path: '/browse/', domExtract: "#torrent_list tr", domInsertion: "#torrent_list"
+			opt_name: "main", loading: '#pager_index', path: '/browse/', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", pageModifier: -1
 		} },
 		{ path_name: "/browse/", options: { 
-			opt_name: "browse", loading: '.pager_align', lastPage: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list" , pageModifier: -1
+			opt_name: "browse", loading: '.pager_align', lastPage: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", pageModifier: -1
 		} },
 		{ path_name: "/sphinx/", options: { 
 			opt_name: "sphinx", loading: '.pager_align', lastPage: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", canSuggest: true, pageModifier: -1

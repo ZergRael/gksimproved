@@ -246,6 +246,7 @@ modules.torrent_list = {
 		$("#mark_first_torrent").click(function() {
 			var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
 			dbg("[TorrentMark] Marking torrent [" + firstTorrentId + "]");
+			$("#mark_first_torrent_span").remove();
 			opt.set(module_name, "torrent_marker", firstTorrentId);
 			return false;
 		});

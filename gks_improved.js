@@ -229,13 +229,13 @@ var appendFrame = function(o) {
 	}
 
 	// Background-color correction
-	var transparentCss = "rgba(0, 0, 0, 0)";
-	if($(".gksi_frame_data").css("background-color") == transparentCss) {
+	var transparentCss = "rgba(0, 0, 0, 0)", transparentCssFirefox = "transparent";
+	if($(".gksi_frame_data").css("background-color") == transparentCss || $(".gksi_frame_data").css("background-color") == transparentCssFirefox) {
 		dbg("[frame_builder] Can't find background-color");
 		// Go up as much as needed to find some non-transparent color
 		var cssTries = [ "#navigation", "#centre", "#navig_bloc_user", "#header" ];
 		$.each(cssTries, function(i, cssId) {
-			if($(cssId).css("background-color") != transparentCss) {
+			if($(cssId).css("background-color") != transparentCss && $(cssId).css("background-color") != transparentCssFirefox) {
 				dbg("[frame_builder] Took " + cssId + " background-color");
 				// Instead of creating style on frame, let's append to our custom CSS area
 				appendCSS('.gksi_frame_data { background-color: ' + $(cssId).css("background-color") + '; } ');
