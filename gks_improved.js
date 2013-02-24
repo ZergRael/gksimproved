@@ -10,7 +10,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-var DEBUG = false;
+var DEBUG = true;
 
 // General debug function
 var _dbg = function (section, str) {
