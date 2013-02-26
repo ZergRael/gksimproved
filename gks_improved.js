@@ -171,6 +171,63 @@ var post = function(urlObject, postData, callback) {
 	});
 };
 
+var dateToDuration = function(dateStr) {
+	var dateMatch = dateStr.match(/(\d+)\/(\d+)\/(\d+) à (\d+):(\d+)/);
+	if(!dateMatch || !dateMatch.length) {
+		return false;
+	}
+
+	var dur = {};
+	dur.now = new Date();
+	//new Date(year, month, day, hours, minutes, seconds, milliseconds)
+	dur.was = new Date(dateMatch[3], dateMatch[2] - 1, dateMatch[1], dateMatch[4], dateMatch[5]);
+	dur.ttDiff = dur.now - dur.was;
+
+	dur.msTot = dur.ttDiff;
+	dur.ms = dur.msTot % 1000;
+	dur.secTot = dur.msTot / 1000;
+	dur.sec = Math.floor(dur.secTot) % 60;
+	dur.minTot = dur.secTot / 60;
+	dur.min = Math.floor(dur.minTot) % 60;
+	dur.hourTot = dur.minTot / 60;
+	dur.hour = Math.floor(dur.hourTot) % 24;
+	dur.dayTot = dur.hourTot / 24;
+	dur.day = Math.floor(dur.dayTot) % 7;
+	dur.weekTot = dur.dayTot / 7;
+	dur.week = Math.floor(Math.floor(dur.weekTot) % 4.34812141);
+	dur.monthTot = dur.weekTot / 4.34812141;
+	dur.month = Math.floor(dur.monthTot) % 12;
+	dur.yearTot = dur.monthTot / 12;
+	dur.year = Math.floor(dur.yearTot);
+	return dur;
+};
+
+var strToSize = function(sizeStr) {
+	var sizeMatches = sizeStr.match(/([\d\.,]+) (\w)o/);
+	if(!sizeMatches || !sizeMatches.length) {
+		return false;
+	}
+
+	var value = Number(sizeMatches[1].replace(',', '')); // In Ko
+	switch(sizeMatches[2]) {
+		case 'P': value *= 1024;
+		case 'T': value *= 1024;
+		case 'G': value *= 1024;
+		case 'M': value *= 1024;
+	}
+
+	var size = {};
+	size.koTot = value;
+	size.ko = Math.floor(size.koTot) % 1024;
+	size.moTot = size.koTot / 1024;
+	size.mo = Math.floor(size.moTot) % 1024;
+	size.goTot = size.moTot / 1024;
+	size.go = Math.floor(size.goTot) % 1024;
+	size.toTot = size.goTot / 1024;
+	size.to = Math.floor(size.toTot) % 1024;
+	return size;
+};
+
 // Import a javascript file from the site if we need it elsewhere (jQ function doesn't seem to work as intended)
 var appendNativeScript = function (jsFileName) {
 	var script = document.createElement("script");
@@ -279,6 +336,11 @@ var insertCSS = function() {
 		".age_torrent_0 { width: 40px; text-align: center; } " +
 		".age_torrent_1 { width: 40px; text-align: center; background-color: #f6f6f6; } " +
 		".torrent_mark_found { background-color: lightgreen !important; } " +
+
+		// Aura
+		"#gksi_aura_controls thead th { width: 33%; } " +
+		"#gksi_aura_controls tbody td { vertical-align: inherit; } " +
+		".gksi_aura_result { font-weight: bold; } " +
 
 		// Misc
 		".halfOpacity { opacity: 0.4; } " +

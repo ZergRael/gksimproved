@@ -24,6 +24,7 @@
         "forums.module.js",
         "badges.module.js",
         "logs.module.js",
+        "aura.module.js",
         "loader.js"
       ]
     }

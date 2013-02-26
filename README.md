@@ -9,12 +9,10 @@ Voir topic associé.
 ### TODO.list
 - Moar comments
 - Optimisations
-- Endless scrolling sur /my/torrents
-- Endless scrolling sur /m/comments/onuploads
-- Scrapping IMDB
-- Marqueur dernier torrent vu
 
 ### TODO.done
+- Aura : Ajout d'un module d'aura permettant quelques calculs
+
 **0.2.5**
 - Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
 - Options : Correction de la couleur de la fenêtre d'options + adaptation en fonction du CSS (mwerf)
