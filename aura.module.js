@@ -99,20 +99,20 @@ modules.aura = {
 			//var duration = dateToDuration("07/01/2012 à 01:13");
 			grabPage(urlTorrent, function(data) {
 				dbg("[auraTorrent] Got torrent info - Parsing");
-				var infos = $(data).find('#contenu div[style="margin-left:50px;"] p');
-				var size = strToSize(infos.eq(3).text());
-				var date = dateToDuration(infos.eq(6).text());
-				var seeds = infos.eq(7).find("strong:nth(0)").text();
+				var infos = $(data).find('#contenu div[style="margin-left:50px;"]');
+				var size = strToSize(infos.find(".torr-taille").parent().text());
+				var date = dateToDuration(infos.find(".torr-add-the").parent().text());
+				var seeds = infos.find(".torr-peers").parent().find("strong:nth(0)").text();
 
 				//A = (1-10^(-Ti/4))*Si*(1+sqrt(2)*10^(-((Ni-1)/(7-1))))
-				var aTorrent = (1 - Math.pow(10, -date.weekTot / 4)) * size.goTot * (1 + Math.sqrt(2) * Math.pow(10, -((seeds - 1) / (7 - 1))));
+				var aTorrent = (1 - Math.pow(10, - date.weekTot / 4)) * size.goTot * (1 + Math.sqrt(2) * Math.pow(10, -((seeds - 1) / (7 - 1))));
 				dbg("[auraTorrent] Got [" + size.goTot + "] Go - [" + date.weekTot + "] Weeks [" + seeds + "] Seeds => A = [" + aTorrent + "]");
 
 				var estAg = ag + aTorrent;
 				//B = 50 * (2/pi) * arctan (Ag / 300)
 				var estAura = 50 * (2 / Math.PI) * Math.atan(estAg / 300);
 				dbg("[auraTorrent] ag [" + ag + "] -> [" + estAg + "] | aura [" + aura + "] -> [" + estAura + "]");
-				$("#gksi_auratorrent_aura").text(Math.round(estAura * 100) / 100);
+				$("#gksi_auratorrent_aura").text(Math.round(estAura * 1000) / 1000);
 				ready = true;
 			});
 		};
@@ -120,7 +120,7 @@ modules.aura = {
 		dbg("[Init] Starting");
 		// Execute functions
 
-		var buttons = '<table id="gksi_aura_controls" class="table100 tablesorter" style="width: 100%;" border="1"><thead><tr><th>Calculateur d\'objectif de karma</th><th>Calculateur de palier d\'aura</th><th>Calculateur de changements d\'aura</th></tr></thead><tbody><tr><td>Objectif karma : <input id="gksi_karmagoal_input" type="text" value="1000000"><br>Temps nécessaire estimé : <span id="gksi_karmagoal_time" class="gksi_aura_result"></span></td><td>Objectif aura : <input id="gksi_auragoal_input" type="text" value="49.9"><br>Taux Ag de progression : <span id="gksi_auragoal_progression">Z</span> / Go<br>Go nécessaires estimés : <span id="gksi_auragoal_go" class="gksi_aura_result">Z</span> Go</td><td>Lien vers un torrent à télécharger : <input id="gksi_auratorrent_input" type="text"><br>En seedant ce torrent, votre aura passera à : <span id="gksi_auratorrent_aura" class="gksi_aura_result"></span></td></tr></tbody></table>';
+		var buttons = '<table id="gksi_aura_controls" class="table100 tablesorter" style="width: 100%;" border="1"><thead><tr><th>Calculateur d\'objectif de karma</th><th>Calculateur de palier d\'aura</th><th>Calculateur de changements d\'aura</th></tr></thead><tbody><tr><td>Objectif karma : <input id="gksi_karmagoal_input" type="text" value="1000000"><br>Temps nécessaire estimé : <span id="gksi_karmagoal_time" class="gksi_aura_result"></span></td><td>Objectif aura : <input id="gksi_auragoal_input" type="text" value="49.9"><br>Taux Ag de progression : <span id="gksi_auragoal_progression">Z</span> / Go <a href="#" title="Cette valeur est calculée à partir de l\'ensemble des caractéristiques de torrents que vous seedez (nombre de seeds et age moyen).\n\nElle permet de déduire la progression de votre aura en fonction d\'une taille en Go. On trouvera généralement une valeur proche de 1. Si vos torrents sont jeunes et très seedés, la valeur sera plus faible et inversement pour des torrents agés et peu seedés.">[?]</a><br>Go nécessaires estimés : <span id="gksi_auragoal_go" class="gksi_aura_result">Z</span> Go</td><td>Lien vers un torrent à télécharger : <input id="gksi_auratorrent_input" type="text"><br>En seedant ce torrent, votre aura passera à : <span id="gksi_auratorrent_aura" class="gksi_aura_result"></span></td></tr></tbody></table><p class="marginleft">Attention, ce système expérimental ne propose que des estimations servant à vous aider dans l\'optimisation de votre aura/karma.<br />Malgré l\'utilisation des formules exactes du calcul d\'aura, ces valeurs sont des approximations basées sur les arrondis de la page.<br />De même, au dessus de 500 torrents, les résultats seront probablement incohérents.</p><br />';
 		$(mOptions.buttons).before(buttons);
 
 		$("#gksi_karmagoal_input").keyup(calcKarmaGoal);
