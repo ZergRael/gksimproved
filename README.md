@@ -16,6 +16,8 @@ Voir topic associé.
 - Badges : Correction du parseur en cas de lignes supplémentaires sur le profil
 - Badges : Correction de l'image du 4ème d'IRC
 - Raccourcis BBCode : Correction lors de l'édit d'un post
+- Torrent list : Tri par clic sur les titres de colonnes
+- Torrent list : Le marqueur de torrent affiche le torrent trouvé en bas de page
 
 **0.2.5**
 - Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques

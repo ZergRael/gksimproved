@@ -190,14 +190,14 @@ modules.torrent_list = {
 			var foundMarkedTorrent = false;
 			var torrentIdMark = opt.get(module_name, "torrent_marker");
 			var torrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
-			$("tbody tr").find("td:nth(1) a").each(function() {
+			$("tbody tr:not(:first)").find("td:nth(1) a").each(function() {
 				torrentId = Number($(this).attr("href").match(/\/torrent\/(\d+)\//)[1]);
 				if(torrentId <= torrentIdMark) {
 					dbg("[TorrentMark] Found it !");
 					foundMarkedTorrent = true;
 					$(".page_loading").remove();
 					$(this).parent().addClass("torrent_mark_found");
-					$(document).scrollTop($(this).offset().top - 20);
+					$(document).scrollTop($(this).offset().top - window.innerHeight + 21);
 					return false;
 				}
 			});
@@ -219,6 +219,47 @@ modules.torrent_list = {
 					}
 				});
 			}
+		};
+
+		var columns_def = {
+			1: "name",
+			3: "comments",
+			4: "size",
+			5: "times_completed",
+			6: "seeders",
+			7: "leechers"
+		};
+		var columns_def_sphinx = {
+			3: "coms",
+			4: "size",
+			5: "complets",
+			6: "seeders",
+			7: "leechers"
+		};
+		var columnSorter = function() {
+			if(url.path == "/sphinx/") {
+				columns_def = columns_def_sphinx;
+			}
+
+			$(".head_torrent:first td").each(function(k, td) {
+				if(columns_def[k]) {
+					$(this).click(function() {
+						var order = "desc";
+						if(url.params && url.params.sort == columns_def[k] && url.params.order != "asc") {
+							order = "asc";
+						}
+
+						var sortedUrl = url;
+						sortedUrl.path = url.path == "/" ? "/browse/" : url.path;
+						sortedUrl.params = url.params || {};
+						sortedUrl.params.sort = columns_def[k];
+						sortedUrl.params.order = order;
+						window.location = craftUrl(sortedUrl);
+						return false;
+					});
+					$(this).wrapInner('<a href="#"></a>');
+				}
+			})
 		};
 
 		var findMarkedTorrent = '<span id="find_marked_torrent_span"><a id="find_marked_torrent" href="#">Retrouver le torrent marqué</a> | </span>';
@@ -278,6 +319,7 @@ modules.torrent_list = {
 		});
 		filterFL();
 		addAgeColumn();
+		columnSorter();
 
 		if(mOptions.canSuggest && opt.get(module_name, "imdb_suggest")) {
 			suggestMore();
