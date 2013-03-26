@@ -154,7 +154,7 @@ modules.badges = {
 					{ url: "ircnoob", trigger: 1000 },
 					{ url: "ircuser", trigger: 5000 },
 					{ url: "ircexpert", trigger: 10000 },
-					{ url: "ircexpert", trigger: 50000 },
+					{ url: "ircaddict", trigger: 50000 },
 					{ url: "ircgod", trigger: 100000 }
 				],
 				p_nth: 20,

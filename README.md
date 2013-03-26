@@ -14,6 +14,7 @@ Voir topic associé.
 - Aura : Ajout d'un module d'aura permettant quelques calculs
 - ES : Correction de l'adaptation d'url sur viewforum.php
 - Badges : Correction du parseur en cas de lignes supplémentaires sur le profil
+- Badges : Correction de l'image du 4ème d'IRC
 
 **0.2.5**
 - Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
