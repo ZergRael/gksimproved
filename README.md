@@ -18,6 +18,8 @@ Voir topic associé.
 - Raccourcis BBCode : Correction lors de l'édit d'un post
 - Torrent list : Tri par clic sur les titres de colonnes
 - Torrent list : Le marqueur de torrent affiche le torrent trouvé en bas de page
+- Torrent list : Le marqueur de torrent est aussi actif sur la page d'accueil
+- Endless scrolling : Ajout d'un bouton de pause
 
 **0.2.5**
 - Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques

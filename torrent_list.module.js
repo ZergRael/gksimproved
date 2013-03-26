@@ -16,7 +16,7 @@ modules.torrent_list = {
 	name: "torrent_list",
 	dText: "Liste torrents",
 	pages: [
-		{ path_name: "/", options: { buttons: '#sort' } },
+		{ path_name: "/", options: { buttons: '#sort', canMark: true } },
 		{ path_name: "/browse/", options: { buttons: '#sort p', canMark: true } },
 		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canSuggest: true } },
 	],
@@ -203,6 +203,7 @@ modules.torrent_list = {
 			});
 			if(!foundMarkedTorrent) {
 				var urlFinder = url;
+				url.path = "/browse/";
 				url.params = url.params || {};
 				url.params.page = Number(url.params.page || 0) + 1;
 				dbg("[TorrentMark] Grabbing next page");
