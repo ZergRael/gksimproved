@@ -74,7 +74,13 @@ modules.global = {
 
 				e.preventDefault();
 				dbg("[BBCodeShortcuts] Got a BBCode key : " + bbcode);
-				$(bbcode).click();
+				var i = 1;
+				var dom_smileys = $(this);
+				while(dom_smileys.siblings(".bbsmiles").length == 0 && i < 4) {
+					dom_smileys = dom_smileys.parent();
+					i++;
+				}
+				dom_smileys.siblings(".bbsmiles").find(bbcode).click();
 			});
 		};
 
