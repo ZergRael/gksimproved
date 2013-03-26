@@ -67,7 +67,8 @@ modules.badges = {
 					{ url: "awesomeuploader", trigger: 500 },
 					{ url: "uploadmaster", trigger: 1000 }
 				],
-				dom: "#contenu p:nth(17)",
+				p_nth: 17,
+				modifier: { ".usr-invited_by": -1 },
 				regex: /(\d+)/
 			},
 			{	// Forum posts -- 3
@@ -77,7 +78,7 @@ modules.badges = {
 					{ url: "forumateur", trigger: 500 },
 					{ url: "grandmalade", trigger: 1000 }
 				],
-				dom: "#contenu p:nth(10)",
+				p_nth: 10,
 				regex: /([\d,]+) \//
 			},
 			{	// Twits received -- 4
@@ -99,7 +100,8 @@ modules.badges = {
 					{ url: "requestaddict", trigger: 100 },
 					{ url: "requesteater", trigger: 200 }
 				],
-				dom: "#contenu p:nth(18)",
+				p_nth: 18,
+				modifier: { ".usr-invited_by": -1 },
 				regex: /([\d,]+) \//
 			},
 			{	// Wiki edits -- 6
@@ -143,7 +145,8 @@ modules.badges = {
 					{ url: "fillerexpert", trigger: 100 },
 					{ url: "fillermaster", trigger: 200 }
 				],
-				dom: "#contenu p:nth(18)",
+				p_nth: 18,
+				modifier: { ".usr-invited_by": -1 },
 				regex: /\/ ([\d,]+)/
 			},
 			{	// IRC words -- 10
@@ -154,7 +157,8 @@ modules.badges = {
 					{ url: "ircexpert", trigger: 50000 },
 					{ url: "ircgod", trigger: 100000 }
 				],
-				dom: "#contenu p:nth(20)",
+				p_nth: 20,
+				modifier: { ".usr-invited_by": -1 },
 				regex: /([\d,]+)/
 			}
 		];
@@ -176,23 +180,40 @@ modules.badges = {
 			
 			var lastGrab = false;
 			var domTr = $("tbody tr");
-			$.each(badgesReqParse, function(_s, u) {
-				grabPage({ host: url.host, path: u.url }, function(data) {
-					$.each(u.sections, function(_, i_section) {
-						var b_s = badgesData[i_section];
-						if(b_s.dom) {
-							b_s.val = $(data).find(b_s.dom).text().match(b_s.regex)[1];
-							dbg("[progress] " + i_section + " >> Got value [" + b_s.val + "](" + typeof b_s.val + ")");
+			$.each(badgesReqParse, function(i_url, url_section) {
+				grabPage({ host: url.host, path: url_section.url }, function(data) {
+					var jData = $(data);
+					$.each(url_section.sections, function(_, i_section) {
+						var badge_data_block = badgesData[i_section];
+
+						// Find directly by dom
+						if(badge_data_block.dom) {
+							badge_data_block.val = jData.find(badge_data_block.dom).text().match(badge_data_block.regex)[1];
+							dbg("[progress] " + i_section + " >> Got value [" + badge_data_block.val + "](" + typeof badge_data_block.val + ")");
 						}
 
-						if(b_s.val !== undefined) {
-							b_s.val = (typeof b_s.val == "string" || typeof b_s.val == "String" ? Number(b_s.val.replace(",", "")) : b_s.val);
+						// Find by p:nth
+						if(badge_data_block.p_nth) {
+							// p:nth modifiers
+							if(badge_data_block.modifier) {
+								$.each(badge_data_block.modifier, function(mod_class, mod_value) {
+									if(jData.find(mod_class).length) {
+										badge_data_block.p_nth += mod_value;
+									}
+								});
+							}
+							badge_data_block.val = jData.find("#contenu p:nth(" + badge_data_block.p_nth + ")").text().match(badge_data_block.regex)[1];
+							dbg("[progress] " + i_section + " >> Got value [" + badge_data_block.val + "](" + typeof badge_data_block.val + ")");
+						}
+
+						if(badge_data_block.val !== undefined) {
+							badge_data_block.val = (typeof badge_data_block.val == "string" || typeof badge_data_block.val == "String" ? Number(badge_data_block.val.replace(",", "")) : badge_data_block.val);
 							$(domTr).eq(i_section).find("td:not(:first)").each(function(i) {
-								var b = b_s.badges[i];
-								if(!b || !b.trigger) {
+								var badge = badge_data_block.badges[i];
+								if(!badge || !badge.trigger) {
 									return;
 								}
-								$(this).append('<div class="gksi_progress"><div class="gksi_progress_area"><div class="gksi_progress_bar' + (b_s.val >= b.trigger ? ' gksi_valid' : '') + '" style="width: ' + (b_s.val >= b.trigger ? b.trigger : b_s.val) / b.trigger * 100 + '%"></div><div class="gksi_progress_numbers">' + (b_s.val >= b.trigger ? b.trigger : Math.round(b_s.val)) + '/' + b.trigger + '</div></div></div>');
+								$(this).append('<div class="gksi_progress"><div class="gksi_progress_area"><div class="gksi_progress_bar' + (badge_data_block.val >= badge.trigger ? ' gksi_valid' : '') + '" style="width: ' + (badge_data_block.val >= badge.trigger ? badge.trigger : badge_data_block.val) / badge.trigger * 100 + '%"></div><div class="gksi_progress_numbers">' + (badge_data_block.val >= badge.trigger ? badge.trigger : Math.round(badge_data_block.val)) + '/' + badge.trigger + '</div></div></div>');
 							});
 						}
 					});
