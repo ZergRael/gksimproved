@@ -61,7 +61,6 @@ modules.forums = {
 
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
-			$(".colhead:not(:first)").remove();
 			$(document).trigger("recolor_twits");
 			filterSignatures();
 			$(document).trigger("es_dom_process_done");

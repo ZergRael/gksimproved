@@ -12,6 +12,7 @@ Voir topic associé.
 
 ### TODO.done
 - Aura : Ajout d'un module d'aura permettant quelques calculs
+- ES : Correction de l'adaptation d'url sur viewforum.php
 
 **0.2.5**
 - Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques

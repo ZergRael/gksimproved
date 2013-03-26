@@ -26,7 +26,7 @@ modules.endless_scrolling = {
 			opt_name: "sphinx", loading: '.pager_align', lastPage: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", canSuggest: true, pageModifier: -1
 		} },
 		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { 
-			opt_name: "viewforum", loading: '.thin table', lastPage: '.linkbox:nth(2)', loadingAfter: true, domExtract: 'tbody tr', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 180, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/, endOfStream: 'No posts to display!'
+			opt_name: "viewforum", loading: '.thin table', lastPage: '.linkbox:nth(2)', loadingAfter: true, domExtract: 'tbody tr:not(.colhead)', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 180, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/, endOfStream: 'No posts to display!'
 		} },
 		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { 
 			opt_name: "viewtopic", loading: '.thin table:last', lastPage: '.linkbox', loadingAfter: true, domExtract: '.thin table', domInsertion: '.thin table:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/
