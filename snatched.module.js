@@ -236,7 +236,7 @@ modules.snatched = {
 			}
 			dbg("[AllPagesGrab] Stop endless scrolling");
 			$("#grabAllPagesSpan").remove();
-			avoidEndlessScrolling = true;
+			stopEndlessScrolling = true;
 			return false;
 		};
 

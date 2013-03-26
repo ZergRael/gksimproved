@@ -34,7 +34,8 @@
   ],
   "web_accessible_resources": [
     "images/loading.gif",
-    "images/to_top.png",
-    "images/to_top_small.png"
+    "images/to_top_small.png",
+    "images/endless_scrolling_active.png",
+    "images/endless_scrolling_paused.png"
   ]
 }

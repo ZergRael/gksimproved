@@ -308,6 +308,10 @@ var insertCSS = function() {
 	$("head").append("<style id='gksi_css'>" +
 		// Back to top button
 		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top_small.png") + ") no-repeat; } " +
+		// Endless scrolling pauser button
+		"#esPauseButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:42px; overflow:hidden; width:26px; height:39px; border:none; text-indent:100%; } " +
+		".esButtonPaused { background:url(" + chrome.extension.getURL("images/endless_scrolling_paused.png") + ") no-repeat; } " +
+		".esButtonActive { background:url(" + chrome.extension.getURL("images/endless_scrolling_active.png") + ") no-repeat; } " +
 
 		// Frames
 		".gksi_frame { z-index: 10; position: absolute; } " +
@@ -355,16 +359,30 @@ var appendCSS = function(css) {
 };
 
 // Custom divs insertion & funcs
-var ignoreScrolling = false, avoidEndlessScrolling = false;
+var ignoreScrolling = false, pauseEndlessScrolling = false, stopEndlessScrolling = false;
 var insertDivs = function() {
 	// The back to top button - We build it on init and show it when needed
-	$("#global").append('<a id="backTopButton" href="#"></a>');
+	$("#global").append('<a id="esPauseButton" class="esButtonActive" href="#"></a><a id="backTopButton" href="#"></a>');
 	$("#backTopButton").click(function() {
 		ignoreScrolling = true;
 		$("html, body").animate({ scrollTop: 0 }, 800, "swing", function() {
 			ignoreScrolling = false;
 		});
 		$(this).hide();
+		$("#esPauseButton").hide();
+		return false;
+	});
+	$("#esPauseButton").click(function() {
+		if(pauseEndlessScrolling) {
+			$("#esPauseButton").removeClass("esButtonPaused");
+			$("#esPauseButton").addClass("esButtonActive");
+			pauseEndlessScrolling = false;
+		}
+		else {
+			$("#esPauseButton").removeClass("esButtonActive");
+			$("#esPauseButton").addClass("esButtonPaused");
+			pauseEndlessScrolling = true;
+		}
 		return false;
 	});
 };

@@ -83,7 +83,7 @@ modules.endless_scrolling = {
 		};
 
 		var defaultScrollOffset = 200;
-		var backTopButtonOffset = 100;
+		var backTopButtonOffset = 10;
 		var loadingPage = false;
 		var wentToPageBottom = false;
 		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 2 + (mOptions.pageModifier ? mOptions.pageModifier : 0));
@@ -127,13 +127,15 @@ modules.endless_scrolling = {
 			// Back to top button management
 			if(scrollTop > backTopButtonOffset) {
 				$("#backTopButton").show();
+				$("#esPauseButton").show();
 			}
 			else {
 				$("#backTopButton").hide();
+				$("#esPauseButton").hide();
 			}
 
 			// ignore scrolling we already grabbed all pages
-			if(avoidEndlessScrolling) {
+			if(stopEndlessScrolling || pauseEndlessScrolling) {
 				return;
 			}
 
