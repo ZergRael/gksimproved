@@ -432,9 +432,11 @@ var opt = {
 				logs:        { defaultVal: true, showInOptions: true, dispText: "Logs : Liste", tooltip: "https://gks.gs/logs/" },
 				req:         { defaultVal: true, showInOptions: true, dispText: "Requests : Liste", tooltip: "https://gks.gs/req/" },
 				images:      { defaultVal: true, showInOptions: true, dispText: "Images : Liste", tooltip: "https://gks.gs/m/images/" },
-				uploads:     { defaultVal: true, showInOptions: true, dispText: "Uploads : Liste", tooltip: "https://gks.gs/m/uploads/" }
+				uploads:     { defaultVal: true, showInOptions: true, dispText: "Uploads : Liste", tooltip: "https://gks.gs/m/uploads/" },
+				dupecheck:   { defaultVal: true, showInOptions: true, dispText: "Dupecheck : Liste", tooltip: "https://gks.gs/dupecheck/" }
 			} },
 			adapt_url:          { defaultVal: true, showInOptions: true, dispText: "Adapter l'url en fonction de la page vue avec l'ES", parent: "endless_scrolling" },
+			pagination_rewrite: { defaultVal: false, showInOptions: true, dispText: "Adapter la pagination en fonction de la page vue avec l'ES", parent: "adapt_url" },
 			pause_scrolling:    { defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page", parent: "endless_scrolling" }
 		},
 		torrent_list: {

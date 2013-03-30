@@ -20,31 +20,34 @@ modules.endless_scrolling = {
 			opt_name: "main", loading: '#pager_index', path: '/browse/', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", pageModifier: -1
 		} },
 		{ path_name: "/browse/", options: { 
-			opt_name: "browse", loading: '.pager_align', lastPage: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", pageModifier: -1
+			opt_name: "browse", loading: '.pager_align', pagination: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", pageModifier: -1
 		} },
 		{ path_name: "/sphinx/", options: { 
-			opt_name: "sphinx", loading: '.pager_align', lastPage: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", canSuggest: true, pageModifier: -1
+			opt_name: "sphinx", loading: '.pager_align', pagination: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", canSuggest: true, pageModifier: -1
 		} },
 		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { 
-			opt_name: "viewforum", loading: '.thin table', lastPage: '.linkbox:nth(2)', loadingAfter: true, domExtract: 'tbody tr:not(.colhead)', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 180, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/, endOfStream: 'No posts to display!'
+			opt_name: "viewforum", loading: '.thin table', pagination: '.linkbox:nth(1), .linkbox:nth(2)', loadingAfter: true, domExtract: 'tbody tr:not(.colhead)', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 180, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/, endOfStream: 'No posts to display!'
 		} },
 		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { 
-			opt_name: "viewtopic", loading: '.thin table:last', lastPage: '.linkbox', loadingAfter: true, domExtract: '.thin table', domInsertion: '.thin table:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/
+			opt_name: "viewtopic", loading: '.thin table:last', pagination: '.linkbox', loadingAfter: true, domExtract: '.thin table', domInsertion: '.thin table:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/
 		} },
 		{ path_name: "/m/peers/snatched", options: { 
-			opt_name: "snatched", loading: '.pager_align', lastPage: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1
+			opt_name: "snatched", loading: '.pager_align', pagination: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1
 		} },
 		{ path_name: "/logs/", options: { 
-			opt_name: "logs", loading: '.pager_align', lastPage: '.pager_align', domExtract: "tbody tr", domInsertion: "tbody", pageModifier: -1
+			opt_name: "logs", loading: '.pager_align', pagination: '.pager_align', domExtract: "tbody tr:not(:first)", domInsertion: "tbody", pageModifier: -1, notListeningToTrigger: true
 		} },
 		{ path_name: "/req/", options: { 
-			opt_name: "req", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#requests_list tbody tr:not(:first)", domInsertion: "#requests_list tbody", pageModifier: -1, notListeningToTrigger: true
+			opt_name: "req", loading: '.pager_align', pagination: '.pager_align', domExtract: "#requests_list tbody tr:not(:first)", domInsertion: "#requests_list tbody", pageModifier: -1, notListeningToTrigger: true
 		} },
 		{ path_name: "/m/images/", options: {
-			opt_name: "images", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, cancelAmp: true, pageModifier: -1, notListeningToTrigger: true
+			opt_name: "images", loading: '.pager_align', pagination: '.pager_align', domExtract: "#imageslist div", domInsertion: "#imageslist", cancelQ: true, cancelAmp: true, pageModifier: -1, notListeningToTrigger: true
 		} },
 		{ path_name: "/m/uploads/", options: {
-			opt_name: "uploads", loading: '.pager_align', lastPage: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", cancelQ: true, cancelAmp: true, pageModifier: -1, notListeningToTrigger: true
+			opt_name: "uploads", loading: '.pager_align', pagination: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", cancelQ: true, cancelAmp: true, pageModifier: -1, notListeningToTrigger: true
+		} },
+		{ path_name: "/dupecheck/", options: {
+			opt_name: "dupecheck", loading: '.pager_align', pagination: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1, notListeningToTrigger: true
 		} }
 	],
 	loaded: false,
@@ -58,36 +61,134 @@ modules.endless_scrolling = {
 		dbg("[Init] Loading module");
 		// Loading all functions used
 
-		var maxPage = false;
-		// Try to parse the last page available
-		// Returns : false(no idea what page we're at) / int(real url page number) / true(assume we're at last page)
-		var getMaxPage = function() {
-			if(!mOptions.lastPage) {
+		// Extracts data from pagination bar (firstPage & lastPage) & deduce actual page
+		var pagerData = { firstPage: 1 + (mOptions.pageModifier || 0), pages: [] };
+		pagerData.thisPage = Number(url.params && url.params.page ? url.params.page : pagerData.firstPage);
+		pagerData.maxPage = (mOptions.pagination ? pagerData.thisPage : false);
+		var extractPagerAlignData = function() {
+			if(!mOptions.pagination) {
 				return;
 			}
 
-			var pagesList = $(mOptions.lastPage);
-			if(!pagesList.length || !pagesList.first().text().match(/\S/)) {
-				maxPage = true;
+			var paginateBar = $(mOptions.pagination);
+			if(!paginateBar.length || !paginateBar.text().match(/\S/)) {
+				return;
 			}
-			else {
-				var lastPageRegex = mOptions.lastPageRegex ? mOptions.lastPageRegex : /(\d+) ?$/;
-				var lastPageMatch = pagesList.first().text().match(lastPageRegex);
-				if(!lastPageMatch) {
-					maxPage = true
+
+			dbg("[page_extract] Analysing pages");
+			var pagesUrls = paginateBar.html().match(/page=\d+/g);
+			if(!pagesUrls.length) {
+				return;
+			}
+
+			dbg("[page_extract] Extracting pages");
+			var maxPage = pagerData.maxPage;
+			$.each(pagesUrls, function(i, pageUrl) {
+				var pageId = pageUrl.match(/\d+/);
+				if(!pageId.length) {
+					return;
+				}
+				pagerData.pages.push(Number(pageId[0]));
+				maxPage = Math.max(maxPage, Number(pageId[0]));
+			});
+			pagerData.maxPage = maxPage;
+
+			dbg("[page_extract] Done");
+			//dbg(pagerData);
+		};
+
+		// Builds a A from pageId
+		var pageToLink = function(page) {
+			var pageUrl = url;
+			pageUrl.params = pageUrl.params || {};
+			pageUrl.params.page = page.pageId;
+			var text = page.pageId - (mOptions.pageModifier || 0);
+			if(page.end) {
+				text = "[" + text + "]";
+			}
+			else if(page.prec) {
+				text = "<";
+			}
+			else if(page.next) {
+				text = ">";
+			}
+
+			return page.thisPage ? '<strong>' + text + '</strong>' : '<a href="' + craftUrl(pageUrl) + '">' + text + '</a>';
+		};
+
+		// Replace pagination bar with custom one which get updated while ESing
+		var rewritePagination = function(thisPage) {
+			if(!opt.get(module_name, "pagination_rewrite") || pagerData.maxPage == pagerData.firstPage) {
+				return;
+			}
+
+			dbg("[pagination_rewrite] We're at [" + thisPage + "] in [" + pagerData.firstPage + "/" + pagerData.maxPage + "]");
+			var maxPagesToShow = 5;
+			var pagesEachSide = (maxPagesToShow - 1) / 2;
+			var pagesToShow = [];
+			var addLeft = 0;
+			for(var i = thisPage - pagesEachSide; i <= thisPage + pagesEachSide; i++) {
+				while(i < pagerData.firstPage) {
+					i++;
+					pagesEachSide++;
+				}
+				pagesToShow.push(i);
+			}
+
+			for(var i = 0; i < pagesToShow.length; i++) {
+				if(pagesToShow[i] && pagesToShow[i] > pagerData.maxPage) {
+					pagesToShow.splice(i, 1);
+					addLeft++;
+					i--;
+				}
+			}
+
+			for(var i = 1; i <= addLeft; i++) {
+				if(pagesToShow[0] == pagerData.firstPage) {
+					break;
+				}
+
+				pagesToShow.unshift(pagesToShow[0] - 1);
+			}
+			dbg("[pagination_rewrite] Rewriting with " + pagesToShow.join(', '));
+
+			var paginateBar = [], hasPrec = false, hasNext = false;
+			if(thisPage != pagerData.firstPage) {
+				paginateBar.push({pageId: pagerData.firstPage, end: true});
+				paginateBar.push({pageId: thisPage - 1, prec: true});
+				hasPrec = true;
+			}
+			for(var i in pagesToShow) {
+				paginateBar.push({pageId: pagesToShow[i], thisPage: (pagesToShow[i] == thisPage)});
+			}
+			if(thisPage != pagerData.maxPage) {
+				paginateBar.push({pageId: thisPage + 1, next: true});
+				hasNext = true;
+				paginateBar.push({pageId: pagerData.maxPage, end: true});
+			}
+
+			var paginateBarHtml = "";
+			for(var i = 0; i < paginateBar.length; i++) {
+				paginateBarHtml += pageToLink(paginateBar[i]);
+				if(i == paginateBar.length - 1) { }
+				else if(i == 0 && hasPrec || i == paginateBar.length - 2 && hasNext) {
+					paginateBarHtml += " ";
 				}
 				else {
-					maxPage = Number(lastPageMatch[1]) + (mOptions.pageModifier ? mOptions.pageModifier : 0);
+					paginateBarHtml += " | ";
 				}
 			}
+
+			$(mOptions.pagination).html(paginateBarHtml);
+			//dbg(paginateBarHtml);
 		};
 
 		var defaultScrollOffset = 200;
 		var backTopButtonOffset = 10;
 		var loadingPage = false;
 		var wentToPageBottom = false;
-		var nextPage = (url.params && url.params.page ? Number(url.params.page) + 1 : 2 + (mOptions.pageModifier ? mOptions.pageModifier : 0));
-		var previousLookedPage = nextPage - 1;
+		var nextPage = pagerData.thisPage + 1;
+		var previousLookedPage = pagerData.thisPage;
 		var jOnScroll = function() {
 			if(!opt.get(module_name, "endless_scrolling") || !opt.sub_get(module_name, "endless_scrolling", mOptions.opt_name)) {
 				return;
@@ -115,6 +216,8 @@ modules.endless_scrolling = {
 					thisUrl.params.page = lookingAtPage;
 					window.history.replaceState("", "GKS : " + lookingAtPage, craftUrl(thisUrl));
 
+					rewritePagination(lookingAtPage);
+					interceptPaginationClicks();
 					previousLookedPage = lookingAtPage;
 				}
 			}
@@ -140,7 +243,7 @@ modules.endless_scrolling = {
 			}
 
 			// If we know what page we're at && (we are at last page || the next page is obviously out of boundary)
-			if(maxPage !== false && (maxPage === true || nextPage > maxPage)) {
+			if(pagerData.maxPage !== false && nextPage > pagerData.maxPage) {
 				return;
 			}
 
@@ -271,12 +374,39 @@ modules.endless_scrolling = {
 			return offset;
 		};
 
+		var interceptPaginationClicks = function() {
+			// Remap href links to scroll to offset instead of load a new page
+			// We don't modify links, just add a click listenner and prevent the browser to change page if we can scroll
+			if(mOptions.pagination) {
+				$(mOptions.pagination).find("a").on("click", function() {
+					if(!opt.get(module_name, "adapt_url")) {
+						return;
+					}
+
+					var href = $(this).attr("href");
+					var hrefPage = href.match(/page=(\d+)/);
+					if(hrefPage.length) {
+						toTop = getOffsetByPage(hrefPage[1]);
+						if(toTop !== false) {
+							dbg("[adapt_url] Found it. Scrolling to " + toTop);
+							$(document).scrollTop(toTop);
+							return false;
+						}
+					}
+				});
+			}
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
-		getMaxPage();
-		this.maxPage = maxPage;
-		dbg("[EndlessScrolling] url relative pages : " + (url.params && url.params.page ? url.params.page : 0) + "/" + maxPage);
+		extractPagerAlignData();
+		rewritePagination(pagerData.thisPage);
+		interceptPaginationClicks();
+
+		this.maxPage = pagerData.maxPage;
+		this.thisPage = pagerData.thisPage;
+		dbg("[EndlessScrolling] url relative pages : " + pagerData.thisPage + "/" + pagerData.maxPage);
 		$(document).scroll(jOnScroll);
 
 		// Auto endless scrolling pause if any textarea has been focused - mostly forums usage
@@ -286,27 +416,6 @@ modules.endless_scrolling = {
 				wentToPageBottom = true;
 			}
 		});
-
-		// Remap href links to scroll to offset instead of load a new page
-		// We don't modify links, just add a click listenner and prevent the browser to change page if we can scroll
-		if(mOptions.lastPage) {
-			$(mOptions.lastPage + " a").on("click", function() {
-				if(!opt.get(module_name, "adapt_url")) {
-					return;
-				}
-
-				var href = $(this).attr("href");
-				var hrefPage = href.match(/page=(\d+)/);
-				if(hrefPage.length) {
-					toTop = getOffsetByPage(hrefPage[1]);
-					if(toTop !== false) {
-						dbg("[adapt_url] Found it. Scrolling to " + toTop);
-						$(document).scrollTop(toTop);
-						return false;
-					}
-				}
-			});
-		}
 
 		// Listen to after dom modifications by other modules
 		$(document).on("es_dom_process_done", function() {

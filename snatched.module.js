@@ -86,28 +86,6 @@ modules.snatched = {
 			});
 		};
 
-		var maxPage = false;
-		var getMaxPage = function() {
-			if(!mOptions.lastPage) {
-				return;
-			}
-
-			var pagesList = $(mOptions.lastPage);
-			if(!pagesList.length || !pagesList.text().match(/\S/)) {
-				maxPage = true;
-			}
-			else {
-				var lastPageRegex = mOptions.lastPageRegex ? mOptions.lastPageRegex : /(\d+) ?$/;
-				var lastPageMatch = pagesList.text().match(lastPageRegex);
-				if(!lastPageMatch) {
-					maxPage = true
-				}
-				else {
-					maxPage = Number(lastPageMatch[1]) + (mOptions.pageModifier ? mOptions.pageModifier : 0);
-				}
-			}
-		};
-
 		var bytesToInt = function(str) {
 			var splitted = str.split(" ");
 			if(splitted.length != 2) {
@@ -191,6 +169,7 @@ modules.snatched = {
 			$(".table100 tbody").html($(".table100 tbody tr").sort(sortFunc));
 		};
 
+		var maxPage = modules["endless_scrolling"].maxPage, thisPage = modules["endless_scrolling"].thisPage;
 		var canGrabAllPages = (!url.params || url.params.page == 0);
 		var grabAllPages = function() {
 			loadingPage = true;
@@ -200,14 +179,14 @@ modules.snatched = {
 			nextUrl.cancelQ = true;
 			nextUrl.params = nextUrl.params ? nextUrl.params : {};
 
-			if(maxPage === true) {
+			if(thisPage == maxPage) {
 				dbg("[AllPagesGrab] Not enough pages");
 				return;
 			}
 
 			dbg("[AllPagesGrab] Grabbing started");
 			$(mOptions.loading).before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Hachage positronique de l\'ensemble des pages</p>');
-			for(var i = 1; i < maxPage; i++) {
+			for(var i = 1; i <= maxPage; i++) {
 				nextUrl.params.page = i;
 				dbg("[AllPagesGrab] Grabbing page " + i);
 				var pageLoaded = 1;
@@ -251,7 +230,6 @@ modules.snatched = {
 		// Adding buttons
 		$(mOptions.buttons).after(torrentButtons);
 
-		getMaxPage();
 		tagTorrents();
 
 		// Deleted torrents filtering
