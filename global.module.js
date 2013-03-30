@@ -110,10 +110,10 @@ modules.global = {
 		};
 
 		var createOptionsFrame = function() {
-			var optionsFrameData = "";
+			var optionsFrameData = "", optionsFrameHeader = "";
 			dbg("[Options] Building frame");
 			$.each(opt.options, function(module_name, options) {
-				var optionsSection = '<div id="gksi_options_data_' + module_name + '"><div class="gksi_frame_section">' + modules[module_name].dText + '</div>';
+				var optionsSection = '<div id="gksi_options_data_' + module_name + '" class="gksi_options_section"><div class="gksi_frame_section_header">' + modules[module_name].dText + '</div>';
 				var showSection = false;
 				$.each(options, function(option, oData) {
 					if(oData.showInOptions) {
@@ -124,13 +124,14 @@ modules.global = {
 				optionsSection += '</div>';
 				if(showSection) {
 					// If there is no options to be shown for this section, just skip the whole div
+					optionsFrameHeader += '<span class="gksi_options_header_button" section="' + module_name + '">' + modules[module_name].dText + '</span>';
 					optionsFrameData += optionsSection;
 				}
 			});
 
 			// { id, classes, title, data, relativeToId, top, left, underButtonsText }
 			var copyright = '<a href="/forums.php?action=viewtopic&topicid=6336">GKSi</a> by <a href="/users/2360140">ZergRael</a>'
-			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "navigation", top: 8, left: 230, underButtonsText: copyright });
+			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "navigation", top: 8, left: 230, header: optionsFrameHeader, underButtonsText: copyright });
 
 			$.each(opt.options, function(module_name, options) {
 				if(!$("#gksi_options_data_" + module_name).length) {
@@ -196,6 +197,15 @@ modules.global = {
 					}
 				});
 			});
+
+			$(".gksi_options_header_button").hover(function() {
+				$(".gksi_options_header_button").removeClass("gksi_options_header_button_selected");
+				$(this).addClass("gksi_options_header_button_selected");
+				$(".gksi_options_section").hide();
+				$("#gksi_options_data_" + $(this).attr("section")).show();
+			}, function() {
+			});
+
 			dbg("[Options] Frame ready");
 		};
 

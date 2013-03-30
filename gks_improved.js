@@ -250,7 +250,7 @@ var appendFrame = function(o) {
 
 	// Build entire frame
 	var gksi_frame = '<div id="gksi_' + o.id + '" class="gksi_frame' + (o.classes ? ' ' + o.classes : '') + '"><p class="separate">' + o.title + '</p>' +
-		'<div id="gksi_' + o.id + '_data" class="gksi_frame_data">' + o.data +
+		'<div class="gksi_frame_content">' + (o.header ? '<div class="gksi_frame_header">' + o.header + '</div>' : '') + '<div id="gksi_' + o.id + '_data" class="gksi_frame_data">' + o.data + '</div>' +
 		'<div id="gksi_' + o.id + '_buttons" class="gksi_frame_buttons">' + (additionnalButtons.length ? additionnalButtons : '' ) + '<input type="button" id="gksi_' + o.id + '_close" class="fine" value=" Fermer "></div>' +
 		(o.underButtonsText ? '<div id="gksi_copyright">' + o.underButtonsText + '</div>': '') +
 		'</div></div>';
@@ -287,7 +287,7 @@ var appendFrame = function(o) {
 
 	// Background-color correction
 	var transparentCss = "rgba(0, 0, 0, 0)", transparentCssFirefox = "transparent";
-	if($(".gksi_frame_data").css("background-color") == transparentCss || $(".gksi_frame_data").css("background-color") == transparentCssFirefox) {
+	if($(".gksi_frame_content").css("background-color") == transparentCss || $(".gksi_frame_data").css("background-color") == transparentCssFirefox) {
 		dbg("[frame_builder] Can't find background-color");
 		// Go up as much as needed to find some non-transparent color
 		var cssTries = [ "#navigation", "#centre", "#navig_bloc_user", "#header" ];
@@ -295,7 +295,7 @@ var appendFrame = function(o) {
 			if($(cssId).css("background-color") != transparentCss && $(cssId).css("background-color") != transparentCssFirefox) {
 				dbg("[frame_builder] Took " + cssId + " background-color");
 				// Instead of creating style on frame, let's append to our custom CSS area
-				appendCSS('.gksi_frame_data { background-color: ' + $(cssId).css("background-color") + '; } ');
+				appendCSS('.gksi_frame_content { background-color: ' + $(cssId).css("background-color") + '; } ');
 				return false;
 			}
 		});
@@ -315,13 +315,17 @@ var insertCSS = function() {
 
 		// Frames
 		".gksi_frame { z-index: 10; position: absolute; } " +
-		".gksi_frame_section { border-bottom: 1px solid; font-weight: bold; padding-top: 6px; } " +
+		".gksi_frame_content { width: auto; padding: 12px; } " +
+		".gksi_frame_header { padding-top: 6px; padding-bottom: 6px; } " +
+		//".gksi_frame_data { } " +
+		".gksi_frame_section_header { border-bottom: 1px solid; font-weight: bold; padding-top: 6px; } " +
 		".gksi_frame_buttons { padding-top: 9px; text-align: center; } " +
-		".gksi_frame_data { width: auto; padding: 12px; } " +
 		//"#gksi_suggest { } " +
 		//"#gksi_suggest_data { } " +
 		//"#gksi_options { } " +
-		//"#gksi_options_data { } " +
+		"#gksi_options_data { min-height: 90px; } " +
+		".gksi_options_header_button { background-color:#f5f5f5; border:1px solid #dedede; border-top:1px solid #eee; border-left:1px solid #eee; font-weight:bold; color:#565656; cursor:pointer; padding:5px 10px 6px 7px; } " +
+		".gksi_options_header_button_selected { background-color:#6299c5; color:#fff; } " +
 		".gksi_options_sub { font-size: 0.9em; padding-left: 12px; } " +
 		".gksi_options_sub input { margin:2px; } " +
 		".gksi_option_required { text-decoration: underline; } " +
