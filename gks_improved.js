@@ -131,7 +131,7 @@ var craftUrl = function (parsedUrl) {
 	});
 
 	// Append the hashtag thingie
-	craftUrl += (parsedUrl.hash ? parsedUrl.hash : '');
+	//craftUrl += (parsedUrl.hash ? parsedUrl.hash : '');
 
 	return craftUrl;
 };

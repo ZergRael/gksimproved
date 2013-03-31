@@ -154,13 +154,17 @@ modules.torrent_list = {
 					});
 					appendFrame({ title: "GKSi IMDB Suggestions", data: suggestionsStr, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
 
-					if(opt.get(module_name, "imdb_auto_add") && modules.endless_scrolling.maxPage === true && imdb.translateBest) {
+					if(opt.get(module_name, "imdb_auto_add") && modules.endless_scrolling.maxPage == 0 && imdb.translateBest) {
 						dbg("[QueryTranslate] Looks like we can grab bestTranslation [" + imdb.translateBest + "] results");
 						var bestMatchUrl = url;
 						bestMatchUrl.params.q = encodeURIComponent(imdb.translateBest); // From remote translation analysis - levenshtein
 						$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Recherche supraluminique des traductions</p>');
 						grabPage(bestMatchUrl, function(data) {
 							var dataFrame = $(data).find("#torrent_list");
+							var header = dataFrame.find("tr:first");
+							if(header.length) {
+								header.find(".name_torrent_head").text(header.find(".name_torrent_head").text() + " - GKSi IMDB Suggestions");
+							}
 							var insertionData = dataFrame.find("tr");
 							if(insertionData.length) {
 								dbg("[QueryTranslate] Append bestTranslation results");
