@@ -207,9 +207,9 @@ modules.torrent_list = {
 			});
 			if(!foundMarkedTorrent) {
 				var urlFinder = url;
-				url.path = "/browse/";
-				url.params = url.params || {};
-				url.params.page = Number(url.params.page || 0) + 1;
+				urlFinder.path = "/browse/";
+				urlFinder.params = url.params || {};
+				urlFinder.params.page = Number(url.params.page || 0) + 1;
 				dbg("[TorrentMark] Grabbing next page");
 				grabPage(urlFinder, function(data) {
 					var insertionData = $(data).find("#torrent_list tr");

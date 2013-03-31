@@ -102,10 +102,10 @@ modules.endless_scrolling = {
 
 		// Builds a A from pageId
 		var pageToLink = function(page) {
-			var pageUrl = url;
-			pageUrl.params = pageUrl.params || {};
-			pageUrl.params.page = page.pageId;
+			var linkUrl = { host: url.host, path: url.path, params: (url.params || {}), cancelQ: url.cancelQ, cancelAmp: url.cancelAmp, hash: url.hash };
+			linkUrl.params.page = page.pageId;
 			var text = page.pageId - (mOptions.pageModifier || 0);
+
 			if(page.end) {
 				text = "[" + text + "]";
 			}
@@ -116,7 +116,7 @@ modules.endless_scrolling = {
 				text = ">";
 			}
 
-			return page.thisPage ? '<strong>' + text + '</strong>' : '<a href="' + craftUrl(pageUrl) + '">' + text + '</a>';
+			return page.thisPage ? '<strong>' + text + '</strong>' : '<a href="' + craftUrl(linkUrl) + '">' + text + '</a>';
 		};
 
 		// Replace pagination bar with custom one which get updated while ESing
