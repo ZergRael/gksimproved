@@ -46,6 +46,9 @@ modules.endless_scrolling = {
 		{ path_name: "/m/uploads/", options: {
 			opt_name: "uploads", loading: '.pager_align', pagination: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", cancelQ: true, cancelAmp: true, pageModifier: -1, notListeningToTrigger: true
 		} },
+		{ path_name: "/m/peers/", options: {
+			opt_name: "snatched", loading: '.pager_align', pagination: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, cancelAmp: true, pageModifier: -1
+		} },
 		{ path_name: "/dupecheck/", options: {
 			opt_name: "dupecheck", loading: '.pager_align', pagination: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1, notListeningToTrigger: true
 		} }

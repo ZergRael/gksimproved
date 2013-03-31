@@ -237,6 +237,18 @@ var appendNativeScript = function (jsFileName) {
 	document.body.appendChild(script);
 };
 
+// Insert script into DOM - Escape sandboxing
+var insertScript = function (id, f, removeAfterUse) {
+	var script = document.createElement("script");
+	script.type = "text/javascript";
+	script.id = id;
+	script.textContent = "(" + f.toString() + ")(jQuery)";
+	document.body.appendChild(script);
+	if(removeAfterUse) {
+		$("#" + id).remove();
+	}
+};
+
 // Builds our specific frames from a frame object :
 // { id, classes, title, data, relativeToId, top, left, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ] }
 var appendFrame = function(o) {

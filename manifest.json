@@ -25,6 +25,7 @@
         "badges.module.js",
         "logs.module.js",
         "aura.module.js",
+        "peers.module.js",
         "loader.js"
       ]
     }

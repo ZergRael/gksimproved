@@ -19,8 +19,11 @@ Voir topic associé.
 - Torrent list : Tri par clic sur les titres de colonnes
 - Torrent list : Le marqueur de torrent affiche le torrent trouvé en bas de page
 - Torrent list : Le marqueur de torrent est aussi actif sur la page d'accueil
+- Torrent list : Les suggestions ajoutées automatiquement sont clairement annoncées comme telles
 - Endless scrolling : Ajout d'un bouton de pause
 - Endless scrolling : Réécriture de la barre de pagination (urls des pages) en fonction de l'ES
+- Endless scrolling : Support de /dupecheck/
+- Endless scrolling : Support de /m/peers/
 - Panneau d'options : Affichage complet puis section par section au mouseover de l'entête
 
 **0.2.5**
