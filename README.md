@@ -24,6 +24,7 @@ Voir topic associé.
 - Endless scrolling : Réécriture de la barre de pagination (urls des pages) en fonction de l'ES
 - Endless scrolling : Support de /dupecheck/
 - Endless scrolling : Support de /m/peers/
+- Snatched : Filtrage par suspicion de Hit&Run
 - Panneau d'options : Affichage complet puis section par section au mouseover de l'entête
 
 **0.2.5**

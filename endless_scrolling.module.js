@@ -359,7 +359,9 @@ modules.endless_scrolling = {
 					line = line.nextAll(":visible").first();
 				}
 
-				insertedOffsets[line.offset().top] = $(this).data("page");
+				if(line.offset()) {
+					insertedOffsets[line.offset().top] = $(this).data("page");
+				}
 			});
 			dbg("[adapt_url] Offsets ready");
 		};
@@ -423,6 +425,7 @@ modules.endless_scrolling = {
 		// Listen to after dom modifications by other modules
 		$(document).on("es_dom_process_done", function() {
 			rebuildInsertedOffsets();
+			$(document).trigger("scroll");
 		});
 
 		dbg("[Init] Ready");

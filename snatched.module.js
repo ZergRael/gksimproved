@@ -42,6 +42,9 @@ modules.snatched = {
 					if(i == 5 && $(this).text() == "Non Complété") {
 						t.addClass("t_not_completed");
 					}
+					if(i == 5 && !$(this).find("img").length) {
+						t.addClass("t_not_hnr");
+					}
 				})
 			});
 			dbg("[TorrentTag] Ended scanning");
@@ -77,10 +80,21 @@ modules.snatched = {
 			dbg("[NCFilter] Ended filtering");
 		};
 
+		var filterNonHnR = function() {
+			if(!opt.get(module_name, "filtering_no_hnr")) {
+				return;
+			}
+
+			dbg("[NCFilter] Scanning for non H&R");
+			$(".t_not_hnr").hide();
+			dbg("[NCFilter] Ended filtering");
+		};
+
+
 		var unFilter = function() {
 			$(".table100 tbody tr").each(function() {
 				var t = $(this);
-				if(!((t.hasClass("t_deleted") && opt.get(module_name, "filtering_deleted")) || (t.hasClass("t_seeding") && opt.get(module_name, "filtering_seed")) || (t.hasClass("t_not_completed") && opt.get(module_name, "filtering_no_comp")))) {
+				if(!((t.hasClass("t_deleted") && opt.get(module_name, "filtering_deleted")) || (t.hasClass("t_seeding") && opt.get(module_name, "filtering_seed")) || (t.hasClass("t_not_completed") && opt.get(module_name, "filtering_no_comp")) || (t.hasClass("t_not_hnr") && opt.get(module_name, "filtering_no_hnr")))) {
 					t.show();
 				}
 			});
@@ -219,7 +233,7 @@ modules.snatched = {
 			return false;
 		};
 
-		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/><label for="filter_deleted">Cacher les supprimés</label> ' + ' | <input id="filter_seed" type="checkbox" ' + (opt.get(module_name, "filtering_seed") ? 'checked="checked" ' : ' ') + '/><label for="filter_seed">Cacher les torrents en seed</label> ' + ' | <input id="filter_no_comp" type="checkbox" ' + (opt.get(module_name, "filtering_no_comp") ? 'checked="checked" ' : ' ') + '/><label for="filter_no_comp">Cacher les non completés</label> ' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
+		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/><label for="filter_deleted">Cacher les supprimés</label> ' + ' | <input id="filter_seed" type="checkbox" ' + (opt.get(module_name, "filtering_seed") ? 'checked="checked" ' : ' ') + '/><label for="filter_seed">Cacher les torrents en seed</label> ' + ' | <input id="filter_no_comp" type="checkbox" ' + (opt.get(module_name, "filtering_no_comp") ? 'checked="checked" ' : ' ') + '/><label for="filter_no_comp">Cacher les non completés</label> ' + ' | <input id="filter_no_hnr" type="checkbox" ' + (opt.get(module_name, "filtering_no_hnr") ? 'checked="checked" ' : ' ') + '/><label for="filter_no_hnr">N\'afficher que les H&R</label> ' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
 		var colSortButtons = [ {n: 1, id: "sortName", nom: "Nom"}, {n: 3, id: "sortUL", nom: "UL"}, {n: 4, id: "sortDL", nom: "DL"}, {n: 5, id: "sortRDL", nom: "Real DL"}, {n: 6, id: "sortST", nom: "SeedTime"}, {n: 7, id: "sortRatio", nom: "Ratio"}
 		];
 		$.each(colSortButtons, function(k, v) {
@@ -281,6 +295,22 @@ modules.snatched = {
 		});
 		filterNonCompleted();
 
+		$("#filter_no_hnr").change(function() {
+			opt.set(module_name, "filtering_no_hnr", $(this).attr("checked") == "checked" ? true : false);
+			dbg("[H&RFilter] is " + opt.get(module_name, "filtering_no_hnr"));
+			if(opt.get(module_name, "filtering_no_hnr")) {
+				filterNonHnR();
+				$(document).trigger("es_dom_process_done");
+			}
+			else {
+				dbg("[NCFilter] Unfiltering non H&R");
+				unFilter();
+				dbg("[NCFilter] Ended unfiltering");
+				$(document).trigger("es_dom_process_done");
+			}
+		});
+		filterNonHnR();
+
 		// Sort on column click
 		$(".sortCol").click(function() {
 			if(sort == $(this).attr("id")) {
@@ -305,6 +335,7 @@ modules.snatched = {
 			filterDeleted();
 			filterInSeed();
 			filterNonCompleted();
+			filterNonHnR();
 			sortData();
 			canGrabAllPages = false;
 			$("#grabAllPagesSpan").remove();
