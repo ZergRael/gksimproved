@@ -267,6 +267,28 @@ modules.torrent_list = {
 			})
 		};
 
+		var showTorrentComments = function() {
+			var commLink = $(this)
+			if(opt.get(module_name, "direct_comments") && commLink.attr("href").match(/\/com\//) && commLink.text() != "0") {
+				var commUrl = parseUrl("https://gks.gs" + commLink.attr("href"));
+				grabPage(commUrl, function(data) {
+					// { id, classes, title, header, data, relativeToId, relativeToObj, top, left, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
+					appendFrame({ id: "t_comm", title: "Commentaires pour le torrent " + commUrl.params.id, data: $(data).find("#contenu").html(), relativeToObj: commLink, top: -20, left: -750, maxWidth: 780 });
+					//$("#gksi_t_comm").find("#gksi_t_comm_data p, #gksi_t_comm_data #com").remove();
+					$("#gksi_t_comm_data #com").hide();
+					$("#gksi_t_comm_data p:first").mouseenter(function() {
+						$("#gksi_t_comm_data #com").slideDown();
+					});
+					$("#gksi_t_comm_data #com").mouseleave(function() {
+						$("#gksi_t_comm_data #com").slideUp();
+					});
+					$("#gksi_t_comm").mouseleave(function() {
+						$("#gksi_t_comm").remove();
+					});
+				});
+			}
+		};
+
 		var findMarkedTorrent = '<span id="find_marked_torrent_span"><a id="find_marked_torrent" href="#">Retrouver le torrent marqué</a> | </span>';
 		var markFirstTorrent = '<span id="mark_first_torrent_span"><a id="mark_first_torrent" href="#">Marquer le premier torrent</a> | </span>';
 		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Afficher les FL uniquement</label> | ';
@@ -337,6 +359,8 @@ modules.torrent_list = {
 			addAgeColumn();
 			$(document).trigger("es_dom_process_done");
 		});
+
+		$("#torrent_list a").on("mouseenter", showTorrentComments);
 
 		dbg("[Init] Ready");
 	}

@@ -250,7 +250,7 @@ var insertScript = function (id, f, removeAfterUse) {
 };
 
 // Builds our specific frames from a frame object :
-// { id, classes, title, data, relativeToId, top, left, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ] }
+// { id, classes, title, header, data, relativeToId, relativeToObj, top, left, maxHeight, maxWidth, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
 var appendFrame = function(o) {
 	// Build custom buttons
 	var additionnalButtons = '';
@@ -270,9 +270,10 @@ var appendFrame = function(o) {
 	// Append
 	$("#navigation").append(gksi_frame);
 
+	var frame = $("#gksi_" + o.id);
 	// Close button
 	$("#gksi_" + o.id + "_close").click(function() {
-		$("#gksi_" + o.id).remove();
+		frame.remove();
 		return false;
 	});
 
@@ -288,11 +289,29 @@ var appendFrame = function(o) {
 		});
 	}
 
+	if(o.maxWidth || o.maxHeight) {
+		if(o.maxHeight) {
+			frame.css("maxHeight", o.maxHeight);
+		}
+		if(o.maxWidth) {
+			frame.css("maxWidth", o.maxWidth);
+		}
+		frame.css("overflow", "auto");
+	}
+
 	// Position correction on resize
 	if(o.relativeToId && !opt.get("global", "allow_frame_css")) {
 		$(window).resize(function() {
 			var toOffset = $("#" + o.relativeToId).offset();
-			$("#gksi_" + o.id).offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
+			frame.offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
+		});
+		$(window).trigger("resize");
+	}
+
+	if(o.relativeToObj && !opt.get("global", "allow_frame_css")) {
+		$(window).resize(function() {
+			var toOffset = o.relativeToObj.offset();
+			frame.offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
 		});
 		$(window).trigger("resize");
 	}
@@ -455,8 +474,9 @@ var opt = {
 			imdb_suggest:       { defaultVal: false, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
 			imdb_auto_add:      { defaultVal: false, showInOptions: true, dispText: "Ajouter le résultat de la meilleure correspondance IMDB", parent: "imdb_suggest" },
 			filtering_fl:       { defaultVal: false, showInOptions: false },
-			age_column:         { defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent"},
-			torrent_marker:     { defaultVal: false, showInOptions: false }
+			age_column:         { defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent" },
+			torrent_marker:     { defaultVal: false, showInOptions: false },
+			direct_comments:    { defaultVal: false, showInOptions: true, dispText: "Afficher les commentaires au survol" }
 		},
 		snatched: {
 			filtering_deleted:  { defaultVal: true, showInOptions: false },

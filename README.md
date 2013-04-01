@@ -20,6 +20,7 @@ Voir topic associé.
 - Torrent list : Le marqueur de torrent affiche le torrent trouvé en bas de page
 - Torrent list : Le marqueur de torrent est aussi actif sur la page d'accueil
 - Torrent list : Les suggestions ajoutées automatiquement sont clairement annoncées comme telles
+- Torrent list : Ajout des commentaires au survol du nombre de commentaires
 - Endless scrolling : Ajout d'un bouton de pause
 - Endless scrolling : Réécriture de la barre de pagination (urls des pages) en fonction de l'ES
 - Endless scrolling : Support de /dupecheck/
