@@ -354,7 +354,7 @@ var insertCSS = function() {
 		//"#gksi_suggest { } " +
 		//"#gksi_suggest_data { } " +
 		//"#gksi_options { } " +
-		"#gksi_options_data { min-height: 90px; } " +
+		"#gksi_options_data { min-height: 96px; } " +
 		".gksi_options_header_button { background-color:#f5f5f5; border:1px solid #dedede; border-top:1px solid #eee; border-left:1px solid #eee; font-weight:bold; color:#565656; cursor:pointer; padding:5px 10px 6px 7px; } " +
 		".gksi_options_header_button_selected { background-color:#6299c5; color:#fff; } " +
 		".gksi_options_sub { font-size: 0.9em; padding-left: 12px; } " +
