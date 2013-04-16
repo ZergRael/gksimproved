@@ -338,11 +338,11 @@ var insertCSS = function() {
 	dbg("Inserting custom CSS");
 	$("head").append("<style id='gksi_css'>" +
 		// Back to top button
-		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/to_top_small.png") + ") no-repeat; } " +
+		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "to_top_small.png") + ") no-repeat; } " +
 		// Endless scrolling pauser button
 		"#esPauseButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:42px; overflow:hidden; width:26px; height:39px; border:none; text-indent:100%; } " +
-		".esButtonPaused { background:url(" + chrome.extension.getURL("images/endless_scrolling_paused.png") + ") no-repeat; } " +
-		".esButtonActive { background:url(" + chrome.extension.getURL("images/endless_scrolling_active.png") + ") no-repeat; } " +
+		".esButtonPaused { background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "/endless_scrolling_paused.png") + ") no-repeat; } " +
+		".esButtonActive { background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "/endless_scrolling_active.png") + ") no-repeat; } " +
 
 		// Frames
 		".gksi_frame { z-index: 10; position: absolute; } " +
@@ -468,7 +468,8 @@ var opt = {
 			} },
 			adapt_url:          { defaultVal: true, showInOptions: true, dispText: "Adapter l'url en fonction de la page vue avec l'ES", parent: "endless_scrolling" },
 			pagination_rewrite: { defaultVal: false, showInOptions: true, dispText: "Adapter la pagination en fonction de la page vue avec l'ES", parent: "adapt_url" },
-			pause_scrolling:    { defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page", parent: "endless_scrolling" }
+			pause_scrolling:    { defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page", parent: "endless_scrolling" },
+			button_style:       { defaultVal: 'LordVal', showInOptions: true, type: "select", choices: ['LordVal', 'Classic'], dispText: "Style des icônes" }
 		},
 		torrent_list: {
 			imdb_suggest:       { defaultVal: false, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },

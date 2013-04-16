@@ -96,17 +96,27 @@ modules.global = {
 		};
 
 		var createOptionInput = function(module_name, option_name, oData) {
-			var oHtml = '<span id="gksi_' + module_name + '_' + option_name + '_span"><input type="checkbox" id="gksi_' + module_name + '_' + option_name + '" ' + (oData.parent && !opt.get(module_name, oData.parent) ? 'disabled="disabled" ': '') + (opt.get(module_name, option_name) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option_name + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br /></span>';
+			var optionHtml = "";
+			if(oData.type == 'select') {
+				var optionChoices = "";
+				$.each(oData.choices, function(k, optionChoice) {
+					optionChoices += '<option value="' + optionChoice + '">' + optionChoice + '</option>';
+				});
+				optionHtml = '<select id="gksi_' + module_name + '_' + option_name + '" ' + (oData.parent && !opt.get(module_name, oData.parent) ? 'disabled="disabled" ': '') + (opt.get(module_name, option_name) ? 'checked="checked"' : '') + '>' + optionChoices + '</select><label for="gksi_' + module_name + '_' + option_name + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
+			}
+			else {
+				optionHtml = '<input type="checkbox" id="gksi_' + module_name + '_' + option_name + '" ' + (oData.parent && !opt.get(module_name, oData.parent) ? 'disabled="disabled" ': '') + (opt.get(module_name, option_name) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option_name + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
+			}
 			if(oData.sub_options) {
-				oHtml += '<div id="gksi_' + module_name + '_s_' + option_name + '" class="gksi_options_sub">';
+				var subOptionHtml = "";
 				$.each(oData.sub_options, function(s_option, s_oData) {
 					if(s_oData.showInOptions) {
-						oHtml += '<span id="gksi_' + module_name + '_' + option_name + '_' + s_option + '_span"><input type="checkbox" id="gksi_' + module_name + '_' + option_name + '_' + s_option + '" ' + (opt.sub_get(module_name, option_name, s_option) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option_name + '_' + s_option + '"' + (s_oData.tooltip ? ' title="' + s_oData.tooltip + '"' : '') + '>' + s_oData.dispText + '</label><br /></span>';
+						subOptionHtml += '<span id="gksi_' + module_name + '_' + option_name + '_' + s_option + '_span"><input type="checkbox" id="gksi_' + module_name + '_' + option_name + '_' + s_option + '" ' + (opt.sub_get(module_name, option_name, s_option) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option_name + '_' + s_option + '"' + (s_oData.tooltip ? ' title="' + s_oData.tooltip + '"' : '') + '>' + s_oData.dispText + '</label><br /></span>';
 					}
 				});
-				oHtml += '</div>';
+				optionHtml += '<div id="gksi_' + module_name + '_s_' + option_name + '" class="gksi_options_sub">' + subOptionHtml + '</div>';
 			}
-			return oHtml;
+			return '<span id="gksi_' + module_name + '_' + option_name + '_span">' + optionHtml + '</span>';
 		};
 
 		var createOptionsFrame = function() {
@@ -144,7 +154,13 @@ modules.global = {
 						var childs = getOptionChilds(module_name, option);
 
 						$("#gksi_" + module_name + "_" + option).change(function() {
-							var state = $(this).attr("checked") == "checked" ? true : false;
+							var state = undefined;
+							if($(this).is('select')) {
+								state = $(this).val();
+							}
+							else {
+								state = $(this).attr("checked") == "checked" ? true : false;
+							}
 							opt.set(module_name, option, state);
 							_dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
 							if(oData.callback) {

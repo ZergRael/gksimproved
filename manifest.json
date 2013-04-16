@@ -35,8 +35,11 @@
   ],
   "web_accessible_resources": [
     "images/loading.gif",
-    "images/classic/to_top_small.png",
-    "images/classic/endless_scrolling_active.png",
-    "images/classic/endless_scrolling_paused.png"
+    "images/Classic/to_top_small.png",
+    "images/Classic/endless_scrolling_active.png",
+    "images/Classic/endless_scrolling_paused.png",
+    "images/LordVal/to_top_small.png",
+    "images/LordVal/endless_scrolling_active.png",
+    "images/LordVal/endless_scrolling_paused.png"
   ]
 }
