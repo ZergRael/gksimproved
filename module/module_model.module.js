@@ -22,7 +22,7 @@ modules.module_ = {
 		this.loaded = true;
 		var module_name = this.name;
 		var dbg = function(str) {
-			_dbg(module_name, str);
+			utils._dbg(module_name, str);
 		};
 
 		dbg("[Init] Loading module");

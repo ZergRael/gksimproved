@@ -25,7 +25,7 @@ modules.torrent_list = {
 		this.loaded = true;
 		var module_name = this.name;
 		var dbg = function(str) {
-			_dbg(module_name, str);
+			utils._dbg(module_name, str);
 		}
 
 		dbg("[Init] Loading module");
@@ -136,7 +136,7 @@ modules.torrent_list = {
 			if(searchQuery) {
 				dbg("[QuerySuggest] Query : " + searchQuery);
 				// Try to get some results from IMDB: 4 + 4 max
-				grabPage({ host: "https://thetabx.net", path: "/gksi/imdbproxy/get/" + encodeURIComponent(searchQuery) + "/2" }, function(data) {
+				utils.grabPage({ host: "https://thetabx.net", path: "/gksi/imdbproxy/get/" + encodeURIComponent(searchQuery) + "/2" }, function(data) {
 					dbg("[QuerySuggest] Got data back");
 					var imdb = JSON.parse(data);
 					var suggestions = [];
@@ -149,7 +149,7 @@ modules.torrent_list = {
 					var suggestionsStr = "";
 					$.map(suggestions, function(movieName, i) {
 						if($.inArray(movieName, suggestions) === i) {
-							suggestionsStr += '<a href="' + craftUrl({ host: url.host, path: url.path, params: { q: encodeURIComponent(movieName) } }) + '">' + movieName + '</a><br />';
+							suggestionsStr += '<a href="' + utils.craftUrl({ host: url.host, path: url.path, params: { q: encodeURIComponent(movieName) } }) + '">' + movieName + '</a><br />';
 						}
 					});
 					appendFrame({ title: "GKSi IMDB Suggestions", data: suggestionsStr, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
@@ -159,7 +159,7 @@ modules.torrent_list = {
 						var bestMatchUrl = url;
 						bestMatchUrl.params.q = encodeURIComponent(imdb.translateBest); // From remote translation analysis - levenshtein
 						$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Recherche supraluminique des traductions</p>');
-						grabPage(bestMatchUrl, function(data) {
+						utils.grabPage(bestMatchUrl, function(data) {
 							var dataFrame = $(data).find("#torrent_list");
 							var header = dataFrame.find("tr:first");
 							if(header.length) {
@@ -211,7 +211,7 @@ modules.torrent_list = {
 				urlFinder.params = url.params || {};
 				urlFinder.params.page = Number(url.params.page || 0) + 1;
 				dbg("[TorrentMark] Grabbing next page");
-				grabPage(urlFinder, function(data) {
+				utils.grabPage(urlFinder, function(data) {
 					var insertionData = $(data).find("#torrent_list tr");
 					if(insertionData.length) {
 						dbg("[TorrentMark] Insert torrents");
@@ -259,7 +259,7 @@ modules.torrent_list = {
 						sortedUrl.params = url.params || {};
 						sortedUrl.params.sort = columns_def[k];
 						sortedUrl.params.order = order;
-						window.location = craftUrl(sortedUrl);
+						window.location = utils.craftUrl(sortedUrl);
 						return false;
 					});
 					$(this).wrapInner('<a href="#"></a>');
@@ -270,8 +270,8 @@ modules.torrent_list = {
 		var showTorrentComments = function() {
 			var commLink = $(this)
 			if(opt.get(module_name, "direct_comments") && commLink.attr("href").match(/\/com\//) && commLink.text() != "0") {
-				var commUrl = parseUrl("https://gks.gs" + commLink.attr("href"));
-				grabPage(commUrl, function(data) {
+				var commUrl = utils.parseUrl("https://gks.gs" + commLink.attr("href"));
+				utils.grabPage(commUrl, function(data) {
 					// { id, classes, title, header, data, relativeToId, relativeToObj, top, left, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
 					appendFrame({ id: "t_comm", title: "Commentaires pour le torrent " + commUrl.params.id, data: $(data).find("#contenu").html(), relativeToObj: commLink, top: -20, left: -750, maxWidth: 780 });
 					//$("#gksi_t_comm").find("#gksi_t_comm_data p, #gksi_t_comm_data #com").remove();

@@ -23,7 +23,7 @@ modules.snatched = {
 		this.loaded = true;
 		var module_name = this.name;
 		var dbg = function(str) {
-			_dbg(module_name, str);
+			utils._dbg(module_name, str);
 		}
 
 		dbg("[Init] Loading module");
@@ -204,7 +204,7 @@ modules.snatched = {
 				nextUrl.params.page = i;
 				dbg("[AllPagesGrab] Grabbing page " + i);
 				var pageLoaded = 1;
-				grabPage(nextUrl, function(data) {
+				utils.grabPage(nextUrl, function(data) {
 					torrentsTR = $(data).find(".table100 tbody tr")
 					if(torrentsTR && torrentsTR.length) {
 						dbg("[AllPagesGrab] Got data - Inserting")

@@ -23,7 +23,7 @@ modules.logs = {
 		this.loaded = true;
 		var module_name = this.name;
 		var dbg = function(str) {
-			_dbg(module_name, str);
+			utils._dbg(module_name, str);
 		};
 
 		dbg("[Init] Loading module");
@@ -37,7 +37,7 @@ modules.logs = {
 			}
 
 			dbg("[auto_refresh] Grabing this page");
-			grabPage(url, function(data) {
+			utils.grabPage(url, function(data) {
 				logsTR = $(data).find("tbody tr");
 				dbg("[auto_refresh] Got data");
 				if(logsTR && logsTR.length) {

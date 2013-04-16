@@ -24,11 +24,12 @@ modules.badges = {
 		this.loaded = true;
 		var module_name = this.name;
 		var dbg = function(str) {
-			_dbg(module_name, str);
+			utils._dbg(module_name, str);
 		};
 
 		if(mOptions.checkId) {
-			if(url.path.match(/(\d+)/)[1] != modules.global.userId) {
+			var userId = utils.getUserId();
+			if(url.path.match(/(\d+)/)[1] != userId) {
 				return;
 			}
 		}
@@ -135,7 +136,7 @@ modules.badges = {
 					{ url: "karmajedi", trigger: 500000 }
 				],
 				dom: false,
-				val: modules.global.karma
+				val: utils.getKarmaTotal()
 			},
 			{	// Requests filled -- 9
 				badges: [ 
@@ -163,7 +164,6 @@ modules.badges = {
 			}
 		];
 
-		var userId = modules.global.userId;
 		var badgesReqParse = [
 			{ url: "/m/peers/snatched", sections: [0] },
 			{ url: "/users/" + userId, sections: [1, 2, 3, 5, 8, 9, 10] },
@@ -181,7 +181,7 @@ modules.badges = {
 			var lastGrab = false;
 			var domTr = $("tbody tr");
 			$.each(badgesReqParse, function(i_url, url_section) {
-				grabPage({ host: url.host, path: url_section.url }, function(data) {
+				utils.grabPage({ host: url.host, path: url_section.url }, function(data) {
 					var jData = $(data);
 					$.each(url_section.sections, function(_, i_section) {
 						var badge_data_block = badgesData[i_section];

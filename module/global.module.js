@@ -20,7 +20,7 @@ modules.global = {
 		this.loaded = true;
 		var module_name = this.name;
 		var dbg = function(str) {
-			_dbg(module_name, str);
+			utils._dbg(module_name, str);
 		};
 
 		dbg("[Init] Loading module");
@@ -154,7 +154,7 @@ modules.global = {
 						var childs = getOptionChilds(module_name, option);
 
 						$("#gksi_" + module_name + "_" + option).change(function() {
-							var state = undefined;
+							var state = null;
 							if($(this).is('select')) {
 								state = $(this).val();
 							}
@@ -162,7 +162,7 @@ modules.global = {
 								state = $(this).attr("checked") == "checked" ? true : false;
 							}
 							opt.set(module_name, option, state);
-							_dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
+							utils._dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
 							if(oData.callback) {
 								oData.callback(state);
 							}
@@ -194,7 +194,7 @@ modules.global = {
 								$("#gksi_" + module_name + "_" + option + "_" + s_option).change(function() {
 									if(s_oData.showInOptions) {
 										opt.sub_set(module_name, option, s_option, $(this).attr("checked") == "checked" ? true : false);
-										_dbg(module_name, "[" + option + "][" + s_option + "] is " + opt.sub_get(module_name, option, s_option));
+										utils._dbg(module_name, "[" + option + "][" + s_option + "] is " + opt.sub_get(module_name, option, s_option));
 									}
 								});
 							});
@@ -225,20 +225,6 @@ modules.global = {
 			dbg("[Options] Frame ready");
 		};
 
-		var getKarmaTotal = function() {
-			if(!$("#userlink .karma").length) {
-				return -1;
-			}
-			return Number($("#userlink .karma").text().replace(',', ''));
-		};
-
-		var getUserId = function() {
-			if(!$("#userlink a:first").length) {
-				return -1;
-			}
-			return $("#userlink a:first").attr("href").match(/\d+/)[0];
-		};
-
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -262,8 +248,6 @@ modules.global = {
 
 		listenToCtrlEnter();
 		listenToBBCodeShortcuts();
-		this.karma = getKarmaTotal();
-		this.userId = getUserId();
 
 		dbg("[Init] Ready");
 	}

@@ -58,7 +58,7 @@ modules.endless_scrolling = {
 		this.loaded = true;
 		var module_name = this.name;
 		var dbg = function(str) {
-			_dbg(module_name, str);
+			utils._dbg(module_name, str);
 		};
 
 		dbg("[Init] Loading module");
@@ -116,7 +116,7 @@ modules.endless_scrolling = {
 				text = ">";
 			}
 
-			return page.thisPage ? '<strong>' + text + '</strong>' : '<a href="' + craftUrl(linkUrl) + '">' + text + '</a>';
+			return page.thisPage ? '<strong>' + text + '</strong>' : '<a href="' + utils.craftUrl(linkUrl) + '">' + text + '</a>';
 		};
 
 		// Replace pagination bar with custom one which get updated while ESing
@@ -217,7 +217,7 @@ modules.endless_scrolling = {
 					var thisUrl = url;
 					thisUrl.params = thisUrl.params || {};
 					thisUrl.params.page = lookingAtPage;
-					window.history.replaceState("", "GKS : " + lookingAtPage, craftUrl(thisUrl));
+					window.history.replaceState("", "GKS : " + lookingAtPage, utils.craftUrl(thisUrl));
 
 					rewritePagination(lookingAtPage);
 					interceptPaginationClicks();
@@ -280,7 +280,7 @@ modules.endless_scrolling = {
 				}
 
 				// Fetching
-				grabPage(nextUrl, function(data, page_n) {
+				utils.grabPage(nextUrl, function(data, page_n) {
 					// Extract needed data
 					insertionData = $(data).find(mOptions.domExtract)
 					dbg("[EndlessScrolling] Grab ended")

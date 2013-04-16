@@ -22,7 +22,7 @@ modules.aura = {
 		this.loaded = true;
 		var module_name = this.name;
 		var dbg = function(str) {
-			_dbg(module_name, str);
+			utils._dbg(module_name, str);
 		};
 
 		dbg("[Init] Loading module");
@@ -48,7 +48,7 @@ modules.aura = {
 		var agProgress = 0;
 		var ag = 0;
 		var calcAgProgress = function() {
-			var size = strToSize($("#myauracalc tfoot td:nth(2)").text());
+			var size = utils.strToSize($("#myauracalc tfoot td:nth(2)").text());
 			if(!size) {
 				return;
 			}
@@ -88,7 +88,7 @@ modules.aura = {
 			ready = false;
 			dbg("[auraTorrent] Input change");
 			var input_val = $(this).val();
-			var urlTorrent = parseUrl($(this).val());
+			var urlTorrent = utils.parseUrl($(this).val());
 			if(!urlTorrent || lastTorrent == urlTorrent) {
 				ready = true;
 				return;
@@ -96,12 +96,11 @@ modules.aura = {
 
 			lastTorrent = urlTorrent;
 			dbg("[auraTorrent] Fetching torrent info");
-			//var duration = dateToDuration("07/01/2012 à 01:13");
-			grabPage(urlTorrent, function(data) {
+			utils.grabPage(urlTorrent, function(data) {
 				dbg("[auraTorrent] Got torrent info - Parsing");
 				var infos = $(data).find('#contenu div[style="margin-left:50px;"]');
-				var size = strToSize(infos.find(".torr-taille").parent().text());
-				var date = dateToDuration(infos.find(".torr-add-the").parent().text());
+				var size = utils.strToSize(infos.find(".torr-taille").parent().text());
+				var date = utils.dateToDuration(infos.find(".torr-add-the").parent().text());
 				var seeds = infos.find(".torr-peers").parent().find("strong:nth(0)").text();
 
 				//A = (1-10^(-Ti/4))*Si*(1+sqrt(2)*10^(-((Ni-1)/(7-1))))
@@ -127,7 +126,7 @@ modules.aura = {
 		$("#gksi_auragoal_input").keyup(calcAuraGoal);
 		$("#gksi_auratorrent_input").keyup(calcAuraTorrent);
 
-		var karma = modules.global.karma;
+		var karma = utils.getKarmaTotal();
 		dbg("[Karma] Parsed [" + karma + "]");
 		var aura = Number($("#userlink li:nth(3)").text().match(/[\d\.]+/)[0]);
 		dbg("[Aura] Parsed [" + aura + "]");

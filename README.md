@@ -27,6 +27,8 @@ Voir topic associé.
 - Endless scrolling : Support de /m/peers/
 - Snatched : Filtrage par suspicion de Hit&Run
 - Panneau d'options : Affichage complet puis section par section au mouseover de l'entête
+- Panneau d'options : Thèmes pour les images (Endless scrolling & Back to top)
+- Réorganisation interne des fichiers
 
 **0.2.5**
 - Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
