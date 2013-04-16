@@ -12,20 +12,20 @@
     {
       "matches": ["https://gks.gs/*"],
       "js": [
-        "jquery-1.8.3.min.js",
+        "lib/jquery-1.8.3.min.js",
         "gks_improved.js",
-        "global.module.js",
-        "endless_scrolling.module.js",
-        "torrent_list.module.js",
-        "snatched.module.js",
-        "torrent.module.js",
-        "twits.module.js",
-        "pins.module.js",
-        "forums.module.js",
-        "badges.module.js",
-        "logs.module.js",
-        "aura.module.js",
-        "peers.module.js",
+        "module/global.module.js",
+        "module/endless_scrolling.module.js",
+        "module/torrent_list.module.js",
+        "module/snatched.module.js",
+        "module/torrent.module.js",
+        "module/twits.module.js",
+        "module/pins.module.js",
+        "module/forums.module.js",
+        "module/badges.module.js",
+        "module/logs.module.js",
+        "module/aura.module.js",
+        "module/peers.module.js",
         "loader.js"
       ]
     }
@@ -35,8 +35,8 @@
   ],
   "web_accessible_resources": [
     "images/loading.gif",
-    "images/to_top_small.png",
-    "images/endless_scrolling_active.png",
-    "images/endless_scrolling_paused.png"
+    "images/classic/to_top_small.png",
+    "images/classic/endless_scrolling_active.png",
+    "images/classic/endless_scrolling_paused.png"
   ]
 }
