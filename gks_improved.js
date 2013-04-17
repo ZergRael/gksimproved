@@ -17,7 +17,7 @@ var DEBUG = true;
 
 // Debug print function for the main, will be overwriten in modules
 var dbg = function(str) {
-	utils._dbg("main", str);
+	utils.dbg("main", str);
 };
 
 // Firefox hacks to simulate chrome APIs
@@ -144,7 +144,7 @@ var insertCSS = function() {
 	dbg("Inserting custom CSS");
 	$("head").append("<style id='gksi_css'>" +
 		// Back to top button
-		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "to_top_small.png") + ") no-repeat; } " +
+		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "/to_top_small.png") + ") no-repeat; } " +
 		// Endless scrolling pauser button
 		"#esPauseButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:42px; overflow:hidden; width:26px; height:39px; border:none; text-indent:100%; } " +
 		".esButtonPaused { background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "/endless_scrolling_paused.png") + ") no-repeat; } " +

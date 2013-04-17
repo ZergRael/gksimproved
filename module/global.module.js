@@ -20,7 +20,7 @@ modules.global = {
 		this.loaded = true;
 		var module_name = this.name;
 		var dbg = function(str) {
-			utils._dbg(module_name, str);
+			utils.dbg(module_name, str);
 		};
 
 		dbg("[Init] Loading module");
@@ -100,7 +100,7 @@ modules.global = {
 			if(oData.type == 'select') {
 				var optionChoices = "";
 				$.each(oData.choices, function(k, optionChoice) {
-					optionChoices += '<option value="' + optionChoice + '">' + optionChoice + '</option>';
+					optionChoices += '<option value="' + optionChoice + '"' + (oData.val == optionChoice ? ' selected="selected"' : '') + '>' + optionChoice + '</option>';
 				});
 				optionHtml = '<select id="gksi_' + module_name + '_' + option_name + '" ' + (oData.parent && !opt.get(module_name, oData.parent) ? 'disabled="disabled" ': '') + (opt.get(module_name, option_name) ? 'checked="checked"' : '') + '>' + optionChoices + '</select><label for="gksi_' + module_name + '_' + option_name + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
 			}
@@ -162,7 +162,7 @@ modules.global = {
 								state = $(this).attr("checked") == "checked" ? true : false;
 							}
 							opt.set(module_name, option, state);
-							utils._dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
+							utils.dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
 							if(oData.callback) {
 								oData.callback(state);
 							}
@@ -194,7 +194,7 @@ modules.global = {
 								$("#gksi_" + module_name + "_" + option + "_" + s_option).change(function() {
 									if(s_oData.showInOptions) {
 										opt.sub_set(module_name, option, s_option, $(this).attr("checked") == "checked" ? true : false);
-										utils._dbg(module_name, "[" + option + "][" + s_option + "] is " + opt.sub_get(module_name, option, s_option));
+										utils.dbg(module_name, "[" + option + "][" + s_option + "] is " + opt.sub_get(module_name, option, s_option));
 									}
 								});
 							});

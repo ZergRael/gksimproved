@@ -25,7 +25,7 @@ modules.torrent_list = {
 		this.loaded = true;
 		var module_name = this.name;
 		var dbg = function(str) {
-			utils._dbg(module_name, str);
+			utils.dbg(module_name, str);
 		}
 
 		dbg("[Init] Loading module");
