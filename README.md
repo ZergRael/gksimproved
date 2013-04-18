@@ -15,6 +15,7 @@ Voir topic associé.
 - ES : Correction de l'adaptation d'url sur viewforum.php
 - Badges : Correction du parseur en cas de lignes supplémentaires sur le profil
 - Badges : Correction de l'image du 4ème d'IRC
+- Badges : Correction de la valeur du badge Snatched (snatched - uploads)
 - Raccourcis BBCode : Correction lors de l'édit d'un post
 - Torrent list : Tri par clic sur les titres de colonnes
 - Torrent list : Le marqueur de torrent affiche le torrent trouvé en bas de page
@@ -26,9 +27,11 @@ Voir topic associé.
 - Endless scrolling : Support de /dupecheck/
 - Endless scrolling : Support de /m/peers/
 - Snatched : Filtrage par suspicion de Hit&Run
+- Forums : Correction du scrolling lors de l'utilisation d'un lien direct vers un post
 - Panneau d'options : Affichage complet puis section par section au mouseover de l'entête
 - Panneau d'options : Thèmes pour les images (Endless scrolling & Back to top)
 - Réorganisation interne des fichiers
+- Ajout de la possibilité de sauvegarder des données en dehors des options
 
 **0.2.5**
 - Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques

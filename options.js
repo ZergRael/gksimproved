@@ -65,7 +65,8 @@ var opt = {
 		},
 		forums: {
 			hidable_sigs:       { defaultVal: false, showInOptions: true, dispText: "Rendre les signatures masquables" },
-			hide_signatures:    { defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut", parent: "hidable_sigs" }
+			hide_signatures:    { defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut", parent: "hidable_sigs" },
+			scroll_correction:  { defaultVal: false, showInOptions: true, dispText: "Corriger le scrolling " }
 		},
 		torrent: {
 			quick_comment:      { defaultVal: true, showInOptions: true, dispText: "Afficher la boite de commentaire rapide sur les fiches torrent" },

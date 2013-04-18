@@ -17,7 +17,7 @@ modules.forums = {
 	dText: "Forums",
 	pages: [
 		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { buttons: '.linkbox:first' } },
-		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: '.linkbox:first', canHideSig : true } }
+		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: '.linkbox:first', isTopic : true } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -31,7 +31,7 @@ modules.forums = {
 		// Loading all functions used
 
 		var filterSignatures = function() {
-			if(!mOptions.canHideSig || !opt.get(module_name, "hidable_sigs")) {
+			if(!mOptions.isTopic || !opt.get(module_name, "hidable_sigs")) {
 				return;
 			}
 
@@ -47,10 +47,32 @@ modules.forums = {
 			dbg("[hide_signatures] Process ended");
 		};
 
+		var lastScrolledHash = null;
+		var adjustScrolling = function() {
+			if(!opt.get(module_name, "scroll_correction") || !mOptions.isTopic || $("#entete").css("position") != "fixed") {
+				return;
+			}
+
+			var scrollingUrl = utils.parseUrl(window.location.href);
+			if(!scrollingUrl.hash || scrollingUrl.hash == lastScrolledHash) {
+				return;
+			}
+
+			dbg("[adjustScrolling] Found hash : " + scrollingUrl.hash);
+			//$(document).scrollTop($('a[href="#post336526"]').offset().top - $("#entete").height() - 15);
+
+			var hashTarget = $('a[href="' + scrollingUrl.hash + '"]');
+			if(hashTarget.length) {
+				dbg("[adjustScrolling] Scrolling");
+				lastScrolledHash = scrollingUrl.hash;
+				$(document).scrollTop(hashTarget.offset().top - $("#entete").height() - 15);
+			}
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
-		if(mOptions.canHideSig) {
+		if(mOptions.isTopic) {
 			$(".toggleSignature").live("click", function() {
 				dbg("[hide_signatures] Toggle signature");
 				$(this).parent().find(".signature").toggle();
@@ -58,6 +80,9 @@ modules.forums = {
 			});
 		}
 		filterSignatures();
+		$(document).scroll(function() {
+			adjustScrolling();
+		});
 
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
