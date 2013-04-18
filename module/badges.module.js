@@ -70,6 +70,7 @@ modules.badges = {
 				],
 				p_nth: 17,
 				modifier: { ".usr-invited_by": -1 },
+				modifies_val { 2: true },
 				regex: /(\d+)/
 			},
 			{	// Forum posts -- 3
@@ -184,36 +185,41 @@ modules.badges = {
 				utils.grabPage({ host: url.host, path: url_section.url }, function(data) {
 					var jData = $(data);
 					$.each(url_section.sections, function(_, i_section) {
-						var badge_data_block = badgesData[i_section];
+						var badgeBlock = badgesData[i_section];
+						badgeBlock.val = badgeBlock.val || 0;
 
 						// Find directly by dom
-						if(badge_data_block.dom) {
-							badge_data_block.val = jData.find(badge_data_block.dom).text().match(badge_data_block.regex)[1];
-							dbg("[progress] " + i_section + " >> Got value [" + badge_data_block.val + "](" + typeof badge_data_block.val + ")");
+						if(badgeBlock.dom) {
+							badgeBlock.val += utils.strToInt(jData.find(badgeBlock.dom).text().match(badgeBlock.regex)[1]);
+							dbg("[progress] " + i_section + " >> Got value [" + badgeBlock.val + "](" + typeof badgeBlock.val + ")");
 						}
 
 						// Find by p:nth
-						if(badge_data_block.p_nth) {
+						if(badgeBlock.p_nth) {
 							// p:nth modifiers
-							if(badge_data_block.modifier) {
-								$.each(badge_data_block.modifier, function(mod_class, mod_value) {
+							if(badgeBlock.modifier) {
+								$.each(badgeBlock.modifier, function(mod_class, mod_value) {
 									if(jData.find(mod_class).length) {
-										badge_data_block.p_nth += mod_value;
+										badgeBlock.p_nth += mod_value;
 									}
 								});
 							}
-							badge_data_block.val = jData.find("#contenu p:nth(" + badge_data_block.p_nth + ")").text().match(badge_data_block.regex)[1];
-							dbg("[progress] " + i_section + " >> Got value [" + badge_data_block.val + "](" + typeof badge_data_block.val + ")");
+							badgeBlock.val += utils.strToInt(jData.find("#contenu p:nth(" + badgeBlock.p_nth + ")").text().match(badgeBlock.regex)[1]);
+							dbg("[progress] " + i_section + " >> Got value [" + badgeBlock.val + "](" + typeof badgeBlock.val + ")");
 						}
 
-						if(badge_data_block.val !== undefined) {
-							badge_data_block.val = (typeof badge_data_block.val == "string" || typeof badge_data_block.val == "String" ? Number(badge_data_block.val.replace(",", "")) : badge_data_block.val);
+						if(badgeBlock.val !== undefined) {
+							if(badgeBlock.modifies_val) {
+								$.each(badgeBlock.modifies_val, function(block, minus) {
+									badgesData[block].val += (badgesData[block].val || 0) + (minus ? -badgeBlock.val : badgeBlock.val);
+								});
+							}
 							$(domTr).eq(i_section).find("td:not(:first)").each(function(i) {
-								var badge = badge_data_block.badges[i];
+								var badge = badgeBlock.badges[i];
 								if(!badge || !badge.trigger) {
 									return;
 								}
-								$(this).append('<div class="gksi_progress"><div class="gksi_progress_area"><div class="gksi_progress_bar' + (badge_data_block.val >= badge.trigger ? ' gksi_valid' : '') + '" style="width: ' + (badge_data_block.val >= badge.trigger ? badge.trigger : badge_data_block.val) / badge.trigger * 100 + '%"></div><div class="gksi_progress_numbers">' + (badge_data_block.val >= badge.trigger ? badge.trigger : Math.round(badge_data_block.val)) + '/' + badge.trigger + '</div></div></div>');
+								$(this).append('<div class="gksi_progress"><div class="gksi_progress_area"><div class="gksi_progress_bar' + (badgeBlock.val >= badge.trigger ? ' gksi_valid' : '') + '" style="width: ' + (badgeBlock.val >= badge.trigger ? badge.trigger : badgeBlock.val) / badge.trigger * 100 + '%"></div><div class="gksi_progress_numbers">' + (badgeBlock.val >= badge.trigger ? badge.trigger : Math.round(badgeBlock.val)) + '/' + badge.trigger + '</div></div></div>');
 							});
 						}
 					});
