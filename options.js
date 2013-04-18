@@ -121,3 +121,24 @@ var opt = {
 		});
 	}
 };
+
+var gData = {
+	data: {
+		badges: {}
+	},
+	set: function(m, o, v) {
+		this.data[m][o] = v;
+		utils.storage.data_set(m, this.data[m]);
+	},
+	get: function(m, o) {
+		return this.data[m][o];
+	},
+	load: function() {
+		$.each(this.data, function(m, data) {
+			var values = utils.storage.data_get(m);
+			$.each(opts, function(o, v) {
+				gData.data[m][o] = (values && values[o] != undefined ? values[o] : null);
+			});
+		});
+	}
+};
