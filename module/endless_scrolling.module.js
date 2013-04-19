@@ -102,7 +102,7 @@ modules.endless_scrolling = {
 
 		// Builds a A from pageId
 		var pageToLink = function(page) {
-			var linkUrl = { host: url.host, path: url.path, params: (url.params || {}), cancelQ: url.cancelQ, cancelAmp: url.cancelAmp, hash: url.hash };
+			var linkUrl = { host: url.host, path: url.path, params: (url.params || {}), cancelQ: mOptions.cancelQ, cancelAmp: mOptions.cancelAmp, hash: url.hash };
 			linkUrl.params.page = page.pageId;
 			var text = page.pageId - (mOptions.pageModifier || 0);
 

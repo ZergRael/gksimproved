@@ -19,7 +19,8 @@ var opt = {
 		global: {
 			form_validation:    { defaultVal: true, showInOptions: true, dispText: "Validation des formulaires avec ctrl+entrée" },
 			bbcode_shortcuts:   { defaultVal: true, showInOptions: true, dispText: "Raccourcis BBCodes avec ctrl" },
-			allow_frame_css:    { defaultVal: false, showInOptions: true, dispText: "Laisser le CSS positionner les fenêtres GKSi" }
+			allow_frame_css:    { defaultVal: false, showInOptions: true, dispText: "Laisser le CSS positionner les fenêtres GKSi" },
+			real_upload:        { defaultVal: false, showInOptions: true, dispText: "Afficher l'upload réel dans l'entête" },
 		},
 		endless_scrolling : {
 			endless_scrolling:  { defaultVal: true, showInOptions: true, dispText: "Endless scrolling sur les pages compatibles", sub_options: {
@@ -125,7 +126,11 @@ var opt = {
 
 var gData = {
 	data: {
-		badges: {}
+		badges: {},
+		upload: {
+			real_upload: 0,
+			last_check: 0
+		}
 	},
 	set: function(m, o, v) {
 		this.data[m][o] = v;
@@ -137,7 +142,7 @@ var gData = {
 	load: function() {
 		$.each(this.data, function(m, data) {
 			var values = utils.storage.data_get(m);
-			$.each(opts, function(o, v) {
+			$.each(data, function(o, v) {
 				gData.data[m][o] = (values && values[o] != undefined ? values[o] : null);
 			});
 		});

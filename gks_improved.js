@@ -233,6 +233,8 @@ dbg("[Init] Starting the engine");
 var url = utils.parseUrl(window.location.href);
 // Load all options
 opt.load();
+// Load global saved data
+gData.load();
 // Insert custom CSS and divs
 insertCSS();
 insertDivs();
