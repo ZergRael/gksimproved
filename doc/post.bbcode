@@ -1,49 +1,49 @@
 [size=4][b]Nouvelle version dispo ![/b][/size]
 
-[b]* 0.2.5 - 23/02/2013[/b]
-- Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
-- Options : Correction de la couleur de la fenêtre d'options + adaptation en fonction du CSS (mwerf)
-- Options : Structuration des options pour éviter d'activer une option sans son parent
-- Endless scrolling : Pause lorsqu'une textarea est sélectionnée - Forums
-- Endless scrolling : Adaptation de l'url en fonction du scrolling
-- Endless scrolling : Options spécifiques par page
-- Endless scrolling : Ajout sur /m/uploads/
-- Snatched : Cacher les torrents en seed (by MacGeek)
-- Snatched : Cacher les torrents non completés
-- Pins : Option de tri par prix
-- Twits : Auto-complétion bien plus robuste, basée sur la position du curseur plutôt que des regex hasardeuses
-- Twits : Ajout automatique d'un espace si une des complétions convient, la détection des twits de GKS nécessite cet espace pour fonctionner
-- Torrent list : Ajout d'une colonne d'age optionnelle
-- Torrent list : Correction des résultats des suggestions IMDB
-- Torrent list : Possibilité d'ajouter automatiquement les torrents associés à la meilleure traduction d'IMDB lorsque peu ou pas de résultats
-- Torrent list : Ajout d'un marqueur de torrent (manuel) permettant de retrouver le dernier torrent vu
-- Forums : Le cacheur de signature est devenu optionnel
-- Diverses améliorations (construction des fenêtres, détecteur de karma, détecteur de valeurs badges 1k+, autocomplétion après endless-scrolling)
+[b]* 0.3.0 - 19/04/2013[/b]
+- Aura : Ajout d'un module d'aura permettant quelques calculs
+- ES : Correction de l'adaptation d'url sur viewforum.php
+- Badges : Correction du parseur en cas de lignes supplémentaires sur le profil
+- Badges : Correction de l'image du 4ème d'IRC
+- Badges : Correction de la valeur du badge Snatched (snatched - uploads)
+- Raccourcis BBCode : Correction lors de l'édit d'un post
+- Torrent list : Tri par clic sur les titres de colonnes
+- Torrent list : Le marqueur de torrent affiche le torrent trouvé en bas de page
+- Torrent list : Le marqueur de torrent est aussi actif sur la page d'accueil
+- Torrent list : Les suggestions ajoutées automatiquement sont clairement annoncées comme telles
+- Torrent list : Ajout des commentaires au survol du nombre de commentaires
+- Endless scrolling : Ajout d'un bouton de pause
+- Endless scrolling : Réécriture de la barre de pagination (urls des pages) en fonction de l'ES
+- Endless scrolling : Support de /dupecheck/
+- Endless scrolling : Support de /m/peers/
+- Global : Ajout de l'Upload réel dans l'entête - Imprécis ?
+- Snatched : Filtrage par suspicion de Hit&Run
+- Forums : Correction du scrolling lors de l'utilisation d'un lien direct vers un post
+- Panneau d'options : Affichage complet puis section par section au mouseover de l'entête
+- Panneau d'options : Thèmes pour les images (Endless scrolling & Back to top)
+- Réorganisation interne des fichiers
 
 Ceux possédant déjà l'extension verront Chrome/Firefox la mettre à jour d'ici le prochain reboot.
 Les curieux, c'est ici : [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf]Page Chrome Webstore[/url] - [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/]Extension Firefox[/url]
 
-Si la mise à jour Firefox n'est pas effectuée automatiquement : [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/versions/?page=1#version-0.2.5]lien direct[/url]
+Si la mise à jour Firefox n'est pas effectuée automatiquement dans les prochaines heures : [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/versions/?page=1#version-0.3.0]lien direct[/url]
 
 N'hésitez pas à proposer vos suggestions :)
 
 [b]Quelques explications[/b]
 * [u]La fenêtre d'options[/u]
-Si quelqu'un à une idée pour rendre la fenêtre d'options mieux foutues, je dirai pas non. La longue liste de pages pour l'ES est pas géniale et ça allonge bien trop les options :-/
+S'affiche d'abord au complet et peut ensuite être réduite en mouseover des onglets. Pas très ingénieux mais j'trouvais ça plutôt marrant.
 
-* [u]Marqueur de torrents[/u]
-L'idée du marqueur de torrents provient de @Bartowski ( https://gks.gs/forums.php?action=viewtopic&topicid=6533&topicname=Torrent.de.la.veille#post325776 )
-Dans "Parcourir" ( https://gks.gs/browse/ ) il est possible de marquer le premier torrent de la liste.
-Ainsi, en revenant un peu plus tard, un second bouton apparaît permettant de retrouver ce torrent (ou, s'il a été supprimé, un torrent du même age) en recherchant dans les 2000 derniers torrents postés.
-Si le marqueur n'est pas trop ancien, le système va ajouter toutes les pages jusqu'a trouver le torrent, le colorer et forcer le browser à scroller jusque là.
+* [u]Calcul d'aura[/u]
+J'ai mis un pavé de warning sur la page déjà mais je préfère rappeller, c'est vraiment imprécis sur des valeurs faibles. C'est principalement du aux arrondis de la page, le fait qu'elle soit cachée et les valeurs calculées ne donnent pas un résultat en temps réel.
+Le calculateur de palier d'aura (aura -> Go) est le principal ciblé ici. Je calcule un taux de progression sur une moyenne de vos torrents et une moyenne reste une moyenne. Ceci dit après tests, si vous ne changez pas vos habitudes de DL, les écarts avec la réalité sont très plutôt maigres.
 
-Les boutons ne seront affichés que lorsque la première page est affichée et qu'il n'y a pas eu d'endless scrolling, de tri ou de filtrage. En clair, il suffit de cliquer sur l'onglet "Parcourir".
-Je me suis permis de laisser une limite assez élevée pour le finder (2000 torrents, ce qui représente 20 à 21 pages selon les suppressions, environ une semaine d'uploads selon les stats), vu que la recherche par id ne pompe probablement pas trop sur la DB.
-Beta is beta, c'est assez expérimental :P
-@modos : Si ça pose souci, les "How about no" sont acceptés ;)
+Les 2 autres calculateurs sont un peu plus précis : 
+- Objectif de Karma c'est surtout pour déprimer les volontaires pour Yoda ( :P ).
+- Changement d'aura qui lui se base sur les valeurs réelles de la fiche torrent à de très fortes chances d'être précis au dixième
 
-* [u]Suggestions IMDB[/u]
-J'ai amélioré les suggestions en passant par un scrapping des résultats du site d'IMDB, ça reste assez funky mais peut aider quelques fois.
-L'idée de l'ajout des torrents correspondant à la meilleure traduction par IMDB vient de @Thales0796
-C'est encore plus funky mais il arrive que ça marche ( [url=https://gks.gs/sphinx/?q=les+%C3%A9vad%C3%A9s]Les évadés[/url] qui ne renvoit qu'un seul résultat alors que 3 torrents sont aussi dispo avec le titre VO ou encore [url=https://gks.gs/sphinx/?q=La%2025%C3%A8me%20heure]La 25ème heure[/url] qui ne renvoit rien mais 4 torrents sur le titre VO). Oubliez pas d'activer l'option avant de tester :P
-Certes, c'est plus simple de rechercher aussi dans les descriptions et ça fonctionne souvent beaucoup mieux, mais c'était un petit challenge quand même :D
+* [u]Endless scrolling[/u]
+- Vu que je n'ai pas trouvé de solution miracle pour modifier en continu la barre de pagination ( 1 | 2 | 3 | 4 | 5 | > [10] ), le plus simple était de la réécrire au complet à chaque refresh/ES :)
+- Un petit bouton de pause fait son apparition
+- J'ai rajouté le thème que m'a proposé LordVal par défaut vu qu'il colle mieux avec le CSS officiel. L'ancien est oujours présent dans les options si vous préférez le noir :D
+[img]https://s.gks.gs/img/img/04-2013/es_button2.png[/img] vs [img]https://s.gks.gs/img/img/03-2013/es_button.png[/img]

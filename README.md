@@ -11,6 +11,8 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+
+**0.3.0**
 - Aura : Ajout d'un module d'aura permettant quelques calculs
 - ES : Correction de l'adaptation d'url sur viewforum.php
 - Badges : Correction du parseur en cas de lignes supplémentaires sur le profil

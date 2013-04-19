@@ -7,7 +7,7 @@ C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un
 
 Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. Toujours en beta mais un jour peut-être une version stable arrivera ;)
 
-Version actuelle : 0.2.5 - 23/02/2013 - Licence GPLv3
+Version actuelle : 0.3.0 - 19/04/2013 - Licence GPLv3
 
 [size=6]Téléchargement[/size] :
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
@@ -37,6 +37,8 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Traduction IMDB[/i] : Ajout des torrents correspondant à la meilleure traduction d'IMDB si peu de résultats
 > [i]Colonne d'age[/i] : Colonne d'age calculée à partir de la date du torrent
 > [i]Marqueur de torrents[/i] : Marquage du dernier torrent vu pour afficher tous les torrents non vu à partir de ce marqueur
+> [i]Commentaires au survol[/i] : Au survol du nombre de commentaires, ceux-ci s'affichent
+> [i]Tri par clic sur les colonnes[/i]
 
 [b]* Snatched[/b]
 - Page des snatched -- https://gks.gs/snatched/
@@ -47,6 +49,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Cacher les supprimés[/i] : Cache les torrents supprimés du tracker - Pas ceux que vous ne seedez plus
 > [i]Cacher les torrents en seed[/i] : N'affiche que les torrents qui ne sont plus seedés - Retrouve les H&R
 > [i]Cacher les non completés[/i] : N'affiche que les torrents que vous avez téléchargé entièrement
+> [i]N'afficher que les H&R[/i] : Montre uniquement vos Hit&Run
 > [i]Tri par colonne[/i] : Permet de trier les snatched par UL/DL/Seedtime/Ratio
 
 [b]* Twits[/b]
@@ -67,12 +70,20 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
 > [i]Cacheur de signatures[/i] : Permet de cacher les signatures au clic
 > [i]Cacher les signatures auto[/i] : Cache toutes les signatures - Ré-affichables au clic
+> [i]Correction du scrolling[/i] : Pour les utilisateurs du CSS à entête fixe
 
 [b]* Torrents[/b]
 - Liste commentaires d'un torrent -- /torrent/<id_torrent>/
 
 > [i]Quick comment[/i] : Ajoute un formulaire d'envoi de commentaire directement sur la page du torrent
 > [i]Commentaires désactivés[/i] : Propose l'envoi d'un MP préformaté (éditable) lorsque les commentaires d'un torrent sont désactivés. Permet de prévenir l'uploader avec l'ensemble des liens nécessaires en un seul clic, si ses MP sont activés.
+
+[b]* Aura[/b]
+- Mon aura -- https://gks.gs/m/aura/
+
+> [i]Calculateur d'objectif de karma[/i] : Entrez un objectif de karma, obtenez une date à laquelle vous les aurez
+> [i]Calculateur de palier d'aura[/i] : Entrez un objectif d'aura, obtenez le nombre de Go à mettre en seed pour l'atteindre (Warning : imprécis)
+> [i]Calculateur de changements d'aura[/i] : Entrez l'url d'un torrent, obtenez l'aura qu'il vous permettra d'atteindre
 
 [b]* Karma store[/b]
 - Pin's store -- https://gks.gs/karma/?tab=pins
@@ -88,30 +99,21 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Progression[/i] : Affiche votre progression vers l'obtention de ce badge
 > [i]Tous les badges[/i] : Affiche toutes les images de badges même si vous ne les avez pas (semi-transparents)
 
-[b]* Requests[/b]
+[b]* Les autres pages [/b]
 - Liste des requêtes -- https://gks.gs/req/
-
-> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
-
-[b]* Logs[/b]
 - Page des logs -- https://gks.gs/logs/
-
-> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
-
-[b]* Images[/b]
 - Liste des images -- https://gks.gs/m/images/
-
-> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
-
-[b]* Uploads[/b]
 - Liste des uploads -- https://gks.gs/m/uploads/
+- Dupecheck -- https://gks.gs/dupecheck/
+- Torrents en seed -- https://gks.gs/m/peers/
 
-> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Boutons personnalisables de remontée en haut de page & de pause
 
 [b]* Sur l'ensemble du site[/b]
 
 > [i]Validation des formulaires[/i] : Valide les formulaires (commentaires/posts/etc) avec ctrl+entrée
 > [i]Raccourcis BBCode[/i] : Permet d'ajouter les balises BBCode avec les raccourcis Ctrl + (b/u/i/q)
+> [i]Upload réel[/i] : Affiche votre upload réel - requêtes exclues. Mis à jour toutes les 24h
 
 [size=6]TODO list:[/size]
 - Moar comments
@@ -120,6 +122,29 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
 
 [size=6]Changelog :[/size]
+[b]* 0.3.0 - 19/04/2013[/b]
+- Aura : Ajout d'un module d'aura permettant quelques calculs
+- ES : Correction de l'adaptation d'url sur viewforum.php
+- Badges : Correction du parseur en cas de lignes supplémentaires sur le profil
+- Badges : Correction de l'image du 4ème d'IRC
+- Badges : Correction de la valeur du badge Snatched (snatched - uploads)
+- Raccourcis BBCode : Correction lors de l'édit d'un post
+- Torrent list : Tri par clic sur les titres de colonnes
+- Torrent list : Le marqueur de torrent affiche le torrent trouvé en bas de page
+- Torrent list : Le marqueur de torrent est aussi actif sur la page d'accueil
+- Torrent list : Les suggestions ajoutées automatiquement sont clairement annoncées comme telles
+- Torrent list : Ajout des commentaires au survol du nombre de commentaires
+- Endless scrolling : Ajout d'un bouton de pause
+- Endless scrolling : Réécriture de la barre de pagination (urls des pages) en fonction de l'ES
+- Endless scrolling : Support de /dupecheck/
+- Endless scrolling : Support de /m/peers/
+- Global : Ajout de l'Upload réel dans l'entête - Imprécis ?
+- Snatched : Filtrage par suspicion de Hit&Run
+- Forums : Correction du scrolling lors de l'utilisation d'un lien direct vers un post
+- Panneau d'options : Affichage complet puis section par section au mouseover de l'entête
+- Panneau d'options : Thèmes pour les images (Endless scrolling & Back to top)
+- Réorganisation interne des fichiers
+[spoil]
 [b]* 0.2.5 - 23/02/2013[/b]
 - Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
 - Options : Correction de la couleur de la fenêtre d'options + adaptation en fonction du CSS (mwerf)
@@ -139,7 +164,6 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Torrent list : Ajout d'un marqueur de torrent (manuel) permettant de retrouver le dernier torrent vu
 - Forums : Le cacheur de signature est devenu optionnel
 - Diverses améliorations (construction des fenêtres, détecteur de karma, détecteur de valeurs badges 1k+, autocomplétion après endless-scrolling)
-[spoil]
 [b]* 0.2.4 - 04/02/2013[/b]
 - Global : Ajout de labels sur les inputs - Permet de clic sur le texte plutôt que la checkbox
 - Snatched : Multiple bug fixes - javascript:false
