@@ -1,6 +1,9 @@
 echo "Update data"
-cp *.js ..\ff_gksi\data
-cp images\*.* ..\ff_gksi\data\images
+cd ..
+cp -R -ErrorAction SilentlyContinue images\* ..\ff_gksi\data\images\
+cp lib\* ..\ff_gksi\data\lib\
+cp module\* ..\ff_gksi\data\module\
+cp *.js ..\ff_gksi\data\
 
 echo "Update version"
 get-content .\manifest.json | foreach-object { if($_ -match '"version": "(\d+\.\d+\.\d+)"') { $vers = $matches[1]; }}
@@ -50,7 +53,7 @@ else {
 }
 
 echo "Activate Firefox SDK"
-cd "..\addon-sdk-1.13.2\"
+cd "..\addon-sdk-1.14\"
 $env:Path += ";C:\Python27\"
 .\bin\activate.ps1
 

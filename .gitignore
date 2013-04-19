@@ -1,7 +1,7 @@
 test_data/
+output/
 
-*.zip
-
+.zip
 .DS_Store
 .DS_Store?
 ._*
