@@ -66,7 +66,7 @@ modules.endless_scrolling = {
 
 		// Extracts data from pagination bar (firstPage & lastPage) & deduce actual page
 		var pagerData = { firstPage: 1 + (mOptions.pageModifier || 0), pages: [] };
-		pagerData.thisPage = Number(url.params && url.params.page ? url.params.page : pagerData.firstPage);
+		pagerData.thisPage = Number(pageUrl.params && pageUrl.params.page ? pageUrl.params.page : pagerData.firstPage);
 		pagerData.maxPage = (mOptions.pagination ? pagerData.thisPage : false);
 		var extractPagerAlignData = function() {
 			if(!mOptions.pagination) {
@@ -79,15 +79,15 @@ modules.endless_scrolling = {
 			}
 
 			dbg("[page_extract] Analysing pages");
-			var pagesUrls = paginateBar.html().match(/page=\d+/g);
-			if(!pagesUrls.length) {
+			var paginationUrls = paginateBar.html().match(/page=\d+/g);
+			if(!paginationUrls.length) {
 				return;
 			}
 
 			dbg("[page_extract] Extracting pages");
 			var maxPage = pagerData.maxPage;
-			$.each(pagesUrls, function(i, pageUrl) {
-				var pageId = pageUrl.match(/\d+/);
+			$.each(paginationUrls, function(i, paginationUrl) {
+				var pageId = paginationUrl.match(/\d+/);
 				if(!pageId.length) {
 					return;
 				}
@@ -102,7 +102,10 @@ modules.endless_scrolling = {
 
 		// Builds a A from pageId
 		var pageToLink = function(page) {
-			var linkUrl = { host: url.host, path: url.path, params: (url.params || {}), cancelQ: mOptions.cancelQ, cancelAmp: mOptions.cancelAmp, hash: url.hash };
+			var linkUrl = utils.clone(pageUrl);
+			linkUrl.params = linkUrl.params || {};
+			linkUrl.cancelQ = mOptions.cancelQ;
+			linkUrl.cancelAmp = mOptions.cancelAmp;
 			linkUrl.params.page = page.pageId;
 			var text = page.pageId - (mOptions.pageModifier || 0);
 
@@ -115,7 +118,6 @@ modules.endless_scrolling = {
 			else if(page.next) {
 				text = ">";
 			}
-
 			return page.thisPage ? '<strong>' + text + '</strong>' : '<a href="' + utils.craftUrl(linkUrl) + '">' + text + '</a>';
 		};
 
@@ -214,7 +216,7 @@ modules.endless_scrolling = {
 					dbg("[adapt_url] Looking at page " + lookingAtPage);
 
 					// Update URL
-					var thisUrl = url;
+					var thisUrl = utils.clone(pageUrl);
 					thisUrl.params = thisUrl.params || {};
 					thisUrl.params.page = lookingAtPage;
 					window.history.replaceState("", "GKS : " + lookingAtPage, utils.craftUrl(thisUrl));
@@ -263,7 +265,7 @@ modules.endless_scrolling = {
 				loadingPage = true;
 
 				// Build the url object for the next page
-				var nextUrl = url;
+				var nextUrl = utils.clone(pageUrl);
 				nextUrl.path = mOptions.path ? mOptions.path : nextUrl.path;
 				nextUrl.params = nextUrl.params ? nextUrl.params : {};
 				nextUrl.cancelQ = mOptions.cancelQ || nextUrl.cancelQ || false;

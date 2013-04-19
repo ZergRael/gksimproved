@@ -31,13 +31,13 @@ modules.logs = {
 
 		var refreshTimer = false;
 		var autoRefresh = function() {
-			if(url.params && url.params.page != "0") {
+			if(pageUrl.params && pageUrl.params.page != "0") {
 				dbg("[auto_refresh] Not first page");
 				return;
 			}
 
 			dbg("[auto_refresh] Grabing this page");
-			utils.grabPage(url, function(data) {
+			utils.grabPage(pageUrl, function(data) {
 				logsTR = $(data).find("tbody tr");
 				dbg("[auto_refresh] Got data");
 				if(logsTR && logsTR.length) {

@@ -23,19 +23,19 @@ $.each(modules, function(module_name, m) {
 			return false;
 		}
 
-		if(url.path.search("^" + p.path_name + "$") != -1) {
+		if(pageUrl.path.search("^" + p.path_name + "$") != -1) {
 			if(!p.params) {
 				m.loadModule(p.options);
 				return false;
 			}
 
-			if(!url.params) {
+			if(!pageUrl.params) {
 				return;
 			}
 
 			var validParams = 0;
 			$.each(p.params, function(q, v) {
-				if(url.params[q] && (url.params[q] == v || v == '*')) {
+				if(pageUrl.params[q] && (pageUrl.params[q] == v || v == '*')) {
 					validParams++;
 				}
 			});

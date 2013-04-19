@@ -29,7 +29,7 @@ modules.badges = {
 
 		if(mOptions.checkId) {
 			var userId = utils.getUserId();
-			if(url.path.match(/(\d+)/)[1] != userId) {
+			if(pageUrl.path.match(/(\d+)/)[1] != userId) {
 				return;
 			}
 		}
@@ -193,7 +193,7 @@ modules.badges = {
 			var lastGrab = false;
 			var completedAjaxCalls = 0;
 			$.each(badgesReqParse, function(i_url, url_section) {
-				utils.grabPage({ host: url.host, path: url_section.url }, function(data) {
+				utils.grabPage({ host: pageUrl.host, path: url_section.url }, function(data) {
 					var jData = $(data);
 					$.each(url_section.sections, function(_, i_section) {
 						var badgeBlock = badgesData[i_section];

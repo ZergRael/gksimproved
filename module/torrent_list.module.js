@@ -149,14 +149,14 @@ modules.torrent_list = {
 					var suggestionsStr = "";
 					$.map(suggestions, function(movieName, i) {
 						if($.inArray(movieName, suggestions) === i) {
-							suggestionsStr += '<a href="' + utils.craftUrl({ host: url.host, path: url.path, params: { q: encodeURIComponent(movieName) } }) + '">' + movieName + '</a><br />';
+							suggestionsStr += '<a href="' + utils.craftUrl({ host: pageUrl.host, path: pageUrl.path, params: { q: encodeURIComponent(movieName) } }) + '">' + movieName + '</a><br />';
 						}
 					});
 					appendFrame({ title: "GKSi IMDB Suggestions", data: suggestionsStr, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
 
 					if(opt.get(module_name, "imdb_auto_add") && modules.endless_scrolling.maxPage == 0 && imdb.translateBest) {
 						dbg("[QueryTranslate] Looks like we can grab bestTranslation [" + imdb.translateBest + "] results");
-						var bestMatchUrl = url;
+						var bestMatchUrl = utils.clone(pageUrl);
 						bestMatchUrl.params.q = encodeURIComponent(imdb.translateBest); // From remote translation analysis - levenshtein
 						$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Recherche supraluminique des traductions</p>');
 						utils.grabPage(bestMatchUrl, function(data) {
@@ -206,10 +206,10 @@ modules.torrent_list = {
 				}
 			});
 			if(!foundMarkedTorrent) {
-				var urlFinder = url;
+				var urlFinder = utils.clone(pageUrl);
 				urlFinder.path = "/browse/";
-				urlFinder.params = url.params || {};
-				urlFinder.params.page = Number(url.params.page || 0) + 1;
+				urlFinder.params = pageUrl.params || {};
+				urlFinder.params.page = Number(pageUrl.params.page || 0) + 1;
 				dbg("[TorrentMark] Grabbing next page");
 				utils.grabPage(urlFinder, function(data) {
 					var insertionData = $(data).find("#torrent_list tr");
@@ -242,7 +242,7 @@ modules.torrent_list = {
 			7: "leechers"
 		};
 		var columnSorter = function() {
-			if(url.path == "/sphinx/") {
+			if(pageUrl.path == "/sphinx/") {
 				columns_def = columns_def_sphinx;
 			}
 
@@ -250,15 +250,16 @@ modules.torrent_list = {
 				if(columns_def[k]) {
 					$(this).click(function() {
 						var order = "desc";
-						if(url.params && url.params.sort == columns_def[k] && url.params.order != "asc") {
+						if(pageUrl.params && pageUrl.params.sort == columns_def[k] && pageUrl.params.order != "asc") {
 							order = "asc";
 						}
 
-						var sortedUrl = url;
-						sortedUrl.path = url.path == "/" ? "/browse/" : url.path;
-						sortedUrl.params = url.params || {};
+						var sortedUrl = utils.clone(pageUrl);
+						sortedUrl.path = sortedUrl.path == "/" ? "/browse/" : sortedUrl.path;
+						sortedUrl.params = sortedUrl.params || {};
 						sortedUrl.params.sort = columns_def[k];
 						sortedUrl.params.order = order;
+						sortedUrl.params.page = 0;
 						window.location = utils.craftUrl(sortedUrl);
 						return false;
 					});
@@ -270,6 +271,7 @@ modules.torrent_list = {
 		var showTorrentComments = function() {
 			var commLink = $(this)
 			if(opt.get(module_name, "direct_comments") && commLink.attr("href").match(/\/com\//) && commLink.text() != "0") {
+				$("#gksi_t_comm").remove();
 				var commUrl = utils.parseUrl("https://gks.gs" + commLink.attr("href"));
 				utils.grabPage(commUrl, function(data) {
 					// { id, classes, title, header, data, relativeToId, relativeToObj, top, left, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
@@ -296,7 +298,7 @@ modules.torrent_list = {
 		dbg("[Init] Starting");
 
 		// Adding buttons
-		if(mOptions.canMark && (!url.params || !url.params.page || url.params.page == 0) && (!url.params || !url.params.sort || (url.params.sort == "id" && (!url.params.order || url.params.order == "desc")))) {
+		if(mOptions.canMark && (!pageUrl.params || !pageUrl.params.page || pageUrl.params.page == 0) && (!pageUrl.params || !pageUrl.params.sort || (pageUrl.params.sort == "id" && (!pageUrl.params.order || pageUrl.params.order == "desc")))) {
 			var torrentIdMark = opt.get(module_name, "torrent_marker");
 			var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
 			if(torrentIdMark === false) {

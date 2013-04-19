@@ -103,7 +103,7 @@ modules.pins = {
 			}
 		});
 
-		if(url.params && url.params.tab == mOptions.tab) {
+		if(pageUrl.params && pageUrl.params.tab == mOptions.tab) {
 			tagPins();
 			hideExpensivePins();
 			hideBoughtPins();

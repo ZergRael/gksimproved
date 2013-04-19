@@ -31,7 +31,7 @@ modules.torrent = {
 
 		appendNativeScript("https://s.gks.gs/static/js/forums.js?v=2");
 
-		var torrentId = url.path.match(/\/torrent\/(\d+)/)[1];
+		var torrentId = pageUrl.path.match(/\/torrent\/(\d+)/)[1];
 		var torrentName = $("#contenu p[class=separate]:first").text().replace(/\s+$/, "");
 
 		var quick_comment = opt.get(module_name, "quick_comment");
@@ -49,7 +49,7 @@ modules.torrent = {
 			dbg("[QuickComment] Grabbing quickcomment textarea");
 			$(mOptions.loading).hide();
 			$(mOptions.loading).after('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Protonisation des entrailles du quick comment</p>');
-			var urlQuickComment = { host: url.host, path: "/com/", params: { id: torrentId } };
+			var urlQuickComment = { host: pageUrl.host, path: "/com/", params: { id: torrentId } };
 
 			utils.grabPage(urlQuickComment, function(data) {
 				$(".page_loading").remove();
@@ -62,12 +62,12 @@ modules.torrent = {
 		var warnCantComment = function() {
 			dbg("[WarnComment] Is the user allowing MPs ?");
 			$("#warn_cant_comment_area").html('<img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Tentative d\'envoi du MP');
-			utils.grabPage({ host: url.host, path: "/mailbox/", params: { write: false, receiver: pseudo_up } }, function(data) {
+			utils.grabPage({ host: pageUrl.host, path: "/mailbox/", params: { write: false, receiver: pseudo_up } }, function(data) {
 				if($(data).find("#mailbox_write textarea").length) {
 					dbg("[WarnComment] Sending MP");
 					var ak = $(data).find("input[name=ak]").val();
 					var mailbox_data = { action: "mail_new_send", ak: ak, msgsubject: replaceCommentText(opt.get(module_name, "comment_mp_title")), to: pseudo_up, message_content: replaceCommentText(opt.get(module_name, "comment_mp_text")) };
-					utils.post({ host: url.host, path: "/mailbox/" }, mailbox_data, function() {
+					utils.post({ host: pageUrl.host, path: "/mailbox/" }, mailbox_data, function() {
 						dbg("[WarnComment] MP sent");
 						$("#warn_cant_comment_area").text("Le MP a correctement été envoyé !");
 					});
@@ -82,7 +82,7 @@ modules.torrent = {
 		var replacementText = {
 			id_torrent: { val: torrentId, text: "Id du torrent" },
 			titre_torrent: { val: torrentName, text: "Titre du torrent" },
-			url_torrent: { val: utils.craftUrl(url), text: "URL de la fiche torrent" },
+			url_torrent: { val: utils.craftUrl(pageUrl), text: "URL de la fiche torrent" },
 			pseudo: { text: "Pseudo de l'uploadeur" }
 		};
 		var replaceCommentText = function(text) {

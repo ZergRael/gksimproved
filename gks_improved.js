@@ -230,7 +230,7 @@ var insertDivs = function() {
 
 dbg("[Init] Starting the engine");
 // Parse our url string from the browser
-var url = utils.parseUrl(window.location.href);
+var pageUrl = utils.parseUrl(window.location.href);
 // Load all options
 opt.load();
 // Load global saved data
@@ -241,8 +241,8 @@ insertDivs();
 // Each module will be inserted in the modules object for an easier inter-modules communication
 var modules = {};
 // Print some url debug to make sure the parser is not going nuts
-dbg(url);
-dbg(utils.craftUrl(url));
+dbg(pageUrl);
+dbg(utils.craftUrl(pageUrl));
 // Each .module.js from the manifest will now be read by the javascript engine
 // then the loader will launch them if the url is matching
 dbg("[Init] Ready");

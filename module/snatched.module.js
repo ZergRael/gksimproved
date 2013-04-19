@@ -184,12 +184,12 @@ modules.snatched = {
 		};
 
 		var maxPage = modules["endless_scrolling"].maxPage, thisPage = modules["endless_scrolling"].thisPage;
-		var canGrabAllPages = (!url.params || url.params.page == 0);
+		var canGrabAllPages = (!pageUrl.params || pageUrl.params.page == 0);
 		var grabAllPages = function() {
 			loadingPage = true;
 
 			dbg("[AllPagesGrab] Loading all pages");
-			var nextUrl = url;
+			var nextUrl = utils.clone(pageUrl);
 			nextUrl.cancelQ = true;
 			nextUrl.params = nextUrl.params ? nextUrl.params : {};
 

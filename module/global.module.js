@@ -248,7 +248,7 @@ modules.global = {
 
 		var parseRealUpload = function() {
 			dbg("[real_upload] Grab pages & parse");
-			var snatchedUrl = { host: url.host, path: "/m/peers/snatched", params: { page: 0 }, cancelQ: true };
+			var snatchedUrl = { host: pageUrl.host, path: "/m/peers/snatched", params: { page: 0 }, cancelQ: true };
 			var maxPage = 0, realUpload = 0, grabbedPages = 0;
 			utils.grabPage(snatchedUrl, function(data) {
 				var pager_align = $(data).find(".pager_align a");
