@@ -246,24 +246,20 @@ modules.torrent_list = {
 				columns_def = columns_def_sphinx;
 			}
 
+			var sortedUrl = utils.clone(pageUrl);
+			sortedUrl.path = sortedUrl.path == "/" ? "/browse/" : sortedUrl.path;
+			sortedUrl.params = sortedUrl.params || {};
+			sortedUrl.params.page = 0;
+
 			$(".head_torrent:first td").each(function(k, td) {
 				if(columns_def[k]) {
-					$(this).click(function() {
-						var order = "desc";
-						if(pageUrl.params && pageUrl.params.sort == columns_def[k] && pageUrl.params.order != "asc") {
-							order = "asc";
-						}
+					sortedUrl.params.sort = columns_def[k];
+					sortedUrl.params.order = "desc";
+					if(pageUrl.params && pageUrl.params.sort == columns_def[k] && pageUrl.params.order != "asc") {
+						sortedUrl.params.order = "asc";
+					}
 
-						var sortedUrl = utils.clone(pageUrl);
-						sortedUrl.path = sortedUrl.path == "/" ? "/browse/" : sortedUrl.path;
-						sortedUrl.params = sortedUrl.params || {};
-						sortedUrl.params.sort = columns_def[k];
-						sortedUrl.params.order = order;
-						sortedUrl.params.page = 0;
-						window.location = utils.craftUrl(sortedUrl);
-						return false;
-					});
-					$(this).wrapInner('<a href="#"></a>');
+					$(this).wrapInner('<a href="' + utils.craftUrl(sortedUrl) + '"></a>');
 				}
 			})
 		};
