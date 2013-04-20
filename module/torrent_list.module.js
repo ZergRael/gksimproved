@@ -189,7 +189,7 @@ modules.torrent_list = {
 			}
 		};
 
-		var findTorrent = function() {
+		var findTorrent = function(pageNumber) {
 			$("#find_marked_torrent_span").remove();
 			var foundMarkedTorrent = false;
 			var torrentIdMark = opt.get(module_name, "torrent_marker");
@@ -209,7 +209,7 @@ modules.torrent_list = {
 				var urlFinder = utils.clone(pageUrl);
 				urlFinder.path = "/browse/";
 				urlFinder.params = pageUrl.params || {};
-				urlFinder.params.page = Number(pageUrl.params.page || 0) + 1;
+				urlFinder.params.page = pageNumber;
 				dbg("[TorrentMark] Grabbing next page");
 				utils.grabPage(urlFinder, function(data) {
 					var insertionData = $(data).find("#torrent_list tr");
@@ -220,7 +220,7 @@ modules.torrent_list = {
 						addAgeColumn();
 						dbg("[TorrentMark] Blocking endless scrolling");
 						avoidEndlessScrolling = true;
-						findTorrent();
+						findTorrent(pageNumber + 1);
 					}
 				});
 			}
@@ -321,7 +321,7 @@ modules.torrent_list = {
 		$("#find_marked_torrent").click(function() {
 			dbg("[TorrentMark] Looking for torrent mark");
 			$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Désencapsulation des torrents à la recherche du marqueur</p>');
-			findTorrent();
+			findTorrent(1);
 			return false;
 		});
 
