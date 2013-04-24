@@ -185,7 +185,7 @@ modules.torrent_list = {
 							$(".page_loading").remove();
 						});
 					}
-				}, 'json');
+				});
 			}
 		};
 
