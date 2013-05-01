@@ -27,8 +27,8 @@ modules.badges = {
 			utils.dbg(module_name, str);
 		};
 
+		var userId = utils.getUserId();
 		if(mOptions.checkId) {
-			var userId = utils.getUserId();
 			if(pageUrl.path.match(/(\d+)/)[1] != userId) {
 				return;
 			}
