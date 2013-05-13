@@ -226,30 +226,32 @@ modules.global = {
 		};
 
 		var timeOffset = 24 * 60 * 60 * 1000;
-		var insertRealUpload = function() {
+		var insertRealStats = function() {
 			if(!opt.get(module_name, "real_upload")) {
 				return;
 			}
 
-			dbg("[real_upload] Started");
+			dbg("[real_stats] Started");
 			var now = new Date().getTime();
-			if(now > gData.get("upload", "last_check") + timeOffset) {
-				parseRealUpload();
+			if(now > gData.get("real_stats", "last_check") + timeOffset) {
+				parseRealStats();
 			}
 			else {
-				writeRealUpload(gData.get("upload", "real_upload"));
+				writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio"));
 			}
 		};
 
-		var writeRealUpload = function(uploadStr) {
-			dbg("[real_upload] Insert " + uploadStr);
+		var writeRealStats = function(uploadStr, downloadStr, ratioStr) {
+			dbg("[real_stats] Insert " + uploadStr + " / " + downloadStr + " / " + ratioStr);
 			$("#userlink li:nth(1) span:nth(0)").after(' / <span class="uploaded">' + uploadStr + '</span>');
+			$("#userlink li:nth(1) span:nth(2)").after(' / <span class="downloaded">' + downloadStr + '</span>');
+			$("#userlink li:nth(2) span:nth(0)").after(' / <span>' + ratioStr + '</span>');
 		};
 
-		var parseRealUpload = function() {
-			dbg("[real_upload] Grab pages & parse");
+		var parseRealStats = function() {
+			dbg("[real_stats] Grab pages & parse");
 			var snatchedUrl = { host: pageUrl.host, path: "/m/peers/snatched", params: { page: 0 }, cancelQ: true };
-			var maxPage = 0, realUpload = 0, grabbedPages = 0;
+			var maxPage = 0, realUpload = 0, readDownload = 0, grabbedPages = 0;
 			utils.grabPage(snatchedUrl, function(data) {
 				var pager_align = $(data).find(".pager_align a");
 				$.each(pager_align, function(i, pageUrl) {
@@ -264,25 +266,41 @@ modules.global = {
 					realUpload += Number($(this).attr("data-filesize"));
 				});
 
+				$(data).find("td[data-filesize]:nth-child(5n)").each(function() {
+					readDownload += Number($(this).attr("data-filesize"));
+				});
+
 				for(var i = 1; i <= maxPage; i++) {
 					snatchedUrl.params.page = i;
 					utils.grabPage(snatchedUrl, function(data) {
 						$(data).find("td[data-filesize]:nth-child(3n)").each(function() {
 							realUpload += Number($(this).attr("data-filesize"));
 						});
+
+						$(data).find("td[data-filesize]:nth-child(5n)").each(function() {
+							readDownload += Number($(this).attr("data-filesize"));
+						});
 					}, function(){
 						grabbedPages++;
 						if(grabbedPages >= maxPage) {
+							var realRatio = Math.round((realUpload / readDownload) * 100) / 100;
 							var units = ["o", "Ko", "Mo", "Go", "To", "Po"];
-							var unit = 0;
+							var uploadUnit = 0, downloadUnit = 0;
 							while(realUpload > 1024) {
-								unit++;
+								uploadUnit++;
 								realUpload /= 1024.0;
 							}
-							var realUploadStr = Math.round(realUpload * 1000) / 1000 + units[unit];
-							writeRealUpload(realUploadStr);
-							gData.set("upload", "real_upload", realUploadStr);
-							gData.set("upload", "last_check", new Date().getTime());
+							while(readDownload > 1024) {
+								downloadUnit++;
+								readDownload /= 1024.0;
+							}
+							var realUploadStr = Math.round(realUpload * 1000) / 1000 + units[uploadUnit];
+							var realDownloadStr = Math.round(readDownload * 1000) / 1000 + units[downloadUnit];
+							writeRealStats(realUploadStr, realDownloadStr, realRatio);
+							gData.set("real_stats", "real_upload", realUploadStr);
+							gData.set("real_stats", "real_download", realDownloadStr);
+							gData.set("real_stats", "real_ratio", realRatio);
+							gData.set("real_stats", "last_check", new Date().getTime());
 						}
 					});
 				}
@@ -312,7 +330,7 @@ modules.global = {
 
 		listenToCtrlEnter();
 		listenToBBCodeShortcuts();
-		insertRealUpload();
+		insertRealStats();
 
 		dbg("[Init] Ready");
 	}

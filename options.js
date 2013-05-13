@@ -20,7 +20,7 @@ var opt = {
 			form_validation:    { defaultVal: true, showInOptions: true, dispText: "Validation des formulaires avec ctrl+entrée" },
 			bbcode_shortcuts:   { defaultVal: true, showInOptions: true, dispText: "Raccourcis BBCodes avec ctrl" },
 			allow_frame_css:    { defaultVal: false, showInOptions: true, dispText: "Laisser le CSS positionner les fenêtres GKSi" },
-			real_upload:        { defaultVal: false, showInOptions: true, dispText: "Afficher l'upload réel dans l'entête" },
+			real_upload:        { defaultVal: false, showInOptions: true, dispText: "Afficher les stats réeles (UP/DL/Ratio) dans l'entête" },
 		},
 		endless_scrolling : {
 			endless_scrolling:  { defaultVal: true, showInOptions: true, dispText: "Endless scrolling sur les pages compatibles", sub_options: {
@@ -127,8 +127,10 @@ var opt = {
 var gData = {
 	data: {
 		badges: {},
-		upload: {
+		real_stats: {
 			real_upload: 0,
+			real_download: 0,
+			real_ratio: 0,
 			last_check: 0
 		}
 	},
