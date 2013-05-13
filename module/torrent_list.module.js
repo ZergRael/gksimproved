@@ -301,41 +301,63 @@ modules.torrent_list = {
 			}
 		};
 
-		var findMarkedTorrent = '<span id="find_marked_torrent_span"><a id="find_marked_torrent" href="#">Retrouver le torrent marqué</a> | </span>';
-		var markFirstTorrent = '<span id="mark_first_torrent_span"><a id="mark_first_torrent" href="#">Marquer le premier torrent</a> | </span>';
+		var makeTorrentMarkerFrame = function() {
+			var markerFrame = { id: "marker", title: "Marqueur de torrents", relativeToId: "torrent_marker_button", top: -180, left: -90 };
+			var findMarkedTorrent = '<span id="find_marked_torrent_span"><a id="find_marked_torrent" href="#">Retrouver torrent</a></span>';
+			var markFirstTorrent = '<span id="mark_first_torrent_span"><a id="mark_first_torrent" href="#">Marquer torrent</a></span>';
+
+			var torrentIdMark = opt.get(module_name, "torrent_marker");
+			var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
+			if(torrentIdMark === false) {
+				dbg("[TorrentMark] No marked torrent");
+				findMarkedTorrent = '( Pas de marqueur )';
+			}
+			else if(firstTorrentId - torrentIdMark > 2000) {
+				dbg("[TorrentMark] Marked torrent too old");
+				findMarkedTorrent = '( Marqueur trop ancien pour être retrouvé )';
+			}
+			var frameText = "Vous permet de sauvegarder l'id du premier torrent de la liste pour le retrouver plus tard<br /><br />Au dessus de 2000 ids de retard (~2 semaines), le torrent sera considéré trop ancien.<br />Position actuelle : " + (torrentIdMark || 0) + "/" + firstTorrentId;
+			markerFrame.data = frameText + "<br /><br /><center>" + markFirstTorrent + "<br />" + findMarkedTorrent + "</center>";
+
+			appendFrame(markerFrame);
+
+			// Torrent marking
+			$("#mark_first_torrent").click(function() {
+				var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
+				dbg("[TorrentMark] Marking torrent [" + firstTorrentId + "]");
+				$("#mark_first_torrent_span").remove();
+				opt.set(module_name, "torrent_marker", firstTorrentId);
+				$("#gksi_marker").remove();
+				return false;
+			});
+
+			// Torrent mark finding
+			$("#find_marked_torrent").click(function() {
+				dbg("[TorrentMark] Looking for torrent mark");
+				$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Désencapsulation des torrents à la recherche du marqueur</p>');
+				findTorrent(1);
+				$("#gksi_marker").remove();
+				return false;
+			});
+		}
+
+		var markerButton = '';
 		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Afficher les FL uniquement</label> | ';
 
 		dbg("[Init] Starting");
 
 		// Adding buttons
 		if(mOptions.canMark && (!pageUrl.params || !pageUrl.params.page || pageUrl.params.page == 0) && (!pageUrl.params || !pageUrl.params.sort || (pageUrl.params.sort == "id" && (!pageUrl.params.order || pageUrl.params.order == "desc")))) {
-			var torrentIdMark = opt.get(module_name, "torrent_marker");
-			var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
-			if(torrentIdMark === false) {
-				dbg("[TorrentMark] No marked torrent");
-				findMarkedTorrent = '';
-			}
-			else if(firstTorrentId - torrentIdMark > 2000) {
-				findMarkedTorrent = '(Torrent marqué trop ancien pour être retrouvé) | '
-			}
-			torrentButtons = findMarkedTorrent + markFirstTorrent + torrentButtons;
+			markerButton = '<a id="torrent_marker_button" href="#">Marqueur de torrents</a> | ';
 		}
-		$(mOptions.buttons).prepend(torrentButtons);
+		$(mOptions.buttons).prepend(markerButton + torrentButtons);
 
-		// Torrent marking
-		$("#mark_first_torrent").click(function() {
-			var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
-			dbg("[TorrentMark] Marking torrent [" + firstTorrentId + "]");
-			$("#mark_first_torrent_span").remove();
-			opt.set(module_name, "torrent_marker", firstTorrentId);
-			return false;
-		});
-
-		// Torrent mark finding
-		$("#find_marked_torrent").click(function() {
-			dbg("[TorrentMark] Looking for torrent mark");
-			$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Désencapsulation des torrents à la recherche du marqueur</p>');
-			findTorrent(1);
+		// Torrent marker frame
+		$("#torrent_marker_button").click(function() {
+			if($("#gksi_marker").length) {
+				$("#gksi_marker").remove();
+			}
+			makeTorrentMarkerFrame();
 			return false;
 		});
 

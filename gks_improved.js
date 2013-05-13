@@ -169,6 +169,7 @@ var insertCSS = function() {
 		"#gksi_copyright { text-align: right; font-size: 0.8em; margin-top: -11px; } " +
 		".gksi_edit_title { display: block; width: 100%; margin-top: 12px; } " +
 		".gksi_edit_textarea { display: block; width: 100%; min-height: 240px; min-width: 360px; margin-right: -4px!important; } " +
+		"#gksi_marker { max-width: 310px; } " +
 
 		// Badges
 		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; } " +

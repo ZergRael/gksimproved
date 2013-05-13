@@ -17,6 +17,7 @@ Voir topic associé.
 - Global : Ajout des données de download et ratio réel avec l'upload réel
 - Mouseover comments : Correction de l'affichage sur les pages endless scrollées
 - Options : Correction des onglets sur les petites résolutions
+- Torrent finder : Changement des 2 boutons en une fenêtre plus explicative
 - Torrent list : Correction des tris par colonnes avec la colonne d'age
 
 **0.3.1**
