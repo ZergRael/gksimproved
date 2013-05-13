@@ -118,7 +118,7 @@ modules.endless_scrolling = {
 			else if(page.next) {
 				text = ">";
 			}
-			return page.thisPage ? '<strong>' + text + '</strong>' : '<a href="' + utils.craftUrl(linkUrl) + '">' + text + '</a>';
+			return '<a href="' + utils.craftUrl(linkUrl) + '">' + (page.thisPage ? '<strong>' + text + '</strong>' : text) + '</a>';
 		};
 
 		// Replace pagination bar with custom one which get updated while ESing

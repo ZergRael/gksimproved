@@ -13,6 +13,7 @@ Voir topic associé.
 ### TODO.done
 - Badges : Correction de l'affichage de la progression sur /m/badges/
 - Badges : Correction de la détection des valeurs en cas d'utilisateur invité
+- Endless scrolling : Dans la pagination, la page actuelle est cliquable
 - Global : Ajout des données de download et ratio réel avec l'upload réel
 - Mouseover comments : Correction de l'affichage sur les pages endless scrollées
 - Options : Correction des onglets sur les petites résolutions
