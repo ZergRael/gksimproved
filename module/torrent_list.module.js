@@ -128,6 +128,20 @@ modules.torrent_list = {
 					tds.eq(1).after('<td class="age_torrent_' + ageTdNumber + '">' + age + '</td>');
 				}
 			});
+
+			if(!$(".age_torrent_head:first").find("a").length) {
+				var sortedUrl = utils.clone(pageUrl);
+				sortedUrl.path = sortedUrl.path == "/" ? "/browse/" : sortedUrl.path;
+				sortedUrl.params = sortedUrl.params || {};
+				sortedUrl.params.page = 0;
+				sortedUrl.params.sort = "id";
+				sortedUrl.params.order = "desc";
+				if(pageUrl.params && pageUrl.params.sort == "id" && pageUrl.params.order != "asc") {
+					sortedUrl.params.order = "asc";
+				}
+
+				$(".age_torrent_head:first").wrapInner('<a href="' + utils.craftUrl(sortedUrl) + '"></a>');
+			}
 			dbg("[AgeCol] Ended");
 		};
 
@@ -343,8 +357,8 @@ modules.torrent_list = {
 			}
 		});
 		filterFL();
-		addAgeColumn();
 		columnSorter();
+		addAgeColumn();
 		$("#torrent_list").on("mouseenter", "a", showTorrentComments);
 
 		if(mOptions.canSuggest && opt.get(module_name, "imdb_suggest")) {
