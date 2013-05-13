@@ -134,7 +134,7 @@ modules.global = {
 				optionsSection += '</div>';
 				if(showSection) {
 					// If there is no options to be shown for this section, just skip the whole div
-					optionsFrameHeader += '<span class="gksi_options_header_button" section="' + module_name + '">' + modules[module_name].dText + '</span>';
+					optionsFrameHeader += '<div class="gksi_options_header_button" section="' + module_name + '">' + modules[module_name].dText + '</div>';
 					optionsFrameData += optionsSection;
 				}
 			});
