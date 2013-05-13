@@ -345,6 +345,7 @@ modules.torrent_list = {
 		filterFL();
 		addAgeColumn();
 		columnSorter();
+		$("#torrent_list").on("mouseenter", "a", showTorrentComments);
 
 		if(mOptions.canSuggest && opt.get(module_name, "imdb_suggest")) {
 			suggestMore();
@@ -357,8 +358,6 @@ modules.torrent_list = {
 			addAgeColumn();
 			$(document).trigger("es_dom_process_done");
 		});
-
-		$("#torrent_list a").on("mouseenter", showTorrentComments);
 
 		dbg("[Init] Ready");
 	}
