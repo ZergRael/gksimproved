@@ -71,7 +71,7 @@ modules.badges = {
 					{ url: "uploadmaster", trigger: 1000 }
 				],
 				p_nth: 17,
-				modifier: { ".usr-invited_by": -1 },
+				modifier: { ".usr-invited_by": 1 },
 				modifies_val: { 0: true },
 				regex: /(\d+)/,
 				name: "uploads"
@@ -108,7 +108,7 @@ modules.badges = {
 					{ url: "requesteater", trigger: 200 }
 				],
 				p_nth: 18,
-				modifier: { ".usr-invited_by": -1 },
+				modifier: { ".usr-invited_by": 1 },
 				regex: /([\d,]+) \//,
 				name: "req_added"
 			},
@@ -157,7 +157,7 @@ modules.badges = {
 					{ url: "fillermaster", trigger: 200 }
 				],
 				p_nth: 18,
-				modifier: { ".usr-invited_by": -1 },
+				modifier: { ".usr-invited_by": 1 },
 				regex: /\/ ([\d,]+)/,
 				name: "req_fill"
 			},
@@ -170,7 +170,7 @@ modules.badges = {
 					{ url: "ircgod", trigger: 100000 }
 				],
 				p_nth: 20,
-				modifier: { ".usr-invited_by": -1 },
+				modifier: { ".usr-invited_by": 1 },
 				regex: /([\d,]+)/,
 				name: "irc_w"
 			}
