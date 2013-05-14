@@ -30,35 +30,59 @@ modules.torrent_list = {
 
 		dbg("[Init] Loading module");
 
-		var filterFL = function() {
-			if(!opt.get(module_name, "filtering_fl")) {
-				return;
-			}
-
-			dbg("[FLFilter] Scanning for FL");
-			var removeHead = false;
-			$("tbody tr:not(:first)").each(function() {
-				if($(this).find(".alt1").length) {
-					return;
-				}
-
+		var even = false; // :nth-child(2n) doesn't work on odd ES'd pages
+		var tagTorrents = function() {
+			dbg("[tagTorrents] Scanning torrents");
+			$("tbody tr.head_torrent:not(.page_tagged)").nextAll(":nth-child(2n" + (even ? "+1" : "") + ")").each(function() {
+				var classIs = "";
 				var imgs = $(this).find("img");
-				var hideMe = true;
 				$.each(imgs, function() {
-					if($(this).attr("alt") == "FreeLeech") {
-						hideMe = false;
-						return false;
+					switch($(this).attr("alt")) {
+						case "New !":
+							classIs += "t_new ";
+							break;
+						case "Nuke !":
+							classIs += "t_nuke ";
+							break;
+						case "FreeLeech":
+							classIs += "t_freeleech ";
+							break;
+						case "Scene":
+							classIs += "t_scene";
 					}
 				});
-				if(hideMe) {
-					$(this).hide();
-					if(!$(this).hasClass("head_torrent")) {
-						$(this).next().hide();
-					}
+
+				if(classIs != "") {
+					$(this).addClass(classIs);
+					$(this).next().addClass(classIs);
 				}
 			});
-			dbg("[FLFilter] Ended filtering");
+			$("tbody tr.head_torrent").addClass("page_tagged");
+			even = !even;
+			dbg("[tagTorrents] Ended scanning");
 		};
+
+		var unfilterFL = function() {
+			if(opt.get(module_name, "filtering_scene")) {
+				$("tbody tr.t_scene:not(.t_freeleech)").show();
+			}
+			else {
+				$("tbody tr").show();
+			}
+		}
+
+		var unfilterScene = function() {
+			if(opt.get(module_name, "filtering_fl")) {
+				$("tbody tr.t_freeleech:not(.t_scene)").show();
+			}
+			else {
+				$("tbody tr").show();
+			}
+		}
+
+		var applyFilters = function() {
+			$("tbody tr:not(:first):not(" + (opt.get(module_name, "filtering_fl") ? ".t_freeleech" : "") + (opt.get(module_name, "filtering_scene") ? ".t_scene" : "") + ")").hide();
+		}
 
 		var addAgeColumn = function() {
 			if(!opt.get(module_name, "age_column")) {
@@ -340,7 +364,7 @@ modules.torrent_list = {
 		}
 
 		var markerButton = '';
-		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Afficher les FL uniquement</label> | ';
+		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Filtre Freeleech</label> | <input id="filter_scene" type="checkbox" ' + (opt.get(module_name, "filtering_scene") ? 'checked="checked" ' : ' ') + '/><label for="filter_scene">Filtre Scene</label> | ';
 
 		dbg("[Init] Starting");
 
@@ -364,21 +388,42 @@ modules.torrent_list = {
 			opt.set(module_name, "filtering_fl", $(this).attr("checked") == "checked" ? true : false);
 			dbg("[FilterFL] is " + opt.get(module_name, "filtering_fl"));
 			if(opt.get(module_name, "filtering_fl")) {
-				filterFL();
+				dbg("[FLFilter] Filtering FL");
+				applyFilters();
 				$("#find_marked_torrent_span").hide();
+				dbg("[FLFilter] Ended filtering");
 				$(document).trigger("es_dom_process_done");
 			}
 			else {
 				dbg("[FLFilter] Unfiltering FL");
-				$("#torrent_list tr").show();
+				unfilterFL();
 				$("#find_marked_torrent_span").show();
 				dbg("[FLFilter] Ended unfiltering");
 				$(document).trigger("es_dom_process_done");
 			}
 		});
-		filterFL();
+		$("#filter_scene").change(function() {
+			opt.set(module_name, "filtering_scene", $(this).attr("checked") == "checked" ? true : false);
+			dbg("[FilterScene] is " + opt.get(module_name, "filtering_scene"));
+			if(opt.get(module_name, "filtering_scene")) {
+				dbg("[SceneFilter] Filtering Scene");
+				applyFilters();
+				$("#find_marked_torrent_span").hide();
+				dbg("[SceneFilter] Ended filtering");
+				$(document).trigger("es_dom_process_done");
+			}
+			else {
+				dbg("[SceneFilter] Unfiltering Scene");
+				unfilterScene();
+				$("#find_marked_torrent_span").show();
+				dbg("[SceneFilter] Ended unfiltering");
+				$(document).trigger("es_dom_process_done");
+			}
+		});
+		tagTorrents();
 		columnSorter();
 		addAgeColumn();
+		applyFilters();
 		$("#torrent_list").on("mouseenter", "a", showTorrentComments);
 
 		if(mOptions.canSuggest && opt.get(module_name, "imdb_suggest")) {
@@ -388,8 +433,9 @@ modules.torrent_list = {
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
 			$("#find_marked_torrent_span").remove();
-			filterFL();
+			tagTorrents();
 			addAgeColumn();
+			applyFilters();
 			$(document).trigger("es_dom_process_done");
 		});
 

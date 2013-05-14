@@ -20,6 +20,7 @@ Voir topic associé.
 - Torrent finder : Changement des 2 boutons en une fenêtre plus explicative
 - Torrent list : Correction des tris par colonnes avec la colonne d'age
 - Torrent list : Corrections sur la fenêtre de commentaires au mouseover
+- Torrent list : Ajout du filtre Scene
 
 **0.3.1**
 - Torrent list : Correction d'un bug empêchant de retrouver un torrent ancien
