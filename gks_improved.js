@@ -103,31 +103,36 @@ var appendFrame = function(o) {
 	}
 
 	// Position correction on resize
-	if(o.relativeToId && !opt.get("global", "allow_frame_css")) {
-		$(window).resize(function() {
-			var toOffset = $("#" + o.relativeToId).offset();
-			frame.offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
-		});
-		$(window).trigger("resize");
-	}
+	if(!opt.get("global", "allow_frame_css")) {
+		if(o.relativeToId) {
+			$(window).resize(function() {
+				var toOffset = $("#" + o.relativeToId).offset();
+				frame.offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
+			});
+			$(window).trigger("resize");
+		}
 
-	if(o.relativeToObj && !opt.get("global", "allow_frame_css")) {
-		$(window).resize(function() {
-			var toOffset = o.relativeToObj.offset();
-			frame.offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
-		});
-		$(window).trigger("resize");
-	}
+		if(o.relativeToObj) {
+			$(window).resize(function() {
+				var toOffset = o.relativeToObj.offset();
+				frame.offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
+			});
+			$(window).trigger("resize");
+		}
 
-	if(o.relativeToWindow && !opt.get("global", "allow_frame_css")) {
-		$(window).resize(function() {
-			var body = document[$.browser.mozilla ? "documentElement" : "body"];
-			if(o.top === true) {
-				o.top =
-			}
-			frame.offset({ top: body.scrollTop + o.top, left: body.scrollLeft + o.left });
-		});
-		$(window).trigger("resize");
+		if(o.relativeToWindow) {
+			$(window).resize(function() {
+				var body = document[$.browser.mozilla ? "documentElement" : "body"];
+				if(o.top === true) {
+					o.top = $(window).height() / 2 - frame.height() / 2;
+				}
+				if(o.left === true) {
+					o.left = $(window).width() / 2 - frame.width() / 2;
+				}
+				frame.offset({ top: body.scrollTop + o.top + ($("#entete").css("position") == "fixed" ? $("#entete").height() : 0), left: body.scrollLeft + o.left });
+			});
+			$(window).trigger("resize");
+		}
 	}
 
 	// Background-color correction

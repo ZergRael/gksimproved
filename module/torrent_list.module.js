@@ -282,11 +282,11 @@ modules.torrent_list = {
 		var showTorrentComments = function() {
 			var commLink = $(this)
 			if(opt.get(module_name, "direct_comments") && commLink.attr("href").match(/\/com\//) && commLink.text() != "0") {
-				$("#gksi_t_comm").remove();
 				var commUrl = utils.parseUrl("https://gks.gs" + commLink.attr("href"));
 				utils.grabPage(commUrl, function(data) {
+					$("#gksi_t_comm").remove();
 					// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
-					appendFrame({ id: "t_comm", title: "Commentaires pour le torrent " + commUrl.params.id, data: $(data).find("#contenu").html(), relativeToWindow: true, top: 20, left: 80, css: { minWidth: 500, maxWidth: 780 }});
+					appendFrame({ id: "t_comm", title: "Commentaires pour le torrent " + commUrl.params.id, data: $(data).find("#contenu").html(), relativeToWindow: true, top: 20, left: true, css: { minWidth: 500, maxWidth: 780, maxHeight: 600 }});
 					//$("#gksi_t_comm").find("#gksi_t_comm_data p, #gksi_t_comm_data #com").remove();
 					$("#gksi_t_comm_data #com").hide();
 					$("#gksi_t_comm_data p:first").click(function() {
