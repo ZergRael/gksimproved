@@ -118,8 +118,6 @@ modules.torrent = {
 
 		var buildCantCommentEditFrame = function() {
 			dbg("[edit_mp_comment] Building frame");
-			// { id, classes, title, data, relativeToId, top, left, buttons = [ /* close is by default */ { id, text, callback} ] } 
-			//var appendFrame = function(o)
 			var edit_replacements_available = "Remplacements possibles :<br />";
 			$.each(replacementText, function(replacement, data) {
 				edit_replacements_available += '<span class="bold">%' + replacement + '%</span> = ' + data.text + ' (exemple: ' + data.val + ')<br />';
@@ -138,6 +136,7 @@ modules.torrent = {
 				$(frame_id).remove();
 			};
 			var edit_frame = { id: "edit_cant_comment_mp", title: "GKSi : Edition du MP à envoyer", data: edit_frame_data, relativeToId: "torrent_comments", top: -400, left: 0, buttons: [ { b_id: "save", b_text: "Enregistrer", b_callback: save_callback } ] };
+			// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
 			appendFrame(edit_frame);
 			dbg("[edit_mp_comment] Frame built");
 		};

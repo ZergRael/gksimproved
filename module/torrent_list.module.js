@@ -93,7 +93,7 @@ modules.torrent_list = {
 					}
 
 					var dateMatch = $(this).next().text().match(/(\d+)\/(\d+)\/(\d+) à (\d+):(\d+)/);
-					if(!dateMatch.length) { // This should never happen
+					if(!dateMatch || !dateMatch.length) { // This should never happen
 						return;
 					}
 
@@ -166,6 +166,7 @@ modules.torrent_list = {
 							suggestionsStr += '<a href="' + utils.craftUrl({ host: pageUrl.host, path: pageUrl.path, params: { q: encodeURIComponent(movieName) } }) + '">' + movieName + '</a><br />';
 						}
 					});
+					// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
 					appendFrame({ title: "GKSi IMDB Suggestions", data: suggestionsStr, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
 
 					if(opt.get(module_name, "imdb_auto_add") && modules.endless_scrolling.maxPage == 0 && imdb.translateBest) {
@@ -284,18 +285,15 @@ modules.torrent_list = {
 				$("#gksi_t_comm").remove();
 				var commUrl = utils.parseUrl("https://gks.gs" + commLink.attr("href"));
 				utils.grabPage(commUrl, function(data) {
-					// { id, classes, title, header, data, relativeToId, relativeToObj, top, left, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
-					appendFrame({ id: "t_comm", title: "Commentaires pour le torrent " + commUrl.params.id, data: $(data).find("#contenu").html(), relativeToObj: commLink, top: -20, left: -750, maxWidth: 780 });
+					// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
+					appendFrame({ id: "t_comm", title: "Commentaires pour le torrent " + commUrl.params.id, data: $(data).find("#contenu").html(), relativeToWindow: true, top: 20, left: 80, css: { minWidth: 500, maxWidth: 780 }});
 					//$("#gksi_t_comm").find("#gksi_t_comm_data p, #gksi_t_comm_data #com").remove();
 					$("#gksi_t_comm_data #com").hide();
-					$("#gksi_t_comm_data p:first").mouseenter(function() {
-						$("#gksi_t_comm_data #com").slideDown();
-					});
-					$("#gksi_t_comm_data #com").mouseleave(function() {
-						$("#gksi_t_comm_data #com").slideUp();
+					$("#gksi_t_comm_data p:first").click(function() {
+						$("#gksi_t_comm_data #com").slideToggle();
 					});
 					$("#gksi_t_comm").mouseleave(function() {
-						$("#gksi_t_comm").remove();
+						$(this).remove();
 					});
 				});
 			}
@@ -318,7 +316,7 @@ modules.torrent_list = {
 			}
 			var frameText = "Vous permet de sauvegarder l'id du premier torrent de la liste pour le retrouver plus tard<br /><br />Au dessus de 2000 ids de retard (~2 semaines), le torrent sera considéré trop ancien.<br />Position actuelle : " + (torrentIdMark || 0) + "/" + firstTorrentId;
 			markerFrame.data = frameText + "<br /><br /><center>" + markFirstTorrent + "<br />" + findMarkedTorrent + "</center>";
-
+			// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
 			appendFrame(markerFrame);
 
 			// Torrent marking

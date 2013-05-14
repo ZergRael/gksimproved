@@ -56,7 +56,7 @@ var insertScript = function (id, f, removeAfterUse) {
 };
 
 // Builds our specific frames from a frame object :
-// { id, classes, title, header, data, relativeToId, relativeToObj, top, left, maxHeight, maxWidth, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
+// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
 var appendFrame = function(o) {
 	// Build custom buttons
 	var additionnalButtons = '';
@@ -95,13 +95,10 @@ var appendFrame = function(o) {
 		});
 	}
 
-	if(o.maxWidth || o.maxHeight) {
-		if(o.maxHeight) {
-			frame.css("maxHeight", o.maxHeight);
-		}
-		if(o.maxWidth) {
-			frame.css("maxWidth", o.maxWidth);
-		}
+	if(o.css) {
+		$.each(o.css, function(key, value) {
+			frame.css(key, value);
+		});
 		frame.css("overflow", "auto");
 	}
 
@@ -118,6 +115,17 @@ var appendFrame = function(o) {
 		$(window).resize(function() {
 			var toOffset = o.relativeToObj.offset();
 			frame.offset({ top: toOffset.top + o.top, left: toOffset.left + o.left });
+		});
+		$(window).trigger("resize");
+	}
+
+	if(o.relativeToWindow && !opt.get("global", "allow_frame_css")) {
+		$(window).resize(function() {
+			var body = document[$.browser.mozilla ? "documentElement" : "body"];
+			if(o.top === true) {
+				o.top =
+			}
+			frame.offset({ top: body.scrollTop + o.top, left: body.scrollLeft + o.left });
 		});
 		$(window).trigger("resize");
 	}
