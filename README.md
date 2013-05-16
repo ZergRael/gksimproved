@@ -9,8 +9,15 @@ Voir topic associé.
 ### TODO.list
 - Moar comments
 - Optimisations
+- [Extension] Context menu "Search on GKS" #60
+- [Bookmark] Add sorting #59
+- [Summary] Mouseover comments #55
+- [Uploads] Comments on mouseover #51
+- [Global] Multi images upload to s.gks.gs form #48
+- User smileys in textarea #44
 
 ### TODO.done
+- Aura : Amélioration des calculs pour supporter les pages de 500+ torrents. (1k+ maintenant)
 - Badges : Correction de l'affichage de la progression sur /m/badges/
 - Badges : Correction de la détection des valeurs en cas d'utilisateur invité
 - Endless scrolling : Dans la pagination, la page actuelle est cliquable
