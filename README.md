@@ -9,8 +9,6 @@ Voir topic associé.
 ### TODO.list
 - Moar comments
 - Optimisations
-- [Extension] Context menu "Search on GKS" #60
-- [Bookmark] Add sorting #59
 - [Global] Multi images upload to s.gks.gs form #48
 - User smileys in textarea #44
 

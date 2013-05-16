@@ -307,8 +307,54 @@ modules.global = {
 			});
 		};
 
+		var createMultiUploadFrame = function() {
+			dbg("[multi_upload] Building frame");
+			var authKey = utils.getAuthkey();
+
+			var multi_upload_frame_data = '<form method="post" action="https://s.gks.gs/img/?ak=' + authKey + '" id="fileupload" enctype="multipart/form-data">' +
+				'<p class="publiclabel">' +
+					'<label class="lstart">Depuis un fichier</label>' +
+				'</p>' +
+				'<div class="slidefile">' +
+					'<p class="publiclabel">' +
+						'<label class="lstart">Votre Image</label>' +
+						'<label class="lend"><input type="file" name="photo" id="photo" style="margin-left: 10px;" accept="image/*"></label>' +
+					'</p>' +
+					'<p class="hidden"><input type="hidden" name="MAX_FILE_SIZE" value="5242880"></p>' +
+					'<p class="hidden"><input type="hidden" name="ak" value="' + authKey + '"></p>' +
+					'<p class="center"><input type="submit" name="envoi" value=" Uploader Cette Image "></p>' +
+				'</div>' +
+			'</form>';
+
+			multi_upload_frame_data += '<form method="get" action="https://s.gks.gs/img/extern.php" id="urlupload">' +
+				'<p class="publiclabel">' +
+					'<label class="lstart">Depuis une URL</label>' +
+				'</p>' +
+				'<div class="slideurl">' +
+					'<p class="publiclabel">' +
+						'<label class="lstart">Votre URL</label>' +
+						'<label class="lend"><input type="text" name="c" value=""></label>' +
+					'</p>' +
+					'<p class="hidden"><input type="hidden" name="ak" value="' + authKey + '"></p>' +
+					'<p class="center"><input type="submit" name="envoi" value=" Télécharger à partir de l\'URL "></p>' +
+				'</div>' +
+			'</form>';
+
+			// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
+			var multi_upload_frame = { id: "multi_upload", title: "Multi images uploader", data: multi_upload_frame_data, relativeToWindow: true, top: true, left: true };
+			appendFrame(multi_upload_frame);
+		}
+
 		dbg("[Init] Starting");
 		// Execute functions
+
+		var multiUploadButton = '<ul><a href="#" id="multi_upload">GKSi Multi Images</a></ul>';
+		$("#navig_bloc_user").append(multiUploadButton);
+		$("#multi_upload").click(function() {
+			var optionsFrame = $("#gksi_multi_upload");
+			optionsFrame.length ? optionsFrame.remove() : createMultiUploadFrame();
+			return false;
+		});
 
 		var optionsFrameButtons = '<ul><a href="#" id="options_gksi">GKSi Options</a></ul>';
 		$("#navig_bloc_user").append(optionsFrameButtons);
@@ -327,6 +373,8 @@ modules.global = {
 			}
 			return false;
 		});
+
+
 
 		listenToCtrlEnter();
 		listenToBBCodeShortcuts();
