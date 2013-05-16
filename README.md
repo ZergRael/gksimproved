@@ -11,7 +11,6 @@ Voir topic associé.
 - Optimisations
 - [Extension] Context menu "Search on GKS" #60
 - [Bookmark] Add sorting #59
-- [Uploads] Comments on mouseover #51
 - [Global] Multi images upload to s.gks.gs form #48
 - User smileys in textarea #44
 
@@ -28,6 +27,7 @@ Voir topic associé.
 - Torrent list : Corrections sur la fenêtre de commentaires au mouseover
 - Torrent list : Ajout du filtre Scene
 - Summary : Ajout des options : colonne d'age et commentaires au mouseover
+- Uploads : Ajout des options : colonne d'age et commentaires au mouseover
 
 **0.3.1**
 - Torrent list : Correction d'un bug empêchant de retrouver un torrent ancien

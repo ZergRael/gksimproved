@@ -19,7 +19,8 @@ modules.torrent_list = {
 		{ path_name: "/", options: { buttons: '#sort', canMark: true, canFilter: true, canSort: true } },
 		{ path_name: "/browse/", options: { buttons: '#sort p', canMark: true, canFilter: true, canSort: true } },
 		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canSuggest: true, canFilter: true, canSort: true } },
-		{ path_name: "/summary/", options: {  } },
+		{ path_name: "/summary/", options: { } },
+		{ path_name: "/m/uploads/", options: { } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -82,7 +83,9 @@ modules.torrent_list = {
 		}
 
 		var applyFilters = function() {
-			$("tbody tr:not(:first):not(" + (opt.get(module_name, "filtering_fl") ? ".t_freeleech" : "") + (opt.get(module_name, "filtering_scene") ? ".t_scene" : "") + ")").hide();
+			if(opt.get(module_name, "filtering_fl") || opt.get(module_name, "filtering_scene")) {
+				$("tbody tr:not(:first):not(" + (opt.get(module_name, "filtering_fl") ? ".t_freeleech" : "") + (opt.get(module_name, "filtering_scene") ? ".t_scene" : "") + ")").hide();
+			}
 		}
 
 		var addAgeColumn = function() {
@@ -256,8 +259,9 @@ modules.torrent_list = {
 					if(insertionData.length) {
 						dbg("[TorrentMark] Insert torrents");
 						$("#torrent_list").append(insertionData);
-						filterFL();
+						tagTorrents();
 						addAgeColumn();
+						applyFilters();
 						dbg("[TorrentMark] Blocking endless scrolling");
 						avoidEndlessScrolling = true;
 						findTorrent(pageNumber + 1);
