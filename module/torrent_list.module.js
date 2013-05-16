@@ -16,9 +16,10 @@ modules.torrent_list = {
 	name: "torrent_list",
 	dText: "Liste torrents",
 	pages: [
-		{ path_name: "/", options: { buttons: '#sort', canMark: true } },
-		{ path_name: "/browse/", options: { buttons: '#sort p', canMark: true } },
-		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canSuggest: true } },
+		{ path_name: "/", options: { buttons: '#sort', canMark: true, canFilter: true, canSort: true } },
+		{ path_name: "/browse/", options: { buttons: '#sort p', canMark: true, canFilter: true, canSort: true } },
+		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canSuggest: true, canFilter: true, canSort: true } },
+		{ path_name: "/summary/", options: {  } },
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -153,7 +154,7 @@ modules.torrent_list = {
 				}
 			});
 
-			if(!$(".age_torrent_head:first").find("a").length) {
+			if(!$(".age_torrent_head:first").find("a").length && mOptions.canSort) {
 				var sortedUrl = utils.clone(pageUrl);
 				sortedUrl.path = sortedUrl.path == "/" ? "/browse/" : sortedUrl.path;
 				sortedUrl.params = sortedUrl.params || {};
@@ -372,7 +373,9 @@ modules.torrent_list = {
 		if(mOptions.canMark && (!pageUrl.params || !pageUrl.params.page || pageUrl.params.page == 0) && (!pageUrl.params || !pageUrl.params.sort || (pageUrl.params.sort == "id" && (!pageUrl.params.order || pageUrl.params.order == "desc")))) {
 			markerButton = '<a id="torrent_marker_button" href="#">Marqueur de torrents</a> | ';
 		}
-		$(mOptions.buttons).prepend(markerButton + torrentButtons);
+		if(mOptions.canFilter) {
+			$(mOptions.buttons).prepend(markerButton + torrentButtons);
+		}
 
 		// Torrent marker frame
 		$("#torrent_marker_button").click(function() {
@@ -421,9 +424,13 @@ modules.torrent_list = {
 			}
 		});
 		tagTorrents();
-		columnSorter();
+		if(mOptions.canSort) {
+			columnSorter();
+		}
 		addAgeColumn();
-		applyFilters();
+		if(mOptions.canFilter) {
+			applyFilters();
+		}
 		$("#torrent_list").on("mouseenter", "a", showTorrentComments);
 
 		if(mOptions.canSuggest && opt.get(module_name, "imdb_suggest")) {
