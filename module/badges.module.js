@@ -81,7 +81,8 @@ modules.badges = {
 					{ url: "timide", trigger: 1 },
 					{ url: "forumeur", trigger: 100 },
 					{ url: "forumateur", trigger: 500 },
-					{ url: "grandmalade", trigger: 1000 }
+					{ url: "grandmalade", trigger: 1000 },
+					{ url: "hugochavez" }
 				],
 				p_nth: 10,
 				regex: /([\d,]+) \//,

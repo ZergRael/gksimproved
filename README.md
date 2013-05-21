@@ -16,6 +16,7 @@ Voir topic associé.
 - Aura : Amélioration des calculs pour supporter les pages de 500+ torrents. (1k+ maintenant)
 - Badges : Correction de l'affichage de la progression sur /m/badges/
 - Badges : Correction de la détection des valeurs en cas d'utilisateur invité
+- Badges : Ajout du dernier badge forum
 - Endless scrolling : Dans la pagination, la page actuelle est cliquable
 - Global : Ajout des données de download et ratio réel avec l'upload réel
 - Mouseover comments : Correction de l'affichage sur les pages endless scrollées
