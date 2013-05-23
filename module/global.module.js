@@ -315,13 +315,24 @@ modules.global = {
 			var hidden_get_img = '<form method="get" action="https://s.gks.gs/img/extern.php"><input id="url" type="text" name="c" value=""><input type="hidden" name="ak" value="' + authKey + '"></form>';
 
 			var send_img = function(photo) {
+				dbg("[multi_upload] Sending post data");
 				var iframe = $(hidden_post_img).wrapInner('<iframe style="display: hidden;"></iframe>').find("#photo").val(photo);
 				iframe.submit();
 			};
 
 			var url_img = function(url) {
-				var iframe = $(hidden_get_img).wrapInner('<iframe style="display: hidden;"></iframe>').find("#url").val(url);
-				iframe.submit();
+				dbg("[multi_upload] Sending url");
+				$.ajax({
+					type: 'GET',
+					url: "https://s.gks.gs/img/extern.php",
+					data: {
+						"c": url,
+						"ak": authKey
+					},
+					success: function(data) {
+						dbg("[multi_upload] Url sending success");
+					}
+				});
 			};
 
 			var multi_upload_frame_data = '<form method="post" action="https://s.gks.gs/img/?ak=' + authKey + '" id="fileupload" enctype="multipart/form-data">' +
