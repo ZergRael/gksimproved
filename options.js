@@ -77,7 +77,8 @@ var opt = {
 		},
 		badges: {
 			progress:           { defaultVal: false, showInOptions: true, dispText: "Afficher la progression sous les badges" },
-			show_img:           { defaultVal: false, showInOptions: true, dispText: "Afficher toutes les images des badges" }
+			show_img:           { defaultVal: false, showInOptions: true, dispText: "Afficher toutes les images des badges" },
+			show_tip:           { defaultVal: false, showInOptions: true, dispText: "Afficher toutes les infobulles des badges" }
 		},
 		logs: {
 			auto_refresh:       { defaultVal: false, showInOptions: false }

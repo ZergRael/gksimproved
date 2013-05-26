@@ -40,11 +40,11 @@ modules.badges = {
 		var badgesData = [
 			{	// Snatched -- 0
 				badges: [ 
-					{ url: "firstsnatched", trigger: 1 },
-					{ url: "novicesnatched", trigger: 10 },
-					{ url: "hundredsnatched", trigger: 100 },
-					{ url: "goodsnatched", trigger: 500 },
-					{ url: "mastersnatched", trigger: 1000 }
+					{ url: "firstsnatched", trigger: 1, tip: "First Snatch : Vous avez compl&eacute;t&eacute; votre 1er torrent !" },
+					{ url: "novicesnatched", trigger: 10, tip: "Novice Snatcher : Vous avez t&eacute;l&eacute;charg&eacute; plus de 10 Torrents" },
+					{ url: "hundredsnatched", trigger: 100, tip: "100 Snatched : Vous avez d&eacute;j&agrave; compl&eacute;t&eacute; 100 Torrents" },
+					{ url: "goodsnatched", trigger: 500, tip: "Snatcher confirm&eacute; : Vous avez t&eacute;l&eacute;charg&eacute; plus de 500 Torrents" },
+					{ url: "mastersnatched", trigger: 1000, tip: "Master Snatcher : Vous avez t&eacute;l&eacute;charg&eacute; plus de 1000 Torrents" }
 				],
 				dom: "#contenu .separate em",
 				regex: /([\d,]+)/,
@@ -52,11 +52,11 @@ modules.badges = {
 			},
 			{	// Seeds -- 1
 				badges: [ 
-					{ url: "aurabegginer", trigger: 10 },
-					{ url: "aurarookie", trigger: 100 },
-					{ url: "auraexpert", trigger: 300 },
-					{ url: "auramaster", trigger: 500 },
-					{ url: "auragod", trigger: 1000 }
+					{ url: "aurabegginer", trigger: 10, tip: "Aura Beginner : Vous avez eu 10 torrents en seed" },
+					{ url: "aurarookie", trigger: 100, tip: "Aura Rookie : Vous avez eu 100 torrents en seed" },
+					{ url: "auraexpert", trigger: 300, tip: "Aura Expert : Vous avez eu 300 torrents en seed" },
+					{ url: "auramaster", trigger: 500, tip: "Aura Master : Vous avez eu 500 torrents en seed" },
+					{ url: "auragod", trigger: 1000, tip: "Aura God : Vous avez eu 1000 torrents en seed" }
 				],
 				dom: "#contenu .upload:first",
 				regex: /([\d,]+)/,
@@ -64,11 +64,11 @@ modules.badges = {
 			},
 			{	// Uploads -- 2
 				badges: [ 
-					{ url: "uploadbegginer", trigger: 1 },
-					{ url: "uploadrookie", trigger: 10 },
-					{ url: "uploadeur", trigger: 100 },
-					{ url: "awesomeuploader", trigger: 500 },
-					{ url: "uploadmaster", trigger: 1000 }
+					{ url: "uploadbegginer", trigger: 1, tip: "Upload Beginner : Vous avez upload&eacute; votre premier torrent" },
+					{ url: "uploadrookie", trigger: 10, tip: "Upload Rookie : Vous avez upload&eacute; au moins 10 torrents" },
+					{ url: "uploadeur", trigger: 100, tip: "UpLoadeur : Vous avez upload&eacute; au moins 100 torrents" },
+					{ url: "awesomeuploader", trigger: 500, tip: "Awesome Uploader : Vous avez upload&eacute; au moins 500 torrents" },
+					{ url: "uploadmaster", trigger: 1000, tip: "Upload Master : Vous avez upload&eacute; au moins 1000 torrents" }
 				],
 				p_nth: 17,
 				modifier: { ".usr-invited_by": 1 },
@@ -78,11 +78,11 @@ modules.badges = {
 			},
 			{	// Forum posts -- 3
 				badges: [ 
-					{ url: "timide", trigger: 1 },
-					{ url: "forumeur", trigger: 100 },
-					{ url: "forumateur", trigger: 500 },
-					{ url: "grandmalade", trigger: 1000 },
-					{ url: "hugochavez" }
+					{ url: "timide", trigger: 1, tip: "Timide : Vous avez fait votre premier Post" },
+					{ url: "forumeur", trigger: 100, tip: "Pro ? : D&eacute;ja 100 Posts sur le forum !" },
+					{ url: "forumateur", trigger: 500, tip: "Forumateur : D&eacute;j&agrave 500 Posts sur le forum..." },
+					{ url: "grandmalade", trigger: 1000, tip: "Grand Malade : D&eacute;j&agrave; 1000 Posts sur le forum..." },
+					{ url: "hugochavez", tip: "Hugo Chavez personnifi&eacute; : Dafuq ???" }
 				],
 				p_nth: 10,
 				regex: /([\d,]+) \//,
@@ -90,11 +90,11 @@ modules.badges = {
 			},
 			{	// Twits received -- 4
 				badges: [ 
-					{ url: "followed", trigger: 50 },
-					{ url: "lightened", trigger: 100 },
-					{ url: "mosttwitted", trigger: 200 },
-					{ url: "spotted", trigger: 500 },
-					{ url: "twitterowner", trigger: 1000 }
+					{ url: "followed", trigger: 50, tip: "Followed : Vous avez &eacute;t&eacute; twitt&eacute; 50 fois" },
+					{ url: "lightened", trigger: 100, tip: "Lightened : Vous avez &eacute;t&eacute; twitt&eacute; 100 fois" },
+					{ url: "mosttwitted", trigger: 200, tip: "Most Twitted : Vous avez &eacute;t&eacute; twitt&eacute; 200 fois" },
+					{ url: "spotted", trigger: 500, tip: "Spotted : Vous avez &eacute;t&eacute; twitt&eacute; 500 fois" },
+					{ url: "twitterowner", trigger: 1000, tip: "Twitter Owner : Vous avez &eacute;t&eacute; twitt&eacute; 1000 fois" }
 				],
 				dom: "#contenu .separate",
 				regex: /([\d,]+)/,
@@ -102,11 +102,11 @@ modules.badges = {
 			},
 			{	// Requests added -- 5
 				badges: [ 
-					{ url: "firstrequest", trigger: 1 },
-					{ url: "requesttatator", trigger: 10 },
-					{ url: "requestlover", trigger: 50 },
-					{ url: "requestaddict", trigger: 100 },
-					{ url: "requesteater", trigger: 200 }
+					{ url: "firstrequest", trigger: 1, tip: "First Request : Vous avez effectu&eacute; votre 1&egrave;re requ&ecirc;te" },
+					{ url: "requesttatator", trigger: 10, tip: "Request Tatator : Vous avez effectu&eacute; au moins 10 requ&ecirc;tes" },
+					{ url: "requestlover", trigger: 50, tip: "Request Lover : Vous avez effectu&eacute; 50 requ&ecirc;tes" },
+					{ url: "requestaddict", trigger: 100, tip: "Request Addict : Vous avez effectu&eacute; 100 requ&ecirc;tes" },
+					{ url: "requesteater", trigger: 200, tip: "Request Eater : Vous avez effectu&eacute; 200 requ&ecirc;tes" }
 				],
 				p_nth: 18,
 				modifier: { ".usr-invited_by": 1 },
@@ -115,11 +115,11 @@ modules.badges = {
 			},
 			{	// Wiki edits -- 6
 				badges: [ 
-					{ url: "wikibeginner", trigger: 1 },
-					{ url: "wikiuser", trigger: 10 },
-					{ url: "wikiexpert", trigger: 50 },
-					{ url: "wikicrazy", trigger: 100 },
-					{ url: "wikimaster", trigger: 250 }
+					{ url: "wikibeginner", trigger: 1, tip: "Wiki Beginner : 1 Article cr&eacute;&eacute; ou &eacute;dit&eacute" },
+					{ url: "wikiuser", trigger: 10, tip: "Wiki User : 10 Articles cr&eacute;&eacute;s ou &eacute;dit&eacute;s" },
+					{ url: "wikiexpert", trigger: 50, tip: "Wiki Expert : 50 Articles cr&eacute;&eacute;s ou &eacute;dit&eacute;s" },
+					{ url: "wikicrazy", trigger: 100, tip: "Wiki Crazy : 100 Articles cr&eacute;&eacute;s ou &eacute;dit&eacute;s" },
+					{ url: "wikimaster", trigger: 250, tip: "Wiki Master : 250 Articles cr&eacute;&eacute;s ou &eacute;dit&eacute;s" }
 				],
 				dom: "#contenu",
 				regex: /([\d,]+) Wiki/,
@@ -127,23 +127,23 @@ modules.badges = {
 			},
 			{	// DL/Ratio -- 7
 				badges: [ 
-					{ url: "actionnaireovh" },
-					{ url: "hadopiwanted" },
-					{ url: "actionnairewd" },
-					{ url: "datacenterowner" }/*,
-					{ url: "epenis" },
-					{ url: "eboobz" }*/
+					{ url: "actionnaireovh", tip: "Actionnaire OVH : Vous avez compris le principe du ratio !" },
+					{ url: "hadopiwanted", tip: "Hadopi Wanted : Un bon ratio et un bon upload, &ccedil;a se f&ecirc;te" },
+					{ url: "actionnairewd", tip: "Actionnaire Western Digital : Vous allez remplir vos disques durs bien vite &agrave; cette vitesse" },
+					{ url: "datacenterowner", tip: "Datacenter Owner : Vous &ecirc;tes un gros consommateur de torrents" }/*,
+					{ url: "epenis", tip: "E-p&eacute;nis : Vous aimez faire des concours hein ? },
+					{ url: "eboobz", tip: "E-Boobz : Vous aimez faire des concours hein ?" }*/
 				],
 				dom: false,
 				name: "dl_ratio"
 			},
 			{	// Karma -- 8
 				badges: [ 
-					{ url: "padawan", trigger: 1000 },
-					{ url: "karmafull", trigger: 10000 },
-					{ url: "maitrezen", trigger: 50000 },
-					{ url: "karmamaster", trigger: 100000 },
-					{ url: "karmajedi", trigger: 500000 }
+					{ url: "padawan", trigger: 1000, tip: "Padawan : +1000 de karma atteint" },
+					{ url: "karmafull", trigger: 10000, tip: "Karma Stocker : Vous aimez conserver votre Karma" },
+					{ url: "maitrezen", trigger: 50000, tip: "Maitre Zen : +50 000 de karma atteint" },
+					{ url: "karmamaster", trigger: 100000, tip: "Karma Master : +100 000 de karma atteint" },
+					{ url: "karmajedi", trigger: 500000, tip: "Yoda : + 500 000 de karma atteint !" }
 				],
 				dom: false,
 				val: utils.getKarmaTotal(),
@@ -151,11 +151,11 @@ modules.badges = {
 			},
 			{	// Requests filled -- 9
 				badges: [ 
-					{ url: "firstfiller", trigger: 1 },
-					{ url: "filleravise", trigger: 10 },
-					{ url: "fillerfou", trigger: 50 },
-					{ url: "fillerexpert", trigger: 100 },
-					{ url: "fillermaster", trigger: 200 }
+					{ url: "firstfiller", trigger: 1, tip: "First Filled : Vous avez fill&eacute; votre 1&egrave;re requ&ecirc;te" },
+					{ url: "filleravise", trigger: 10, tip: "Filler Avis&eacute; : Vous avez fill&eacute; 10 requ&ecirc;tes" },
+					{ url: "fillerfou", trigger: 50, tip: "Filler Fou : Vous avez fill&eacute; 50 requ&ecirc;tes" },
+					{ url: "fillerexpert", trigger: 100, tip: "Filler Expert : Vous avez fill&eacute; 100 requ&ecirc;tes" },
+					{ url: "fillermaster", trigger: 200, tip: "Filler Master : Vous avez fill&eacute; 200 requ&ecirc;tes" }
 				],
 				p_nth: 18,
 				modifier: { ".usr-invited_by": 1 },
@@ -164,11 +164,11 @@ modules.badges = {
 			},
 			{	// IRC words -- 10
 				badges: [ 
-					{ url: "ircnoob", trigger: 1000 },
-					{ url: "ircuser", trigger: 5000 },
-					{ url: "ircexpert", trigger: 10000 },
-					{ url: "ircaddict", trigger: 50000 },
-					{ url: "ircgod", trigger: 100000 }
+					{ url: "ircnoob", trigger: 1000, tip: "IRC N00b : Vos premiers 1000 mots sur IRC, bienvenue !" },
+					{ url: "ircuser", trigger: 5000, tip: "IRC User : Avec 5000 mots, on commence &agrave; vous conna&icirc;tre" },
+					{ url: "ircexpert", trigger: 10000, tip: "IRC Expert : Vous avez d&eacute;j&agrave; &eacute;crit 10000 mots, vous &ecirc;tes un habitu&eacute;" },
+					{ url: "ircaddict", trigger: 50000, tip: "IRC Addict : 50000 mots ! Grand orateur !" },
+					{ url: "ircgod", trigger: 100000, tip: "IRC God : 100000 mots ! On entend que vous !" }
 				],
 				p_nth: 20,
 				modifier: { ".usr-invited_by": 1 },
@@ -290,7 +290,29 @@ modules.badges = {
 					img.addClass("halfOpacity");
 				});
 			});
-		}
+		};
+
+		var show_missing_tips = function() {
+			if(!opt.get(module_name, "show_tip")) {
+				return;
+			}
+
+			dbg("[show_tip] Showing missing tooltips");
+			$("tbody tr").each(function(i_s) {
+				$(this).find("td:not(:first)").each(function(i) {
+					var b = badgesData[i_s].badges[i];
+					if(!b || !b.tip) {
+						return;
+					}
+
+					var img = $(this).find("img");
+					if(img.attr("src").indexOf("soon") == -1 && !img.hasClass("halfOpacity")) {
+						return;
+					}
+					img.tipTip({maxWidth: "auto", edgeOffset: 10, content: b.tip});
+				});
+			});
+		};
 
 		dbg("[Init] Starting");
 		// Execute functions
@@ -306,6 +328,7 @@ modules.badges = {
 		})
 
 		show_missing_images();
+		show_missing_tips();
 		opt.setCallback(module_name, "show_img", function(state) {
 			if(state) {
 				show_missing_images();
@@ -313,6 +336,14 @@ modules.badges = {
 			else {
 				$(".halfOpacity").attr("src", "https://s.gks.gs/static/images/badges/soon.png");
 				$(".halfOpacity").removeClass("halfOpacity");
+			}
+		})
+		opt.setCallback(module_name, "show_tip", function(state) {
+			if(state) {
+				show_missing_tips();
+			}
+			else {
+				$(".halfOpacity, [src$='soon.png']").tipTip({maxWidth: "auto", edgeOffset: 10, content: "Badge soon"});
 			}
 		})
 
