@@ -84,7 +84,7 @@ modules.torrent_list = {
 
 		var applyFilters = function() {
 			if(opt.get(module_name, "filtering_fl") || opt.get(module_name, "filtering_scene")) {
-				$("tbody tr:not(:first):not(" + (opt.get(module_name, "filtering_fl") ? ".t_freeleech" : "") + (opt.get(module_name, "filtering_scene") ? ".t_scene" : "") + ")").hide();
+				$("tbody tr:not(:first):not(.gksi_imdb_head):not(" + (opt.get(module_name, "filtering_fl") ? ".t_freeleech" : "") + (opt.get(module_name, "filtering_scene") ? ".t_scene" : "") + ")").hide();
 			}
 		}
 
@@ -207,6 +207,7 @@ modules.torrent_list = {
 							var header = dataFrame.find("tr:first");
 							if(header.length) {
 								header.find(".name_torrent_head").text(header.find(".name_torrent_head").text() + " - GKSi IMDB Suggestions");
+								header.addClass("gksi_imdb_head");
 							}
 							var insertionData = dataFrame.find("tr");
 							if(insertionData.length) {
@@ -218,8 +219,9 @@ modules.torrent_list = {
 								else {
 									$("#torrent_list").append(insertionData);
 								}
-								filterFL();
+								tagTorrents();
 								addAgeColumn();
+								applyFilters();
 							}
 							else {
 								dbg("[QueryTranslate] Or maybe not (no results)");
