@@ -120,7 +120,10 @@ modules.global = {
 		};
 
 		var createOptionsFrame = function() {
-			var optionsFrameData = "", optionsFrameHeader = "";
+			var optionsFrameData = "";
+			// Full options pannel
+			var optionsFrameHeader = '<div class="gksi_options_header_button">Tout</div>';
+
 			dbg("[Options] Building frame");
 			$.each(opt.options, function(module_name, options) {
 				var optionsSection = '<div id="gksi_options_data_' + module_name + '" class="gksi_options_section"><div class="gksi_frame_section_header">' + modules[module_name].dText + '</div>';
@@ -139,9 +142,14 @@ modules.global = {
 				}
 			});
 
+			var onCloseCallback = function() {
+				var section = $(".gksi_options_header_button_selected").attr("section");
+				opt.set(module_name, "options_section", section);
+			}
+
 			// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
 			var copyright = '<a href="/forums.php?action=viewtopic&topicid=6336">GKSi</a> by <a href="/users/2360140">ZergRael</a>'
-			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "navigation", top: 8, left: 230, header: optionsFrameHeader, underButtonsText: copyright });
+			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "navigation", top: 8, left: 230, header: optionsFrameHeader, onCloseCallback: onCloseCallback, underButtonsText: copyright });
 
 			$.each(opt.options, function(module_name, options) {
 				if(!$("#gksi_options_data_" + module_name).length) {
@@ -217,10 +225,25 @@ modules.global = {
 			$(".gksi_options_header_button").hover(function() {
 				$(".gksi_options_header_button").removeClass("gksi_options_header_button_selected");
 				$(this).addClass("gksi_options_header_button_selected");
-				$(".gksi_options_section").hide();
-				$("#gksi_options_data_" + $(this).attr("section")).show();
+					
+				var section = $(this).attr("section");
+				if(section) {
+					$(".gksi_options_section").hide();
+					$("#gksi_options_data_" + section).show();
+				}
+				else {
+					$(".gksi_options_section").show();
+				}
 			}, function() {
 			});
+
+			var section = opt.get(module_name, "options_section");
+			if(section) {
+				$(".gksi_options_header_button[section=" + section + "]").trigger("mouseenter");
+			}
+			else {
+				$(".gksi_options_header_button:first-child").trigger("mouseenter")
+			}
 
 			dbg("[Options] Frame ready");
 		};

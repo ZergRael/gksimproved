@@ -9,22 +9,24 @@ Voir topic associé.
 ### TODO.list
 - Moar comments
 - Optimisations
-- [Global] Multi images upload to s.gks.gs form #48
-- User smileys in textarea #44
 
 ### TODO.done
 - Aura : Amélioration des calculs pour supporter les pages de 500+ torrents. (1k+ maintenant)
 - Badges : Correction de l'affichage de la progression sur /m/badges/
 - Badges : Correction de la détection des valeurs en cas d'utilisateur invité
 - Badges : Ajout du dernier badge forum
+- Badges : Afficher les tooltips de tous les badges - ravomavain
+- Badges : Afficher les badges manquants et tooltips sur les pages d'autres utilisateurs - ravomavain
 - Endless scrolling : Dans la pagination, la page actuelle est cliquable
 - Global : Ajout des données de download et ratio réel avec l'upload réel
+- Global : Ajout d'un onglet "Tout" dans les options et sauvegarde du dernier onglet consulté
 - Mouseover comments : Correction de l'affichage sur les pages endless scrollées
 - Options : Correction des onglets sur les petites résolutions
 - Torrent finder : Changement des 2 boutons en une fenêtre plus explicative
 - Torrent list : Correction des tris par colonnes avec la colonne d'age
 - Torrent list : Corrections sur la fenêtre de commentaires au mouseover
 - Torrent list : Ajout du filtre Scene
+- Torrent list : Correction des filtres et colonne age sur les résultats IMDB - ravomavain
 - Summary : Ajout des options : colonne d'age et commentaires au mouseover
 - Uploads : Ajout des options : colonne d'age et commentaires au mouseover
 

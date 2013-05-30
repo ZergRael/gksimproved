@@ -56,7 +56,7 @@ var insertScript = function (id, f, removeAfterUse) {
 };
 
 // Builds our specific frames from a frame object :
-// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
+// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], onCloseCallback, underButtonsText }
 var appendFrame = function(o) {
 	// Build custom buttons
 	var additionnalButtons = '';
@@ -79,6 +79,9 @@ var appendFrame = function(o) {
 	var frame = $("#gksi_" + o.id);
 	// Close button
 	$("#gksi_" + o.id + "_close").click(function() {
+		if(o.onCloseCallback) {
+			o.onCloseCallback();
+		}
 		frame.remove();
 		return false;
 	});

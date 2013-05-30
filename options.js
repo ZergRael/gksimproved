@@ -21,6 +21,7 @@ var opt = {
 			bbcode_shortcuts:   { defaultVal: true, showInOptions: true, dispText: "Raccourcis BBCodes avec ctrl" },
 			allow_frame_css:    { defaultVal: false, showInOptions: true, dispText: "Laisser le CSS positionner les fenêtres GKSi" },
 			real_upload:        { defaultVal: false, showInOptions: true, dispText: "Afficher les stats réeles (UP/DL/Ratio) dans l'entête" },
+			options_section:    { defaultVal: false, showInOptions: false }
 		},
 		endless_scrolling : {
 			endless_scrolling:  { defaultVal: true, showInOptions: true, dispText: "Endless scrolling sur les pages compatibles", sub_options: {
