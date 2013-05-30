@@ -29,6 +29,7 @@
         "module/logs.module.js",
         "module/aura.module.js",
         "module/peers.module.js",
+        "module/bookmark.module.js",
         "loader.js"
       ]
     }
