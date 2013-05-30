@@ -370,6 +370,27 @@ modules.torrent_list = {
 			});
 		}
 
+		var BookmarkVisibleTorrents = function() {
+			dbg("[BookmarkVisibleTorrents] Scanning");
+			var actions = [];
+			$("#torrent_list tr:visible a[href^='/get/']:lt(40)").each(function(i){
+				var tid = $(this).attr('href').match(/\d+/)[0];
+				actions.push({
+					action: "add",
+					type: "booktorrent",
+					tid: tid
+				});
+			});
+			dbg("[BookmarkVisibleTorrents] Sending "+actions.length+" requests");
+			utils.multiGet(actions, function(){
+				dbg("[BookmarkVisibleTorrents] Done");
+				insertScript("autoget_notify", function(){
+					Notifier.success("Torrents ajouté aux BookMarks", 'Ajout Effectué');
+				}, true);
+			});
+			dbg("[BookmarkVisibleTorrents] Sent");
+		}
+
 		var markerButton = '';
 		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Filtre Freeleech</label> | <input id="filter_scene" type="checkbox" ' + (opt.get(module_name, "filtering_scene") ? 'checked="checked" ' : ' ') + '/><label for="filter_scene">Filtre Scene</label> | ';
 
@@ -379,6 +400,10 @@ modules.torrent_list = {
 		if(mOptions.canMark && (!pageUrl.params || !pageUrl.params.page || pageUrl.params.page == 0) && (!pageUrl.params || !pageUrl.params.sort || (pageUrl.params.sort == "id" && (!pageUrl.params.order || pageUrl.params.order == "desc")))) {
 			markerButton = '<a id="torrent_marker_button" href="#">Marqueur de torrents</a> | ';
 		}
+
+		$(mOptions.buttons).prepend('<a href="#" id="bookmarkvisibletorrents">Ajouter 40 premiers aux BookMarks</a> | ');
+		$("#bookmarkvisibletorrents").click(BookmarkVisibleTorrents);
+
 		if(mOptions.canFilter) {
 			$(mOptions.buttons).prepend(markerButton + torrentButtons);
 		}
