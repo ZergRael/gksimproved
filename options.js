@@ -83,6 +83,9 @@ var opt = {
 		},
 		logs: {
 			auto_refresh:       { defaultVal: false, showInOptions: false }
+		},
+		bookmark: {
+			delete_get:  { defaultVal: true, showInOptions: false }
 		}
 	},
 	// Returns value for module(m) & option(o)
