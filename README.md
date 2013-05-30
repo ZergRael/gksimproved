@@ -17,6 +17,8 @@ Voir topic associé.
 - Badges : Ajout du dernier badge forum
 - Badges : Afficher les tooltips de tous les badges - ravomavain
 - Badges : Afficher les badges manquants et tooltips sur les pages d'autres utilisateurs - ravomavain
+- Bookmark : Suppression par catégorie - ravomavain
+- Bookmark : Ajout des 15 premiers bookmarks à l'autoget & suppression automatique - ravomavain
 - Endless scrolling : Dans la pagination, la page actuelle est cliquable
 - Global : Ajout des données de download et ratio réel avec l'upload réel
 - Global : Ajout d'un onglet "Tout" dans les options et sauvegarde du dernier onglet consulté
@@ -27,6 +29,7 @@ Voir topic associé.
 - Torrent list : Corrections sur la fenêtre de commentaires au mouseover
 - Torrent list : Ajout du filtre Scene
 - Torrent list : Correction des filtres et colonne age sur les résultats IMDB - ravomavain
+- Torrent list : Ajout des 40 premiers torrents aux bookmarks - ravomavain
 - Summary : Ajout des options : colonne d'age et commentaires au mouseover
 - Uploads : Ajout des options : colonne d'age et commentaires au mouseover
 

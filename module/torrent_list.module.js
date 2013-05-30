@@ -391,22 +391,24 @@ modules.torrent_list = {
 			dbg("[BookmarkVisibleTorrents] Sent");
 		}
 
-		var markerButton = '';
-		var torrentButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Filtre Freeleech</label> | <input id="filter_scene" type="checkbox" ' + (opt.get(module_name, "filtering_scene") ? 'checked="checked" ' : ' ') + '/><label for="filter_scene">Filtre Scene</label> | ';
+		var markerButton = '<a id="torrent_marker_button" href="#">Marqueur torrents</a> |';
+		var filterButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Filtre Freeleech</label> |<input id="filter_scene" type="checkbox" ' + (opt.get(module_name, "filtering_scene") ? 'checked="checked" ' : ' ') + '/><label for="filter_scene">Filtre Scene</label> | ';
+		var bookmarkButton = '<a href="#" id="bookmarkvisibletorrents">Bookmarker 40 premiers</a> | ';
+		var buttons = "";
 
 		dbg("[Init] Starting");
 
 		// Adding buttons
 		if(mOptions.canMark && (!pageUrl.params || !pageUrl.params.page || pageUrl.params.page == 0) && (!pageUrl.params || !pageUrl.params.sort || (pageUrl.params.sort == "id" && (!pageUrl.params.order || pageUrl.params.order == "desc")))) {
-			markerButton = '<a id="torrent_marker_button" href="#">Marqueur de torrents</a> | ';
+			buttons += markerButton;
 		}
-
-		$(mOptions.buttons).prepend('<a href="#" id="bookmarkvisibletorrents">Ajouter 40 premiers aux BookMarks</a> | ');
-		$("#bookmarkvisibletorrents").click(BookmarkVisibleTorrents);
 
 		if(mOptions.canFilter) {
-			$(mOptions.buttons).prepend(markerButton + torrentButtons);
+			buttons += filterButtons;
 		}
+
+		$(mOptions.buttons).prepend(buttons + bookmarkButton);
+		$("#bookmarkvisibletorrents").click(BookmarkVisibleTorrents);
 
 		// Torrent marker frame
 		$("#torrent_marker_button").click(function() {

@@ -32,15 +32,14 @@ modules.bookmark = {
 			dbg("[AutoGetAll] Scanning");
 			var actions = [];
 			// Autoget is limited to 15 torrents !
-			$("#torrent tbody:lt(15) tr:not(#bookresults)").each(function(i){
+			$("#torrent tbody:lt(15) tr:not(#bookresults)").each(function(i) {
 				var tid = $(this).find(".dl a").attr('href').match(/\d+/)[0];
 				actions.push({
 					action: "add",
 					type: "autoget",
 					tid: tid
 				});
-				if(opt.get(module_name, "delete_get"))
-				{
+				if(opt.get(module_name, "delete_get")) {
 					var bid = $(this).attr('id').match(/\d+/)[0];
 					actions.push({
 						action: "del",
@@ -52,10 +51,9 @@ modules.bookmark = {
 			dbg("[AutoGetAll] Sending "+actions.length+" requests");
 			utils.multiGet(actions, function(){
 				dbg("[AutoGetAll] Done");
-				insertScript("autoget_notify", function(){
+				insertScript("autoget_notify", function() {
 					Notifier.success("Torrents ajouté à l'autoget", 'Ajout Effectué');
-					if($("#delete_get").is(':checked'))
-					{
+					if($("#delete_get").is(':checked')) {
 						$("#torrent tbody:has(tr:not(#bookresults)):lt(15)").remove();
 						$('#bookresults').trigger('click');
 					}
@@ -68,8 +66,7 @@ modules.bookmark = {
 			dbg("[DelAllCat] Scanning category");
 			var cat = $("#book a.current").attr('href');
 			var actions = [];
-			// Could be replaced by $("#book a.current:target tbody tr:not(#bookresults)") with jQuery 1.9 (for :target support)
-			$(cat+" tbody tr:not(#bookresults)").each(function(i){
+			$(cat+" tbody tr:not(#bookresults)").each(function(i) {
 				var tid = $(this).attr('id').match(/\d+/)[0];
 				actions.push({
 					action: "del",
@@ -80,7 +77,7 @@ modules.bookmark = {
 			dbg("[DelAllCat] Sending "+actions.length+" requests");
 			utils.multiGet(actions, function(){
 				dbg("[DelAllCat] Done");
-				insertScript("delallcat_notify", function(){
+				insertScript("delallcat_notify", function() {
 					Notifier.success("Bookmarks supprimés", 'Suppression OK');
 					var cat = $("#book a.current").attr('href');
 					$(cat+" tbody:has(tr:not(#bookresults))").remove();
