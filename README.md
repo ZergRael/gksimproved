@@ -31,6 +31,7 @@ Voir topic associé.
 - Torrent list : Correction des filtres et colonne age sur les résultats IMDB - ravomavain
 - Torrent list : Ajout des 40 premiers torrents aux bookmarks - ravomavain
 - Summary : Ajout des options : colonne d'age et commentaires au mouseover
+- Twits : Annonce lorsqu'un twit est raté lors de la rédaction d'un message
 - Uploads : Ajout des options : colonne d'age et commentaires au mouseover
 
 **0.3.1**
