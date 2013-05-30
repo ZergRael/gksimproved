@@ -28,11 +28,6 @@ modules.badges = {
 		};
 
 		var userId = utils.getUserId();
-		if(mOptions.checkId) {
-			if(pageUrl.path.match(/(\d+)/)[1] != userId) {
-				return;
-			}
-		}
 
 		dbg("[Init] Loading module");
 		// Loading all functions used
@@ -317,15 +312,18 @@ modules.badges = {
 		dbg("[Init] Starting");
 		// Execute functions
 
-		parse_progress();
-		opt.setCallback(module_name, "progress", function(state) {
-			if(state) {
-				parse_progress();
-			}
-			else {
-				$(".gksi_progress").remove();
-			}
-		})
+		if(!mOptions.checkId || pageUrl.path.match(/(\d+)/)[1] == userId)
+		{
+			parse_progress();
+			opt.setCallback(module_name, "progress", function(state) {
+				if(state) {
+					parse_progress();
+				}
+				else {
+					$(".gksi_progress").remove();
+				}
+			})
+		}
 
 		show_missing_images();
 		show_missing_tips();
