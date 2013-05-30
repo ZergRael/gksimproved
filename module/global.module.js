@@ -222,6 +222,9 @@ modules.global = {
 			}, function() {
 			});
 
+			$(".gksi_options_header_button:first-child").addClass("gksi_options_header_button_selected");
+			$(".gksi_options_section:not(:first-child)").hide();
+
 			dbg("[Options] Frame ready");
 		};
 
