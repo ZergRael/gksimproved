@@ -14,6 +14,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 modules.aura = {
 	name: "aura",
+	dText: "Aura",
 	pages: [
 		{ path_name: "/m/aura/", options: { buttons: '#myauracalc' } }
 	],
@@ -129,8 +130,7 @@ modules.aura = {
 			});
 		};
 
-		var updateTableSort = function()
-		{
+		var updateTableSort = function() {
 			dbg("[updateTableSort] Init");
 			insertScript("update_tablesorter", function(){
 				var table = $('#myauracalc');
@@ -158,10 +158,9 @@ modules.aura = {
 				});
 			}, true);
 			dbg("[updateTableSort] Done");
-		}
+		};
 
-		var addAgColumn = function()
-		{
+		var addAgColumn = function() {
 			dbg("[addAgColumn] Starting");
 			var myauracalc = $('#myauracalc');
 			$("thead tr th:last", myauracalc).after("<th class='ag_column'>A/Go</th>");
@@ -173,7 +172,7 @@ modules.aura = {
 			});
 			updateTableSort();
 			dbg("[addAgColumn] Done");
-		}
+		};
 
 		dbg("[Init] Starting");
 		// Execute functions
@@ -181,7 +180,9 @@ modules.aura = {
 		var buttons = '<table id="gksi_aura_controls" class="table100 tablesorter" style="width: 100%;" border="1"><thead><tr><th>Calculateur d\'objectif de karma</th><th>Calculateur de palier d\'aura</th><th>Calculateur de changements d\'aura</th></tr></thead><tbody><tr><td>Objectif karma : <input id="gksi_karmagoal_input" type="text" value="1000000"><br>Temps nécessaire estimé : <span id="gksi_karmagoal_time" class="gksi_aura_result"></span></td><td>Objectif aura : <input id="gksi_auragoal_input" type="text" value="49.9"><br>Taux Ag de progression : <span id="gksi_auragoal_progression">Z</span> / Go <a href="#" title="Cette valeur est calculée à partir de l\'ensemble des caractéristiques de torrents que vous seedez (nombre de seeds et age moyen).\n\nElle permet de déduire la progression de votre aura en fonction d\'une taille en Go. On trouvera généralement une valeur proche de 1. Si vos torrents sont jeunes et très seedés la valeur sera plus faible, et inversement pour des torrents agés et peu seedés.">[?]</a><br>Go nécessaires estimés : <span id="gksi_auragoal_go" class="gksi_aura_result">Z</span> Go</td><td>Lien vers un torrent à télécharger : <input id="gksi_auratorrent_input" type="text"><br>En seedant ce torrent, votre aura passera à : <span id="gksi_auratorrent_aura" class="gksi_aura_result"></span></td></tr></tbody></table><p class="marginleft">Attention, ce système expérimental ne propose que des estimations servant à vous aider dans l\'optimisation de votre aura/karma.<br />Malgré l\'utilisation des formules exactes du calcul d\'aura, ces valeurs sont des approximations basées sur les arrondis de la page.</p><br />';
 		$(mOptions.buttons).before(buttons);
 
-		addAgColumn();
+		if(opt.get(module_name, "ag_column")) {
+			addAgColumn();
+		}
 
 		$("#gksi_karmagoal_input").keyup(calcKarmaGoal);
 		$("#gksi_auragoal_input").keyup(calcAuraGoal);

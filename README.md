@@ -12,6 +12,7 @@ Voir topic associé.
 
 ### TODO.done
 - Aura : Amélioration des calculs pour supporter les pages de 500+ torrents. (1k+ maintenant)
+- Aura : Colonne de rentabilité par torrent (A/Go) - ravomavain
 - Badges : Correction de l'affichage de la progression sur /m/badges/
 - Badges : Correction de la détection des valeurs en cas d'utilisateur invité
 - Badges : Ajout du dernier badge forum

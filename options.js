@@ -84,8 +84,11 @@ var opt = {
 		logs: {
 			auto_refresh:       { defaultVal: false, showInOptions: false }
 		},
+		aura: {
+			ag_column:          { defaultVal: true, showInOptions: true, dispText: "Colonne de rentabilité torrent A/Go" }
+		},
 		bookmark: {
-			delete_get:  { defaultVal: true, showInOptions: false }
+			delete_get:         { defaultVal: true, showInOptions: false }
 		}
 	},
 	// Returns value for module(m) & option(o)
