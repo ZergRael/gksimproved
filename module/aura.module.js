@@ -164,12 +164,17 @@ modules.aura = {
 			dbg("[addAgColumn] Starting");
 			var myauracalc = $('#myauracalc');
 			$("thead tr th:last", myauracalc).after("<th class='ag_column'>A/Go</th>");
+			var ATot = 0;
+			var sizeTot = 0;
 			$("tbody tr", myauracalc).each(function(i){
 				var tds = $(this).find("td");
-				var size = tds.eq(2).attr("data-filesize")/(1024*1024*1024);
-				var A = tds.eq(4).text();
+				var size = Number(tds.eq(2).attr("data-filesize"))/(1024*1024*1024);
+				var A = Number(tds.eq(4).text());
+				ATot += A;
+				sizeTot += size;
 				tds.last().after("<td class='ag_column'>"+(A/size).toFixed(3)+"</td>");
 			});
+			$("tfoot tr td:last", myauracalc).after("<td class='ag_column'>"+(ATot/sizeTot).toFixed(3)+"</td>");
 			updateTableSort();
 			dbg("[addAgColumn] Done");
 		};
