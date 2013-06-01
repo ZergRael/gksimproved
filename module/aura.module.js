@@ -188,6 +188,14 @@ modules.aura = {
 		if(opt.get(module_name, "ag_column")) {
 			addAgColumn();
 		}
+		opt.setCallback(module_name, "ag_column", function(state) {
+			if(state) {
+				addAgColumn();
+			}
+			else {
+				$(".ag_column").remove();
+			}
+		});
 
 		$("#gksi_karmagoal_input").keyup(calcKarmaGoal);
 		$("#gksi_auragoal_input").keyup(calcAuraGoal);
