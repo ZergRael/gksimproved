@@ -32,7 +32,7 @@ modules.bookmark = {
 			dbg("[AutoGetAll] Scanning");
 			var actions = [];
 			// Autoget is limited to 15 torrents !
-			$("#torrent tbody:lt(15) tr:not(#bookresults)").each(function(i) {
+			$("#torrent tbody:first tr[id^=book]:lt(15)").each(function(i) {
 				var tid = $(this).find(".dl a").attr('href').match(/\d+/)[0];
 				actions.push({
 					action: "add",
@@ -53,20 +53,21 @@ modules.bookmark = {
 				dbg("[AutoGetAll] Done");
 				insertScript("autoget_notify", function() {
 					Notifier.success("Torrents ajouté à l'autoget", 'Ajout Effectué');
-					if($("#delete_get").is(':checked')) {
-						$("#torrent tbody:has(tr:not(#bookresults)):lt(15)").remove();
-						$('#bookresults').trigger('click');
-					}
 				}, true);
+				if(opt.get(module_name, "delete_get")) {
+					$("#torrent tbody:first tr[id^=book]:lt(15)").remove();
+					updateTotal();
+				}
 			});
 			dbg("[AutoGetAll] Sent");
-		}
+			return false;
+		};
 
 		var DelAllCat = function() {
 			dbg("[DelAllCat] Scanning category");
 			var cat = $("#book a.current").attr('href');
 			var actions = [];
-			$(cat+" tbody tr:not(#bookresults)").each(function(i) {
+			$(cat+" tbody:first tr[id^=book]").each(function(i) {
 				var tid = $(this).attr('id').match(/\d+/)[0];
 				actions.push({
 					action: "del",
@@ -77,24 +78,26 @@ modules.bookmark = {
 			dbg("[DelAllCat] Sending "+actions.length+" requests");
 			utils.multiGet(actions, function(){
 				dbg("[DelAllCat] Done");
+				$(cat+" tbody:first tr[id^=book]").remove();
 				insertScript("delallcat_notify", function() {
 					Notifier.success("Bookmarks supprimés", 'Suppression OK');
-					var cat = $("#book a.current").attr('href');
-					$(cat+" tbody:has(tr:not(#bookresults))").remove();
-					$('#bookresults').trigger('click');
 				}, true);
 			});
+			updateTotal();
 			dbg("[DelAllCat] Sent");
-		}
+			return false;
+		};
 
-		var updateTotal = function(event) {
+		var updateTotal = function() {
 			var t=0,s=0,l=0;
-			$("#torrent tbody tr:not(#bookresults)").each(function(i){
+			var torrent = $("#torrent");
+			$("tr:hidden", torrent).remove();
+			$("tbody:first tr[id^=book]", torrent).each(function(i){
 				t += utils.strToSize($(this).find(".size").text()).koTot;
 				s += Number($(this).find(".seed").text());
 				l += Number($(this).find(".leech").text());
 			});
-			var result = $("#torrent tbody tr#bookresults");
+			var result = $("tbody tr#bookresults", torrent);
 			var size = utils.strToSize(t+" Ko");
 			if(size.toTot > 1) {
 				result.find(".size").text(size.toTot.toFixed(2)+" To");
@@ -102,7 +105,7 @@ modules.bookmark = {
 			else if(size.goTot > 1) {
 				result.find(".size").text(size.goTot.toFixed(2)+" Go");
 			}
-			else if(size.MoTot > 1) {
+			else if(size.moTot > 1) {
 				result.find(".size").text(size.moTot.toFixed(2)+" Mo");
 			}
 			else {
@@ -110,7 +113,11 @@ modules.bookmark = {
 			}
 			result.find(".upload").text(s);
 			result.find(".download").text(l);
-		}
+		};
+
+		$("#torrent tbody tr td.name a[onclick]").on('click', function(){
+			updateTotal();
+		});
 
 		dbg("[Init] Starting");
 		// Execute functions
@@ -127,7 +134,6 @@ modules.bookmark = {
 			opt.set(module_name, "delete_get", $(this).is(":checked"));
 			dbg("[DeleteGet] is " + opt.get(module_name, "delete_get"));
 		});
-		$('#bookresults').on('click', updateTotal);
 
 		dbg("[Init] Ready");
 	}
