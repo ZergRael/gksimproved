@@ -80,7 +80,7 @@ modules.endless_scrolling = {
 
 			dbg("[page_extract] Analysing pages");
 			var paginationUrls = paginateBar.html().match(/page=\d+/g);
-			if(!paginationUrls.length) {
+			if(!paginationUrls) {
 				return;
 			}
 
@@ -88,7 +88,7 @@ modules.endless_scrolling = {
 			var maxPage = pagerData.maxPage;
 			$.each(paginationUrls, function(i, paginationUrl) {
 				var pageId = paginationUrl.match(/\d+/);
-				if(!pageId.length) {
+				if(!pageId) {
 					return;
 				}
 				pagerData.pages.push(Number(pageId[0]));

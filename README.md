@@ -29,6 +29,7 @@ Voir topic associé.
 - Torrent list : Correction des tris par colonnes avec la colonne d'age
 - Torrent list : Corrections sur la fenêtre de commentaires au mouseover
 - Torrent list : Ajout du filtre Scene
+- Torrent list : Corrections sur la section PSP
 - Torrent list : Correction des filtres et colonne age sur les résultats IMDB - ravomavain
 - Torrent list : Ajout des 40 premiers torrents aux bookmarks - ravomavain
 - Summary : Ajout des options : colonne d'age et commentaires au mouseover
