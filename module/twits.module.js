@@ -94,11 +94,11 @@ modules.twits = {
 			}
 
 			if(e.which == 13) {
-				if(qp_text.match(/\B@\w+\W*\s*$/gm)) {
+				if(qp_text.match(/\B@\w+[^\w\s]/g)) {
 					if(!$(".failed_twit").length) {
 						$(this).after('<div class="failed_twit" style="display: none;">Un ou plusieurs de vos twits semblent incorrects.<br />Rappel : <b>@pseudo message</b></div>');
 					}
-					$(".failed_twit").slideDown().delay(5000).slideUp();
+					$(".failed_twit").clearQueue().slideDown().delay(5000).slideUp();
 				}
 			}
 		};
