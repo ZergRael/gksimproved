@@ -45,7 +45,7 @@ if($isDiff -eq "true") {
     $mainNewContent += "  ],"
 
     $mainOldContent = (get-content ..\ff_gksi\lib\main.js | Out-String)
-    $regex = [regex] '(?m)  contentScriptFile: \[[\s\w\.\(\"\-\),]+\],'
+    $regex = [regex] '(?m)  contentScriptFile: \[[\s\w\.\(\"\-\)_\/,]+\],'
     set-content ..\ff_gksi\lib\main.js ($mainOldContent -replace $regex, $mainNewContent)
 }
 else {
