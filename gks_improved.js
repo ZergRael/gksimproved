@@ -10,7 +10,7 @@
 
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
-var DEBUG = true;
+var DEBUG = false;
 
 // At this point, libs with most common functions are loaded
 // Options are ready but not loaded

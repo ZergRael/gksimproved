@@ -11,6 +11,8 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+
+**0.3.2**
 - Aura : Amélioration des calculs pour supporter les pages de 500+ torrents. (1k+ maintenant)
 - Aura : Colonne de rentabilité par torrent (A/Go) - ravomavain
 - Badges : Correction de l'affichage de la progression sur /m/badges/
@@ -22,8 +24,8 @@ Voir topic associé.
 - Bookmark : Ajout des 15 premiers bookmarks à l'autoget & suppression automatique - ravomavain
 - Endless scrolling : Dans la pagination, la page actuelle est cliquable
 - Global : Ajout des données de download et ratio réel avec l'upload réel
-- Global : Ajout d'un onglet "Tout" dans les options et sauvegarde du dernier onglet consulté
 - Mouseover comments : Correction de l'affichage sur les pages endless scrollées
+- Options : Ajout d'un onglet "Tout" et sauvegarde du dernier onglet consulté
 - Options : Correction des onglets sur les petites résolutions
 - Torrent finder : Changement des 2 boutons en une fenêtre plus explicative
 - Torrent list : Correction des tris par colonnes avec la colonne d'age

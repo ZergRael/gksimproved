@@ -1,53 +1,40 @@
 [size=4][b]Nouvelle version dispo ![/b][/size]
 
-[b]* 0.3.1 - 20/04/2013[/b]
-- Torrent list : Correction d'un bug empêchant de retrouver un torrent ancien
-[b]* 0.3.0 - 19/04/2013[/b]
-- Aura : Ajout d'un module d'aura permettant quelques calculs
-- ES : Correction de l'adaptation d'url sur viewforum.php
-- Badges : Correction du parseur en cas de lignes supplémentaires sur le profil
-- Badges : Correction de l'image du 4ème d'IRC
-- Badges : Correction de la valeur du badge Snatched (snatched - uploads)
-- Raccourcis BBCode : Correction lors de l'édit d'un post
-- Torrent list : Tri par clic sur les titres de colonnes
-- Torrent list : Le marqueur de torrent affiche le torrent trouvé en bas de page
-- Torrent list : Le marqueur de torrent est aussi actif sur la page d'accueil
-- Torrent list : Les suggestions ajoutées automatiquement sont clairement annoncées comme telles
-- Torrent list : Ajout des commentaires au survol du nombre de commentaires
-- Endless scrolling : Ajout d'un bouton de pause
-- Endless scrolling : Réécriture de la barre de pagination (urls des pages) en fonction de l'ES
-- Endless scrolling : Support de /dupecheck/
-- Endless scrolling : Support de /m/peers/
-- Global : Ajout de l'Upload réel dans l'entête - Imprécis ?
-- Snatched : Filtrage par suspicion de Hit&Run
-- Forums : Correction du scrolling lors de l'utilisation d'un lien direct vers un post
-- Panneau d'options : Affichage complet puis section par section au mouseover de l'entête
-- Panneau d'options : Thèmes pour les images (Endless scrolling & Back to top)
-- Réorganisation interne des fichiers
+[b]* 0.3.2 - 09/06/2013[/b]
+- Aura : Amélioration des calculs pour supporter les pages de 500+ torrents. (1k+ maintenant)
+- Aura : Colonne de rentabilité par torrent (A/Go) - ravomavain
+- Badges : Correction de l'affichage de la progression sur /m/badges/
+- Badges : Correction de la détection des valeurs en cas d'utilisateur invité
+- Badges : Ajout du dernier badge forum
+- Badges : Afficher les tooltips de tous les badges - ravomavain
+- Badges : Afficher les badges manquants et tooltips sur les pages d'autres utilisateurs - ravomavain
+- Bookmark : Suppression par catégorie - ravomavain
+- Bookmark : Ajout des 15 premiers bookmarks à l'autoget & suppression automatique - ravomavain
+- Endless scrolling : Dans la pagination, la page actuelle est cliquable
+- Global : Ajout des données de download et ratio réel avec l'upload réel
+- Mouseover comments : Correction de l'affichage sur les pages endless scrollées
+- Options : Ajout d'un onglet "Tout" et sauvegarde du dernier onglet consulté
+- Options : Correction des onglets sur les petites résolutions
+- Torrent finder : Changement des 2 boutons en une fenêtre plus explicative
+- Torrent list : Correction des tris par colonnes avec la colonne d'age
+- Torrent list : Corrections sur la fenêtre de commentaires au mouseover
+- Torrent list : Ajout du filtre Scene
+- Torrent list : Corrections sur la section PSP
+- Torrent list : Correction des filtres et colonne age sur les résultats IMDB - ravomavain
+- Torrent list : Ajout des 40 premiers torrents aux bookmarks - ravomavain
+- Summary : Ajout des options : colonne d'age et commentaires au mouseover
+- Twits : Annonce lorsqu'un twit est raté lors de la rédaction d'un message
+- Uploads : Ajout des options : colonne d'age et commentaires au mouseover
 
-Ceux possédant déjà l'extension verront Chrome/Firefox la mettre à jour d'ici le prochain reboot.
-Les curieux, c'est ici : [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf]Page Chrome Webstore[/url] - [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/]Extension Firefox[/url]
+Chrome :
+* La mise à jour sera automatique au prochain reboot
+* [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf]Page Chrome Webstore[/url]
 
-Si la mise à jour Firefox n'est pas effectuée automatiquement dans les prochaines heures : [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/versions/?page=1#version-0.3.1]lien direct[/url]
+Firefox :
+* La mise à jour automatique sera réalisée dès que Mozilla approuvera l'update (3-4 semaines)
+* Les plus pressés pourront trouver l'update ici : [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/versions/?page=1#version-0.3.2]GKSimproved 0.3.2[/url]
+* [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/]Page extension Firefox[/url]
 
 N'hésitez pas à proposer vos suggestions :)
 
-[b]Quelques explications[/b]
-* [u]La fenêtre d'options[/u]
-S'affiche d'abord au complet et peut ensuite être réduite en mouseover des onglets. Pas très ingénieux mais j'trouvais ça plutôt marrant.
-
-* [u]Calcul d'aura[/u]
-J'ai mis un pavé de warning sur la page déjà mais je préfère rappeller, c'est vraiment imprécis sur des valeurs faibles. C'est principalement du aux arrondis de la page, le fait qu'elle soit cachée et les valeurs calculées ne donnent pas un résultat en temps réel.
-Le calculateur de palier d'aura (aura -> Go) est le principal ciblé ici. Je calcule un taux de progression sur une moyenne de vos torrents et une moyenne reste une moyenne. Ceci dit après tests, si vous ne changez pas vos habitudes de DL, les écarts avec la réalité sont très plutôt maigres.
-
-Les 2 autres calculateurs sont un peu plus précis : 
-- Objectif de Karma c'est surtout pour déprimer les volontaires pour Yoda ( :P ).
-- Changement d'aura qui lui se base sur les valeurs réelles de la fiche torrent à de très fortes chances d'être précis au dixième
-
-* [u]Endless scrolling[/u]
-- Vu que je n'ai pas trouvé de solution miracle pour modifier en continu la barre de pagination ( 1 | 2 | 3 | 4 | 5 | > [10] ), le plus simple était de la réécrire au complet à chaque refresh/ES :)
-- Un petit bouton de pause fait son apparition
-- J'ai rajouté le thème que m'a proposé LordVal par défaut vu qu'il colle mieux avec le CSS officiel. L'ancien est oujours présent dans les options si vous préférez le noir :D
-[img]https://s.gks.gs/img/img/04-2013/es_button2.png[/img] vs [img]https://s.gks.gs/img/img/03-2013/es_button.png[/img]
-
-Thanks @LordVal pour son boulot :D
+Merci @ravomavain pour son travail et toutes les fonctionnalités ajoutées :D

@@ -7,11 +7,11 @@ C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un
 
 Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. Toujours en beta mais un jour peut-être une version stable arrivera ;)
 
-Version actuelle : 0.3.1 - 20/04/2013 - Licence GPLv3
+Version actuelle : 0.3.2 - 09/06/2013 - Licence GPLv3
 
 [size=6]Téléchargement[/size] :
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
-* [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/][b]Extension Firefox[/b][/url]
+* [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/][b]Extension Firefox[/b][/url] - [url=https://addons.mozilla.org/fr/firefox/addon/gksimproved/versions/?page=1#version-0.3.2]Dernière update en attente de validation (0.3.2)[/url]
 * [url=https://github.com/ZergRael/gksimproved]Page GitHub[/url]
 
 [size=6]Présentation :[/size]
@@ -31,6 +31,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
 > [i]FL uniquement[/i] : N'affiche que les torrents en Freeleech, le tri natif n'est pas concluant - Permet de garder un tri spécifique sur les FL
+> [i]Scene uniquement[/i] : N'affiche que les torrents issus de releases scene
 > [i]Récupérer toutes les pages[/i] : Affiche l'ensemble des pages des snatched en une seule liste
 > [i]Tri par Nom, UL, DL, Real DL, SeedTime, Ratio[/i]	: Un clic sur la colonne associée trie les données - Peut-être lent en fonction de la taille de la liste
 > [i]Suggestions IMDB[/i] : Suggestions de recherche basées sur IMDB.fr et IMDB.com -- Utilise un système de cache perso
@@ -39,6 +40,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Marqueur de torrents[/i] : Marquage du dernier torrent vu pour afficher tous les torrents non vu à partir de ce marqueur
 > [i]Commentaires au survol[/i] : Au survol du nombre de commentaires, ceux-ci s'affichent
 > [i]Tri par clic sur les colonnes[/i]
+> [i]Bookmark torrents[i] : Permet d'ajouter les 40 premiers torrents aux bookmarks - ravomavain
 
 [b]* Snatched[/b]
 - Page des snatched -- https://gks.gs/snatched/
@@ -62,6 +64,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 
 > [i]Autocomplétion des Twits[/i] : Un '@' suivi de quelques lettres puis un tab permet de compléter automatiquement un twit en fonction des pseudos déjà présents sur la page - Les tab suivants tentent les autres pseudos correspondants
 > [i]Coloration des Twits[/i] : Les twits déjà présents dans les posts sont colorés avec le lien associés en fonction des posteurs de la page - Les twits sur des pseudos non présents sur la page ne seront pas reconnus
+> [i]Annonce des twits ratés[/i] : Vous indique lorsqu'un de vos twits n'est pas correctement formé
 
 [b]* Forums[/b]
 - Liste des topics -- /forums.php?action=viewforum&forumid=<id_forum>
@@ -84,6 +87,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Calculateur d'objectif de karma[/i] : Entrez un objectif de karma, obtenez une date à laquelle vous les aurez
 > [i]Calculateur de palier d'aura[/i] : Entrez un objectif d'aura, obtenez le nombre de Go à mettre en seed pour l'atteindre (Warning : imprécis)
 > [i]Calculateur de changements d'aura[/i] : Entrez l'url d'un torrent, obtenez l'aura qu'il vous permettra d'atteindre
+> [i]Colonne de rentabilité par torrent[/i] : Valeur de A/Go du torrent (A est une valeur servant à calculer l'aura) - ravomavain
 
 [b]* Karma store[/b]
 - Pin's store -- https://gks.gs/karma/?tab=pins
@@ -98,6 +102,13 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 
 > [i]Progression[/i] : Affiche votre progression vers l'obtention de ce badge
 > [i]Tous les badges[/i] : Affiche toutes les images de badges même si vous ne les avez pas (semi-transparents)
+> [i]Toolips[/i] : Voir les tooltips des badges non débloqués - ravomavain
+
+[b]* Bookmarks[/b]
+- Page des bookmarks -- https://gks.gs/bookmark/
+
+> [i]Suppression par catégorie[/i] : Supprime les 40 premiers bookmarks d'une catégorie - ravomavain
+> [i]Ajout en autoget[/i] : Ajoute les 15 premiers bookmarks dans l'autoget puis les supprime - ravomavain
 
 [b]* Les autres pages [/b]
 - Liste des requêtes -- https://gks.gs/req/
@@ -109,11 +120,17 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Boutons personnalisables de remontée en haut de page & de pause
 
+- Summaries -- https://gks.gs/summary/id=<id_sum>
+- Liste des uploads -- https://gks.gs/m/uploads/
+
+> [i]Colonne d'age[/i] : Colonne d'age calculée à partir de la date du torrent
+> [i]Commentaires au survol[/i] : Au survol du nombre de commentaires, ceux-ci s'affichent
+
 [b]* Sur l'ensemble du site[/b]
 
 > [i]Validation des formulaires[/i] : Valide les formulaires (commentaires/posts/etc) avec ctrl+entrée
 > [i]Raccourcis BBCode[/i] : Permet d'ajouter les balises BBCode avec les raccourcis Ctrl + (b/u/i/q)
-> [i]Upload réel[/i] : Affiche votre upload réel - requêtes exclues. Mis à jour toutes les 24h
+> [i]Stats réelles[/i] : Affiche vos upload, download et ratio réels - requêtes exclues. Mis à jour toutes les 24h
 
 [size=6]TODO list:[/size]
 - Moar comments
@@ -122,6 +139,32 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
 
 [size=6]Changelog :[/size]
+[b]* 0.3.2 - 09/06/2013[/b]
+- Aura : Amélioration des calculs pour supporter les pages de 500+ torrents. (1k+ maintenant)
+- Aura : Colonne de rentabilité par torrent (A/Go) - ravomavain
+- Badges : Correction de l'affichage de la progression sur /m/badges/
+- Badges : Correction de la détection des valeurs en cas d'utilisateur invité
+- Badges : Ajout du dernier badge forum
+- Badges : Afficher les tooltips de tous les badges - ravomavain
+- Badges : Afficher les badges manquants et tooltips sur les pages d'autres utilisateurs - ravomavain
+- Bookmark : Suppression par catégorie - ravomavain
+- Bookmark : Ajout des 15 premiers bookmarks à l'autoget & suppression automatique - ravomavain
+- Endless scrolling : Dans la pagination, la page actuelle est cliquable
+- Global : Ajout des données de download et ratio réel avec l'upload réel
+- Mouseover comments : Correction de l'affichage sur les pages endless scrollées
+- Options : Ajout d'un onglet "Tout" et sauvegarde du dernier onglet consulté
+- Options : Correction des onglets sur les petites résolutions
+- Torrent finder : Changement des 2 boutons en une fenêtre plus explicative
+- Torrent list : Correction des tris par colonnes avec la colonne d'age
+- Torrent list : Corrections sur la fenêtre de commentaires au mouseover
+- Torrent list : Ajout du filtre Scene
+- Torrent list : Corrections sur la section PSP
+- Torrent list : Correction des filtres et colonne age sur les résultats IMDB - ravomavain
+- Torrent list : Ajout des 40 premiers torrents aux bookmarks - ravomavain
+- Summary : Ajout des options : colonne d'age et commentaires au mouseover
+- Twits : Annonce lorsqu'un twit est raté lors de la rédaction d'un message
+- Uploads : Ajout des options : colonne d'age et commentaires au mouseover
+[spoil]
 [b]* 0.3.1 - 20/04/2013[/b]
 - Torrent list : Correction d'un bug empêchant de retrouver un torrent ancien
 [b]* 0.3.0 - 19/04/2013[/b]
@@ -146,7 +189,6 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Panneau d'options : Affichage complet puis section par section au mouseover de l'entête
 - Panneau d'options : Thèmes pour les images (Endless scrolling & Back to top)
 - Réorganisation interne des fichiers
-[spoil]
 [b]* 0.2.5 - 23/02/2013[/b]
 - Options : Correction de l'attache de la fenêtre d'options au menu gauche pour les CSS atypiques
 - Options : Correction de la couleur de la fenêtre d'options + adaptation en fonction du CSS (mwerf)
@@ -241,3 +283,4 @@ Merci à l'ensemble des utilisateurs ayant proposé leurs suggestions pour amél
 Tout particulièrement à :
 - @MacGeek qui a apporté quelques portions de code
 - @LordVal et ses images pour les boutons pause ES et backToTop
+- @ravomavain pour son code et ses idées
