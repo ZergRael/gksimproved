@@ -354,7 +354,6 @@ modules.torrent_list = {
 			$("#mark_first_torrent").click(function() {
 				var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
 				dbg("[TorrentMark] Marking torrent [" + firstTorrentId + "]");
-				$("#mark_first_torrent_span").remove();
 				opt.set(module_name, "torrent_marker", firstTorrentId);
 				$("#gksi_marker").remove();
 				return false;
@@ -418,6 +417,9 @@ modules.torrent_list = {
 			makeTorrentMarkerFrame();
 			return false;
 		});
+		if(opt.get(module_name, "filtering_fl") || opt.get(module_name, "filtering_scene")) {
+			$("#torrent_marker_button").hide();
+		}
 
 		// FreeLeech torrents filtering
 		$("#filter_fl").change(function() {
@@ -426,14 +428,14 @@ modules.torrent_list = {
 			if(opt.get(module_name, "filtering_fl")) {
 				dbg("[FLFilter] Filtering FL");
 				applyFilters();
-				$("#find_marked_torrent_span").hide();
+				$("#torrent_marker_button").hide();
 				dbg("[FLFilter] Ended filtering");
 				$(document).trigger("es_dom_process_done");
 			}
 			else {
 				dbg("[FLFilter] Unfiltering FL");
 				unfilterFL();
-				$("#find_marked_torrent_span").show();
+				$("#torrent_marker_button").show();
 				dbg("[FLFilter] Ended unfiltering");
 				$(document).trigger("es_dom_process_done");
 			}
@@ -444,14 +446,14 @@ modules.torrent_list = {
 			if(opt.get(module_name, "filtering_scene")) {
 				dbg("[SceneFilter] Filtering Scene");
 				applyFilters();
-				$("#find_marked_torrent_span").hide();
+				$("#torrent_marker_button").hide();
 				dbg("[SceneFilter] Ended filtering");
 				$(document).trigger("es_dom_process_done");
 			}
 			else {
 				dbg("[SceneFilter] Unfiltering Scene");
 				unfilterScene();
-				$("#find_marked_torrent_span").show();
+				$("#torrent_marker_button").show();
 				dbg("[SceneFilter] Ended unfiltering");
 				$(document).trigger("es_dom_process_done");
 			}
