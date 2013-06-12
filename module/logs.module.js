@@ -36,30 +36,30 @@ modules.logs = {
 				return;
 			}
 
-			dbg("[auto_refresh] Grabing this page");
-			utils.grabPage(pageUrl, function(data) {
-				logsTR = $(data).find("tbody tr");
-				dbg("[auto_refresh] Got data");
-				if(logsTR && logsTR.length) {
-					var firstTR = $("tbody tr:nth(1)");
-					var foundFirst = false;
-					$(logsTR.get().reverse()).each(function() {
-						if($(this).text() == firstTR.text()) {
-							foundFirst = true;
-							return;
-						}
-						if(foundFirst && !$(this).find(".date_head").length) {
-							$("tbody tr:first").after($(this));
-							$("tbody tr:last").remove();
-						}
-					});
-				}
-				else {
-					dbg("[auto_refresh] No data");
-				}
-			});
-
-			refreshTimer = setTimeout(autoRefresh, mOptions.auto_refresh_interval);
+			refreshTimer = setInterval(function() {
+				dbg("[auto_refresh] Grabing this page");
+				utils.grabPage(pageUrl, function(data) {
+					logsTR = $(data).find("tbody tr");
+					dbg("[auto_refresh] Got data");
+					if(logsTR && logsTR.length) {
+						var firstTR = $("tbody tr:nth(1)");
+						var foundFirst = false;
+						$(logsTR.get().reverse()).each(function() {
+							if($(this).text() == firstTR.text()) {
+								foundFirst = true;
+								return;
+							}
+							if(foundFirst && !$(this).find(".date_head").length) {
+								$("tbody tr:first").after($(this));
+								$("tbody tr:last").remove();
+							}
+						});
+					}
+					else {
+						dbg("[auto_refresh] No data");
+					}
+				});
+			}, mOptions.auto_refresh_interval);
 		};
 
 		dbg("[Init] Starting");
@@ -75,13 +75,13 @@ modules.logs = {
 				autoRefresh();
 			}
 			else {
-				clearTimeout(refreshTimer);
+				clearInterval(refreshTimer);
 			}
 		});
 
 		if(opt.get(module_name, "auto_refresh")) {
 			dbg("[auto_refresh] Starting");
-			refreshTimer = setTimeout(autoRefresh, mOptions.auto_refresh_interval);
+			autoRefresh();
 		}
 
 		dbg("[Init] Ready");

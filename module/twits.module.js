@@ -162,15 +162,16 @@ modules.twits = {
 				// Listen for twit autocomplete in editbox
 				$("#editbox" + postId).keydown(jOnKeydown);
 
+				var waitMoreInterval = false;
 				var waitMore = function(postId) {
-					if($("#editbox" + postId).length) {
-						setTimeout(waitMore, 100, postId);
-						return;
-					}
-					else {
-						dbg("[TwitColorize] Edit is done - Colorize");
-						colorizeTwits(postId);
-					}
+					waitMoreInterval = setInterval(function() {
+						if(!$("#editbox" + postId).length) {
+							dbg("[TwitColorize] Edit is done - Colorize");
+							clearInterval(waitMoreInterval);
+							colorizeTwits(postId);
+						}
+					}, 100, postId);
+					
 				}
 				var bindEditButton = function() {
 					// On edit validation
