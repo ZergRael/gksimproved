@@ -36,20 +36,15 @@ dbg("[Init] Loading general funcs");
 
 // Import a javascript file from the site if we need it elsewhere (jQ function doesn't seem to work as intended)
 var appendNativeScript = function (jsFileName) {
-	var script = document.createElement("script");
-	script.type = "text/javascript";
-	script.src = jsFileName;
+	$("body").append($("<script>", { type: "text/javascript", src: jsFileName }));
 	dbg("[NativeScript] Append " + jsFileName);
-	document.body.appendChild(script);
 };
 
 // Insert script into DOM - Escape sandboxing
 var insertScript = function (id, f, removeAfterUse) {
-	var script = document.createElement("script");
-	script.type = "text/javascript";
-	script.id = id;
-	script.textContent = "(" + f.toString() + ")(jQuery)";
-	document.body.appendChild(script);
+	document.body.appendChild(
+		$("<script>", { id: id, type: "text/javascript" }).text("(" + f.toString() + ")(jQuery)").get(0)
+	);
 	if(removeAfterUse) {
 		$("#" + id).remove();
 	}
