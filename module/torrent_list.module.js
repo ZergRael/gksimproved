@@ -330,6 +330,22 @@ modules.torrent_list = {
 			}
 		};
 
+		var mark_first_torrent = function() {
+			var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
+			dbg("[TorrentMark] Marking torrent [" + firstTorrentId + "]");
+			opt.set(module_name, "torrent_marker", firstTorrentId);
+			$("#torrent_marker_button").remove();
+			return false;
+		};
+
+		var find_marked_torrent = function() {
+			dbg("[TorrentMark] Looking for torrent mark");
+			$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Désencapsulation des torrents à la recherche du marqueur</p>');
+			findTorrent(1);
+			$("#torrent_finder_button").remove();
+			return false;
+		};
+
 		var makeTorrentMarkerFrame = function() {
 			var markerFrame = { id: "marker", title: "Marqueur de torrents", relativeToId: "torrent_marker_button", top: -180, left: -90 };
 			var findMarkedTorrent = '<span id="find_marked_torrent_span"><a id="find_marked_torrent" href="#">Retrouver torrent</a></span>';
@@ -347,26 +363,7 @@ modules.torrent_list = {
 			}
 			var frameText = "Vous permet de sauvegarder l'id du premier torrent de la liste pour le retrouver plus tard<br /><br />Au dessus de 2000 ids de retard (~2 semaines), le torrent sera considéré trop ancien.<br />Position actuelle : " + (torrentIdMark || 0) + "/" + firstTorrentId;
 			markerFrame.data = frameText + "<br /><br /><center>" + markFirstTorrent + "<br />" + findMarkedTorrent + "</center>";
-			// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
-			appendFrame(markerFrame);
 
-			// Torrent marking
-			$("#mark_first_torrent").click(function() {
-				var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
-				dbg("[TorrentMark] Marking torrent [" + firstTorrentId + "]");
-				opt.set(module_name, "torrent_marker", firstTorrentId);
-				$("#gksi_marker").remove();
-				return false;
-			});
-
-			// Torrent mark finding
-			$("#find_marked_torrent").click(function() {
-				dbg("[TorrentMark] Looking for torrent mark");
-				$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Désencapsulation des torrents à la recherche du marqueur</p>');
-				findTorrent(1);
-				$("#gksi_marker").remove();
-				return false;
-			});
 		}
 
 		var BookmarkVisibleTorrents = function() {
@@ -390,7 +387,8 @@ modules.torrent_list = {
 			dbg("[BookmarkVisibleTorrents] Sent");
 		}
 
-		var markerButton = '<a id="torrent_marker_button" href="#">Marqueur torrents</a> |';
+		var markerButton =  '<a id="torrent_marker_button" href="#">Marquer torrent</a> |';
+		var finderButton = '<a id="torrent_finder_button" href="#">Retrouver torrent</a> | ';
 		var filterButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Filtre Freeleech</label> |<input id="filter_scene" type="checkbox" ' + (opt.get(module_name, "filtering_scene") ? 'checked="checked" ' : ' ') + '/><label for="filter_scene">Filtre Scene</label> | ';
 		var bookmarkButton = '<a href="#" id="bookmarkvisibletorrents">Bookmarker 40 premiers</a> | ';
 		var buttons = "";
@@ -399,6 +397,11 @@ modules.torrent_list = {
 
 		// Adding buttons
 		if(mOptions.canMark && (!pageUrl.params || !pageUrl.params.page || pageUrl.params.page == 0) && (!pageUrl.params || !pageUrl.params.sort || (pageUrl.params.sort == "id" && (!pageUrl.params.order || pageUrl.params.order == "desc")))) {
+			var torrentIdMark = opt.get(module_name, "torrent_marker");
+			var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
+			if(torrentIdMark !== false && firstTorrentId - torrentIdMark < 2000) {
+				buttons += finderButton;
+			}
 			buttons += markerButton;
 		}
 
@@ -408,17 +411,12 @@ modules.torrent_list = {
 
 		$(mOptions.buttons).prepend(buttons + bookmarkButton);
 		$("#bookmarkvisibletorrents").click(BookmarkVisibleTorrents);
+		$("#torrent_marker_button").click(mark_first_torrent);
+		$("#torrent_finder_button").click(find_marked_torrent);
 
-		// Torrent marker frame
-		$("#torrent_marker_button").click(function() {
-			if($("#gksi_marker").length) {
-				$("#gksi_marker").remove();
-			}
-			makeTorrentMarkerFrame();
-			return false;
-		});
 		if(opt.get(module_name, "filtering_fl") || opt.get(module_name, "filtering_scene")) {
 			$("#torrent_marker_button").hide();
+			$("#torrent_finder_button").hide();
 		}
 
 		// FreeLeech torrents filtering
@@ -429,6 +427,7 @@ modules.torrent_list = {
 				dbg("[FLFilter] Filtering FL");
 				applyFilters();
 				$("#torrent_marker_button").hide();
+				$("#torrent_finder_button").hide();
 				dbg("[FLFilter] Ended filtering");
 				$(document).trigger("es_dom_process_done");
 			}
@@ -436,6 +435,7 @@ modules.torrent_list = {
 				dbg("[FLFilter] Unfiltering FL");
 				unfilterFL();
 				$("#torrent_marker_button").show();
+				$("#torrent_finder_button").show();
 				dbg("[FLFilter] Ended unfiltering");
 				$(document).trigger("es_dom_process_done");
 			}
@@ -447,6 +447,7 @@ modules.torrent_list = {
 				dbg("[SceneFilter] Filtering Scene");
 				applyFilters();
 				$("#torrent_marker_button").hide();
+				$("#torrent_finder_button").hide();
 				dbg("[SceneFilter] Ended filtering");
 				$(document).trigger("es_dom_process_done");
 			}
@@ -454,6 +455,7 @@ modules.torrent_list = {
 				dbg("[SceneFilter] Unfiltering Scene");
 				unfilterScene();
 				$("#torrent_marker_button").show();
+				$("#torrent_finder_button").show();
 				dbg("[SceneFilter] Ended unfiltering");
 				$(document).trigger("es_dom_process_done");
 			}
