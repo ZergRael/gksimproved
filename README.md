@@ -11,6 +11,7 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+- Mouseover comments : Fermeture de la fenêtre au clic en dehors de celle-ci
 - Global : Evenements de début et fin de process
 
 **0.3.2**
