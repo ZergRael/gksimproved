@@ -47,6 +47,7 @@ var opt = {
 			imdb_auto_add:      { defaultVal: false, showInOptions: true, dispText: "Ajouter le résultat de la meilleure correspondance IMDB", parent: "imdb_suggest" },
 			filtering_fl:       { defaultVal: false, showInOptions: false },
 			filtering_scene:    { defaultVal: false, showInOptions: false },
+			auto_refresh:       { defaultVal: false, showInOptions: false },
 			age_column:         { defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent" },
 			autoget_column:     { defaultVal: false, showInOptions: true, dispText: "Colonne de boutons d'ajout direct à l'autoget" },
 			torrent_marker:     { defaultVal: false, showInOptions: false },

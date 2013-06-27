@@ -16,7 +16,7 @@ modules.torrent_list = {
 	name: "torrent_list",
 	dText: "Liste torrents",
 	pages: [
-		{ path_name: "/", options: { buttons: '#sort', canMark: true, canFilter: true, canSort: true } },
+		{ path_name: "/", options: { buttons: '#sort', canRefresh: true, canMark: true, canFilter: true, canSort: true } },
 		{ path_name: "/browse/", options: { buttons: '#sort p', canMark: true, canFilter: true, canSort: true } },
 		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canSuggest: true, canFilter: true, canSort: true } },
 		{ path_name: "/summary/", options: { } },
@@ -225,6 +225,56 @@ modules.torrent_list = {
 			return false;
 		};
 
+		var autorefreshInterval;
+		var startAutorefresh = function() {
+			if(!opt.get(module_name, "auto_refresh")) {
+				return;
+			}
+
+			autorefreshInterval = setInterval(function() {
+				dbg("[auto_refresh] Grabing this page");
+				utils.grabPage(pageUrl, function(data) {
+					torrentsTR = $(data).find("#torrent_list tr");
+					dbg("[auto_refresh] Got data");
+					if(torrentsTR && torrentsTR.length) {
+						var firstTRtext = $("#torrent_list tr:nth(1)").find("td:nth(1)").text();
+						var foundFirst = false;
+						var insertedTrs = false;
+						$(torrentsTR.get().reverse()).each(function() {
+							if($(this).find("td:nth(1)").text() == firstTRtext) {
+								foundFirst = true;
+								return;
+							}
+							if(foundFirst && !$(this).hasClass("head_torrent")) {
+								var torrentTR = $(this);
+								var torrentNameTd = torrentTR.find("td:nth(1)");
+								if(opt.get(module_name, "autoget_column")) {
+									torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="autoget_link"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td>');
+								}
+								if(opt.get(module_name, "age_column")) {
+									torrentNameTd.after('<td class="age_torrent_1">frais</td>');
+								}
+								torrentTR.find("td:nth(1)").addClass("torrent_autorefreshed");
+								$("#torrent_list tr:first").after(torrentTR);
+								$("#torrent_list tr:last").remove();
+								insertedTrs = true;
+							}
+						});
+						if(insertedTrs) {
+							dbg("[auto_refresh] Inserted torrents");
+							$(document).trigger("endless_scrolling_insertion_done");
+						}
+						else {
+							dbg("[auto_refresh] Nothing new");
+						}
+					}
+					else {
+						dbg("[auto_refresh] No data");
+					}
+				});
+			}, 60000);
+		};
+
 		var suggestMore = function() {
 			var searchQuery = $("#searchinput").val();
 			if(searchQuery) {
@@ -429,6 +479,7 @@ modules.torrent_list = {
 		var finderButton = '<a id="torrent_finder_button" href="#">Retrouver torrent</a> | ';
 		var filterButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Filtre Freeleech</label> |<input id="filter_scene" type="checkbox" ' + (opt.get(module_name, "filtering_scene") ? 'checked="checked" ' : ' ') + '/><label for="filter_scene">Filtre Scene</label> | ';
 		var bookmarkButton = '<a href="#" id="bookmarkvisibletorrents">Bookmarker 40 premiers</a> | ';
+		var refreshButton = '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/><label for="auto_refresh">Auto refresh</label> |';
 		var buttons = "";
 
 		dbg("[Init] Starting");
@@ -442,7 +493,9 @@ modules.torrent_list = {
 			}
 			buttons += markerButton;
 		}
-
+		if(mOptions.canRefresh) {
+			buttons += refreshButton;
+		}
 		if(mOptions.canFilter) {
 			buttons += filterButtons;
 		}
@@ -498,6 +551,18 @@ modules.torrent_list = {
 				$(document).trigger("es_dom_process_done");
 			}
 		});
+		$("#auto_refresh").change(function() {
+			opt.set(module_name, "auto_refresh", $(this).attr("checked") == "checked" ? true : false);
+			dbg("[auto_refresh] is " + opt.get(module_name, "auto_refresh"));
+			if(opt.get(module_name, "auto_refresh")) {
+				dbg("[auto_refresh] Starting");
+				startAutorefresh();
+			}
+			else {
+				dbg("[auto_refresh] Ended");
+				clearInterval(autorefreshInterval);
+			}
+		});
 		tagTorrents();
 		columnSorter();
 		addAutogetColumn();
@@ -510,6 +575,7 @@ modules.torrent_list = {
 		if(mOptions.canSuggest && opt.get(module_name, "imdb_suggest")) {
 			suggestMore();
 		}
+		startAutorefresh();
 
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
