@@ -47,3 +47,4 @@ $.each(modules, function(module_name, m) {
 	});
 });
 $(document).trigger("scroll");
+$(document).trigger("gksi_ready");

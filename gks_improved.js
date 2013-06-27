@@ -31,6 +31,7 @@ if($.browser.mozilla) {
 	};
 }
 
+$(document).trigger("gksi_started");
 dbg("[Init] Loading general funcs");
 // Only DOM modifying functions are here
 

@@ -11,6 +11,7 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+- Global : Evenements de début et fin de process
 
 **0.3.2**
 - Aura : Amélioration des calculs pour supporter les pages de 500+ torrents. (1k+ maintenant)
