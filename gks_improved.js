@@ -151,7 +151,7 @@ var appendFrame = function(o) {
 	}
 
 	if(o.removeOnOutsideClick) {
-		$(document).on("click", function() {
+		$(document).one("click", function() {
 			frame.remove();
 		});
 		frame.on("click", function(e) {
