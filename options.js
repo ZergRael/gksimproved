@@ -48,6 +48,7 @@ var opt = {
 			filtering_fl:       { defaultVal: false, showInOptions: false },
 			filtering_scene:    { defaultVal: false, showInOptions: false },
 			age_column:         { defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent" },
+			autoget_column:     { defaultVal: false, showInOptions: true, dispText: "Colonne de boutons d'ajout direct à l'autoget" },
 			torrent_marker:     { defaultVal: false, showInOptions: false },
 			direct_comments:    { defaultVal: false, showInOptions: true, dispText: "Afficher les commentaires au survol" }
 		},

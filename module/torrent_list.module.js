@@ -83,6 +83,10 @@ modules.torrent_list = {
 		}
 
 		var applyFilters = function() {
+			if(!mOptions.canFilter) {
+				return;
+			}
+
 			if(opt.get(module_name, "filtering_fl") || opt.get(module_name, "filtering_scene")) {
 				$("tbody tr:not(:first):not(.gksi_imdb_head):not(" + (opt.get(module_name, "filtering_fl") ? ".t_freeleech" : "") + (opt.get(module_name, "filtering_scene") ? ".t_scene" : "") + ")").hide();
 			}
@@ -97,13 +101,14 @@ modules.torrent_list = {
 			var alreadyDated = false;
 			$("tbody tr").each(function() { // Process all data & skip already dated, is strangely faster than processing data before insertion
 				if($(this).hasClass("head_torrent")) {
-					if($(this).find("td:nth(2)").hasClass("age_torrent_head")) { // If this td head is already dated, assume the same for the whole page
+					if($(this).hasClass("age_done")) { // If this td head is already dated, assume the same for the whole page
 						dbg("[AgeCol] Already dated page");
 						alreadyDated = true;
 						return;
 					}
 					dbg("[AgeCol] Date calculation");
 					$(this).find("td:nth(1)").after('<td class="age_torrent_head">Age</td>');
+					$(this).addClass("age_done");
 					alreadyDated = false;
 				}
 				else {
@@ -173,6 +178,53 @@ modules.torrent_list = {
 			dbg("[AgeCol] Ended");
 		};
 
+		var addAutogetColumn = function() {
+			if(!opt.get(module_name, "autoget_column")) {
+				return;
+			}
+
+			dbg("[autoget_column] Started");
+			var alreadyProcessed = false;
+			$("tbody tr").each(function() { // Process all data & skip already processed, is strangely faster than processing data before insertion
+				if($(this).hasClass("head_torrent")) {
+					if($(this).hasClass("autoget_done")) { // If this td head is already processed, assume the same for the whole page
+						dbg("[autoget_column] Already processed page");
+						alreadyProcessed = true;
+						return;
+					}
+					dbg("[autoget_column] Processing");
+					$(this).find("td:nth(1)").after('<td class="autoget_torrent_head">Aget</td>');
+					$(this).addClass("autoget_done");
+					alreadyProcessed = false;
+				}
+				else {
+					if(alreadyProcessed) { // Wait until we get to the new page
+						return;
+					}
+
+					var tds = $(this).find("td");
+					if(tds.first().hasClass("alt1")) { // Don't mind the hidden td
+						return;
+					}
+
+					var autogetTdNumber = 0;
+					if(tds.eq(1).hasClass("name_torrent_1")) { // Keep background-color alternance
+						autogetTdNumber = 1;
+					}
+
+					tds.eq(1).after('<td class="autoget_torrent_' + autogetTdNumber + '"><a href="#" class="autoget_link"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td>');
+				}
+			});
+			dbg("[autoget_column] Ended");
+		};
+
+		var autogetOnClick = function() {
+			var td = $(this).parent().parent().find("td:nth(1)");
+			var funct = "function() { AddGet('" + td.find("img:first").attr("id").substring(6) + "', 'autoget', '" + td.find("a:first").text() + "'); }";
+			insertScript("autoget_native", funct, true);
+			return false;
+		};
+
 		var suggestMore = function() {
 			var searchQuery = $("#searchinput").val();
 			if(searchQuery) {
@@ -220,6 +272,7 @@ modules.torrent_list = {
 									$("#torrent_list").append(insertionData);
 								}
 								tagTorrents();
+								addAutogetColumn();
 								addAgeColumn();
 								applyFilters();
 							}
@@ -262,6 +315,7 @@ modules.torrent_list = {
 						dbg("[TorrentMark] Insert torrents");
 						$("#torrent_list").append(insertionData);
 						tagTorrents();
+						addAutogetColumn();
 						addAgeColumn();
 						applyFilters();
 						dbg("[TorrentMark] Blocking endless scrolling");
@@ -288,6 +342,10 @@ modules.torrent_list = {
 			7: "leechers"
 		};
 		var columnSorter = function() {
+			if(!mOptions.canSort) {
+				return;
+			}
+
 			if(pageUrl.path == "/sphinx/") {
 				columns_def = columns_def_sphinx;
 			}
@@ -346,26 +404,6 @@ modules.torrent_list = {
 			return false;
 		};
 
-		var makeTorrentMarkerFrame = function() {
-			var markerFrame = { id: "marker", title: "Marqueur de torrents", relativeToId: "torrent_marker_button", top: -180, left: -90 };
-			var findMarkedTorrent = '<span id="find_marked_torrent_span"><a id="find_marked_torrent" href="#">Retrouver torrent</a></span>';
-			var markFirstTorrent = '<span id="mark_first_torrent_span"><a id="mark_first_torrent" href="#">Marquer torrent</a></span>';
-
-			var torrentIdMark = opt.get(module_name, "torrent_marker");
-			var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
-			if(torrentIdMark === false) {
-				dbg("[TorrentMark] No marked torrent");
-				findMarkedTorrent = '( Pas de marqueur )';
-			}
-			else if(firstTorrentId - torrentIdMark > 2000) {
-				dbg("[TorrentMark] Marked torrent too old");
-				findMarkedTorrent = '( Marqueur trop ancien pour être retrouvé )';
-			}
-			var frameText = "Vous permet de sauvegarder l'id du premier torrent de la liste pour le retrouver plus tard<br /><br />Au dessus de 2000 ids de retard (~2 semaines), le torrent sera considéré trop ancien.<br />Position actuelle : " + (torrentIdMark || 0) + "/" + firstTorrentId;
-			markerFrame.data = frameText + "<br /><br /><center>" + markFirstTorrent + "<br />" + findMarkedTorrent + "</center>";
-
-		}
-
 		var BookmarkVisibleTorrents = function() {
 			dbg("[BookmarkVisibleTorrents] Scanning");
 			var actions = [];
@@ -385,7 +423,7 @@ modules.torrent_list = {
 				}, true);
 			});
 			dbg("[BookmarkVisibleTorrents] Sent");
-		}
+		};
 
 		var markerButton =  '<a id="torrent_marker_button" href="#">Marquer torrent</a> |';
 		var finderButton = '<a id="torrent_finder_button" href="#">Retrouver torrent</a> | ';
@@ -461,14 +499,13 @@ modules.torrent_list = {
 			}
 		});
 		tagTorrents();
-		if(mOptions.canSort) {
-			columnSorter();
-		}
+		columnSorter();
+		addAutogetColumn();
 		addAgeColumn();
-		if(mOptions.canFilter) {
-			applyFilters();
-		}
+		applyFilters();
+
 		$("#torrent_list").on("mouseenter", "a", showTorrentComments);
+		$("#torrent_list").on("click", "a.autoget_link", autogetOnClick);
 
 		if(mOptions.canSuggest && opt.get(module_name, "imdb_suggest")) {
 			suggestMore();
@@ -478,6 +515,7 @@ modules.torrent_list = {
 			dbg("[endless_scrolling] Module specific functions");
 			$("#find_marked_torrent_span").remove();
 			tagTorrents();
+			addAutogetColumn();
 			addAgeColumn();
 			applyFilters();
 			$(document).trigger("es_dom_process_done");

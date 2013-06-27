@@ -11,8 +11,9 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
-- Mouseover comments : Fermeture de la fenêtre au clic en dehors de celle-ci
 - Global : Evenements de début et fin de process
+- Mouseover comments : Fermeture de la fenêtre au clic en dehors de celle-ci
+- Torrent list : Ajout d'une colonne d'autoget
 
 **0.3.2**
 - Aura : Amélioration des calculs pour supporter les pages de 500+ torrents. (1k+ maintenant)

@@ -202,6 +202,9 @@ var insertCSS = function() {
 		".age_torrent_head { width: 40px; text-align: center; font-weight: bold; } " +
 		".age_torrent_0 { width: 40px; text-align: center; } " +
 		".age_torrent_1 { width: 40px; text-align: center; background-color: #f6f6f6; } " +
+		".autoget_torrent_head { width: 26px; text-align: center; font-weight: bold; } " +
+		".autoget_torrent_0 { width: 26px; text-align: center; } " +
+		".autoget_torrent_1 { width: 26px; text-align: center; background-color: #f6f6f6; } " +
 		".torrent_mark_found { background-color: lightgreen !important; } " +
 
 		// Aura
