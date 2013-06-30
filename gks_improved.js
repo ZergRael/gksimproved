@@ -57,9 +57,9 @@ var appendFrame = function(o) {
 	// Build custom buttons
 	var additionnalButtons = '';
 	if(o.buttons) {
-		 $.each(o.buttons, function(i, button) {
+		$.each(o.buttons, function(i, button) {
 			additionnalButtons += '<input type="button" id="gksi_' + o.id + '_' + button.b_id + '" class="fine" value=" ' + button.b_text + ' "> ';
-		})
+		});
 	}
 
 	// Build entire frame

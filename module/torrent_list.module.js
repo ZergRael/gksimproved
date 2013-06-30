@@ -237,29 +237,26 @@ modules.torrent_list = {
 					torrentsTR = $(data).find("#torrent_list tr");
 					dbg("[auto_refresh] Got data");
 					if(torrentsTR && torrentsTR.length) {
-						var firstTRtext = $("#torrent_list tr:nth(1)").find("td:nth(1)").text();
+						var firstTorrentId = Number($("#torrent_list tr:nth(1)").find("td:nth(1) img:first").attr("id").substring(6));
 						var foundFirst = false;
 						var insertedTrs = false;
 						$(torrentsTR.get().reverse()).each(function() {
-							/**
-							 * Not working correctly yet, torrents can be renamed or deleted
-							 * Should use an incremental ID as deleted torrents keep their ID
-							 */
-
-							if($(this).find("td:nth(1)").text() == firstTRtext) {
+							if(!foundFirst && !$(this).find(".alt1").length && !$(this).hasClass("head_torrent") && Number($(this).find("td:nth(1) img:first").attr("id").substring(6)) >= firstTorrentId) {
 								foundFirst = true;
 								return;
 							}
 							if(foundFirst && !$(this).hasClass("head_torrent")) {
 								var torrentTR = $(this);
-								var torrentNameTd = torrentTR.find("td:nth(1)");
-								if(opt.get(module_name, "autoget_column")) {
-									torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="autoget_link"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td>');
+								if(!torrentTR.find(".alt1").length) {
+									var torrentNameTd = torrentTR.find("td:nth(1)");
+									if(opt.get(module_name, "autoget_column")) {
+										torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="autoget_link"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td>');
+									}
+									if(opt.get(module_name, "age_column")) {
+										torrentNameTd.after('<td class="age_torrent_1">frais</td>');
+									}
+									torrentTR.find("td:nth(1)").addClass("torrent_autorefreshed");
 								}
-								if(opt.get(module_name, "age_column")) {
-									torrentNameTd.after('<td class="age_torrent_1">frais</td>');
-								}
-								torrentTR.find("td:nth(1)").addClass("torrent_autorefreshed");
 								$("#torrent_list tr:first").after(torrentTR);
 								$("#torrent_list tr:last").remove();
 								insertedTrs = true;
