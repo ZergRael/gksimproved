@@ -59,7 +59,8 @@ $env:Path += ";C:\Python27\"
 
 echo "Build .xpi"
 cd ..\ff_gksi
-cfx xpi
+cfx --update-url https://thetabx.net/gksi/update/check/ --update-link https://github.com/ZergRael/gksimproved/raw/master/build/gksimproved.xpi xpi
+cp gksimproved.xpi ../gksimproved/build/
 echo "Done"
 
 read-host

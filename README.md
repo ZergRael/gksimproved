@@ -11,8 +11,11 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+
+**0.3.3**
 - Global : Evenements de début et fin de process
 - Mouseover comments : Fermeture de la fenêtre au clic en dehors de celle-ci
+- Torrent finder : Retour aux 2 boutons plutôt qu'une fenêtre
 - Torrent list : Ajout d'une colonne d'autoget
 
 **0.3.2**

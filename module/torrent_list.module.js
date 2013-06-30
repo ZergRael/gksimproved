@@ -227,6 +227,7 @@ modules.torrent_list = {
 
 		var autorefreshInterval;
 		var startAutorefresh = function() {
+			return;
 			if(!opt.get(module_name, "auto_refresh")) {
 				return;
 			}
@@ -241,6 +242,11 @@ modules.torrent_list = {
 						var foundFirst = false;
 						var insertedTrs = false;
 						$(torrentsTR.get().reverse()).each(function() {
+							/**
+							 * Not working correctly yet, torrents can be renamed or deleted
+							 * Should use an incremental ID as deleted torrents keep their ID
+							 */
+
 							if($(this).find("td:nth(1)").text() == firstTRtext) {
 								foundFirst = true;
 								return;
@@ -494,7 +500,7 @@ modules.torrent_list = {
 			buttons += markerButton;
 		}
 		if(mOptions.canRefresh) {
-			buttons += refreshButton;
+			//buttons += refreshButton;
 		}
 		if(mOptions.canFilter) {
 			buttons += filterButtons;
