@@ -227,7 +227,6 @@ modules.torrent_list = {
 
 		var autorefreshInterval;
 		var startAutorefresh = function() {
-			return;
 			if(!opt.get(module_name, "auto_refresh")) {
 				return;
 			}
@@ -500,7 +499,7 @@ modules.torrent_list = {
 			buttons += markerButton;
 		}
 		if(mOptions.canRefresh) {
-			//buttons += refreshButton;
+			buttons += refreshButton;
 		}
 		if(mOptions.canFilter) {
 			buttons += filterButtons;
