@@ -273,7 +273,7 @@ modules.torrent_list = {
 
 		var autogetOnClick = function() {
 			var td = $(this).parent().parent().find("td:nth(1)");
-			var funct = "function() { AddGet('" + td.find("img:first").attr("id").substring(6) + "', 'autoget', '" + td.find("a:first").text() + "'); }";
+			var funct = "function() { AddGet('" + td.find("img:first").attr("id").substring(6) + "', 'autoget', '" + $.trim(td.find("a:first").text()) + "'); }";
 			insertScript("autoget_native", funct, true);
 			return false;
 		};
