@@ -12,7 +12,7 @@ Voir topic associé.
 
 ### TODO.done
 - Torrent finder : Les boutons sont optionnels
-
+- Torrent list : Auto refresh des derniers torrents (1 min)
 
 **0.3.3**
 - Global : Evenements de début et fin de process
