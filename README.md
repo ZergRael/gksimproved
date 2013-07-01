@@ -11,6 +11,8 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+- Torrent finder : Les boutons sont optionnels
+
 
 **0.3.3**
 - Global : Evenements de début et fin de process
