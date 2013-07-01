@@ -16,28 +16,28 @@ modules.endless_scrolling = {
 	name: "endless_scrolling",
 	dText: "Endless scrolling",
 	pages: [
-		{ path_name: "/", options: { 
+		{ path_name: "/", options: {
 			opt_name: "main", loading: '#pager_index', path: '/browse/', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", pageModifier: -1
 		} },
-		{ path_name: "/browse/", options: { 
+		{ path_name: "/browse/", options: {
 			opt_name: "browse", loading: '.pager_align', pagination: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", pageModifier: -1
 		} },
-		{ path_name: "/sphinx/", options: { 
+		{ path_name: "/sphinx/", options: {
 			opt_name: "sphinx", loading: '.pager_align', pagination: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", canSuggest: true, pageModifier: -1
 		} },
-		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { 
+		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: {
 			opt_name: "viewforum", loading: '.thin table', pagination: '.linkbox:nth(1), .linkbox:nth(2)', loadingAfter: true, domExtract: 'tbody tr:not(.colhead)', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 180, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/, endOfStream: 'No posts to display!'
 		} },
-		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { 
+		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: {
 			opt_name: "viewtopic", loading: '.thin table:last', pagination: '.linkbox', loadingAfter: true, domExtract: '.thin table', domInsertion: '.thin table:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/
 		} },
-		{ path_name: "/m/peers/snatched", options: { 
+		{ path_name: "/m/peers/snatched", options: {
 			opt_name: "snatched", loading: '.pager_align', pagination: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1
 		} },
-		{ path_name: "/logs/", options: { 
-			opt_name: "logs", loading: '.pager_align', pagination: '.pager_align', domExtract: "tbody tr:not(:first)", domInsertion: "tbody", pageModifier: -1, notListeningToTrigger: true
+		{ path_name: "/logs/", options: {
+			opt_name: "logs", loading: '.pager_align', pagination: '.pager_align', domExtract: "tbody tr:not(:first)", domInsertion: "tbody", pageModifier: -1
 		} },
-		{ path_name: "/req/", options: { 
+		{ path_name: "/req/", options: {
 			opt_name: "req", loading: '.pager_align', pagination: '.pager_align', domExtract: "#requests_list tbody tr:not(:first)", domInsertion: "#requests_list tbody", pageModifier: -1, notListeningToTrigger: true
 		} },
 		{ path_name: "/m/images/", options: {

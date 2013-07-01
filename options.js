@@ -85,7 +85,11 @@ var opt = {
 			show_tip:           { defaultVal: false, showInOptions: true, dispText: "Afficher toutes les infobulles des badges" }
 		},
 		logs: {
-			auto_refresh:       { defaultVal: false, showInOptions: false }
+			auto_refresh:       { defaultVal: false, showInOptions: false },
+			uploads_filter:     { defaultVal: false, showInOptions: false },
+			delete_filter:      { defaultVal: false, showInOptions: false },
+			edit_filter:        { defaultVal: false, showInOptions: false },
+			request_filter:     { defaultVal: false, showInOptions: false }
 		},
 		aura: {
 			ag_column:          { defaultVal: true, showInOptions: true, dispText: "Colonne de rentabilité torrent A/Go" }

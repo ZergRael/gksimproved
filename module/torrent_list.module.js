@@ -36,7 +36,6 @@ modules.torrent_list = {
 		var tagTorrents = function() {
 			dbg("[tagTorrents] Scanning torrents");
 			var bookmarksList = gData.get("bookmarks", "torrents");
-			dbg(bookmarksList);
 			$("tbody tr.head_torrent:not(.page_tagged)").nextAll(":nth-child(2n" + (even ? "+1" : "") + ")").each(function() {
 				var classIs = "";
 				var torrentTr = $(this);

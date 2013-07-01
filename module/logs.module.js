@@ -54,6 +54,7 @@ modules.logs = {
 								$("tbody tr:last").remove();
 							}
 						});
+						refreshFilters();
 					}
 					else {
 						dbg("[auto_refresh] No data");
@@ -62,10 +63,40 @@ modules.logs = {
 			}, mOptions.auto_refresh_interval);
 		};
 
+		var filtersArray = { "uploads_filter": "log_upload", "delete_filter": "log_upload_delete", "edit_filter": "log_upload_edit", "request_filter": "log_requests_new" };
+		var onFilterChange = function() {
+			var changedFilter = $(this).attr("id");
+			$("#log_list tr").show();
+			$.each(filtersArray, function(filter, logClass) {
+				if(filter != changedFilter && $("#" + filter).prop("checked")) {
+					$("#" + filter).prop("checked", false);
+					opt.set(module_name, filter, false);
+				}
+			});
+
+			opt.set(module_name, changedFilter, $(this).prop("checked"));
+			refreshFilters();
+		};
+
+		var refreshFilters = function() {
+			dbg("[*_filter] Refresh");
+			$.each(filtersArray, function(filter, logClass) {
+				if(opt.get(module_name, filter)) {
+					$("#log_list span:not(." + logClass + ")").parent().parent().hide();
+				}
+			});
+			dbg("[*_filter] Done");
+			$(document).trigger("es_dom_process_done");
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
-		var buttons = '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/><label for="auto_refresh">Auto refresh (60secs)</label> | ';
+		var buttons = '<input id="uploads_filter" class="gksi_filter" type="checkbox" ' + (opt.get(module_name, "uploads_filter") ? 'checked="checked" ' : ' ') + '/><label for="uploads_filter">Filtre uploads</label> | ';
+		buttons += '<input id="delete_filter" class="gksi_filter" type="checkbox" ' + (opt.get(module_name, "delete_filter") ? 'checked="checked" ' : ' ') + '/><label for="delete_filter">Filtre delete</label> | ';
+		buttons += '<input id="edit_filter" class="gksi_filter" type="checkbox" ' + (opt.get(module_name, "edit_filter") ? 'checked="checked" ' : ' ') + '/><label for="edit_filter">Filtre edits</label> | ';
+		buttons += '<input id="request_filter" class="gksi_filter" type="checkbox" ' + (opt.get(module_name, "request_filter") ? 'checked="checked" ' : ' ') + '/><label for="request_filter">Filtre requests</label> | ';
+		buttons += '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/><label for="auto_refresh">Auto refresh (60secs)</label> | ';
 		$(mOptions.buttons).prepend(buttons);
 
 		$("#auto_refresh").change(function() {
@@ -79,10 +110,19 @@ modules.logs = {
 			}
 		});
 
+		$(".gksi_filter").change(onFilterChange);
+
 		if(opt.get(module_name, "auto_refresh")) {
 			dbg("[auto_refresh] Starting");
 			autoRefresh();
 		}
+
+		$(document).on("endless_scrolling_insertion_done", function() {
+			dbg("[endless_scrolling] Module specific functions");
+			refreshFilters();
+		});
+
+		refreshFilters();
 
 		dbg("[Init] Ready");
 	}
