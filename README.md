@@ -14,6 +14,7 @@ Voir topic associé.
 - Torrent finder : Les boutons sont optionnels
 - Torrent list : Auto refresh des derniers torrents (1 min)
 - Torrent list : Colonne autoget corrigée sur /sphinx/
+- Torrent list : Ajout d'une icone sur les torrents bookmarkés
 
 **0.3.3**
 - Global : Evenements de début et fin de process

@@ -35,15 +35,26 @@ modules.torrent_list = {
 		var even = false; // :nth-child(2n) doesn't work on odd ES'd pages
 		var tagTorrents = function() {
 			dbg("[tagTorrents] Scanning torrents");
+			var bookmarksList = gData.get("bookmarks", "torrents");
+			dbg(bookmarksList);
 			$("tbody tr.head_torrent:not(.page_tagged)").nextAll(":nth-child(2n" + (even ? "+1" : "") + ")").each(function() {
 				var classIs = "";
-				var imgs = $(this).find("img");
+				var torrentTr = $(this);
+				var imgs = torrentTr.find("img");
 				$.each(imgs, function() {
+					var imgId = $(this).attr("id");
+					if(imgId) {
+						var id = imgId.substring(6);
+						if(bookmarksList.indexOf(id) != -1) {
+							torrentTr.find("img:first").after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
+							classIs += "t_bookmark ";
+						}
+					}
 					switch($(this).attr("alt")) {
 						case "New !":
 							classIs += "t_new ";
 							break;
-						case "Nuke !":
+						case "Nuke ! ":
 							classIs += "t_nuke ";
 							break;
 						case "FreeLeech":
@@ -55,8 +66,8 @@ modules.torrent_list = {
 				});
 
 				if(classIs != "") {
-					$(this).addClass(classIs);
-					$(this).next().addClass(classIs);
+					torrentTr.addClass(classIs);
+					torrentTr.next().addClass(classIs);
 				}
 			});
 			$("tbody tr.head_torrent").addClass("page_tagged");

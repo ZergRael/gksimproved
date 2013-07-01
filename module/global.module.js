@@ -255,8 +255,7 @@ modules.global = {
 			}
 
 			dbg("[real_stats] Started");
-			var now = new Date().getTime();
-			if(now > gData.get("real_stats", "last_check") + timeOffset) {
+			if(new Date().getTime() > (gData.get("real_stats", "last_check") + timeOffset)) {
 				parseRealStats();
 			}
 			else {
@@ -330,6 +329,34 @@ modules.global = {
 			});
 		};
 
+		var fetchBookmarks = function() {
+			if(new Date().getTime() < (gData.get("bookmarks", "last_check") + timeOffset)) {
+				return;
+			}
+			dbg("[fetchBookmarks] Grab bookmarks");
+			var snatchedUrl = { host: pageUrl.host, path: "/bookmark/" };
+			utils.grabPage(snatchedUrl, function(data) {
+				modules.global.parseBookmarks($(data).find("#torrent tbody:first tr"));
+			});
+		}
+
+		this.parseBookmarks = function(torrents) {
+			gData.set("bookmarks", "last_check", new Date().getTime());
+			if(!torrents.length) {
+				dbg("[parseBookmarks] No bookmarks found - Bail out");
+				gData.set("bookmarks", "torrents", []);
+				return;
+			}
+
+			var torrentIds = [];
+			torrents.each(function() {
+				var torrentLink = $(this).find("a:nth(1)").attr("href");
+				torrentIds.push(torrentLink.substring(9, torrentLink.lastIndexOf('/')));
+			});
+			gData.set("bookmarks", "torrents", torrentIds);
+			dbg("[parseBookmarks] Found " + torrentIds.length + " bookmarks");
+		}
+
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -354,6 +381,7 @@ modules.global = {
 		listenToCtrlEnter();
 		listenToBBCodeShortcuts();
 		insertRealStats();
+		fetchBookmarks();
 
 		dbg("[Init] Ready");
 	}

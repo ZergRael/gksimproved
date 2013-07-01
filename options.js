@@ -144,6 +144,10 @@ var gData = {
 			real_download: 0,
 			real_ratio: 0,
 			last_check: 0
+		},
+		bookmarks: {
+			torrents: [],
+			last_check: 0
 		}
 	},
 	set: function(m, o, v) {

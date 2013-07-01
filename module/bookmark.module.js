@@ -135,6 +135,8 @@ modules.bookmark = {
 			dbg("[DeleteGet] is " + opt.get(module_name, "delete_get"));
 		});
 
+		modules.global.parseBookmarks($("#torrent tbody:first tr"));
+
 		dbg("[Init] Ready");
 	}
 };
