@@ -140,35 +140,8 @@ modules.torrent_list = {
 						return;
 					}
 
-					// Calculation is done by taking the first not-now date section, in order Y/M/D/h/m
-					// At first match, just take the difference between now and torrent date
-					// If there's only one unit difference && the date section underneath is still viable, fallback to this smaller date section
-					// eg: Date[torrent] = 1/1/2013 23:59, Date[now] = 2/1/2013 1:01 => day_difference() == 1 => fallback to hours => (24 + 1 - 23) => 2h
-					// In fact, it's 1h02m but it's closer than 1day
-					// In the same thinking process, it can return 24h since it's still viable and more precise than 1day -- Won't return > 24h
-					var now = new Date();
-					var age = "";
-					if(now.getFullYear() > dateMatch[3]) {
-						age = (now.getFullYear() - dateMatch[3]) == 1 && (now.getMonth() + 1 - dateMatch[2]) <= 0 ? (12 + now.getMonth() + 1 - dateMatch[2]) + "mo" : (now.getFullYear() - dateMatch[3]) + "a";
-					}
-					else if(now.getMonth() + 1 > dateMatch[2]) {
-						age = (now.getMonth() + 1 - dateMatch[2]) == 1 && (now.getDate() - dateMatch[1]) <= 0 ? ((new Date(dateMatch[3], dateMatch[2] + 1, 0).getDate()) + now.getDate() - dateMatch[1]) + "j" : (now.getMonth() + 1 - dateMatch[2]) + "mo";
-					}
-					else if(now.getDate() > dateMatch[1]) {
-						age = (now.getDate() - dateMatch[1]) == 1 && (now.getHours() - dateMatch[4]) <= 0 ? (24 + now.getHours() - dateMatch[4]) + "h" : (now.getDate() - dateMatch[1]) + "j";
-					}
-					else if(now.getHours() > dateMatch[4]) {
-						age = (now.getHours() - dateMatch[4]) == 1 && (now.getMinutes() - dateMatch[5]) <= 0 ? (60 + now.getMinutes() - dateMatch[5]) + "min" : (now.getHours() - dateMatch[4]) + "h";
-					}
-					else if(now.getMinutes() > dateMatch[5]) {
-						age = (now.getMinutes() - dateMatch[5]) + "min";
-					}
-					else {
-						age = "frais";
-					}
-
 					// Append our age td
-					tds.eq(1).after('<td class="age_torrent_' + ageTdNumber + '">' + age + '</td>');
+					tds.eq(1).after('<td class="age_torrent_' + ageTdNumber + '">' + simpleDateToDiff(dateMatch) + '</td>');
 				}
 			});
 
@@ -207,38 +180,39 @@ modules.torrent_list = {
 						return;
 					}
 
-					// Calculation is done by taking the first not-now date section, in order Y/M/D/h/m
-					// At first match, just take the difference between now and torrent date
-					// If there's only one unit difference && the date section underneath is still viable, fallback to this smaller date section
-					// eg: Date[torrent] = 1/1/2013 23:59, Date[now] = 2/1/2013 1:01 => day_difference() == 1 => fallback to hours => (24 + 1 - 23) => 2h
-					// In fact, it's 1h02m but it's closer than 1day
-					// In the same thinking process, it can return 24h since it's still viable and more precise than 1day -- Won't return > 24h
-					var now = new Date();
-					var age = "";
-					if(now.getFullYear() > dateMatch[3]) {
-						age = (now.getFullYear() - dateMatch[3]) == 1 && (now.getMonth() + 1 - dateMatch[2]) <= 0 ? (12 + now.getMonth() + 1 - dateMatch[2]) + "mo" : (now.getFullYear() - dateMatch[3]) + "a";
-					}
-					else if(now.getMonth() + 1 > dateMatch[2]) {
-						age = (now.getMonth() + 1 - dateMatch[2]) == 1 && (now.getDate() - dateMatch[1]) <= 0 ? ((new Date(dateMatch[3], dateMatch[2] + 1, 0).getDate()) + now.getDate() - dateMatch[1]) + "j" : (now.getMonth() + 1 - dateMatch[2]) + "mo";
-					}
-					else if(now.getDate() > dateMatch[1]) {
-						age = (now.getDate() - dateMatch[1]) == 1 && (now.getHours() - dateMatch[4]) <= 0 ? (24 + now.getHours() - dateMatch[4]) + "h" : (now.getDate() - dateMatch[1]) + "j";
-					}
-					else if(now.getHours() > dateMatch[4]) {
-						age = (now.getHours() - dateMatch[4]) == 1 && (now.getMinutes() - dateMatch[5]) <= 0 ? (60 + now.getMinutes() - dateMatch[5]) + "min" : (now.getHours() - dateMatch[4]) + "h";
-					}
-					else if(now.getMinutes() > dateMatch[5]) {
-						age = (now.getMinutes() - dateMatch[5]) + "min";
-					}
-					else {
-						age = "frais";
-					}
-
 					// Append our age td
-					tds.eq(2).text(age);
+					tds.eq(2).text(simpleDateToDiff(dateMatch));
 				}
 			});
 			dbg("[AgeCol] Ended");
+		};
+
+		var simpleDateToDiff = function(dateMatch) {
+			// Calculation is done by taking the first not-now date section, in order Y/M/D/h/m
+			// At first match, just take the difference between now and torrent date
+			// If there's only one unit difference && the date section underneath is still viable, fallback to this smaller date section
+			// eg: Date[torrent] = 1/1/2013 23:59, Date[now] = 2/1/2013 1:01 => day_difference() == 1 => fallback to hours => (24 + 1 - 23) => 2h
+			// In fact, it's 1h02m but it's closer than 1day
+			// In the same thinking process, it can return 24h since it's still viable and more precise than 1day -- Won't return > 24h
+			var now = new Date();
+			if(now.getFullYear() > dateMatch[3]) {
+				return (now.getFullYear() - dateMatch[3]) == 1 && (now.getMonth() + 1 - dateMatch[2]) <= 0 ? (12 + now.getMonth() + 1 - dateMatch[2]) + "mo" : (now.getFullYear() - dateMatch[3]) + "a";
+			}
+			else if(now.getMonth() + 1 > dateMatch[2]) {
+				return (now.getMonth() + 1 - dateMatch[2]) == 1 && (now.getDate() - dateMatch[1]) <= 0 ? ((new Date(dateMatch[3], dateMatch[2] + 1, 0).getDate()) + now.getDate() - dateMatch[1]) + "j" : (now.getMonth() + 1 - dateMatch[2]) + "mo";
+			}
+			else if(now.getDate() > dateMatch[1]) {
+				return (now.getDate() - dateMatch[1]) == 1 && (now.getHours() - dateMatch[4]) <= 0 ? (24 + now.getHours() - dateMatch[4]) + "h" : (now.getDate() - dateMatch[1]) + "j";
+			}
+			else if(now.getHours() > dateMatch[4]) {
+				return (now.getHours() - dateMatch[4]) == 1 && (now.getMinutes() - dateMatch[5]) <= 0 ? (60 + now.getMinutes() - dateMatch[5]) + "min" : (now.getHours() - dateMatch[4]) + "h";
+			}
+			else if(now.getMinutes() > dateMatch[5]) {
+				return (now.getMinutes() - dateMatch[5]) + "min";
+			}
+			else {
+				return "frais";
+			}
 		};
 
 		var addAutogetColumn = function() {
