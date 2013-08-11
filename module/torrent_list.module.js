@@ -264,7 +264,7 @@ modules.torrent_list = {
 
 		var autorefreshInterval;
 		var startAutorefresh = function() {
-			if(!opt.get(module_name, "auto_refresh")) {
+			if(!opt.get(module_name, "auto_refresh") || !mOptions.canRefresh) {
 				return;
 			}
 
