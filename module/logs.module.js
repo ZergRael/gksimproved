@@ -89,6 +89,19 @@ modules.logs = {
 			$(document).trigger("es_dom_process_done");
 		};
 
+		var forceIdLinks = function() {
+			dbg("[id_links] Refresh");
+			$(".log_upload, .log_upload_edit").each(function() {
+				$(this).html($(this).html().replace(/Torrent (\d+)/, 'Torrent <a href="/torrent/$1/">$1</a>'));
+				/*var txtUpload = $(this).html();
+				var iDmatch = txtUpload.match(/Torrent (\d+)/);
+				if(iDmatch) {
+					$(this).html(txtUpload.replace(iDmatch[1], '<a href="/torrent/' + iDmatch[1] + '/">' + iDmatch[1] + '</a>'));
+				}*/
+			});
+			dbg("[id_links] Done");
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -120,9 +133,11 @@ modules.logs = {
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
 			refreshFilters();
+			forceIdLinks();
 		});
 
 		refreshFilters();
+		forceIdLinks();
 
 		dbg("[Init] Ready");
 	}
