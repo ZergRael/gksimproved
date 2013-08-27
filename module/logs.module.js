@@ -93,11 +93,6 @@ modules.logs = {
 			dbg("[id_links] Refresh");
 			$(".log_upload, .log_upload_edit").each(function() {
 				$(this).html($(this).html().replace(/Torrent (\d+)/, 'Torrent <a href="/torrent/$1/">$1</a>'));
-				/*var txtUpload = $(this).html();
-				var iDmatch = txtUpload.match(/Torrent (\d+)/);
-				if(iDmatch) {
-					$(this).html(txtUpload.replace(iDmatch[1], '<a href="/torrent/' + iDmatch[1] + '/">' + iDmatch[1] + '</a>'));
-				}*/
 			});
 			dbg("[id_links] Done");
 		};
