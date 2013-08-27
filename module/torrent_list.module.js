@@ -150,9 +150,9 @@ modules.torrent_list = {
 				sortedUrl.path = sortedUrl.path == "/" ? "/browse/" : sortedUrl.path;
 				sortedUrl.params = sortedUrl.params || {};
 				sortedUrl.params.page = 0;
-				sortedUrl.params.sort = "id";
+				sortedUrl.params.sort = (pageUrl.path == "/sphinx/" ? "date" : "id");
 				sortedUrl.params.order = "desc";
-				if(pageUrl.params && pageUrl.params.sort == "id" && pageUrl.params.order != "asc") {
+				if(pageUrl.params && pageUrl.params.sort == (pageUrl.path == "/sphinx/" ? "date" : "id") && pageUrl.params.order != "asc") {
 					sortedUrl.params.order = "asc";
 				}
 
