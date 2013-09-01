@@ -11,6 +11,7 @@ Voir topic associé.
 - Optimisations
 
 ### TODO.done
+- Passage en licence MIT, plus permissive
 - Logs : Filtres upload/delete/edit/request
 - Logs : Liens sur les id torrents des lignes upload et edit
 - Torrent finder : Les boutons sont optionnels
