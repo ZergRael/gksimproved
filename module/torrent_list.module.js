@@ -305,36 +305,42 @@ modules.torrent_list = {
 			var searchQuery = $("#searchinput").val();
 			if(searchQuery) {
 				dbg("[QuerySuggest] Query : " + searchQuery);
+				loadingHtml = '<center><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Analyse des entrailles d\'IMDB</center>';
+				appendFrame({ title: "GKSi IMDB Suggestions", data: loadingHtml, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
+
 				// Try to get some results from IMDB: 4 + 4 max
-				utils.grabPage({ host: "https://thetabx.net", path: "/gksi/imdbproxy/get/" + encodeURIComponent(searchQuery) + "/2" }, function(data) {
+				utils.grabPage({ host: "https://api.thetabx.net", path: "/imdb/translate/3/" + encodeURIComponent(searchQuery) }, function(imdb) {
 					dbg("[QuerySuggest] Got data back");
-					var imdb = JSON.parse(data);
+					if(!imdb.results || !imdb.results.length) {
+						$("#gksi_suggest_data").html("Désolé, rien trouvé !");
+						return
+					}
 					var suggestions = [];
-					$.each(imdb.lang, function(lang, movies) {
-						dbg("[QuerySuggest] Scanning " + lang + " DB");
-						$.each(movies, function(i, movie) {
-							suggestions.push(movie.title);
+					$.each(imdb.results, function(imdbId, movie) {
+						dbg("[QuerySuggest] IMDB [ " + imdbId + " ]");
+						$.each(movie, function(titleType, title) {
+							suggestions.push(title);
 						});
 					});
-					var suggestionsStr = "";
+					var suggestionsHtml = "";
 					$.map(suggestions, function(movieName, i) {
 						if($.inArray(movieName, suggestions) === i) {
-							suggestionsStr += '<a href="' + utils.craftUrl({ host: pageUrl.host, path: pageUrl.path, params: { q: encodeURIComponent(movieName) } }) + '">' + movieName + '</a><br />';
+							suggestionsHtml += '<a href="' + utils.craftUrl({ host: pageUrl.host, path: pageUrl.path, params: { q: encodeURIComponent(movieName) } }) + '">' + movieName + '</a><br />';
 						}
 					});
 					// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
-					appendFrame({ title: "GKSi IMDB Suggestions", data: suggestionsStr, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
+					$("#gksi_suggest_data").html(suggestionsHtml);
 
-					if(opt.get(module_name, "imdb_auto_add") && modules.endless_scrolling.maxPage == 0 && imdb.translateBest) {
-						dbg("[QueryTranslate] Looks like we can grab bestTranslation [" + imdb.translateBest + "] results");
+					if(opt.get(module_name, "imdb_auto_add") && modules.endless_scrolling.maxPage == 0 && imdb.levenshtein) {
+						dbg("[QueryTranslate] Looks like we can grab bestTranslation [" + imdb.levenshtein.bestTitle + "] results");
 						var bestMatchUrl = utils.clone(pageUrl);
-						bestMatchUrl.params.q = encodeURIComponent(imdb.translateBest); // From remote translation analysis - levenshtein
+						bestMatchUrl.params.q = encodeURIComponent(imdb.levenshtein.bestTitle); // From remote translation analysis - levenshtein
 						$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Recherche supraluminique des traductions</p>');
 						utils.grabPage(bestMatchUrl, function(data) {
 							var dataFrame = $(data).find("#torrent_list");
 							var header = dataFrame.find("tr:first");
 							if(header.length) {
-								header.find(".name_torrent_head").text(header.find(".name_torrent_head").text() + " - GKSi IMDB Suggestions");
+								header.find(".name_torrent_head").text(header.find(".name_torrent_head").text() + " - GKSi IMDB [ " + imdb.levenshtein.bestTitle + " ]");
 								header.addClass("gksi_imdb_head");
 							}
 							var insertionData = dataFrame.find("tr");
@@ -358,6 +364,9 @@ modules.torrent_list = {
 							dbg("[QueryTranslate] Ended");
 							$(".page_loading").remove();
 						});
+					}
+					else {
+						dbg("[QueryTranslate] Not even trying")
 					}
 				});
 			}
