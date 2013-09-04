@@ -19,6 +19,7 @@ Voir topic associé.
 - Torrent list : Colonne autoget corrigée sur /sphinx/
 - Torrent list : Ajout d'une icone sur les torrents bookmarkés
 - Torrent list : Correction des suggestions IMDB
+- Uploads : Tri par clic sur les entêtes de colonnes (expérimental)
 
 **0.3.3**
 - Global : Evenements de début et fin de process

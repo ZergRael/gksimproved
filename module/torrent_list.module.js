@@ -6,7 +6,7 @@ modules.torrent_list = {
 		{ path_name: "/browse/", options: { buttons: '#sort p', canMark: true, canFilter: true, canSort: true } },
 		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canSuggest: true, canFilter: true, canSort: true } },
 		{ path_name: "/summary/", options: { } },
-		{ path_name: "/m/uploads/", options: { } }
+		{ path_name: "/m/uploads/", options: { canSort: true } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
