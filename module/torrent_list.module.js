@@ -311,7 +311,7 @@ modules.torrent_list = {
 				// Try to get some results from IMDB: 4 + 4 max
 				utils.grabPage({ host: "https://api.thetabx.net", path: "/imdb/translate/3/" + encodeURIComponent(searchQuery) }, function(imdb) {
 					dbg("[QuerySuggest] Got data back");
-					if(!imdb.results || !imdb.results.length) {
+					if(!imdb.results) {
 						$("#gksi_suggest_data").html("Désolé, rien trouvé !");
 						return
 					}
