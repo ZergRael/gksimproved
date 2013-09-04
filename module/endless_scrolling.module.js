@@ -204,6 +204,8 @@ modules.endless_scrolling = {
 					// Update URL
 					var thisUrl = utils.clone(pageUrl);
 					thisUrl.params = thisUrl.params || {};
+					thisUrl.cancelQ = mOptions.cancelQ;
+					thisUrl.cancelAmp = mOptions.cancelAmp;
 					thisUrl.params.page = lookingAtPage;
 					window.history.replaceState("", "GKS : " + lookingAtPage, utils.craftUrl(thisUrl));
 
