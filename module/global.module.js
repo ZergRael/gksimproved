@@ -235,14 +235,19 @@ modules.global = {
 		};
 
 		var timeOffset = 24 * 60 * 60 * 1000;
+		var isStatUsable = function(stat) {
+			return new Date().getTime() < (gData.get(stat, "last_check") + timeOffset);
+		};
+		modules.global.isStatUsable = isStatUsable;
+
 		var insertRealStats = function() {
 			if(!opt.get(module_name, "real_upload")) {
 				return;
 			}
 
 			dbg("[real_stats] Started");
-			if(new Date().getTime() > (gData.get("real_stats", "last_check") + timeOffset)) {
-				parseRealStats();
+			if(!isStatUsable("real_stats")) {
+				parseRealStats(writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio")));
 			}
 			else {
 				writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio"));
@@ -256,10 +261,10 @@ modules.global = {
 			$("#userlink li:nth(2) span:nth(0)").after(' / <span>' + ratioStr + '</span>');
 		};
 
-		var parseRealStats = function() {
+		var parseRealStats = function(callback) {
 			dbg("[real_stats] Grab pages & parse");
 			var snatchedUrl = { host: pageUrl.host, path: "/m/peers/snatched", params: { page: 0 }, cancelQ: true };
-			var maxPage = 0, realUpload = 0, readDownload = 0, grabbedPages = 0;
+			var maxPage = 0, realUpload = 0, readDownload = 0, realSnatched = 0, grabbedPages = 0;
 			utils.grabPage(snatchedUrl, function(data) {
 				var pager_align = $(data).find(".pager_align a");
 				$.each(pager_align, function(i, pageUrl) {
@@ -278,6 +283,10 @@ modules.global = {
 					readDownload += Number($(this).attr("data-filesize"));
 				});
 
+				$(data).find("td:nth-child(6n)").each(function() {
+					realSnatched += ($(this).text() != "Non Complété");
+				});
+
 				for(var i = 1; i <= maxPage; i++) {
 					snatchedUrl.params.page = i;
 					utils.grabPage(snatchedUrl, function(data) {
@@ -287,6 +296,10 @@ modules.global = {
 
 						$(data).find("td[data-filesize]:nth-child(5n)").each(function() {
 							readDownload += Number($(this).attr("data-filesize"));
+						});
+
+						$(data).find("td:nth-child(6n)").each(function() {
+							realSnatched += ($(this).text() != "Non Complété");
 						});
 					}, function(){
 						grabbedPages++;
@@ -304,16 +317,20 @@ modules.global = {
 							}
 							var realUploadStr = Math.round(realUpload * 1000) / 1000 + units[uploadUnit];
 							var realDownloadStr = Math.round(readDownload * 1000) / 1000 + units[downloadUnit];
-							writeRealStats(realUploadStr, realDownloadStr, realRatio);
+							dbg("[real_stats] Insert");
 							gData.set("real_stats", "real_upload", realUploadStr);
 							gData.set("real_stats", "real_download", realDownloadStr);
 							gData.set("real_stats", "real_ratio", realRatio);
+							gData.set("real_stats", "real_snatched", realSnatched);
 							gData.set("real_stats", "last_check", new Date().getTime());
+							if(callback)
+								callback();
 						}
 					});
 				}
 			});
 		};
+		modules.global.parseRealStats = parseRealStats;
 
 		var fetchBookmarks = function() {
 			if(new Date().getTime() < (gData.get("bookmarks", "last_check") + timeOffset)) {

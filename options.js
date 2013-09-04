@@ -135,6 +135,7 @@ var gData = {
 			real_upload: 0,
 			real_download: 0,
 			real_ratio: 0,
+			real_snatched: 0,
 			last_check: 0
 		},
 		bookmarks: {
