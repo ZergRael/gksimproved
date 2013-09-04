@@ -79,6 +79,9 @@ var opt = {
 		aura: {
 			ag_column:          { defaultVal: true, showInOptions: true, dispText: "Colonne de rentabilité torrent A/Go" }
 		},
+		peers: {
+			filtering_active:   { defaultVal: false, showInOptions: false }
+		},
 		bookmark: {
 			delete_get:         { defaultVal: true, showInOptions: false }
 		}

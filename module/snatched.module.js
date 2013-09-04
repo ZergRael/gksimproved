@@ -189,7 +189,7 @@ modules.snatched = {
 			for(var i = 1; i <= maxPage; i++) {
 				nextUrl.params.page = i;
 				dbg("[AllPagesGrab] Grabbing page " + i);
-				var pageLoaded = 1;
+				var pageLoaded = 0;
 				utils.grabPage(nextUrl, function(data) {
 					torrentsTR = $(data).find(".table100 tbody tr")
 					if(torrentsTR && torrentsTR.length) {

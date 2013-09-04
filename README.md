@@ -14,6 +14,9 @@ Voir topic associé.
 - Passage en licence MIT, plus permissive
 - Logs : Filtres upload/delete/edit/request
 - Logs : Liens sur les id torrents des lignes upload et edit
+- Peers : Rappatriement de toutes les pages
+- Peers : Filtrage des torrents actifs
+- Peers : Vitesse de seed total en entête de tableau lorsque toutes les pages sont chargées
 - Torrent finder : Les boutons sont optionnels
 - Torrent list : Auto refresh des derniers torrents (1 min)
 - Torrent list : Colonne autoget corrigée sur /sphinx/
