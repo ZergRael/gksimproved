@@ -312,6 +312,8 @@ modules.endless_scrolling = {
 			else {
 				$(mOptions.domInsertion).append(processedData);
 			}
+			modules.endless_scrolling.lastESPage = nextPage;
+			modules.endless_scrolling.done = nextPage >= pagerData.maxPage;
 			
 			// End the loading and prepare for next page
 			nextPage++;
