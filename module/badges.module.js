@@ -27,9 +27,16 @@ modules.badges = {
 					{ url: "goodsnatched", trigger: 500, tip: "Snatcher confirm&eacute; : Vous avez t&eacute;l&eacute;charg&eacute; plus de 500 Torrents" },
 					{ url: "mastersnatched", trigger: 1000, tip: "Master Snatcher : Vous avez t&eacute;l&eacute;charg&eacute; plus de 1000 Torrents" }
 				],
-				dom: "#contenu .separate em",
-				regex: /([\d,]+)/,
-				name: "snatched"
+				name: "snatched",
+				func: function() {
+					if(!modules.global.isStatUsable("real_stats") || !gData.get("real_stats", "real_snatched")) {
+						modules.global.parseRealStats(function() {
+							badgesData[0].val = gData.get("real_stats", "real_snatched");
+							set_badge_row(0);
+						});
+					}
+					return gData.get("real_stats", "real_snatched");
+				}
 			},
 			{	// Seeds -- 1
 				badges: [ 
@@ -53,7 +60,6 @@ modules.badges = {
 				],
 				p_nth: 17,
 				modifier: { ".usr-invited_by": 1 },
-				modifies_val: { 0: true },
 				regex: /(\d+)/,
 				name: "uploads"
 			},
@@ -159,7 +165,6 @@ modules.badges = {
 		];
 
 		var badgesReqParse = [
-			{ url: "/m/peers/snatched", sections: [0] },
 			{ url: "/users/" + userId, sections: [1, 2, 3, 5, 8, 9, 10] },
 			{ url: "/m/account/twits", sections: [4] },
 			{ url: "/m/account/", sections: [6] }
@@ -214,39 +219,34 @@ modules.badges = {
 
 		var show_progress = function() {
 			dbg("[progress] Ajax ended - Process & DOM insert");
-			var domTr = $("tbody tr");
 			// Parsing string to int
-			$.each(badgesData, function(i_section, badgeBlock) {
+			$.each(badgesData, function(row, badgeBlock) {
 				if(badgeBlock.strVal !== undefined) {
 					badgeBlock.val = utils.strToInt(badgeBlock.strVal);
 				}
-			});
-			// Applying modifiers
-			$.each(badgesData, function(i_section, badgeBlock) {
-				if(badgeBlock.val !== undefined) {
-					if(badgeBlock.modifies_val) {
-						$.each(badgeBlock.modifies_val, function(block, minus) {
-							if(badgesData[block].val !== undefined) {
-								badgesData[block].val += (minus ? -badgeBlock.val : badgeBlock.val);
-								dbg("[progress] Modified " + badgesData[block].name + " by " + (minus ? -badgeBlock.val : badgeBlock.val));
-							}
-						});
-					}
+				else if(badgeBlock.func) {
+					badgeBlock.val = badgeBlock.func();
 				}
 			});
 			// Inserting into DOM
-			$.each(badgesData, function(i_section, badgeBlock) {
-				if(badgeBlock.val !== undefined) {
-					domTr.eq(i_section).find("td:not(:first)").each(function(i) {
-						var badge = badgeBlock.badges[i];
-						if(!badge || !badge.trigger) {
-							return;
-						}
-						$(this).append('<div class="gksi_progress"><div class="gksi_progress_area"><div class="gksi_progress_bar' + (badgeBlock.val >= badge.trigger ? ' gksi_valid' : '') + '" style="width: ' + (badgeBlock.val >= badge.trigger ? badge.trigger : badgeBlock.val) / badge.trigger * 100 + '%"></div><div class="gksi_progress_numbers">' + (badgeBlock.val >= badge.trigger ? badge.trigger : Math.round(badgeBlock.val)) + '/' + badge.trigger + '</div></div></div>');
-					});
-				}
+			$.each(badgesData, function(row, badgeBlock) {
+				set_badge_row(row);
 			});
 			dbg("[progress] Ended");
+		};
+
+		var set_badge_row = function(row) {
+			badgeBlock = badgesData[row];
+			if(badgeBlock.val !== undefined) {
+				$("tbody tr").eq(row).find("td:not(:first)").each(function(i) {
+					var badge = badgeBlock.badges[i];
+					if(!badge || !badge.trigger) {
+						return;
+					}
+					$(this).find(".gksi_progress").remove();
+					$(this).append('<div class="gksi_progress"><div class="gksi_progress_area"><div class="gksi_progress_bar' + (badgeBlock.val >= badge.trigger ? ' gksi_valid' : '') + '" style="width: ' + (badgeBlock.val >= badge.trigger ? badge.trigger : badgeBlock.val) / badge.trigger * 100 + '%"></div><div class="gksi_progress_numbers">' + (badgeBlock.val >= badge.trigger ? badge.trigger : Math.round(badgeBlock.val)) + '/' + badge.trigger + '</div></div></div>');
+				});
+			}
 		};
 
 		var show_missing_images = function() {

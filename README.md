@@ -12,6 +12,7 @@ Voir topic associé.
 
 ### TODO.done
 - Passage en licence MIT, plus permissive
+- Badges : Correction de la valeur du badge snatched - Calcul du nombre de torrents complétés plutôt que la valeur donnée par le site
 - Logs : Filtres upload/delete/edit/request
 - Logs : Liens sur les id torrents des lignes upload et edit
 - Peers : Rappatriement de toutes les pages
