@@ -59,6 +59,7 @@ modules.peers = {
 					if(pageLoaded == maxPage) {
 						$(".page_loading").remove();
 						dbg("[AllPagesGrab] Grabbing ended");
+						tagTorrents();
 						onEndlessDone();
 						calcTotals();
 						$(document).trigger("es_dom_process_done");

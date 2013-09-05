@@ -218,7 +218,7 @@ modules.torrent_list = {
 						return;
 					}
 					dbg("[autoget_column] Processing");
-					$(this).find("td:nth(1)").after('<td class="autoget_torrent_head">Aget</td>');
+					$(this).find("td:nth(1)").after('<td class="autoget_torrent_head">Get</td>');
 					$(this).addClass("autoget_done");
 					alreadyProcessed = false;
 				}
