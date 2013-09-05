@@ -7,7 +7,7 @@ C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un
 
 Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. Toujours en beta mais un jour peut-être une version stable arrivera ;)
 
-Version actuelle : 0.3.3 - 30/06/2013 - Licence GPLv3
+Version actuelle : 0.3.4 - 06/09/2013 - Licence MIT
 
 [size=6]Téléchargement[/size] :
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
@@ -17,7 +17,7 @@ Version actuelle : 0.3.3 - 30/06/2013 - Licence GPLv3
 [size=6]Présentation :[/size]
 L'extension se base sur un ensemble de scripts Javascript avec l'aide de la libraire jQuery. Cette librairie permet de simplifier le code tout en ajoutant des fonctions très pratiques ainsi que quelques suggestions glanées sur le forum.
 
-L'ensemble de ces scripts ont été développés par moi même si j'ai récupéré quelques parties que j'avais déjà codé auparavant. Le code est entièrement sous licence GPLv3, donc gratuit et réutilisable.
+L'ensemble de ces scripts ont été développés par moi même si j'ai récupéré quelques parties que j'avais déjà codé auparavant. Le code est entièrement sous licence MIT, donc gratuit et réutilisable.
 
 La plupart des options sont sauvegardées entre chaque utilisation.
 
@@ -42,6 +42,8 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Tri par clic sur les colonnes[/i]
 > [i]Bookmark torrents[/i] : Permet d'ajouter les 40 premiers torrents aux bookmarks - ravomavain
 > [i]Colonne autoget[/i] : Colonne de boutons d'autoget direct du torrent
+> [i]Auto-refresh[/i] : Rafraîchissement automatique des derniers torrents et mise en avant
+> [i]Icone bookmark[/i] : Affichage d'une icone indiquant les torrents déjà bookmarkés (requiert la visite de la page https://gks.gs/bookmark/)
 
 [b]* Snatched[/b]
 - Page des snatched -- https://gks.gs/snatched/
@@ -49,6 +51,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 [url=https://s.gks.gs/img/img/01-2013/snatched.png][img]https://s.gks.gs/img/mini/01-2013/snatched.png[/img][/url]
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
+> [i]Récupération des pages[/i] : Récupération de toutes les pages pour former une liste complète de torrents
 > [i]Cacher les supprimés[/i] : Cache les torrents supprimés du tracker - Pas ceux que vous ne seedez plus
 > [i]Cacher les torrents en seed[/i] : N'affiche que les torrents qui ne sont plus seedés - Retrouve les H&R
 > [i]Cacher les non completés[/i] : N'affiche que les torrents que vous avez téléchargé entièrement
@@ -111,13 +114,26 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Suppression par catégorie[/i] : Supprime les 40 premiers bookmarks d'une catégorie - ravomavain
 > [i]Ajout en autoget[/i] : Ajoute les 15 premiers bookmarks dans l'autoget puis les supprime - ravomavain
 
+[b]* Logs[/b]
+- Page des logs -- https://gks.gs/logs/
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Boutons personnalisables de remontée en haut de page & de pause
+> [i]Filtres[/i] : Affichage de certains types de logs
+> [i]Liens fiches[/i] : Liens automatiques sur les fiches torrents pour les lignes upload et edit
+
+[b]* Peers[/b]
+- Torrents en seed -- https://gks.gs/m/peers/
+
+> [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Boutons personnalisables de remontée en haut de page & de pause
+> [i]Récupération des pages[/i] : Récupération de toutes les pages pour former une liste complète de torrents
+> [i]Filtre actif[/i] : Filtrage des torrents en seed actif ( > 0.00 Ko/s)
+> [i]Vitesse de seed[/i] : Calcul de la vitesse de seed totale dans le header colonne
+
 [b]* Les autres pages [/b]
 - Liste des requêtes -- https://gks.gs/req/
-- Page des logs -- https://gks.gs/logs/
 - Liste des images -- https://gks.gs/m/images/
 - Liste des uploads -- https://gks.gs/m/uploads/
 - Dupecheck -- https://gks.gs/dupecheck/
-- Torrents en seed -- https://gks.gs/m/peers/
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Boutons personnalisables de remontée en haut de page & de pause
 
@@ -140,12 +156,26 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
 
 [size=6]Changelog :[/size]
+[b]* 0.3.4 - 06/09/2013[/b]
+- Passage en licence MIT, plus permissive
+- Badges : Correction de la valeur du badge snatched - Calcul du nombre de torrents complétés plutôt que la valeur donnée par le site
+- Logs : Filtres upload/delete/edit/request
+- Logs : Liens sur les id torrents des lignes upload et edit
+- Peers : Rappatriement de toutes les pages
+- Peers : Filtrage des torrents actifs
+- Peers : Vitesse de seed total en entête de tableau lorsque toutes les pages sont chargées
+- Torrent finder : Les boutons sont optionnels
+- Torrent list : Auto refresh des derniers torrents (1 min)
+- Torrent list : Colonne autoget corrigée sur /sphinx/
+- Torrent list : Ajout d'une icone sur les torrents bookmarkés
+- Torrent list : Correction des suggestions IMDB & affichage du chargement
+- Uploads : Tri par clic sur les entêtes de colonnes (expérimental)
+[spoil]
 [b]* 0.3.3 - 30/06/2013[/b]
 - Global : Evenements de début et fin de process
 - Mouseover comments : Fermeture de la fenêtre au clic en dehors de celle-ci
 - Torrent finder : Retour aux 2 boutons plutôt qu'une fenêtre
 - Torrent list : Ajout d'une colonne d'autoget
-[spoil]
 [b]* 0.3.2 - 09/06/2013[/b]
 - Aura : Amélioration des calculs pour supporter les pages de 500+ torrents. (1k+ maintenant)
 - Aura : Colonne de rentabilité par torrent (A/Go) - ravomavain

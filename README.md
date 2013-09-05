@@ -6,11 +6,10 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 
 Voir topic associé.
 
-### TODO.list
-- Moar comments
-- Optimisations
-
 ### TODO.done
+
+### Changelog
+**0.3.4**
 - Passage en licence MIT, plus permissive
 - Badges : Correction de la valeur du badge snatched - Calcul du nombre de torrents complétés plutôt que la valeur donnée par le site
 - Logs : Filtres upload/delete/edit/request
