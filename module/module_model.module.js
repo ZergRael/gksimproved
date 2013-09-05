@@ -1,5 +1,6 @@
 modules.module_ = {
 	name: "module_",
+	dText: "DisplayedText Module_",
 	pages: [
 		{ path_name: "/.*/", params: { query: 'value' }, options: { option: 'value' } }
 	],

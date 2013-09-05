@@ -27,12 +27,14 @@ modules.torrent_list = {
 				var torrentTr = $(this);
 				var imgs = torrentTr.find("img");
 				$.each(imgs, function() {
-					var imgId = $(this).attr("id");
-					if(imgId) {
-						var id = imgId.substring(6);
-						if(bookmarksList.indexOf(id) != -1) {
-							torrentTr.find("img:first").after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
-							classIs += "t_bookmark ";
+					if(bookmarksList) {
+						var imgId = $(this).attr("id");
+						if(imgId) {
+							var id = imgId.substring(6);
+							if(bookmarksList.indexOf(id) != -1) {
+								torrentTr.find("img:first").after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
+								classIs += "t_bookmark ";
+							}
 						}
 					}
 					switch($(this).attr("alt")) {

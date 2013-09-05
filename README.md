@@ -22,7 +22,7 @@ Voir topic associé.
 - Torrent list : Auto refresh des derniers torrents (1 min)
 - Torrent list : Colonne autoget corrigée sur /sphinx/
 - Torrent list : Ajout d'une icone sur les torrents bookmarkés
-- Torrent list : Correction des suggestions IMDB
+- Torrent list : Correction des suggestions IMDB & affichage du chargement
 - Uploads : Tri par clic sur les entêtes de colonnes (expérimental)
 
 **0.3.3**
