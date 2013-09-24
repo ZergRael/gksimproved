@@ -1,4 +1,5 @@
 test_data/
+*.pyc
 
 .zip
 .DS_Store

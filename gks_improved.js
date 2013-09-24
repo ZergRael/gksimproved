@@ -1,4 +1,4 @@
-var DEBUG = false;
+var DEBUG = true;
 
 // At this point, libs with most common functions are loaded
 // Options are ready but not loaded
