@@ -417,7 +417,8 @@ modules.global = {
 
 		var refreshBookmarksOnBookmark = function() {
 			$("a[onclick]").live("click", function() {
-				if($(this).attr("onclick").indexOf("booktorrent") != -1) {
+				var aLink = $(this);
+				if(aLink.attr("onclick").indexOf("booktorrent") != -1) {
 					dbg("[bookmarkRefresh] Bookmark added - Force refresh");
 					fetchBookmarks(true);
 					if($(this).parent().hasClass("added")) {
@@ -426,6 +427,10 @@ modules.global = {
 							cross.after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
 						}
 					}
+				}
+				if(aLink.attr("onclick").indexOf("delbookmark") != -1) {
+					dbg("[bookmarkRefresh] Bookmark deleted - Force refresh");
+					fetchBookmarks(true);
 				}
 			});
 		};
