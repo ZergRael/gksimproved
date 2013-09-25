@@ -7,6 +7,7 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+- Bookmarks : Rafraichissement de la liste interne à chaque ajout de bookmark - L'étoile devrait apparaître directement
 - Global : Possibilité de transformer les loupes en boutons de recherche dans les champs de l'entête (Torrents/Requests/Summary/etc)
 - Logs : Possibilité de filtrer sur plusieurs critères simultannés
 - Logs : Ajout des filtres Request fill / Summary edit / Summary new

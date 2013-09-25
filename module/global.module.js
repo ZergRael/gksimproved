@@ -354,8 +354,8 @@ modules.global = {
 		};
 		modules.global.parseRealStats = parseRealStats;
 
-		var fetchBookmarks = function() {
-			if(new Date().getTime() < (gData.get("bookmarks", "last_check") + timeOffset)) {
+		var fetchBookmarks = function(force) {
+			if(!force && new Date().getTime() < (gData.get("bookmarks", "last_check") + timeOffset)) {
 				return;
 			}
 			dbg("[fetchBookmarks] Grab bookmarks");
@@ -415,6 +415,21 @@ modules.global = {
 			}
 		};
 
+		var refreshBookmarksOnBookmark = function() {
+			$("a[onclick]").live("click", function() {
+				if($(this).attr("onclick").indexOf("booktorrent") != -1) {
+					dbg("[bookmarkRefresh] Bookmark added - Force refresh");
+					fetchBookmarks(true);
+					if($(this).parent().hasClass("added")) {
+						var cross = $(this).parents("tr").prev().find("td:nth(1) img:nth(0)");
+						if(cross) {
+							cross.after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
+						}
+					}
+				}
+			});
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -441,6 +456,7 @@ modules.global = {
 		insertRealStats();
 		fetchBookmarks();
 		addSeachButtons();
+		refreshBookmarksOnBookmark();
 
 		dbg("[Init] Ready");
 	}

@@ -1,10 +1,6 @@
 [center][img]https://s.gks.gs/img/img/01-2013/gks_improved_48.png[/img][size=6]GKSimproved[/size] [size=5](beta)[/size][/center]
 Salutations à tous !
 
-Après un petit weekend de glandouille, je me suis rendu compte qu'il manquait quelques fonctions pratiques sur le site :-/
-
-C'est presque devenu une habitude sur les trackers que je visite, j'ai créé un petit ensemble de scripts ajoutant les fonctions que je jugeais pratiques pour mon utilisation. Etant donné que ça fonctionne étonnamment bien chez moi, pourquoi pas le proposer ? :D
-
 Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. Toujours en beta mais un jour peut-être une version stable arrivera ;)
 
 Version actuelle : 0.3.4 - 06/09/2013 - Licence MIT
@@ -154,6 +150,12 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Optimisations
 
 - Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
+
+[size=6]FAQ :[/size]
+> [i]Firefox ne sauvegarde pas les options[/i] :
+- Les options sont sauvegardées dans le localStorage, une sorte de gros cookie. Il faut donc que les cookies soient acceptés pour GKS.
+De plus, il arrive que Firefox ne soit plus capable de conserver le localStorage entre chaque redémarrage, voir [url=http://www.ghacks.net/2012/11/22/firefox-not-saving-cookie-exceptions-anymore/]ici[/url]. Merci @Masta77
+[spoil]Update: Deleting the permissions.sqlite file in the Firefox proflie directory resolves the issue. The easiest way to get there is to enter about:support in the browser's address bar. Locate the show folder button under Application Basics and click on it. Close Firefox afterwards, delete the permissions.sqlite file, and restart the browser.[/spoil]
 
 [size=6]Changelog :[/size]
 [b]* 0.3.4 - 06/09/2013[/b]
@@ -320,3 +322,4 @@ Tout particulièrement à :
 - @MacGeek qui a apporté quelques portions de code
 - @LordVal et ses images pour les boutons pause ES et backToTop
 - @ravomavain pour son code et ses idées
+- @Masta77 pour la résolution de soucis avec Firefox
