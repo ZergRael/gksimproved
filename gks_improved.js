@@ -205,6 +205,8 @@ var insertCSS = function() {
 		".halfOpacity { opacity: 0.4; } " +
 		".resume_endless_scrolling { font-size: 1.4em; font-weight: bold; } " +
 		".bold { font-weight: bold; } " +
+		".search_button { display: inline-block; position: relative; top: 3px; left: 19px; width: 16px; height: 17px; margin-left: -16px; } " +
+		".search_button_usable { cursor: pointer; } " +
 		"</style>");
 };
 

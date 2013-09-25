@@ -360,6 +360,39 @@ modules.global = {
 			dbg("[parseBookmarks] Found " + torrentIds.length + " bookmarks");
 		}
 
+		var addSeachButtons = function() {
+			if(!opt.get(module_name, "search_buttons")) {
+				return;
+			}
+
+			dbg("[searchButtons] Setting listeners");
+			$("#searchbars .inline").each(function() {
+				var searchDiv = $(this);
+				searchDiv.prepend('<div class="search_button"></div>');
+				searchDiv.find("input").on("keyup paste", function() {
+					var t = $(this);
+					setTimeout(function() {
+						onSearchInput(t.val(), searchDiv);
+					}, 100);
+				});
+			});
+		};
+
+		var onSearchInput = function(val, searchDiv) {
+			if(val != "" && val != "Torrents" && val != "Requests" && val != "Summary" && val != "Forums" && val != "Wiki" && val != "Logs") {
+				var button = searchDiv.find(".search_button");
+				if(!button.hasClass("search_button_usable")) {
+					button.addClass("search_button_usable").click(function() {
+						$(this).parents("form").submit();
+						dbg("[searchButtons] Submit");
+					});
+				}
+			}
+			else {
+				searchDiv.find(".search_button").removeClass("search_button_usable").off("click");
+			}
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -385,6 +418,7 @@ modules.global = {
 		listenToBBCodeShortcuts();
 		insertRealStats();
 		fetchBookmarks();
+		addSeachButtons();
 
 		dbg("[Init] Ready");
 	}
