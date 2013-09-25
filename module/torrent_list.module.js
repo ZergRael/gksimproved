@@ -3,7 +3,7 @@ modules.torrent_list = {
 	dText: "Liste torrents",
 	pages: [
 		{ path_name: "/", options: { buttons: '#sort', canRefresh: true, canMark: true, canFilter: true, canSort: true } },
-		{ path_name: "/browse/", options: { buttons: '#sort p', canMark: true, canFilter: true, canSort: true } },
+		{ path_name: "/browse/", options: { buttons: '#sort p', canRefresh: true, canMark: true, canFilter: true, canSort: true } },
 		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canSuggest: true, canFilter: true, canSort: true } },
 		{ path_name: "/summary/", options: { } },
 		{ path_name: "/m/uploads/", options: { canSort: true } }
