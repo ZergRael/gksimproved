@@ -88,7 +88,10 @@ modules.global = {
 				$.each(oData.choices, function(k, optionChoice) {
 					optionChoices += '<option value="' + optionChoice + '"' + (oData.val == optionChoice ? ' selected="selected"' : '') + '>' + optionChoice + '</option>';
 				});
-				optionHtml = '<select id="gksi_' + module_name + '_' + option_name + '" ' + (oData.parent && !opt.get(module_name, oData.parent) ? 'disabled="disabled" ': '') + (opt.get(module_name, option_name) ? 'checked="checked"' : '') + '>' + optionChoices + '</select><label for="gksi_' + module_name + '_' + option_name + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
+				optionHtml = '<select id="gksi_' + module_name + '_' + option_name + '" ' + (oData.parent && !opt.get(module_name, oData.parent) ? 'disabled="disabled" ': '') + '>' + optionChoices + '</select><label for="gksi_' + module_name + '_' + option_name + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
+			}
+			else if(oData.type == 'text') {
+				optionHtml = '<input type="text" id="gksi_' + module_name + '_' + option_name + '" ' + (oData.parent && !opt.get(module_name, oData.parent) ? 'disabled="disabled" ': '') + 'value="' + opt.get(module_name, option_name) + '"' + ' style="width: ' + oData.width + 'px;"/> <input id="gksi_' + module_name + '_' + option_name + '_savebutton" type="button" value="Ok"/> <label for="gksi_' + module_name + '_' + option_name + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
 			}
 			else {
 				optionHtml = '<input type="checkbox" id="gksi_' + module_name + '_' + option_name + '" ' + (oData.parent && !opt.get(module_name, oData.parent) ? 'disabled="disabled" ': '') + (opt.get(module_name, option_name) ? 'checked="checked"' : '') + '/><label for="gksi_' + module_name + '_' + option_name + '"' + (oData.tooltip ? ' title="' + oData.tooltip + '"' : '') + '>' + oData.dispText + '</label><br />';
@@ -147,41 +150,60 @@ modules.global = {
 					if(oData.showInOptions) {
 						var childs = getOptionChilds(module_name, option);
 
-						$("#gksi_" + module_name + "_" + option).change(function() {
-							var state = null;
-							if($(this).is('select')) {
-								state = $(this).val();
-							}
-							else {
-								state = $(this).attr("checked") == "checked" ? true : false;
-							}
-							opt.set(module_name, option, state);
-							utils.dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
-							if(oData.callback) {
-								oData.callback(state);
-							}
-							if(oData.sub_options) {
-								if(state) {
-									$("#gksi_" + module_name + "_s_" + option).slideDown();
+						if(!oData.type || oData.type == 'select') {
+							$("#gksi_" + module_name + "_" + option).change(function() {
+								var state = null;
+								if($(this).is('select')) {
+									state = $(this).val();
 								}
 								else {
-									$("#gksi_" + module_name + "_s_" + option).slideUp();
+									state = $(this).attr("checked") == "checked" ? true : false;
 								}
-							}
-
-							if(childs.length) {
-								$.each(childs, function(i, child) {
+								opt.set(module_name, option, state);
+								utils.dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
+								if(oData.callback) {
+									oData.callback(state);
+								}
+								if(oData.sub_options) {
 									if(state) {
-										$("#gksi_" + module_name + "_" + child).attr("disabled", false);
+										$("#gksi_" + module_name + "_s_" + option).slideDown();
 									}
 									else {
-										$("#gksi_" + module_name + "_" + child).attr("checked", false);
-										$("#gksi_" + module_name + "_" + child).triggerHandler("change");
-										$("#gksi_" + module_name + "_" + child).attr("disabled", true);
+										$("#gksi_" + module_name + "_s_" + option).slideUp();
 									}
-								});
-							}
-						});
+								}
+
+								if(childs.length) {
+									$.each(childs, function(i, child) {
+										if(state) {
+											$("#gksi_" + module_name + "_" + child).attr("disabled", false);
+										}
+										else {
+											$("#gksi_" + module_name + "_" + child).attr("checked", false);
+											$("#gksi_" + module_name + "_" + child).triggerHandler("change");
+											$("#gksi_" + module_name + "_" + child).attr("disabled", true);
+										}
+									});
+								}
+							});
+						}
+						else if(oData.type == 'text') {
+							$("#gksi_" + module_name + "_" + option + "_savebutton").click(function() {
+								var val = $("#gksi_" + module_name + "_" + option).val();
+								if(oData.regex) {
+									if(!oData.regex.test(val)) {
+										opt.set(module_name, option, oData.defaultVal);
+										$("#gksi_" + module_name + "_" + option).val(opt.get(module_name, option))
+										return;
+									}
+								}
+								opt.set(module_name, option, val);
+								utils.dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
+								if(oData.callback) {
+									oData.callback(state);
+								}
+							});
+						}
 
 						if(oData.sub_options) {
 							$.each(oData.sub_options, function(s_option, s_oData) {

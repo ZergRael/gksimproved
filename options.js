@@ -34,6 +34,7 @@ var opt = {
 			filtering_fl:       { defaultVal: false, showInOptions: false },
 			filtering_scene:    { defaultVal: false, showInOptions: false },
 			auto_refresh:       { defaultVal: false, showInOptions: false },
+			auto_refresh_color: { defaultVal: "#ffa500", showInOptions: true, type: "text", width: 60, regex: /^#[0-9A-Fa-f]{3}$|^#[0-9A-Fa-f]{6}$/, dispText: "Couleur (hexa) de la mise en avant des lignes lors de l'auto-refresh" },
 			age_column:         { defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent" },
 			autoget_column:     { defaultVal: false, showInOptions: true, dispText: "Colonne de boutons d'ajout direct à l'autoget" },
 			torrent_marker:     { defaultVal: false, showInOptions: false },

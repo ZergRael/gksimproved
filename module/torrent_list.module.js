@@ -280,7 +280,7 @@ modules.torrent_list = {
 									if(opt.get(module_name, "age_column")) {
 										torrentNameTd.after('<td class="age_torrent_1">frais</td>');
 									}
-									torrentTR.find("td:nth(1)").addClass("torrent_autorefreshed");
+									torrentTR.find("td:nth(1)").css("background-color", opt.get(module_name, "auto_refresh_color"));
 								}
 								$("#torrent_list tr:first").after(torrentTR);
 								$("#torrent_list tr:last").remove();
