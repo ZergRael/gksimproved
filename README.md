@@ -10,8 +10,10 @@ Voir topic associé.
 - Global : Possibilité de transformer les loupes en boutons de recherche dans les champs de l'entête (Torrents/Requests/Summary/etc)
 - Logs : Possibilité de filtrer sur plusieurs critères simultannés
 - Logs : Ajout des filtres Request fill / Summary edit / Summary new
+- Peers : Arrondi sur la valeur d'upload total de l'entête du tableau
 - Torrent list : Auto-refresh sur /browse/
 - Torrent list : Correction de l'étoile des bookmarks sur Firefox
+- Torrent list : Choix de la couleur de l'auto-refresh
 
 
 ### Changelog

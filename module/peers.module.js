@@ -87,7 +87,7 @@ modules.peers = {
 			});
 
 			dbg("[CalcTotals] Got speed " + speedTotal);
-			$(".table100 tr:nth(0) th:nth(4)").text("↑ " + speedTotal + " Ko/s");
+			$(".table100 tr:nth(0) th:nth(4)").text("↑ " + Math.round(speedTotal) + " Ko/s");
 		};
 
 		var onEndlessDone = function() {
