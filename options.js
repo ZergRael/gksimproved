@@ -75,7 +75,10 @@ var opt = {
 			uploads_filter:     { defaultVal: false, showInOptions: false },
 			delete_filter:      { defaultVal: false, showInOptions: false },
 			edit_filter:        { defaultVal: false, showInOptions: false },
-			request_filter:     { defaultVal: false, showInOptions: false }
+			request_filter:     { defaultVal: false, showInOptions: false },
+			request_fill_filter:{ defaultVal: false, showInOptions: false },
+			summary_edit_filter:{ defaultVal: false, showInOptions: false },
+			summary_new_filter: { defaultVal: false, showInOptions: false }
 		},
 		aura: {
 			ag_column:          { defaultVal: true, showInOptions: true, dispText: "Colonne de rentabilité torrent A/Go" }

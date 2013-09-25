@@ -7,6 +7,12 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+- Global : Possibilité de transformer les loupes en boutons de recherche dans les champs de l'entête (Torrents/Requests/Summary/etc)
+- Logs : Possibilité de filtrer sur plusieurs critères simultannés
+- Logs : Ajout des filtres Request fill / Summary edit / Summary new
+- Torrent list : Auto-refresh sur /browse/
+- Torrent list : Correction de l'étoile des bookmarks sur Firefox
+
 
 ### Changelog
 **0.3.4**

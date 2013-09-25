@@ -48,26 +48,35 @@ modules.logs = {
 			}, mOptions.auto_refresh_interval);
 		};
 
-		var filtersArray = { "uploads_filter": "log_upload", "delete_filter": "log_upload_delete", "edit_filter": "log_upload_edit", "request_filter": "log_requests_new" };
-		var onFilterChange = function() {
-			var changedFilter = $(this).attr("id");
-			$("#log_list tr").show();
-			$.each(filtersArray, function(filter, logClass) {
-				if(filter != changedFilter && $("#" + filter).prop("checked")) {
-					$("#" + filter).prop("checked", false);
-					opt.set(module_name, filter, false);
-				}
-			});
-
-			opt.set(module_name, changedFilter, $(this).prop("checked"));
-			refreshFilters();
+		var filtersArray = {
+			"uploads_filter":      { className: "log_upload" },
+			"delete_filter":       { className: "log_upload_delete" },
+			"edit_filter":         { className: "log_upload_edit" },
+			"request_filter":      { className: "log_requests_new" },
+			"request_fill_filter": { className: "log_requests_filled" },
+			"summary_edit_filter": { className: "log_summary_edit" },
+			"summary_new_filter":  { className: "log_summary_new" }
 		};
 
-		var refreshFilters = function() {
+		var initFilters = function() {
+			$.each(filtersArray, function(filter, filterData) {
+				filterData.show = !opt.get(module_name, filter);
+				filterData.lastStatus = filterData.show;
+			})
+		};
+
+		var refreshFilters = function(notAnInput) {
 			dbg("[*_filter] Refresh");
-			$.each(filtersArray, function(filter, logClass) {
-				if(opt.get(module_name, filter)) {
-					$("#log_list span:not(." + logClass + ")").parent().parent().hide();
+			$.each(filtersArray, function(filter, filterData) {
+				filterData.show = !opt.get(module_name, filter);
+				if(notAnInput || filterData.show != filterData.lastStatus) {
+					if(filterData.show) {
+						$("#log_list span." + filterData.className).parents("tr").show();
+					}
+					else {
+						$("#log_list span." + filterData.className).parents("tr").hide();
+					}
+					filterData.lastStatus = filterData.show;
 				}
 			});
 			dbg("[*_filter] Done");
@@ -85,10 +94,13 @@ modules.logs = {
 		dbg("[Init] Starting");
 		// Execute functions
 
-		var buttons = '<input id="uploads_filter" class="gksi_filter" type="checkbox" ' + (opt.get(module_name, "uploads_filter") ? 'checked="checked" ' : ' ') + '/><label for="uploads_filter">Filtre uploads</label> | ';
-		buttons += '<input id="delete_filter" class="gksi_filter" type="checkbox" ' + (opt.get(module_name, "delete_filter") ? 'checked="checked" ' : ' ') + '/><label for="delete_filter">Filtre delete</label> | ';
-		buttons += '<input id="edit_filter" class="gksi_filter" type="checkbox" ' + (opt.get(module_name, "edit_filter") ? 'checked="checked" ' : ' ') + '/><label for="edit_filter">Filtre edits</label> | ';
-		buttons += '<input id="request_filter" class="gksi_filter" type="checkbox" ' + (opt.get(module_name, "request_filter") ? 'checked="checked" ' : ' ') + '/><label for="request_filter">Filtre requests</label> | ';
+		var buttons = '<input id="uploads_filter" class="gksi_filter" type="checkbox" ' + (!opt.get(module_name, "uploads_filter") ? 'checked="checked" ' : ' ') + '/><label for="uploads_filter">Uploads</label> | ';
+		buttons += '<input id="delete_filter" class="gksi_filter" type="checkbox" ' + (!opt.get(module_name, "delete_filter") ? 'checked="checked" ' : ' ') + '/><label for="delete_filter">Delete</label> | ';
+		buttons += '<input id="edit_filter" class="gksi_filter" type="checkbox" ' + (!opt.get(module_name, "edit_filter") ? 'checked="checked" ' : ' ') + '/><label for="edit_filter">Edits</label> | ';
+		buttons += '<input id="request_filter" class="gksi_filter" type="checkbox" ' + (!opt.get(module_name, "request_filter") ? 'checked="checked" ' : ' ') + '/><label for="request_filter">Requests</label> | ';
+		buttons += '<input id="request_fill_filter" class="gksi_filter" type="checkbox" ' + (!opt.get(module_name, "request_fill_filter") ? 'checked="checked" ' : ' ') + '/><label for="request_fill_filter">Requests filled</label> | ';
+		buttons += '<input id="summary_edit_filter" class="gksi_filter" type="checkbox" ' + (!opt.get(module_name, "summary_edit_filter") ? 'checked="checked" ' : ' ') + '/><label for="summary_edit_filter">Summary edit</label> | ';
+		buttons += '<input id="summary_new_filter" class="gksi_filter" type="checkbox" ' + (!opt.get(module_name, "summary_new_filter") ? 'checked="checked" ' : ' ') + '/><label for="summary_new_filter">Summary new</label> | ';
 		buttons += '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/><label for="auto_refresh">Auto refresh (60secs)</label> | ';
 		$(mOptions.buttons).prepend(buttons);
 
@@ -103,7 +115,11 @@ modules.logs = {
 			}
 		});
 
-		$(".gksi_filter").change(onFilterChange);
+		$(".gksi_filter").change(function() {
+			opt.set(module_name, $(this).attr("id"), !$(this).prop("checked"));
+			refreshFilters();
+			$(document).trigger("scroll");
+		});
 
 		if(opt.get(module_name, "auto_refresh")) {
 			dbg("[auto_refresh] Starting");
@@ -112,11 +128,13 @@ modules.logs = {
 
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
-			refreshFilters();
+			refreshFilters(true);
 			forceIdLinks();
+			$(document).trigger("scroll");
 		});
 
-		refreshFilters();
+		initFilters();
+		refreshFilters(true);
 		forceIdLinks();
 
 		dbg("[Init] Ready");
