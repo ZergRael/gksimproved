@@ -15,6 +15,7 @@ Voir topic associé.
 - Torrent list : Auto-refresh sur /browse/
 - Torrent list : Correction de l'étoile des bookmarks sur Firefox
 - Torrent list : Choix de la couleur de l'auto-refresh
+- Torrent list : Filtrage par exclusion de chaîne de caractères
 
 
 ### Changelog
