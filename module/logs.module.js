@@ -39,7 +39,7 @@ modules.logs = {
 								$("tbody tr:last").remove();
 							}
 						});
-						refreshFilters();
+						refreshFilters(true);
 					}
 					else {
 						dbg("[auto_refresh] No data");
