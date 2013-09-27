@@ -20,6 +20,7 @@
         "module/global.module.js",
         "module/endless_scrolling.module.js",
         "module/torrent_list.module.js",
+        "module/sphinx.module.js",
         "module/snatched.module.js",
         "module/torrent.module.js",
         "module/twits.module.js",

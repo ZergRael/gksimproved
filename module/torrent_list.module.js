@@ -4,7 +4,7 @@ modules.torrent_list = {
 	pages: [
 		{ path_name: "/", options: { buttons: '#sort', canRefresh: true, canMark: true, canFilter: true, canSort: true } },
 		{ path_name: "/browse/", options: { buttons: '#sort p', canRefresh: true, canMark: true, canFilter: true, canSort: true } },
-		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canSuggest: true, canFilter: true, canSort: true } },
+		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canFilter: true, canSort: true } },
 		{ path_name: "/summary/", options: { } },
 		{ path_name: "/m/uploads/", options: { canSort: true } }
 	],
@@ -326,78 +326,6 @@ modules.torrent_list = {
 			}, 60000);
 		};
 
-		var suggestMore = function() {
-			var searchQuery = $("#searchinput").val();
-			if(searchQuery) {
-				dbg("[QuerySuggest] Query : " + searchQuery);
-				loadingHtml = '<center><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Analyse des entrailles d\'IMDB</center>';
-				appendFrame({ title: "GKSi IMDB Suggestions", data: loadingHtml, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
-
-				// Try to get some results from IMDB: 4 + 4 max
-				utils.grabPage({ host: "https://api.thetabx.net", path: "/imdb/translate/3/" + encodeURIComponent(searchQuery) }, function(imdb) {
-					dbg("[QuerySuggest] Got data back");
-					if(!imdb.results) {
-						$("#gksi_suggest_data").html("Désolé, rien trouvé !");
-						return
-					}
-					var suggestions = [];
-					$.each(imdb.results, function(imdbId, movie) {
-						dbg("[QuerySuggest] IMDB [ " + imdbId + " ]");
-						$.each(movie, function(titleType, title) {
-							suggestions.push(title);
-						});
-					});
-					var suggestionsHtml = "";
-					$.map(suggestions, function(movieName, i) {
-						if($.inArray(movieName, suggestions) === i) {
-							suggestionsHtml += '<a href="' + utils.craftUrl({ host: pageUrl.host, path: pageUrl.path, params: { q: encodeURIComponent(movieName) } }) + '">' + movieName + '</a><br />';
-						}
-					});
-					// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
-					$("#gksi_suggest_data").html(suggestionsHtml);
-
-					if(opt.get(module_name, "imdb_auto_add") && modules.endless_scrolling.maxPage == 0 && imdb.levenshtein) {
-						dbg("[QueryTranslate] Looks like we can grab bestTranslation [" + imdb.levenshtein.bestTitle + "] results");
-						var bestMatchUrl = utils.clone(pageUrl);
-						bestMatchUrl.params.q = encodeURIComponent(imdb.levenshtein.bestTitle); // From remote translation analysis - levenshtein
-						$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Recherche supraluminique des traductions</p>');
-						utils.grabPage(bestMatchUrl, function(data) {
-							var dataFrame = $(data).find("#torrent_list");
-							var header = dataFrame.find("tr:first");
-							if(header.length) {
-								header.find(".name_torrent_head").text(header.find(".name_torrent_head").text() + " - GKSi IMDB [ " + imdb.levenshtein.bestTitle + " ]");
-								header.addClass("gksi_imdb_head");
-							}
-							var insertionData = dataFrame.find("tr");
-							if(insertionData.length) {
-								dbg("[QueryTranslate] Append bestTranslation results");
-								if(!$("#torrent_list").length) { // Build the results frame if there was no result on first query
-									$("#contenu .center:not(:first)").remove();
-									$("#contenu .separate:nth(1)").after(dataFrame).after("<br /><br />");
-								}
-								else {
-									$("#torrent_list").append(insertionData);
-								}
-								tagTorrents();
-								addAutogetColumn();
-								addAgeColumn();
-								applyFilters();
-								applyStringFilter();
-							}
-							else {
-								dbg("[QueryTranslate] Or maybe not (no results)");
-							}
-							dbg("[QueryTranslate] Ended");
-							$(".page_loading").remove();
-						});
-					}
-					else {
-						dbg("[QueryTranslate] Not even trying")
-					}
-				});
-			}
-		};
-
 		var findTorrent = function(pageNumber) {
 			$("#find_marked_torrent_span").remove();
 			var foundMarkedTorrent = false;
@@ -641,9 +569,6 @@ modules.torrent_list = {
 		$("#torrent_list").on("mouseenter", "a", showTorrentComments);
 		$("#torrent_list").on("click", "a.autoget_link", autogetOnClick);
 
-		if(mOptions.canSuggest && opt.get(module_name, "imdb_suggest")) {
-			suggestMore();
-		}
 		startAutorefresh();
 
 		$(document).on("endless_scrolling_insertion_done", function() {
