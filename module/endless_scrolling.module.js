@@ -414,6 +414,13 @@ modules.endless_scrolling = {
 			}
 		});
 
+		$("a[onclick]").live("click", function() {
+			var onClickFunction = $(this).attr("onclick");
+			if((onClickFunction.indexOf("Quote") != -1 || onClickFunction.indexOf("insertion") != -1) && $("textarea").length) {
+				wentToPageBottom = true;
+			}
+		})
+
 		// Listen to after dom modifications by other modules
 		$(document).on("es_dom_process_done", function() {
 			rebuildInsertedOffsets();
