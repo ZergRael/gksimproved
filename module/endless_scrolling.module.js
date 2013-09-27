@@ -186,7 +186,7 @@ modules.endless_scrolling = {
 			}
 
 			// Damnit Gecko
-			var scrollTop = document[$.browser.mozilla ? "documentElement" : "body"].scrollTop;
+			var scrollTop = (document.body.scrollTop || document.documentElement.scrollTop);
 			if(opt.get(module_name, "adapt_url")) {
 				var lookingAtPage = 0;
 				// Find out what page we are looking at

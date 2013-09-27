@@ -9,7 +9,9 @@ var dbg = function(str) {
 };
 
 // Firefox hacks to simulate chrome APIs
-if($.browser.mozilla) {
+var isChrome = true;
+if(typeof chrome == "undefined") {
+	isChrome = false;
 	var chrome = {
 		extension: {
 			getURL: function(str) {
@@ -109,14 +111,15 @@ var appendFrame = function(o) {
 
 		if(o.relativeToWindow) {
 			$(window).resize(function() {
-				var body = document[$.browser.mozilla ? "documentElement" : "body"];
+				var topOffset = (document.body.scrollTop || document.documentElement.scrollTop);
+				var leftOffset = (document.body.scrollLeft || document.documentElement.scrollLeft);
 				if(o.top === true) {
 					o.top = $(window).height() / 2 - frame.height() / 2;
 				}
 				if(o.left === true) {
 					o.left = $(window).width() / 2 - frame.width() / 2;
 				}
-				frame.offset({ top: body.scrollTop + o.top + ($("#entete").css("position") == "fixed" ? $("#entete").height() : 0), left: body.scrollLeft + o.left });
+				frame.offset({ top: topOffset + o.top + ($("#entete").css("position") == "fixed" ? $("#entete").height() : 0), left: leftOffset + o.left });
 			});
 			$(window).trigger("resize");
 		}
