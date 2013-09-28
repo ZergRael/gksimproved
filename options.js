@@ -29,7 +29,7 @@ var opt = {
 			button_style:       { defaultVal: 'LordVal', showInOptions: true, type: "select", choices: ['LordVal', 'Classic'], dispText: "Style des icônes" }
 		},
 		torrent_list: {
-			imdb_suggest:       { defaultVal: false, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
+			imdb_suggest:       { defaultVal: true, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
 			imdb_auto_add:      { defaultVal: false, showInOptions: true, dispText: "Ajouter le résultat de la meilleure correspondance IMDB", parent: "imdb_suggest" },
 			filtering_fl:       { defaultVal: false, showInOptions: false },
 			filtering_scene:    { defaultVal: false, showInOptions: false },
@@ -39,7 +39,9 @@ var opt = {
 			autoget_column:     { defaultVal: false, showInOptions: true, dispText: "Colonne de boutons d'ajout direct à l'autoget" },
 			torrent_marker:     { defaultVal: false, showInOptions: false },
 			t_marker_button:    { defaultVal: true, showInOptions: true, dispText: "Afficher les boutons torrent marker/finder" },
-			direct_comments:    { defaultVal: false, showInOptions: true, dispText: "Afficher les commentaires au survol" }
+			direct_comments:    { defaultVal: false, showInOptions: true, dispText: "Afficher les commentaires au survol" },
+			exclude_string:     { defaultVal: true, showInOptions: true, dispText: "Afficher un champ de filtrage par chaîne de caractères" },
+			case_sensitive:     { defaultVal: true, showInOptions: true, dispText: "Prendre en compte la casse", parent: "exclude_string" }
 		},
 		snatched: {
 			filtering_deleted:  { defaultVal: true, showInOptions: false },

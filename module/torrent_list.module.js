@@ -81,11 +81,13 @@ modules.torrent_list = {
 		};
 
 		var applyStringFilter = function() {
-			if(!mOptions.canFilter) {
+			if(!mOptions.canFilter || !opt.get(module_name, "exclude_string")) {
 				return;
 			}
 
+			var caseSensitive = opt.get(module_name, "case_sensitive");
 			var excludeVal = $("#filter_string").val();
+			if(!caseSensitive) { excludeVal = excludeVal.toLowerCase(); }
 			dbg("[StringFilter] Filtering (" + excludeVal + ")");
 			if(excludeVal.trim() == "") {
 				$("tbody tr:not(:first):not(.gksi_imdb_head)" + (opt.get(module_name, "filtering_fl") ? ".t_freeleech" : "") + (opt.get(module_name, "filtering_scene") ? ".t_scene" : "")).show();
@@ -99,13 +101,11 @@ modules.torrent_list = {
 						odd = false;
 						return;
 					}
-					if(t.find("strong").text().indexOf(excludeVal) != -1) {
-						t.hide();
-						t.next().hide();
+					if(caseSensitive ? t.find("strong").text().indexOf(excludeVal) != -1 : t.find("strong").text().toLowerCase().indexOf(excludeVal) != -1) {
+						t.hide().next().hide();
 					}
 					else {
-						t.show();
-						t.next().show();
+						t.show().next().show();
 					}
 					odd = true;
 				});
@@ -467,7 +467,8 @@ modules.torrent_list = {
 
 		var markerButton =  '<a id="torrent_marker_button" href="#">Marquer torrent</a> |';
 		var finderButton = '<a id="torrent_finder_button" href="#">Retrouver torrent</a> | ';
-		var filterButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Filtre Freeleech</label> |<input id="filter_scene" type="checkbox" ' + (opt.get(module_name, "filtering_scene") ? 'checked="checked" ' : ' ') + '/><label for="filter_scene">Filtre Scene</label> |<input type="text" id="filter_string" placeholder="Exclure" size="12" />| ';
+		var filterButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Filtre Freeleech</label> |<input id="filter_scene" type="checkbox" ' + (opt.get(module_name, "filtering_scene") ? 'checked="checked" ' : ' ') + '/><label for="filter_scene">Filtre Scene</label> |';
+		var stringFilterInput = '<input type="text" id="filter_string" placeholder="Exclure" size="12" />| ';
 		var bookmarkButton = '<a href="#" id="bookmarkvisibletorrents">Bookmarker 40 premiers</a> | ';
 		var refreshButton = '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/><label for="auto_refresh">Auto refresh</label> |';
 		var buttons = "";
@@ -488,6 +489,9 @@ modules.torrent_list = {
 		}
 		if(mOptions.canFilter) {
 			buttons += filterButtons;
+			if(opt.get(module_name, "exclude_string")) {
+				buttons += stringFilterInput;
+			}
 		}
 
 		$(mOptions.buttons).prepend(buttons + bookmarkButton);
