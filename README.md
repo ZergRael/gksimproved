@@ -7,7 +7,7 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
-
+- Global : Correction de l'espace manquant dans les stats réelles
 
 
 ### Changelog

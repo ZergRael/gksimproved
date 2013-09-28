@@ -337,8 +337,8 @@ modules.global = {
 								downloadUnit++;
 								readDownload /= 1024.0;
 							}
-							var realUploadStr = Math.round(realUpload * 1000) / 1000 + units[uploadUnit];
-							var realDownloadStr = Math.round(readDownload * 1000) / 1000 + units[downloadUnit];
+							var realUploadStr = Math.round(realUpload * 1000) / 1000 + " " + units[uploadUnit];
+							var realDownloadStr = Math.round(readDownload * 1000) / 1000 + " " + units[downloadUnit];
 							dbg("[real_stats] Insert");
 							gData.set("real_stats", "real_upload", realUploadStr);
 							gData.set("real_stats", "real_download", realDownloadStr);
