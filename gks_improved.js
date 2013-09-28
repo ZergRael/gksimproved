@@ -1,4 +1,4 @@
-var DEBUG = true;
+var DEBUG = false;
 
 // At this point, libs with most common functions are loaded
 // Options are ready but not loaded
@@ -9,9 +9,7 @@ var dbg = function(str) {
 };
 
 // Firefox hacks to simulate chrome APIs
-var isChrome = true;
 if(typeof chrome == "undefined") {
-	isChrome = false;
 	var chrome = {
 		extension: {
 			getURL: function(str) {

@@ -7,18 +7,22 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+
+
+
+### Changelog
+**0.3.5**
 - Bookmarks : Rafraichissement de la liste interne à chaque ajout de bookmark - L'étoile devrait apparaître directement
 - Global : Possibilité de transformer les loupes en boutons de recherche dans les champs de l'entête (Torrents/Requests/Summary/etc)
 - Logs : Possibilité de filtrer sur plusieurs critères simultannés
 - Logs : Ajout des filtres Request fill / Summary edit / Summary new
 - Peers : Arrondi sur la valeur d'upload total de l'entête du tableau
 - Torrent list : Auto-refresh sur /browse/
+- Torrent list : Résultats Discogs lorsque la recherche est effectuée en catégorie FLAC
 - Torrent list : Correction de l'étoile des bookmarks sur Firefox
 - Torrent list : Choix de la couleur de l'auto-refresh
 - Torrent list : Filtrage par exclusion de chaîne de caractères
 
-
-### Changelog
 **0.3.4**
 - Passage en licence MIT, plus permissive
 - Badges : Correction de la valeur du badge snatched - Calcul du nombre de torrents complétés plutôt que la valeur donnée par le site

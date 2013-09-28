@@ -3,7 +3,7 @@ Salutations à tous !
 
 Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. Toujours en beta mais un jour peut-être une version stable arrivera ;)
 
-Version actuelle : 0.3.4 - 06/09/2013 - Licence MIT
+Version actuelle : 0.3.5 - 28/09/2013 - Licence MIT
 
 [size=6]Téléchargement[/size] :
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
@@ -13,7 +13,7 @@ Version actuelle : 0.3.4 - 06/09/2013 - Licence MIT
 [size=6]Présentation :[/size]
 L'extension se base sur un ensemble de scripts Javascript avec l'aide de la libraire jQuery. Cette librairie permet de simplifier le code tout en ajoutant des fonctions très pratiques ainsi que quelques suggestions glanées sur le forum.
 
-L'ensemble de ces scripts ont été développés par moi même si j'ai récupéré quelques parties que j'avais déjà codé auparavant. Le code est entièrement sous licence MIT, donc gratuit et réutilisable.
+J'ai développé l'ensemble de ces scripts, même si j'ai récupéré quelques parties que j'avais déjà codé auparavant. Le code est entièrement sous licence MIT, donc gratuit et réutilisable.
 
 La plupart des options sont sauvegardées entre chaque utilisation.
 
@@ -40,6 +40,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Colonne autoget[/i] : Colonne de boutons d'autoget direct du torrent
 > [i]Auto-refresh[/i] : Rafraîchissement automatique des derniers torrents et mise en avant
 > [i]Icone bookmark[/i] : Affichage d'une icone indiquant les torrents déjà bookmarkés (requiert la visite de la page https://gks.gs/bookmark/)
+> [i]Exclusion[/i] : Exclut certains résultats en fonction d'une chaîne de caractères
 
 [b]* Snatched[/b]
 - Page des snatched -- https://gks.gs/snatched/
@@ -158,6 +159,18 @@ De plus, il arrive que Firefox ne soit plus capable de conserver le localStorage
 [spoil]Update: Deleting the permissions.sqlite file in the Firefox proflie directory resolves the issue. The easiest way to get there is to enter about:support in the browser's address bar. Locate the show folder button under Application Basics and click on it. Close Firefox afterwards, delete the permissions.sqlite file, and restart the browser.[/spoil]
 
 [size=6]Changelog :[/size]
+[b]* 0.3.5 - 28/09/2013[/b]
+- Bookmarks : Rafraichissement de la liste interne à chaque ajout de bookmark - L'étoile devrait apparaître directement
+- Global : Possibilité de transformer les loupes en boutons de recherche dans les champs de l'entête (Torrents/Requests/Summary/etc)
+- Logs : Possibilité de filtrer sur plusieurs critères simultannés
+- Logs : Ajout des filtres Request fill / Summary edit / Summary new
+- Peers : Arrondi sur la valeur d'upload total de l'entête du tableau
+- Torrent list : Auto-refresh sur /browse/
+- Torrent list : Résultats Discogs lorsque la recherche est effectuée en catégorie FLAC
+- Torrent list : Correction de l'étoile des bookmarks sur Firefox
+- Torrent list : Choix de la couleur de l'auto-refresh
+- Torrent list : Filtrage par exclusion de chaîne de caractères
+[spoil]
 [b]* 0.3.4 - 06/09/2013[/b]
 - Passage en licence MIT, plus permissive
 - Badges : Correction de la valeur du badge snatched - Calcul du nombre de torrents complétés plutôt que la valeur donnée par le site
@@ -172,7 +185,6 @@ De plus, il arrive que Firefox ne soit plus capable de conserver le localStorage
 - Torrent list : Ajout d'une icone sur les torrents bookmarkés
 - Torrent list : Correction des suggestions IMDB & affichage du chargement
 - Uploads : Tri par clic sur les entêtes de colonnes (expérimental)
-[spoil]
 [b]* 0.3.3 - 30/06/2013[/b]
 - Global : Evenements de début et fin de process
 - Mouseover comments : Fermeture de la fenêtre au clic en dehors de celle-ci
