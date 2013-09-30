@@ -7,9 +7,10 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
-- Global : Correction de l'espace manquant dans les stats réelles
-- Torrent list : Ajout d'une option pour la prise en compte de la casse sur le filtre par exclusion de chaîne de caractères
 - Account : Preview du custom menu et de la signature
+- Global : Correction de l'espace manquant dans les stats réelles
+- Logs : Texte en bas de page mis à jour en fonction du filtrage
+- Torrent list : Ajout d'une option pour la prise en compte de la casse sur le filtre par exclusion de chaîne de caractères
 
 
 ### Changelog

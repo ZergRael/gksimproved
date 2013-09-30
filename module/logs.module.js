@@ -91,6 +91,17 @@ modules.logs = {
 			dbg("[id_links] Done");
 		};
 
+		var updateBottomText = function() {
+			var bottomP = $("#contenu p:last");
+			if(!$("#filtered_text").length) {
+				bottomP.html(bottomP.html().trim());
+				bottomP.append('<span id="filtered_text"></span>');
+				dbg("[bottomText] Ready");
+			}
+			$("#filtered_text").text(", " + ($("tbody tr:visible").length - 1) + " après filtrage.");
+			dbg("[bottomText] Updated");
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -119,6 +130,9 @@ modules.logs = {
 			opt.set(module_name, $(this).attr("id"), !$(this).prop("checked"));
 			refreshFilters();
 			$(document).trigger("scroll");
+			if(pageUrl.params && pageUrl.params.q) {
+				updateBottomText();
+			}
 		});
 
 		if(opt.get(module_name, "auto_refresh")) {
@@ -136,6 +150,10 @@ modules.logs = {
 		initFilters();
 		refreshFilters(true);
 		forceIdLinks();
+
+		if(pageUrl.params && pageUrl.params.q) {
+			updateBottomText();
+		}
 
 		dbg("[Init] Ready");
 	}
