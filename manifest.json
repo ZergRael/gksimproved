@@ -31,6 +31,7 @@
         "module/aura.module.js",
         "module/peers.module.js",
         "module/bookmark.module.js",
+        "module/m_account.module.js",
         "loader.js"
       ]
     }
