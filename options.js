@@ -147,6 +147,7 @@ var gData = {
 		},
 		bookmarks: {
 			torrents: [],
+			bookmarkIds: {},
 			last_check: 0
 		}
 	},

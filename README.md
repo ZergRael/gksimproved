@@ -11,6 +11,7 @@ Voir topic associé.
 - Global : Correction de l'espace manquant dans les stats réelles
 - Logs : Texte en bas de page mis à jour en fonction du filtrage
 - Torrent list : Ajout d'une option pour la prise en compte de la casse sur le filtre par exclusion de chaîne de caractères
+- Torrent list : Un clic sur l'étoile des bookmarks supprime le bookmark en question
 
 
 ### Changelog

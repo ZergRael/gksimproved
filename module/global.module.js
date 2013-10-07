@@ -374,11 +374,16 @@ modules.global = {
 			}
 
 			var torrentIds = [];
+			var bookmarkIds = {};
 			torrents.each(function() {
 				var torrentLink = $(this).find("a:nth(1)").attr("href");
-				torrentIds.push(torrentLink.substring(9, torrentLink.lastIndexOf('/')));
+				var torrentId = torrentLink.substring(9, torrentLink.lastIndexOf('/'));
+				torrentIds.push(torrentId);
+				var bookmarkLink = $(this).find("a:nth(0)").attr("onclick");
+				bookmarkIds[torrentId] = bookmarkLink.substring(8, bookmarkLink.indexOf("\","));
 			});
 			gData.set("bookmarks", "torrents", torrentIds);
+			gData.set("bookmarks", "bookmarkIds", bookmarkIds);
 			dbg("[parseBookmarks] Found " + torrentIds.length + " bookmarks");
 		}
 
@@ -423,7 +428,7 @@ modules.global = {
 					fetchBookmarks(true);
 					if($(this).parent().hasClass("added")) {
 						var cross = $(this).parents("tr").prev().find("td:nth(1) img:nth(0)");
-						if(cross) {
+						if(cross && gData.get("bookmarks", "torrents").indexOf(cross.attr("id").substring(6)) == -1) {
 							cross.after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
 						}
 					}

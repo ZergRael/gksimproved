@@ -22,6 +22,7 @@ modules.torrent_list = {
 		var tagTorrents = function() {
 			dbg("[tagTorrents] Scanning torrents");
 			var bookmarksList = gData.get("bookmarks", "torrents");
+			var bookmarksIdsList = gData.get("bookmarks", "bookmarkIds");
 			$("tbody tr.head_torrent:not(.page_tagged)").nextAll(":nth-child(2n" + (even ? "+1" : "") + ")").each(function() {
 				var classIs = "";
 				var torrentTr = $(this);
@@ -32,7 +33,24 @@ modules.torrent_list = {
 						if(imgId) {
 							var id = imgId.substring(6);
 							if(bookmarksList.indexOf(id) != -1) {
-								torrentTr.find("img:first").after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
+								if(bookmarksIdsList && bookmarksIdsList[id]) {
+									torrentTr.find("img:first").after($('<a href="#"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a>').click(function() {
+										$(this).remove();
+										utils.grabPage({host: pageUrl.host, path: "/ajax.php", params: {action: "del", type: "delbookmark", tid: bookmarksIdsList[id]}}, function(data) {
+											bookmarksList.splice(bookmarksList.indexOf(id), 1);
+											gData.set("bookmarks", "torrents", bookmarksList);
+											delete bookmarksIdsList[id];
+											gData.set("bookmarks", "bookmarkIds", bookmarksIdsList);
+											insertScript("del_bookmark_" + id, function() {
+												Notifier.success("Bookmark supprimé", 'Suppression OK');
+											}, true);
+										});
+										return false;
+									}));
+								}
+								else {
+									torrentTr.find("img:first").after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
+								}
 								classIs += "t_bookmark ";
 							}
 						}
