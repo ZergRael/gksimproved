@@ -7,14 +7,16 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+
+
+### Changelog
+**0.3.6**
 - Account : Preview du custom menu et de la signature
 - Global : Correction de l'espace manquant dans les stats réelles
 - Logs : Texte en bas de page mis à jour en fonction du filtrage
 - Torrent list : Ajout d'une option pour la prise en compte de la casse sur le filtre par exclusion de chaîne de caractères
 - Torrent list : Un clic sur l'étoile des bookmarks supprime le bookmark en question
 
-
-### Changelog
 **0.3.5**
 - Bookmarks : Rafraichissement de la liste interne à chaque ajout de bookmark - L'étoile devrait apparaître directement
 - Global : Possibilité de transformer les loupes en boutons de recherche dans les champs de l'entête (Torrents/Requests/Summary/etc)
