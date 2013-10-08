@@ -60,7 +60,7 @@ def run():
 
 	os.chdir(os.path.join("..", firefoxDir))
 	try :
-		cuddlefish.run(["--update-url", "https://thetabx.net/gksi/update/check/", "--update-link", "https://github.com/ZergRael/gksimproved/raw/master/build/gksimproved.xpi", "xpi"])
+		cuddlefish.run(["--update-url", "https://thetabx.net/gksi/update/check/%APP_OS%/%CURRENT_APP_VERSION%/%ITEM_VERSION%/", "xpi"])
 	except SystemExit:
 		print("Copy .xpi")
 		distutils.file_util.copy_file("gksimproved.xpi", os.path.join("..", chromeDir, "build"))
