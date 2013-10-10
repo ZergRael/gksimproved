@@ -210,7 +210,6 @@ modules.endless_scrolling = {
 					window.history.replaceState(null, null, utils.craftUrl(thisUrl));
 
 					rewritePagination(lookingAtPage);
-					interceptPaginationClicks();
 					previousLookedPage = lookingAtPage;
 				}
 			}
@@ -374,12 +373,8 @@ modules.endless_scrolling = {
 		var interceptPaginationClicks = function() {
 			// Remap href links to scroll to offset instead of load a new page
 			// We don't modify links, just add a click listenner and prevent the browser to change page if we can scroll
-			if(mOptions.pagination) {
-				$(mOptions.pagination).find("a").on("click", function() {
-					if(!opt.get(module_name, "adapt_url")) {
-						return;
-					}
-
+			if(mOptions.pagination && opt.get(module_name, "adapt_url")) {
+				$(mOptions.pagination + " a").live("click", function() {
 					var href = $(this).attr("href");
 					var hrefPage = href.match(/page=(\d+)/);
 					if(hrefPage.length) {
