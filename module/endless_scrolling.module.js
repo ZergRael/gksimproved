@@ -207,7 +207,7 @@ modules.endless_scrolling = {
 					thisUrl.cancelQ = mOptions.cancelQ;
 					thisUrl.cancelAmp = mOptions.cancelAmp;
 					thisUrl.params.page = lookingAtPage;
-					window.history.replaceState("", "GKS : " + lookingAtPage, utils.craftUrl(thisUrl));
+					window.history.replaceState(null, null, utils.craftUrl(thisUrl));
 
 					rewritePagination(lookingAtPage);
 					interceptPaginationClicks();
