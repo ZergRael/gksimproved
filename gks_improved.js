@@ -242,6 +242,7 @@ var insertDivs = function() {
 		}
 		return false;
 	});
+	$("#custom_menu").addClass("gksi_present");
 };
 
 dbg("[Init] Starting the engine");
