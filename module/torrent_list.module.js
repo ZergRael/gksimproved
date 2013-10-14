@@ -105,6 +105,8 @@ modules.torrent_list = {
 
 			var caseSensitive = opt.get(module_name, "case_sensitive");
 			var excludeVal = $("#filter_string").val();
+			if(!excludeVal)
+				return;
 			if(!caseSensitive) { excludeVal = excludeVal.toLowerCase(); }
 			dbg("[StringFilter] Filtering (" + excludeVal + ")");
 			if(excludeVal.trim() == "") {
