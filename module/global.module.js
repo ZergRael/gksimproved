@@ -443,8 +443,8 @@ modules.global = {
 		dbg("[Init] Starting");
 		// Execute functions
 
-		var optionsFrameButtons = '<ul><a href="#" id="options_gksi">GKSi Options</a></ul>';
-		$("#navig_bloc_user").append(optionsFrameButtons);
+		var optionsFrameButtons = '<li><a href="#" id="options_gksi">GKSi Options</a></li>';
+		$("#navig_bloc_user ul").append(optionsFrameButtons);
 		$("#options_gksi").click(function() {
 			if($("#gksi_options").length) {
 				var optionsFrame = $("#gksi_options");
