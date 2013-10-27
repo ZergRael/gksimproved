@@ -37,7 +37,10 @@ modules.endless_scrolling = {
 		} },
 		{ path_name: "/dupecheck/", options: {
 			opt_name: "dupecheck", loading: '.pager_align', pagination: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1, notListeningToTrigger: true
-		} }
+		} },
+		{ path_name: "/reseed.php", options: {
+			opt_name: "reseed", loading: '.pager_align', pagination: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", pageModifier: -1, notListeningToTrigger: true
+		} },
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
