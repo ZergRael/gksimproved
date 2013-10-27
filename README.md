@@ -8,6 +8,8 @@ Voir topic associé.
 
 ### TODO.done
 - Endless scrolling : Bug fixes en tout genre
+- Endless scrolling : Ajout sur /reseed.php
+- Logs : Lien sur les id de summary
 
 
 ### Changelog

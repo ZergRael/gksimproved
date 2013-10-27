@@ -88,6 +88,9 @@ modules.logs = {
 			$(".log_upload, .log_upload_edit").each(function() {
 				$(this).html($(this).html().replace(/Torrent (\d+)/, 'Torrent <a href="/torrent/$1/">$1</a>'));
 			});
+			$(".log_summary_new, .log_summary_edit").each(function() {
+				$(this).html($(this).html().replace(/Summary (\d+)/, 'Summary <a href="/summary/id=$1">$1</a>'));
+			});
 			dbg("[id_links] Done");
 		};
 
