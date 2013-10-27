@@ -10,6 +10,7 @@ Voir topic associé.
 - Endless scrolling : Bug fixes en tout genre
 - Endless scrolling : Ajout sur /reseed.php
 - Logs : Lien sur les id de summary
+- Logs : Lien sur les titres de requests
 
 
 ### Changelog

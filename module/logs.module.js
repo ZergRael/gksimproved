@@ -91,6 +91,12 @@ modules.logs = {
 			$(".log_summary_new, .log_summary_edit").each(function() {
 				$(this).html($(this).html().replace(/Summary (\d+)/, 'Summary <a href="/summary/id=$1">$1</a>'));
 			});
+			$(".log_requests_new").each(function() {
+				$(this).html($(this).html().replace(/Request : ([^<]+)/, 'Request : <a href="/req/?q=$1">$1</a>'));
+			});
+			$(".log_requests_filled").each(function() {
+				$(this).html($(this).html().replace(/Request ([^<]+) filled./, 'Request <a href="/req/?q=$1">$1</a> filled.'));
+			});
 			dbg("[id_links] Done");
 		};
 
