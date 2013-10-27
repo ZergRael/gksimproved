@@ -105,7 +105,7 @@ modules.global = {
 				});
 				optionHtml += '<div id="gksi_' + module_name + '_s_' + option_name + '" class="gksi_options_sub">' + subOptionHtml + '</div>';
 			}
-			return '<span id="gksi_' + module_name + '_' + option_name + '_span">' + optionHtml + '</span>';
+			return '<span id="gksi_' + module_name + '_' + option_name + '_span"' + (oData.indicateParent ? 'class="gksi_opt_has_parent"' : '') + '>' + optionHtml + '</span>';
 		};
 
 		var createOptionsFrame = function() {

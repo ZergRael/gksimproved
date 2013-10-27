@@ -26,13 +26,13 @@ var opt = {
 				reseed:      { defaultVal: true, showInOptions: true, dispText: "Reseed : Liste", tooltip: "https://gks.gs/reseed.php" }
 			} },
 			adapt_url:          { defaultVal: true, showInOptions: true, dispText: "Adapter l'url en fonction de la page vue avec l'ES", parent: "endless_scrolling" },
-			pagination_rewrite: { defaultVal: false, showInOptions: true, dispText: "Adapter la pagination en fonction de la page vue avec l'ES", parent: "adapt_url" },
+			pagination_rewrite: { defaultVal: false, showInOptions: true, dispText: "Adapter la pagination en fonction de la page vue avec l'ES", parent: "adapt_url", indicateParent: true },
 			pause_scrolling:    { defaultVal: false, showInOptions: true, dispText: "Pauser l'ES lorsqu'arrivé en fond de page", parent: "endless_scrolling" },
 			button_style:       { defaultVal: 'LordVal', showInOptions: true, type: "select", choices: ['LordVal', 'Classic'], dispText: "Style des icônes" }
 		},
 		torrent_list: {
 			imdb_suggest:       { defaultVal: true, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
-			imdb_auto_add:      { defaultVal: false, showInOptions: true, dispText: "Ajouter le résultat de la meilleure correspondance IMDB", parent: "imdb_suggest" },
+			imdb_auto_add:      { defaultVal: false, showInOptions: true, dispText: "Ajouter le résultat de la meilleure correspondance IMDB", parent: "imdb_suggest", indicateParent: true },
 			filtering_fl:       { defaultVal: false, showInOptions: false },
 			filtering_scene:    { defaultVal: false, showInOptions: false },
 			auto_refresh:       { defaultVal: false, showInOptions: false },
@@ -43,7 +43,7 @@ var opt = {
 			t_marker_button:    { defaultVal: true, showInOptions: true, dispText: "Afficher les boutons torrent marker/finder" },
 			direct_comments:    { defaultVal: false, showInOptions: true, dispText: "Afficher les commentaires au survol" },
 			exclude_string:     { defaultVal: true, showInOptions: true, dispText: "Afficher un champ de filtrage par chaîne de caractères" },
-			case_sensitive:     { defaultVal: true, showInOptions: true, dispText: "Prendre en compte la casse", parent: "exclude_string" }
+			case_sensitive:     { defaultVal: true, showInOptions: true, dispText: "Prendre en compte la casse", parent: "exclude_string", indicateParent: true }
 		},
 		snatched: {
 			filtering_deleted:  { defaultVal: true, showInOptions: false },
@@ -62,7 +62,7 @@ var opt = {
 		},
 		forums: {
 			hidable_sigs:       { defaultVal: false, showInOptions: true, dispText: "Rendre les signatures masquables" },
-			hide_signatures:    { defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut", parent: "hidable_sigs" },
+			hide_signatures:    { defaultVal: false, showInOptions: true, dispText: "Cacher les signatures par défaut", parent: "hidable_sigs", indicateParent: true },
 			scroll_correction:  { defaultVal: false, showInOptions: true, dispText: "Corriger le scrolling " }
 		},
 		torrent: {

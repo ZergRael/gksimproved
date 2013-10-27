@@ -176,6 +176,7 @@ var insertCSS = function() {
 		".gksi_options_sub { font-size: 0.9em; padding-left: 12px; } " +
 		".gksi_options_sub input { margin:2px; } " +
 		".gksi_option_required { text-decoration: underline; } " +
+		".gksi_opt_has_parent { margin-left: 12px; } " +
 		"#gksi_copyright { text-align: right; font-size: 0.8em; margin-top: -11px; } " +
 		".gksi_edit_title { display: block; width: 100%; margin-top: 12px; } " +
 		".gksi_edit_textarea { display: block; width: 100%; min-height: 240px; min-width: 360px; margin-right: -4px!important; } " +
