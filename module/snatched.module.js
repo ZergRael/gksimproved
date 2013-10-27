@@ -219,16 +219,16 @@ modules.snatched = {
 			return false;
 		};
 
+		dbg("[Init] Starting");
+		// Adding buttons
 		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/><label for="filter_deleted">Cacher les supprimés</label> ' + ' | <input id="filter_seed" type="checkbox" ' + (opt.get(module_name, "filtering_seed") ? 'checked="checked" ' : ' ') + '/><label for="filter_seed">Cacher les torrents en seed</label> ' + ' | <input id="filter_no_comp" type="checkbox" ' + (opt.get(module_name, "filtering_no_comp") ? 'checked="checked" ' : ' ') + '/><label for="filter_no_comp">Cacher les non completés</label> ' + ' | <input id="filter_no_hnr" type="checkbox" ' + (opt.get(module_name, "filtering_no_hnr") ? 'checked="checked" ' : ' ') + '/><label for="filter_no_hnr">N\'afficher que les H&R</label> ' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
 		var colSortButtons = [ {n: 1, id: "sortName", nom: "Nom"}, {n: 3, id: "sortUL", nom: "UL"}, {n: 4, id: "sortDL", nom: "DL"}, {n: 5, id: "sortRDL", nom: "Real DL"}, {n: 6, id: "sortST", nom: "SeedTime"}, {n: 7, id: "sortRatio", nom: "Ratio"}
 		];
-		$.each(colSortButtons, function(k, v) {
-			$(".table100 thead tr th:nth-child(" + v.n + ")").html('<a id="' + v.id + '" class="sortCol" href="#">' + v.nom + '</a>');
-		});
 
-		dbg("[Init] Starting");
-		// Adding buttons
 		$(mOptions.buttons).after(torrentButtons);
+		$.each(colSortButtons, function(k, v) {
+			$(".table100 thead tr th:nth-child(" + v.n + ")").wrapInner('<a id="' + v.id + '" class="sortCol" href="#">');
+		});
 
 		tagTorrents();
 

@@ -102,9 +102,68 @@ modules.bookmark = {
 		};
 
 		var setHighlight = function() {
-			$("#bookmark_list tbody tr").removeClass('bookmark_highlight');
+			$("#torrent tbody tr").removeClass('bookmark_highlight');
 			$(this).parents("tr").addClass("bookmark_highlight");
-		}
+		};
+
+		var sortColumnClick = function() {
+			if(sort == $(this).attr("id")) {
+				order = (order == "desc" ? "asc" : "desc");
+			}
+			else {
+				sort = $(this).attr("id");
+				order = "asc";
+			}
+			sortData();
+			return false;
+		};
+
+		var order = "desc", sort = "sortDate";
+		var sortData = function() {
+			if(!sort) {
+				return;
+			}
+
+			var sortFunc = false;
+			switch(sort) {
+				case "sortName":
+					sortFunc = function(a, b) {
+						var aN = $(a).find("td:nth-child(1)").text();
+						var bN = $(b).find("td:nth-child(1)").text();
+						return order == "desc" ? (aN > bN ? -1 : 1) : (aN > bN ? 1 : -1);
+					};
+					break;
+				case "sortDate":
+					sortFunc = function(a, b) {
+						var aN = $(a).find("td:nth-child(2)").text();
+						var bN = $(b).find("td:nth-child(2)").text();
+						return order == "desc" ? (utils.dateToDuration(aN).minTot > utils.dateToDuration(bN).minTot ? -1 : 1) : (utils.dateToDuration(aN).minTot > utils.dateToDuration(bN).minTot ? 1 : -1);
+					};
+					break;
+				case "sortSize":
+					sortFunc = function(a, b) {
+						var aN = $(a).find("td:nth-child(3)").text();
+						var bN = $(b).find("td:nth-child(3)").text();
+						return order == "desc" ? (utils.strToSize(aN).koTot > utils.strToSize(bN).koTot ? -1 : 1) : (utils.strToSize(aN).koTot > utils.strToSize(bN).koTot ? 1 : -1);
+					};
+					break;
+				case "sortS":
+					sortFunc = function(a, b) {
+						var aN = Number($(a).find("td:nth-child(4)").text());
+						var bN = Number($(b).find("td:nth-child(4)").text());
+						return order == "desc" ? (aN > bN ? -1 : 1) : (aN > bN ? 1 : -1);
+					};
+					break;
+				case "sortL":
+					sortFunc = function(a, b) {
+						var aN = Number($(a).find("td:nth-child(5)").text());
+						var bN = Number($(b).find("td:nth-child(5)").text());
+						return order == "desc" ? (aN > bN ? -1 : 1) : (aN > bN ? 1 : -1);
+					};
+					break;
+			}
+			$("#torrent tbody:first").html($("#torrent tbody:first tr").sort(sortFunc));
+		};
 
 		$("#torrent tbody tr td.name a[onclick]").on('click', function(){
 			updateTotal();
@@ -112,12 +171,18 @@ modules.bookmark = {
 
 		dbg("[Init] Starting");
 		// Execute functions
-
-		var check = opt.get(module_name, "delete_get") ? 'checked="checked" ' : ' ';
 		var buttons = ' | <a href="#" id="AutoGetAll">AutoGet 15 premiers</a>'
-					+ ' <input id="delete_get" type="checkbox" ' + check + '/><label for="delete_get">Supprimer après ajout</label>'
+					+ ' <input id="delete_get" type="checkbox" ' + (opt.get(module_name, "delete_get") ? 'checked="checked" ' : ' ') + '/><label for="delete_get">Supprimer après ajout</label>'
 					+ ' | <a href="#" id="delallcat">Supprimer ces bookmarks</a>';
 		$(mOptions.buttons).after(buttons);
+		var colSortButtons = [ "sortName", "sortDate", "sortSize", "sortS", "sortL" ];
+		var i = 0;
+		$("#torrent thead td").each(function() {
+			if(colSortButtons[i]) {
+				$(this).wrapInner('<a id="' + colSortButtons[i] + '" class="sortCol" href="#">');
+			}
+			i++;
+		});
 
 		$("#AutoGetAll").click(AutoGetAll);
 		$("#delallcat").click(DelAllCat);
@@ -126,6 +191,7 @@ modules.bookmark = {
 			dbg("[DeleteGet] is " + opt.get(module_name, "delete_get"));
 		});
 		$(".dl a").click(setHighlight);
+		$(".sortCol").click(sortColumnClick);
 
 		modules.global.parseBookmarks($("#torrent tbody:first tr"));
 

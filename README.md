@@ -8,6 +8,7 @@ Voir topic associé.
 
 ### TODO.done
 - Bookmarks : Mise en valeur du dernier torrent téléchargé
+- Bookmarks : Tri des torrents par clic d'entête de colonne
 - Endless scrolling : Bug fixes en tout genre
 - Endless scrolling : Ajout sur /reseed.php
 - Logs : Lien sur les id de summary
