@@ -269,18 +269,22 @@ modules.global = {
 
 			dbg("[real_stats] Started");
 			if(!isStatUsable("real_stats")) {
-				parseRealStats(writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio")));
+				parseRealStats(writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio"), gData.get("real_stats", "real_buffer")));
 			}
 			else {
-				writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio"));
+				writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio"), gData.get("real_stats", "real_buffer"));
 			}
 		};
 
-		var writeRealStats = function(uploadStr, downloadStr, ratioStr) {
+		var writeRealStats = function(uploadStr, downloadStr, ratioStr, bufferStr) {
 			dbg("[real_stats] Insert " + uploadStr + " / " + downloadStr + " / " + ratioStr);
 			$("#userlink li:nth(1) span:nth(0)").after(' / <span class="uploaded">' + uploadStr + '</span>');
 			$("#userlink li:nth(1) span:nth(2)").after(' / <span class="downloaded">' + downloadStr + '</span>');
-			$("#userlink li:nth(2) span:nth(0)").after(' / <span>' + ratioStr + '</span>');
+			var ratioClass = Math.round(ratioStr * 10);
+			$("#userlink li:nth(2) span:nth(0)").after(' / <span class="r' + (ratioClass >= 20 ? '20' : (ratioClass >= 10 ? '10' : '0' + ratioClass)) + '">' + ratioStr + '</span>');
+			if($("#user_real_buffer").length) {
+				$("#user_real_buffer").addClass(bufferStr > 0 ? 'uploaded' : 'downloaded').text(bufferStr);
+			}
 		};
 
 		var parseRealStats = function(callback) {
@@ -327,8 +331,8 @@ modules.global = {
 						grabbedPages++;
 						if(grabbedPages >= maxPage) {
 							var realRatio = Math.round((realUpload / readDownload) * 100) / 100;
-							var units = ["o", "Ko", "Mo", "Go", "To", "Po"];
-							var uploadUnit = 0, downloadUnit = 0;
+							var realBuffer = realUpload - readDownload;
+							var uploadUnit = 0, downloadUnit = 0, bufferUnit = 0;
 							while(realUpload > 1024) {
 								uploadUnit++;
 								realUpload /= 1024.0;
@@ -337,11 +341,17 @@ modules.global = {
 								downloadUnit++;
 								readDownload /= 1024.0;
 							}
-							var realUploadStr = Math.round(realUpload * 1000) / 1000 + " " + units[uploadUnit];
-							var realDownloadStr = Math.round(readDownload * 1000) / 1000 + " " + units[downloadUnit];
+							while(realBuffer > 1024 || realBuffer < -1024) {
+								bufferUnit++;
+								realBuffer /= 1024.0;
+							}
+							var realUploadStr = Math.round(realUpload * 1000) / 1000 + " " + utils.sizeUnits[uploadUnit];
+							var realDownloadStr = Math.round(readDownload * 1000) / 1000 + " " + utils.sizeUnits[downloadUnit];
+							var realBufferStr = Math.round(realBuffer * 1000) / 1000 + " " + utils.sizeUnits[bufferUnit];
 							dbg("[real_stats] Insert");
 							gData.set("real_stats", "real_upload", realUploadStr);
 							gData.set("real_stats", "real_download", realDownloadStr);
+							gData.set("real_stats", "real_buffer", realBufferStr);
 							gData.set("real_stats", "real_ratio", realRatio);
 							gData.set("real_stats", "real_snatched", realSnatched);
 							gData.set("real_stats", "last_check", new Date().getTime());
@@ -365,7 +375,7 @@ modules.global = {
 			});
 		}
 
-		this.parseBookmarks = function(torrents) {
+		var parseBookmarks = function(torrents) {
 			gData.set("bookmarks", "last_check", new Date().getTime());
 			if(!torrents.length) {
 				dbg("[parseBookmarks] No bookmarks found - Bail out");
@@ -385,7 +395,8 @@ modules.global = {
 			gData.set("bookmarks", "torrents", torrentIds);
 			gData.set("bookmarks", "bookmarkIds", bookmarkIds);
 			dbg("[parseBookmarks] Found " + torrentIds.length + " bookmarks");
-		}
+		};
+		modules.global.parseBookmarks = parseBookmarks;
 
 		var addSeachButtons = function() {
 			if(!opt.get(module_name, "search_buttons")) {
@@ -440,6 +451,25 @@ modules.global = {
 			});
 		};
 
+		var showBuffer = function() {
+			if(!$("#user_buffer").length) {
+				var bufferVal = utils.strToSize($("#userlink .uploaded:first").text()).koTot - utils.strToSize($("#userlink .downloaded:first").text()).koTot;
+				var bufferUnit = 0;
+				while(bufferVal > 1024 || bufferVal < -1024) {
+					bufferUnit++;
+					bufferVal /= 1024.0;
+				}
+				var bufferText = '<span class="' + (bufferVal > 0 ? 'uploaded' : 'downloaded') + '">' + (Math.round(bufferVal * 1000) / 1000) + " " + utils.sizeUnits[bufferUnit] + '</span>';
+				if(opt.get(module_name, "real_upload") && gData.get("real_stats", "real_buffer")) {
+					bufferText += ' / <span id="user_real_buffer" class="' + (gData.get("real_stats", "real_buffer") > 0 ? 'uploaded' : 'downloaded') + '">' + gData.get("real_stats", "real_buffer") + '</span>';
+				}
+				$(this).after('<li id="user_buffer">Buffer: ' + bufferText + '</li>');
+			}
+			else {
+				$("#user_buffer").show();
+			}
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -460,6 +490,11 @@ modules.global = {
 			}
 			return false;
 		});
+		if(opt.get(module_name, "buffer")) {
+			$("#userlink li:nth(1)").hover(showBuffer, function() {
+				$("#user_buffer").hide();
+			});
+		}
 
 		listenToCtrlEnter();
 		listenToBBCodeShortcuts();

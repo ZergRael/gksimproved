@@ -6,6 +6,7 @@ var opt = {
 			bbcode_shortcuts:   { defaultVal: true, showInOptions: true, dispText: "Raccourcis BBCodes avec ctrl" },
 			allow_frame_css:    { defaultVal: false, showInOptions: true, dispText: "Laisser le CSS positionner les fenêtres GKSi" },
 			real_upload:        { defaultVal: false, showInOptions: true, dispText: "Afficher les stats réelles (UP/DL/Ratio) dans l'entête" },
+			buffer:             { defaultVal: true, showInOptions: true, dispText: "Afficher le buffer en mouseover sur les statistiques" },
 			search_buttons:     { defaultVal: false, showInOptions: true, dispText: "Transforme les loupes en boutons dans les champs de recherche de l'entête" },
 			options_section:    { defaultVal: false, showInOptions: false }
 		},
@@ -142,6 +143,7 @@ var gData = {
 		real_stats: {
 			real_upload: 0,
 			real_download: 0,
+			real_buffer: 0,
 			real_ratio: 0,
 			real_snatched: 0,
 			last_check: 0
