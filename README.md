@@ -7,10 +7,11 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+- Bookmarks : Mise en valeur du dernier torrent téléchargé
 - Endless scrolling : Bug fixes en tout genre
 - Endless scrolling : Ajout sur /reseed.php
 - Logs : Lien sur les id de summary
-- Logs : Lien sur les titres de requests
+- Logs : Lien de recherche sur les titres de requests
 
 
 ### Changelog

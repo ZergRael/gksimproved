@@ -101,6 +101,11 @@ modules.bookmark = {
 			result.find(".download").text(l);
 		};
 
+		var setHighlight = function() {
+			$("#bookmark_list tbody tr").removeClass('bookmark_highlight');
+			$(this).parents("tr").addClass("bookmark_highlight");
+		}
+
 		$("#torrent tbody tr td.name a[onclick]").on('click', function(){
 			updateTotal();
 		});
@@ -120,6 +125,7 @@ modules.bookmark = {
 			opt.set(module_name, "delete_get", $(this).is(":checked"));
 			dbg("[DeleteGet] is " + opt.get(module_name, "delete_get"));
 		});
+		$(".dl a").click(setHighlight);
 
 		modules.global.parseBookmarks($("#torrent tbody:first tr"));
 

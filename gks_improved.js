@@ -194,7 +194,10 @@ var insertCSS = function() {
 		".autoget_torrent_head { width: 26px; text-align: center; font-weight: bold; } " +
 		".autoget_torrent_0 { width: 26px; text-align: center; } " +
 		".autoget_torrent_1 { width: 26px; text-align: center; background-color: #f6f6f6; } " +
+
+		// Torrent list
 		".torrent_mark_found { background-color: lightgreen !important; } " +
+		".bookmark_highlight { background-color: lightgreen; } " +
 
 		// Aura
 		"#gksi_aura_controls thead th { width: 33%; } " +
