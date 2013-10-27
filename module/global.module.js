@@ -269,7 +269,9 @@ modules.global = {
 
 			dbg("[real_stats] Started");
 			if(!isStatUsable("real_stats")) {
-				parseRealStats(writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio"), gData.get("real_stats", "real_buffer")));
+				parseRealStats(function() {
+					writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio"), gData.get("real_stats", "real_buffer"))
+				});
 			}
 			else {
 				writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio"), gData.get("real_stats", "real_buffer"));
@@ -277,7 +279,7 @@ modules.global = {
 		};
 
 		var writeRealStats = function(uploadStr, downloadStr, ratioStr, bufferStr) {
-			dbg("[real_stats] Insert " + uploadStr + " / " + downloadStr + " / " + ratioStr);
+			dbg("[real_stats] Insert " + uploadStr + " / " + downloadStr + " / " + ratioStr + " / " + bufferStr);
 			$("#userlink li:nth(1) span:nth(0)").after(' / <span class="uploaded">' + uploadStr + '</span>');
 			$("#userlink li:nth(1) span:nth(2)").after(' / <span class="downloaded">' + downloadStr + '</span>');
 			var ratioClass = Math.round(ratioStr * 10);
@@ -287,82 +289,109 @@ modules.global = {
 			}
 		};
 
-		var parseRealStats = function(callback) {
+		var parseRealStats = function(callback, retry) {
 			dbg("[real_stats] Grab pages & parse");
-			var snatchedUrl = { host: pageUrl.host, path: "/m/peers/snatched", params: { page: 0 }, cancelQ: true };
-			var maxPage = 0, realUpload = 0, readDownload = 0, realSnatched = 0, grabbedPages = 0;
-			utils.grabPage(snatchedUrl, function(data) {
-				var pager_align = $(data).find(".pager_align a");
-				$.each(pager_align, function(i, pageUrl) {
-					var pageId = pageUrl.href.match(/\d+/);
-					if(!pageId.length) {
-						return;
+			var maxPage = gData.get("real_stats", "max_snatched_pages"), actualMaxPage = maxPage, realUpload = 0, realDownload = 0, realSnatched = 0, grabbedPages = 0;
+
+			var appendToVals = function(p, maxP, up, dl, snatched) {
+				dbg("[real_stats] page [" + p + "] came back");
+				actualMaxPage = Math.max(maxP, p);
+				realUpload += up;
+				realDownload += dl;
+				realSnatched += snatched;
+				grabbedPages++;
+				if(grabbedPages > maxPage) {
+					dbg("[real_stats] Last page came in :: We got [" + grabbedPages + "] pages :: Last pageId displayed was [" + actualMaxPage + "] :: We expected [" + maxPage + "]");
+					if(actualMaxPage > maxPage) {
+						dbg("[real_stats] Try again then");
+						gData.set("real_stats", "max_snatched_pages", actualMaxPage);
+						if(!retry) {
+							parseRealStats(callback, true);
+						}
+						else {
+							dbg("[real_stats] Oops, can't do that. Abort !");
+						}
 					}
-					maxPage = Math.max(maxPage, Number(pageId[0]));
-				});
+					else {
+						dbg("[real_stats] Done ajaxing");
+						computeRealStats(realUpload, realDownload, realSnatched);
+						if(callback) {
+							callback();
+						}
+					}
+				}
+			};
+
+			dbg("[real_stats] Fetching [" + maxPage + "] pages");
+			for (var i = 0; i <= maxPage; i++) {
+				parseSnatchedPage(i, appendToVals, 2);
+			}
+		};
+		modules.global.parseRealStats = parseRealStats;
+
+		var parseSnatchedPage = function(page, callback, remainingTries) {
+			if(!remainingTries) { return ; }
+			dbg("[real_stats] Grabing page [" + page + "] with [" + remainingTries + "] tries remaining");
+			utils.grabPage({ host: pageUrl.host, path: "/m/peers/snatched", params: { page: page }, cancelQ: true }, function(data, returnedPage) {
+				var pager_align = $(data).find(".pager_align a");
+				var maxPage = 0, realUpload = 0, realDownload = 0, realSnatched = 0;
+				if(pager_align.length) {
+					$.each(pager_align, function(i, pageUrl) {
+						var pageId = pageUrl.href.match(/\d+/);
+						if(!pageId.length) {
+							return;
+						}
+						maxPage = Math.max(maxPage, Number(pageId[0]));
+					});
+				}
 
 				$(data).find("td[data-filesize]:nth-child(3n)").each(function() {
 					realUpload += Number($(this).attr("data-filesize"));
 				});
 
 				$(data).find("td[data-filesize]:nth-child(5n)").each(function() {
-					readDownload += Number($(this).attr("data-filesize"));
+					realDownload += Number($(this).attr("data-filesize"));
 				});
 
 				$(data).find("td:nth-child(6n)").each(function() {
 					realSnatched += ($(this).text() != "Non Complété");
 				});
-
-				for(var i = 1; i <= maxPage; i++) {
-					snatchedUrl.params.page = i;
-					utils.grabPage(snatchedUrl, function(data) {
-						$(data).find("td[data-filesize]:nth-child(3n)").each(function() {
-							realUpload += Number($(this).attr("data-filesize"));
-						});
-
-						$(data).find("td[data-filesize]:nth-child(5n)").each(function() {
-							readDownload += Number($(this).attr("data-filesize"));
-						});
-
-						$(data).find("td:nth-child(6n)").each(function() {
-							realSnatched += ($(this).text() != "Non Complété");
-						});
-					}, function(){
-						grabbedPages++;
-						if(grabbedPages >= maxPage) {
-							var realRatio = Math.round((realUpload / readDownload) * 100) / 100;
-							var realBuffer = realUpload - readDownload;
-							var uploadUnit = 0, downloadUnit = 0, bufferUnit = 0;
-							while(realUpload > 1024) {
-								uploadUnit++;
-								realUpload /= 1024.0;
-							}
-							while(readDownload > 1024) {
-								downloadUnit++;
-								readDownload /= 1024.0;
-							}
-							while(realBuffer > 1024 || realBuffer < -1024) {
-								bufferUnit++;
-								realBuffer /= 1024.0;
-							}
-							var realUploadStr = Math.round(realUpload * 1000) / 1000 + " " + utils.sizeUnits[uploadUnit];
-							var realDownloadStr = Math.round(readDownload * 1000) / 1000 + " " + utils.sizeUnits[downloadUnit];
-							var realBufferStr = Math.round(realBuffer * 1000) / 1000 + " " + utils.sizeUnits[bufferUnit];
-							dbg("[real_stats] Insert");
-							gData.set("real_stats", "real_upload", realUploadStr);
-							gData.set("real_stats", "real_download", realDownloadStr);
-							gData.set("real_stats", "real_buffer", realBufferStr);
-							gData.set("real_stats", "real_ratio", realRatio);
-							gData.set("real_stats", "real_snatched", realSnatched);
-							gData.set("real_stats", "last_check", new Date().getTime());
-							if(callback)
-								callback();
-						}
-					});
+				if(callback) {
+					callback(page, maxPage, realUpload, realDownload, realSnatched);
 				}
+			}, function() { /* onComplete */ }, function() {
+				parseSnatchedPage(page, callback, remainingTries--);
 			});
 		};
-		modules.global.parseRealStats = parseRealStats;
+
+		var computeRealStats = function(realUpload, realDownload, realSnatched) {
+			dbg("[real_stats] Computing");
+			var realRatio = Math.round((realUpload / realDownload) * 100) / 100;
+			var realBuffer = realUpload - realDownload;
+			var uploadUnit = 0, downloadUnit = 0, bufferUnit = 0;
+			while(realUpload > 1024) {
+				uploadUnit++;
+				realUpload /= 1024.0;
+			}
+			while(realDownload > 1024) {
+				downloadUnit++;
+				realDownload /= 1024.0;
+			}
+			while(realBuffer > 1024 || realBuffer < -1024) {
+				bufferUnit++;
+				realBuffer /= 1024.0;
+			}
+			var realUploadStr = Math.round(realUpload * 1000) / 1000 + " " + utils.sizeUnits[uploadUnit];
+			var realDownloadStr = Math.round(realDownload * 1000) / 1000 + " " + utils.sizeUnits[downloadUnit];
+			var realBufferStr = Math.round(realBuffer * 1000) / 1000 + " " + utils.sizeUnits[bufferUnit];
+			dbg("[real_stats] Save");
+			gData.set("real_stats", "real_upload", realUploadStr);
+			gData.set("real_stats", "real_download", realDownloadStr);
+			gData.set("real_stats", "real_buffer", realBufferStr);
+			gData.set("real_stats", "real_ratio", realRatio);
+			gData.set("real_stats", "real_snatched", realSnatched);
+			gData.set("real_stats", "last_check", new Date().getTime());
+		};
 
 		var fetchBookmarks = function(force) {
 			if(!force && new Date().getTime() < (gData.get("bookmarks", "last_check") + timeOffset)) {
@@ -454,14 +483,15 @@ modules.global = {
 		var showBuffer = function() {
 			if(!$("#user_buffer").length) {
 				var bufferVal = utils.strToSize($("#userlink .uploaded:first").text()).koTot - utils.strToSize($("#userlink .downloaded:first").text()).koTot;
-				var bufferUnit = 0;
+				dbg("[buffer] Found a dispBuffer of [" + bufferVal + "] ko");
+				var bufferUnit = 1;
 				while(bufferVal > 1024 || bufferVal < -1024) {
 					bufferUnit++;
 					bufferVal /= 1024.0;
 				}
 				var bufferText = '<span class="' + (bufferVal > 0 ? 'uploaded' : 'downloaded') + '">' + (Math.round(bufferVal * 1000) / 1000) + " " + utils.sizeUnits[bufferUnit] + '</span>';
 				if(opt.get(module_name, "real_upload") && gData.get("real_stats", "real_buffer")) {
-					bufferText += ' / <span id="user_real_buffer" class="' + (gData.get("real_stats", "real_buffer") > 0 ? 'uploaded' : 'downloaded') + '">' + gData.get("real_stats", "real_buffer") + '</span>';
+					bufferText += ' / <span id="user_real_buffer" class="' + (gData.get("real_stats", "real_buffer").indexOf("-") == -1 ? 'uploaded' : 'downloaded') + '">' + gData.get("real_stats", "real_buffer") + '</span>';
 				}
 				$(this).after('<li id="user_buffer">Buffer: ' + bufferText + '</li>');
 			}

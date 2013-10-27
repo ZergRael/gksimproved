@@ -11,6 +11,9 @@ Voir topic associé.
 - Bookmarks : Tri des torrents par clic d'entête de colonne
 - Endless scrolling : Bug fixes en tout genre
 - Endless scrolling : Ajout sur /reseed.php
+- Global : Affichage du buffer par mouseover sur l'upload/download de l'entête
+- Global : Ajout du buffer réel avec les stats réelles
+- Global : Tentative de correction du récupérateur de stats réelles et du badge snatched
 - Logs : Lien sur les id de summary
 - Logs : Lien de recherche sur les titres de requests
 

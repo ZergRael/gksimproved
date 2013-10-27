@@ -146,6 +146,7 @@ var gData = {
 			real_buffer: 0,
 			real_ratio: 0,
 			real_snatched: 0,
+			max_snatched_pages: 0,
 			last_check: 0
 		},
 		bookmarks: {
@@ -165,7 +166,7 @@ var gData = {
 		$.each(this.data, function(m, data) {
 			var values = utils.storage.data_get(m);
 			$.each(data, function(o, v) {
-				gData.data[m][o] = (values && values[o] != undefined ? values[o] : null);
+				gData.data[m][o] = (values && values[o] != undefined ? values[o] : v);
 			});
 		});
 	}
