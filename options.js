@@ -154,6 +154,11 @@ var gData = {
 			torrents: [],
 			bookmarkIds: {},
 			last_check: 0
+		},
+		episodes: {
+			list: {},
+			list_size: 0,
+			last_check: 0
 		}
 	},
 	setFresh: function(m) {

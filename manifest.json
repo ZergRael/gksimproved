@@ -32,6 +32,7 @@
         "module/peers.module.js",
         "module/bookmark.module.js",
         "module/m_account.module.js",
+        "module/serieswatch.module.js",
         "loader.js"
       ]
     }
