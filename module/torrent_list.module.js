@@ -485,6 +485,65 @@ modules.torrent_list = {
 			dbg("[BookmarkVisibleTorrents] Sent");
 		};
 
+		var MAX_WIDTH = 300;
+		var previewTorrent = function(e) {
+			if(!opt.get(module_name, "preview")) {
+				return;
+			}
+			var torrentId = $(this).attr("id").substring(6);
+
+			if(e.type == "mouseleave") {
+				dbg("[preview] Remove");
+				$("#gksi_preview_" + torrentId).remove();
+			}
+			else {
+				var pos = $(this).offset();
+				$("#global").after('<div id="gksi_preview_' + torrentId + '" class="gksi_preview"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /></div>');
+				$("#gksi_preview_" + torrentId).offset({top: pos.top - 6, left: pos.left - 38});
+				dbg("[preview] Fetch torrent info");
+				utils.grabPage({ host: pageUrl.host, path: "/torrent/" + torrentId + "/" }, function(data) {
+					var previewDiv = $("#gksi_preview_" + torrentId);
+					if(!previewDiv.length) {
+						dbg("[preview] Abort !");
+						return;
+					}
+
+					var imgs = [];
+					$(data).find("#prez img").each(function() {
+						imgs.push($(this).attr("src"));
+					});
+					$(data).find("#summary img").each(function() {
+						imgs.push($(this).attr("src"));
+					});
+
+					if(!imgs.length) {
+						previewDiv.remove();
+						return;
+					}
+
+					dbg("[preview] Got torrent info with some imgs");
+					var img = new Image();
+					var i = 0;
+					img.onload = function() {
+						if(this.height <= 80 && ++i < imgs.length) {
+							dbg("[preview] Too small");
+							this.src = imgs[i];
+						}
+						else if(this.height > 80) {
+							dbg("[preview] Perfect :: size [" + this.width + "x" + this.height + "]");
+							previewDiv.offset({ left: pos.left - 6 - Math.min(this.width, MAX_WIDTH) });
+							$("#gksi_preview_" + torrentId + " img").replaceWith(this);
+						}
+						else {
+							dbg("[preview] Nothing was big enough");
+							previewDiv.remove();
+						}
+					};
+					img.src = imgs[i];
+				});
+			}
+		};
+
 		var markerButton =  '<a id="torrent_marker_button" href="#">Marquer torrent</a> |';
 		var finderButton = '<a id="torrent_finder_button" href="#">Retrouver torrent</a> | ';
 		var filterButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Filtre Freeleech</label> |<input id="filter_scene" type="checkbox" ' + (opt.get(module_name, "filtering_scene") ? 'checked="checked" ' : ' ') + '/><label for="filter_scene">Filtre Scene</label> |';
@@ -590,8 +649,9 @@ modules.torrent_list = {
 		addAgeColumn();
 		applyFilters();
 
-		$("#torrent_list").on("mouseenter", "a", showTorrentComments);
-		$("#torrent_list").on("click", "a.autoget_link", autogetOnClick);
+		$("#torrent_list").on("mouseenter", "a", showTorrentComments)
+			.on("click", "a.autoget_link", autogetOnClick)
+			.on("mouseenter mouseleave", 'img[src="https://s.gks.gs/static/themes/sifuture/img/cross.png"]', previewTorrent);
 
 		startAutorefresh();
 

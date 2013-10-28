@@ -16,6 +16,7 @@ Voir topic associé.
 - Global : Tentative de correction du récupérateur de stats réelles et du badge snatched
 - Logs : Lien sur les id de summary
 - Logs : Lien de recherche sur les titres de requests
+- Torrent list : Ajout d'une preview de l'image principale de la fiche torrent par mouseover sur le [+]
 
 
 ### Changelog

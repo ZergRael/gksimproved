@@ -42,6 +42,7 @@ var opt = {
 			torrent_marker:     { defaultVal: false, showInOptions: false },
 			t_marker_button:    { defaultVal: true, showInOptions: true, dispText: "Afficher les boutons torrent marker/finder" },
 			direct_comments:    { defaultVal: false, showInOptions: true, dispText: "Afficher les commentaires au survol" },
+			preview:            { defaultVal: false, showInOptions: true, dispText: "Afficher un apercu de la fiche torrent au survol" },
 			exclude_string:     { defaultVal: true, showInOptions: true, dispText: "Afficher un champ de filtrage par chaîne de caractères" },
 			case_sensitive:     { defaultVal: true, showInOptions: true, dispText: "Prendre en compte la casse", parent: "exclude_string", indicateParent: true }
 		},
