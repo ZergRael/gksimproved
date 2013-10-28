@@ -156,6 +156,9 @@ var gData = {
 			last_check: 0
 		}
 	},
+	setFresh: function(m) {
+		this.set(m, "last_check", new Date().getTime());
+	},
 	set: function(m, o, v) {
 		this.data[m][o] = v;
 		utils.storage.data_set(m, this.data[m]);

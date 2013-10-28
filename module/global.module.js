@@ -256,11 +256,14 @@ modules.global = {
 			dbg("[Options] Frame ready");
 		};
 
-		var timeOffset = 24 * 60 * 60 * 1000;
-		var isStatUsable = function(stat) {
-			return new Date().getTime() < (gData.get(stat, "last_check") + timeOffset);
+		var timeOffsets = {
+			"bookmarks": 24 * 60 * 60 * 1000,
+			"real_stats": 24 * 60 * 60 * 1000
+		}
+		var isDataUsable = function(data) {
+			return new Date().getTime() < (gData.get(data, "last_check") + timeOffsets[data]);
 		};
-		modules.global.isStatUsable = isStatUsable;
+		modules.global.isDataUsable = isDataUsable;
 
 		var insertRealStats = function() {
 			if(!opt.get(module_name, "real_upload")) {
@@ -268,7 +271,7 @@ modules.global = {
 			}
 
 			dbg("[real_stats] Started");
-			if(!isStatUsable("real_stats")) {
+			if(!isDataUsable("real_stats")) {
 				parseRealStats(function() {
 					writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio"), gData.get("real_stats", "real_buffer"))
 				});
@@ -390,22 +393,22 @@ modules.global = {
 			gData.set("real_stats", "real_buffer", realBufferStr);
 			gData.set("real_stats", "real_ratio", realRatio);
 			gData.set("real_stats", "real_snatched", realSnatched);
-			gData.set("real_stats", "last_check", new Date().getTime());
+			gData.setFresh("real_stats");
 		};
 
 		var fetchBookmarks = function(force) {
-			if(!force && new Date().getTime() < (gData.get("bookmarks", "last_check") + timeOffset)) {
+			if(!force && isDataUsable("bookmarks")) {
 				return;
 			}
 			dbg("[fetchBookmarks] Grab bookmarks");
 			var snatchedUrl = { host: pageUrl.host, path: "/bookmark/" };
 			utils.grabPage(snatchedUrl, function(data) {
-				modules.global.parseBookmarks($(data).find("#torrent tbody:first tr"));
+				parseBookmarks($(data).find("#torrent tbody:first tr"));
 			});
 		}
 
 		var parseBookmarks = function(torrents) {
-			gData.set("bookmarks", "last_check", new Date().getTime());
+			gData.setFresh("bookmarks");
 			if(!torrents.length) {
 				dbg("[parseBookmarks] No bookmarks found - Bail out");
 				gData.set("bookmarks", "torrents", []);

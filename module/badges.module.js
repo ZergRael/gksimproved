@@ -29,7 +29,7 @@ modules.badges = {
 				],
 				name: "snatched",
 				func: function() {
-					if(!modules.global.isStatUsable("real_stats") || !gData.get("real_stats", "real_snatched")) {
+					if(!modules.global.isDataUsable("real_stats") || !gData.get("real_stats", "real_snatched")) {
 						modules.global.parseRealStats(function() {
 							badgesData[0].val = gData.get("real_stats", "real_snatched");
 							set_badge_row(0);
