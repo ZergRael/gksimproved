@@ -40,6 +40,7 @@ modules.logs = {
 							}
 						});
 						refreshFilters(true);
+						forceIdLinks();
 					}
 					else {
 						dbg("[auto_refresh] No data");
