@@ -43,6 +43,8 @@
   "web_accessible_resources": [
     "images/loading.gif",
     "images/bookmark.png",
+    "images/watch.png",
+    "images/watch_new.png",
     "images/Classic/to_top_small.png",
     "images/Classic/endless_scrolling_active.png",
     "images/Classic/endless_scrolling_paused.png",

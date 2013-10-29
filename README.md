@@ -14,8 +14,10 @@ Voir topic associé.
 - Global : Affichage du buffer par mouseover sur l'upload/download de l'entête
 - Global : Ajout du buffer réel avec les stats réelles
 - Global : Tentative de correction du récupérateur de stats réelles et du badge snatched
+- Global : Ajout d'un système de vérification des derniers épisodes des séries suivies
 - Logs : Lien sur les id de summary
 - Logs : Lien de recherche sur les titres de requests
+- Logs : Correction des liens sur les lignes ajoutées par autorefresh
 - Torrent list : Ajout d'une preview de l'image principale de la fiche torrent par mouseover sur le [+]
 
 

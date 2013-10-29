@@ -258,7 +258,8 @@ modules.global = {
 
 		var timeOffsets = {
 			"bookmarks": 24 * 60 * 60 * 1000,
-			"real_stats": 24 * 60 * 60 * 1000
+			"real_stats": 24 * 60 * 60 * 1000,
+			"episodes": 2 * 60 * 60 * 1000
 		}
 		var isDataUsable = function(data) {
 			return new Date().getTime() < (gData.get(data, "last_check") + timeOffsets[data]);
@@ -503,6 +504,185 @@ modules.global = {
 			}
 		};
 
+		var checkForNewEpisodes = function(force) {
+			if(!opt.get(module_name, "check_episodes") || (!force && isDataUsable("episodes"))) {
+				return;
+			}
+
+			if(!gData.get("episodes", "shows_list_size")) {
+				return;
+			}
+			var showsList = gData.get("episodes", "shows_list");
+			var compressedShowList = {};
+			var newEpSelectors = modules.serieswatch.newEpSelectors;
+			$.each(showsList, function(showId, showData) {
+				compressedShowList[showId] = { name: showData.name, on: showData.on };
+				if(showData.on) {
+					$.each(newEpSelectors, function(type, selectors) {
+						if(!showData[type]) {
+							return;
+						}
+						compressedShowList[showId][type] = 0;
+						$.each(selectors, function(i, inputName) {
+							if(showData[type].indexOf(inputName) != -1) {
+								compressedShowList[showId][type] |= (1 << i)
+							}
+						});
+					});
+				}
+			});
+
+			dbg("[new_ep] Check new episodes");
+			utils.post({ host: "https://api.thetabx.net", path: "/gks/check_new_episodes/1/" + gData.get("episodes", "last_check") }, { tv_shows: compressedShowList, comp: newEpSelectors }, function(data) {
+				dbg("[new_ep] Got data from api");
+				if(data && data.status == "OK") {
+					dbg("[new_ep] Data is looking good");
+					if(force) {
+						$(".new_ep_refresh").prop("disabled", false);
+						gData.set("episodes", "last_display", new Date().getTime());
+					}
+					else {
+						gData.setFresh("episodes");
+					}
+					if(data.ep_count == 0) {
+						dbg("[new_ep] Nothing new");
+						return;
+					}
+					gData.set("episodes", "episodes_size", data.ep_count);
+					gData.set("episodes", "episodes", data.episodes);
+					$(document).trigger("gksi_new_episodes");
+				}
+			});
+		};
+
+		var pannelButtonNewPos = -10, pannelButtonOldPos = -58;
+		var buildNewEpisodesButton = function() {
+			if(opt.get("global", "check_episodes")) {
+				dbg("[new_ep] Build dem fixed button");
+				var buttonClass = (gData.get("episodes", "last_check") > gData.get("episodes", "last_display") ? 'new_episodes_new' : 'new_episodes_old');
+				$("#contenu").append('<a id="new_episodes_button" class="' + buttonClass + '" href="#"></a>');
+				var button = $("#new_episodes_button");
+				button.click(toggleNewEpisodesPannel).animate({left: pannelButtonOldPos}).hover(function() {
+					if(!button.hasClass("new_episodes_new")) {
+						button.stop().animate({left: pannelButtonNewPos});
+					}
+				}, function() {
+					if(!button.hasClass("new_episodes_new")) {
+						button.stop().animate({left: pannelButtonOldPos});
+					}
+				});
+				if(buttonClass == "new_episodes_new") {
+					button.animate({left: pannelButtonNewPos});
+				}
+			}
+		};
+
+		var toggleNewEpisodesPannel = function() {
+			var pannel = $("#new_episodes_pannel");
+			if(pannel.length) {
+				if(pannel.is(":visible")) {
+					hideNewEpisodesPannel();
+				}
+				else {
+					showNewEpisodesPannel();
+				}
+			}
+			else {
+				buildNewEpisodesPannel();
+			}
+			return false;
+		};
+
+		var populateNewEpisodesPannel = function() {
+			var showsData = gData.get("episodes", "shows_list");
+			var storedEpisodes = gData.get("episodes", "episodes");
+
+			var content = "";
+			if(!showsData || !gData.get("episodes", "shows_list_size")) {
+				content = 'La liste est vide !<br />N\'oubliez pas de visiter <a href="/serieswatch/">/serieswatch/</a> pour remplir et configurer les séries à suivre.';
+			}
+			else if(!storedEpisodes || !gData.get("episodes", "episodes_size")) {
+				content = 'La liste est vide !<br />Les premières vérifications de nouveaux épisodes peuvent nécessiter quelques heures pour prendre en compte les séries inconnues.';
+			}
+			else {
+				$.each(storedEpisodes, function(showId, showData) {
+					content += '<tr class="new_ep_show_header"><td colspan="5">' + showsData[showId].name + '</td></tr>';
+					$.each(showData, function(i, ep) {
+						content += '<tr><td class="new_ep_ep_title" colspan="5"><a href="/torrent/' + ep.id + '/">' + ep.name + '</a></td></tr><tr><td class="new_ep_ep_date">' + ep.date + '</td><td>' + ep.size + '</td><td><a href="/get/' + ep.id + '/"><img src="https://s.gks.gs/static/themes/sifuture/img/download.png" /></a></td><td><a href="#" class="torrent_action_ajax" action="autoget" torrent_id="' + ep.id + '"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td><td><a href="#" class="torrent_action_ajax" action="booktorrent" torrent_id="' + ep.id + '"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></td></tr>';
+					});
+				});
+			}
+
+			return content;
+		};
+
+		var buildNewEpisodesPannel = function() {
+			dbg("[new_ep] Building pannel");
+			$("#contenu").append('<div id="new_episodes_pannel"><div class="new_ep_header">GKSi - Derniers épisodes</div><div class="new_ep_content"><table>' + populateNewEpisodesPannel() + '</table></div><div class="new_ep_buttons"><input type="button" class="new_ep_refresh fine" value=" Rafraîchir " title="Force la récupération des derniers épisodes publiés. En cas d\'absence de résultats, la dernière liste sera conservée" /><input type="button" class="new_ep_clear fine" value=" Vider " /><input type="button" class="new_ep_close fine" value=" Fermer " /></div></div>');
+
+			var pannel = $("#new_episodes_pannel");
+			$(".new_ep_refresh").click(function() {
+				$(this).prop("disabled", true);
+				checkForNewEpisodes(true);
+			});
+			$(".new_ep_clear").click(function() {
+				if(confirm("Êtes-vous sur de vider la liste ?")) {
+					gData.set("episodes", "episodes_size", 0);
+					gData.set("episodes", "episodes", {});
+					$("#new_episodes_pannel .new_ep_content table").html(populateNewEpisodesPannel());
+				}
+			});
+			$(".new_ep_close").click(function() {
+				hideNewEpisodesPannel();
+			});
+
+			pannel.on("click", ".torrent_action_ajax", function(e) {
+				dbg("[new_ep] Native func");
+				var funct = "function() { AddGet('" + $(this).attr("torrent_id") + "', '" + $(this).attr("action") + "', '" + $(this).parents("tr").prev().text() + "'); }";
+				insertScript("native_action", funct, true);
+				return false;
+			}).on("click", function(e) {
+				e.stopPropagation();
+			});
+			$(document).one("click", function() {
+				hideNewEpisodesPannel();
+			});
+
+
+			// Background-color correction
+			var transparentCss = "rgba(0, 0, 0, 0)", transparentCssFirefox = "transparent";
+			if(pannel.css("background-color") == transparentCss || pannel.css("background-color") == transparentCssFirefox) {
+				// Go up as much as needed to find some non-transparent color
+				var cssTries = [ "#contenu", "#centre", "#navig_bloc_user", "#header" ];
+				$.each(cssTries, function(i, cssId) {
+					if($(cssId).css("background-color") != transparentCss && $(cssId).css("background-color") != transparentCssFirefox) {
+						// Instead of creating style on frame, let's append to our custom CSS area
+						appendCSS('#new_episodes_pannel { background-color: ' + $(cssId).css("background-color") + '; } ');
+						return false;
+					}
+				});
+			}
+
+			showNewEpisodesPannel();
+		};
+
+		var pannelHiddenPos = -432, displayPos = -2;
+		var showNewEpisodesPannel = function() {
+			gData.set("episodes", "last_display", new Date().getTime());
+			dbg("[new_ep] Showing pannel");
+			$("#new_episodes_pannel").show().animate({left: displayPos});
+		};
+
+		var hideNewEpisodesPannel = function() {
+			dbg("[new_ep] Hiding pannel");
+			var button = $("#new_episodes_button")
+			if(button.hasClass("new_episodes_new")) {
+				button.removeClass("new_episodes_new").addClass("new_episodes_old");
+			}
+			button.animate({left: pannelButtonOldPos});
+			$("#new_episodes_pannel").animate({left: pannelHiddenPos}).hide(0);
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -535,6 +715,18 @@ modules.global = {
 		fetchBookmarks();
 		addSeachButtons();
 		refreshBookmarksOnBookmark();
+		checkForNewEpisodes();
+		buildNewEpisodesButton();
+
+		$(document).on("gksi_new_episodes", function() {
+			if($("#new_episodes_button").hasClass("new_episodes_old")) {
+				$("#new_episodes_button").removeClass("new_episodes_old").addClass("new_episodes_new").animate({left: pannelButtonNewPos});
+			}
+
+			if($("#new_episodes_pannel").length) {
+				$("#new_episodes_pannel .new_ep_content table").html(populateNewEpisodesPannel());
+			}
+		});
 
 		dbg("[Init] Ready");
 	}

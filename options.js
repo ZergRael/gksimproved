@@ -7,7 +7,8 @@ var opt = {
 			allow_frame_css:    { defaultVal: false, showInOptions: true, dispText: "Laisser le CSS positionner les fenêtres GKSi" },
 			real_upload:        { defaultVal: false, showInOptions: true, dispText: "Afficher les stats réelles (UP/DL/Ratio) dans l'entête" },
 			buffer:             { defaultVal: true, showInOptions: true, dispText: "Afficher le buffer en mouseover sur les statistiques" },
-			search_buttons:     { defaultVal: false, showInOptions: true, dispText: "Transforme les loupes en boutons dans les champs de recherche de l'entête" },
+			search_buttons:     { defaultVal: false, showInOptions: true, dispText: "Transformer les loupes en boutons dans les champs de recherche de l'entête" },
+			check_episodes:     { defaultVal: true, showInOptions: true, dispText: "Vérifier la présence de nouveaux épisodes toutes les 2 heures" },
 			options_section:    { defaultVal: false, showInOptions: false }
 		},
 		endless_scrolling : {
@@ -156,9 +157,13 @@ var gData = {
 			last_check: 0
 		},
 		episodes: {
-			list: {},
-			list_size: 0,
-			last_check: 0
+			shows_list: {},
+			shows_list_size: 0,
+			global_conf: {},
+			episodes: {},
+			episodes_size: 0,
+			last_check: 0,
+			last_display: 0
 		}
 	},
 	setFresh: function(m) {

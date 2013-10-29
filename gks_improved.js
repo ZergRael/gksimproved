@@ -184,6 +184,24 @@ var insertCSS = function() {
 		".gksi_preview img { max-width: 300px; } " +
 		"#gksi_marker { max-width: 310px; } " +
 
+		// New episodes button
+		"#new_episodes_button { z-index: 2; background-color: #333; position:fixed; top:104px; left:-72px; overflow:hidden; width:64px; height:64px; border: 1px solid black; border-top-right-radius: 15px; border-bottom-right-radius: 15px; padding-right: 4px; } " +
+		".new_episodes_new { background:url(" + chrome.extension.getURL("images/watch_new.png") + ") no-repeat; } " +
+		".new_episodes_old { background:url(" + chrome.extension.getURL("images/watch.png") + ") no-repeat; } " +
+		// New episodes pannel
+		"#new_episodes_pannel { display: none; z-index: 20; position: fixed; width: 430px; top: 100px; left: -432px; border: 1px solid black; border-top-right-radius: 15px; border-bottom-right-radius: 15px; } " +
+		".new_ep_header { text-align: center; font-size: 1.9em; border-top-right-radius: 12px; padding-bottom: 4px; border-bottom: 1px dotted black; } " +
+		".new_ep_content { padding: 6px; color: black; min-height: 20px; max-height: 460px; overflow: auto; } " +
+		".new_ep_content table { width: 100%; } " +
+		".new_ep_ep_title { border-top: 1px dashed black; } " +
+		".new_ep_ep_date { padding-left: 10px; } " +
+		".new_ep_show_header { font-size: 1.2em; font-weight: bold; } " +
+		".new_ep_buttons { text-align: center; border-bottom-right-radius: inherit; } " +
+		// Watcher page config
+		".watcher_config { text-align: right; margin-top: -20px; margin-right: 6px; } " +
+		".watcher_config span { cursor: pointer; margin-left: 6px; border: 1px dotted gray; padding: 1px; } " +
+		".watcher_config_block { display: none; position: relative; } " +
+
 		// Badges
 		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; } " +
 		".gksi_progress_bar { background-color: orange; height: 11px; border-radius: 1px; margin-bottom: -11px; } " +
