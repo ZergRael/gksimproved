@@ -149,18 +149,6 @@ var appendFrame = function(o) {
 	}
 };
 
-var appendDropdown = function(o) {
-	$(".gksi_dropdown").slideUp().remove();
-	var htmlContent = o.html;
-	$("#global").append($('<div ' + (o.id ? 'id="' + o.id + '" ' : '') + 'class="gksi_dropdown"><div class="gksi_dropdown_header">' + (o.title ? o.title : '') + '</div><div class="gksi_dropdown_content">' + htmlContent + '</div><div class="gksi_dropdown_buttons"><input type="button" class="gksi_dropdown_close fine" value=" Fermer " /></div></div>'));
-	var dropdown = $(".gksi_dropdown");
-	dropdown.hide().slideDown();
-	dropdown.offset({left: $(window).width() / 2 - dropdown.width() / 2});
-	$(".gksi_dropdown_close").click(function() {
-		dropdown.slideUp();
-	});
-};
-
 // Default GKSi CSS
 var insertCSS = function() {
 	dbg("Inserting custom CSS");
@@ -195,10 +183,6 @@ var insertCSS = function() {
 		".gksi_preview { position: absolute; } " +
 		".gksi_preview img { max-width: 300px; } " +
 		"#gksi_marker { max-width: 310px; } " +
-		".gksi_dropdown { position: absolute; width: 580px; max-height: 400px; top: 0px; background-color: gray; border: 1px solid black; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px; } " +
-		".gksi_dropdown_header { text-align: center; font-size: 1.9em; background-color: black; color: gray; } " +
-		".gksi_dropdown_content { padding: 6px; color: black; } " +
-		".gksi_dropdown_buttons { text-align: center; border-radius: inherit;} " +
 
 		// Badges
 		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; } " +
