@@ -1,4 +1,4 @@
-var DEBUG = false;
+var DEBUG = true;
 
 // At this point, libs with most common functions are loaded
 // Options are ready but not loaded
@@ -130,10 +130,15 @@ var appendFrame = function(o) {
 		// Go up as much as needed to find some non-transparent color
 		var cssTries = [ "#navigation", "#centre", "#navig_bloc_user", "#header" ];
 		$.each(cssTries, function(i, cssId) {
-			if($(cssId).css("background-color") != transparentCss && $(cssId).css("background-color") != transparentCssFirefox) {
+			var cssColor = $(cssId).css("background-color");
+			if(cssColor != transparentCss && cssColor != transparentCssFirefox) {
 				dbg("[frame_builder] Took " + cssId + " background-color");
+				colorRGBA = cssColor.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\.\d]+)\s*\)$/i)
+				if(colorRGBA) {
+					cssColor = "rgba(" + colorRGBA[1] + "," + colorRGBA[2] + "," + colorRGBA[3] + ",1)"
+				}
 				// Instead of creating style on frame, let's append to our custom CSS area
-				appendCSS('.gksi_frame_content { background-color: ' + $(cssId).css("background-color") + '; } ');
+				appendCSS('.gksi_frame_content { background-color: ' + cssColor + '; } ');
 				return false;
 			}
 		});
@@ -190,7 +195,7 @@ var insertCSS = function() {
 		".new_episodes_old { background:url(" + chrome.extension.getURL("images/watch.png") + ") no-repeat; } " +
 		// New episodes pannel
 		"#new_episodes_pannel { display: none; z-index: 140; position: fixed; width: 430px; top: 100px; left: -432px; border: 1px solid black; border-top-right-radius: 15px; border-bottom-right-radius: 15px; } " +
-		".new_ep_header { text-align: center; font-size: 1.9em; border-top-right-radius: 12px; padding-bottom: 4px; border-bottom: 1px dotted black; } " +
+		".new_ep_header { text-align: center; font-size: 1.9em; border-top-right-radius: 12px; padding-bottom: 4px; line-height: normal; border-bottom: 1px dotted black; } " +
 		".new_ep_content { padding: 6px; color: black; min-height: 20px; max-height: 460px; overflow: auto; } " +
 		".new_ep_show_header { font-size: 1.2em; font-weight: bold; } " +
 		".new_ep_ep_block { border-top: 1px dashed black; padding-bottom: 6px; } " +

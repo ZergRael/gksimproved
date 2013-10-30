@@ -678,9 +678,14 @@ modules.global = {
 				// Go up as much as needed to find some non-transparent color
 				var cssTries = [ "#contenu", "#centre", "#navig_bloc_user", "#header" ];
 				$.each(cssTries, function(i, cssId) {
-					if($(cssId).css("background-color") != transparentCss && $(cssId).css("background-color") != transparentCssFirefox) {
+					var cssColor = $(cssId).css("background-color");
+					if(cssColor != transparentCss && cssColor != transparentCssFirefox) {
+						colorRGBA = cssColor.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\.\d]+)\s*\)$/i)
+						if(colorRGBA) {
+							cssColor = "rgba(" + colorRGBA[1] + "," + colorRGBA[2] + "," + colorRGBA[3] + ",1)"
+						}
 						// Instead of creating style on frame, let's append to our custom CSS area
-						appendCSS('#new_episodes_pannel { background-color: ' + $(cssId).css("background-color") + '; } ');
+						appendCSS('#new_episodes_pannel { background-color: ' + cssColor + '; } ');
 						return false;
 					}
 				});
