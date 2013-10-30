@@ -529,7 +529,7 @@ modules.torrent_list = {
 							dbg("[preview] Too small");
 							this.src = imgs[i];
 						}
-						else if(this.height > 80) {
+						else if(this.height > 154) {
 							dbg("[preview] Perfect :: size [" + this.width + "x" + this.height + "]");
 							var top = pos.top, scrollTop = (document.body.scrollTop || document.documentElement.scrollTop), windowHeight = $(window).height(), resizedHeight = (this.width > 300 ? this.height * (300 / this.width) : this.height);
 							if(top + resizedHeight + 4 > scrollTop + windowHeight) {

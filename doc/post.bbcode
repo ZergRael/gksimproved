@@ -1,18 +1,8 @@
 [size=4][b]Nouvelle version dispo ![/b][/size]
 
-[b]* 0.4.0 - 30/10/2013[/b]
-- Bookmarks : Mise en valeur du dernier torrent téléchargé
-- Bookmarks : Tri des torrents par clic d'entête de colonne
-- Endless scrolling : Bug fixes en tout genre
-- Endless scrolling : Ajout sur /reseed.php
-- Global : Affichage du buffer par mouseover sur l'upload/download de l'entête
-- Global : Ajout du buffer réel avec les stats réelles
-- Global : Tentative de correction du récupérateur de stats réelles et du badge snatched
-- Global : Ajout d'un système de vérification des derniers épisodes des séries suivies
-- Logs : Lien sur les id de summary
-- Logs : Lien de recherche sur les titres de requests
-- Logs : Correction des liens sur les lignes ajoutées par autorefresh
-- Torrent list : Ajout d'une preview de l'image principale de la fiche torrent par mouseover sur le [+]
+[b]* 0.4.1 - 30/10/2013[/b]
+- Global : Correction du z-index sur le watcher d'épisodes afin de fonctionner avec les différents CSS
+- Torrent list : Correction de la preview pour s'afficher entièrement dans la page
 
 [b]Chrome [/b]:
 * La mise à jour sera automatique au prochain reboot
@@ -24,23 +14,6 @@
 * [url=https://github.com/ZergRael/gksimproved/raw/master/build/gksimproved.xpi]Téléchargement direct[/url]
 
 [b]Infos importantes[/b]
-* Aux CSS moders, le bouton des options ( "GKSi Options" ) a retrouvé le <li> qui lui était destiné
-* La preview ne prend que les images > 80px en cherchant d'abord dans la prez, puis dans le summary
-* Le buffer ne s'affiche que par mouseover sur l'UL/DL, je trouvais qu'en affichage direct les données pouvaient être trop facilement confondues.
-* Mon nouveau jouet, le watcher d'episodes avec notifications, permet de recevoir les notifications de publication d'episodes directement sur le tracker :
-
-La série doit être ajoutée sur https://gks.gs/serieswatch/ puis des options sont ajoutées sur la ligne de la série pour sélectionner la langue / source / résolution / codec / subs avec fastsub ou non
-Toutes les 2 heures, l'outil va vérifier les derniers torrents à la recherche d'épisodes correspondants à vos préférences (possible de forcer le rafraîchissement)
-S'il y a au moins un nouvel épisode, le bouton sortira du coté de l'écran.
-[img]https://s.gks.gs/img/img/10-2013/gksi_ep_watcher.gif[/img]
-
-Au maximum 5 torrents correspondant à vos préférences de chaque série s'afficheront alors.
-[url=https://s.gks.gs/img/img/10-2013/gksi_ep_watcher.png][img]https://s.gks.gs/img/mini/10-2013/gksi_ep_watcher.png[/img][/url]
-
-Malheureusement, je n'ai pas réussi à obtenir ce degré de précision avec les données fournies par le site, ce qui explique les appels à mon api, et donc pourquoi l'option est désactivée par défaut.
-Essayez la quand même, j'me suis bien marré en ajoutant ça x)
-
-PS : Je sais que le design est affreux, c'est pas volontaire :P
-PPS : L'idée vient de là https://gks.gs/forums.php?action=viewtopic&topicid=8364 . Désolé @AlkaSeltZer , je ne sais pas à quoi ressemble le système chez whatcd, j'ai fait avec mon inspiration.
+* Correctifs uniquement
 
 N'hésitez pas à proposer vos suggestions :)

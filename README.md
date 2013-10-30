@@ -10,6 +10,10 @@ Voir topic associé.
 
 
 ### Changelog
+**0.4.1**
+- Global : Correction du z-index sur le watcher d'épisodes afin de fonctionner avec les différents CSS
+- Torrent list : Correction de la preview pour s'afficher entièrement dans la page
+
 **0.4.0**
 - Bookmarks : Mise en valeur du dernier torrent téléchargé
 - Bookmarks : Tri des torrents par clic d'entête de colonne
