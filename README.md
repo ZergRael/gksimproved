@@ -10,6 +10,10 @@ Voir topic associé.
 
 
 ### Changelog
+**0.4.2**
+- Global : Correction de la transparence des fenêtres avec les différents CSS
+- Torrent list : Correction d'une erreur de DOM sur la preview avec Chromium
+
 **0.4.1**
 - Global : Correction du z-index sur le watcher d'épisodes afin de fonctionner avec les différents CSS
 - Torrent list : Correction de la preview pour s'afficher entièrement dans la page
