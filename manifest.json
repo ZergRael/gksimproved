@@ -1,5 +1,6 @@
 {
   "name": "GKSimproved",
+  "short_name": "GKSi",
   "version": "0.4.0",
   "manifest_version": 2,
   "description": "Améliorations et ajout de fonctions pour GKS",

@@ -1,4 +1,4 @@
-var DEBUG = false;
+var DEBUG = true;
 
 // At this point, libs with most common functions are loaded
 // Options are ready but not loaded
@@ -185,11 +185,11 @@ var insertCSS = function() {
 		"#gksi_marker { max-width: 310px; } " +
 
 		// New episodes button
-		"#new_episodes_button { z-index: 2; background-color: #333; position:fixed; top:104px; left:-72px; overflow:hidden; width:64px; height:64px; border: 1px solid black; border-top-right-radius: 15px; border-bottom-right-radius: 15px; padding-right: 4px; } " +
+		"#new_episodes_button { z-index: 120; background-color: #333; position:fixed; top:104px; left:-72px; overflow:hidden; width:64px; height:64px; border: 1px solid black; border-top-right-radius: 15px; border-bottom-right-radius: 15px; padding-right: 4px; } " +
 		".new_episodes_new { background:url(" + chrome.extension.getURL("images/watch_new.png") + ") no-repeat; } " +
 		".new_episodes_old { background:url(" + chrome.extension.getURL("images/watch.png") + ") no-repeat; } " +
 		// New episodes pannel
-		"#new_episodes_pannel { display: none; z-index: 20; position: fixed; width: 430px; top: 100px; left: -432px; border: 1px solid black; border-top-right-radius: 15px; border-bottom-right-radius: 15px; } " +
+		"#new_episodes_pannel { display: none; z-index: 140; position: fixed; width: 430px; top: 100px; left: -432px; border: 1px solid black; border-top-right-radius: 15px; border-bottom-right-radius: 15px; } " +
 		".new_ep_header { text-align: center; font-size: 1.9em; border-top-right-radius: 12px; padding-bottom: 4px; border-bottom: 1px dotted black; } " +
 		".new_ep_content { padding: 6px; color: black; min-height: 20px; max-height: 460px; overflow: auto; } " +
 		".new_ep_show_header { font-size: 1.2em; font-weight: bold; } " +
