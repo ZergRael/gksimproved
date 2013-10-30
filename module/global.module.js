@@ -629,9 +629,9 @@ modules.global = {
 						return;
 					}
 					var showData = storedEpisodes[showId];
-					content += '<tr class="new_ep_show_header"><td colspan="5">' + showsData[showId].name + '</td></tr>';
+					content += '<div class="new_ep_show_header">' + showsData[showId].name + '</div>';
 					$.each(showData, function(i, ep) {
-						content += '<tr><td class="new_ep_ep_title" colspan="5"><a href="/torrent/' + ep.id + '/">' + ep.name + '</a></td></tr><tr><td class="new_ep_ep_date">' + ep.date + '</td><td>' + ep.size + '</td><td><a href="/get/' + ep.id + '/"><img src="https://s.gks.gs/static/themes/sifuture/img/download.png" /></a></td><td><a href="#" class="torrent_action_ajax" action="autoget" torrent_id="' + ep.id + '"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td><td><a href="#" class="torrent_action_ajax" action="booktorrent" torrent_id="' + ep.id + '"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></td></tr>';
+						content += '<div class="new_ep_ep_block"><a class="new_ep_ep_title" href="/torrent/' + ep.id + '/">' + ep.name + '</a></span><div class="new_ep_ep_details"><span class="new_ep_ep_date">' + ep.date + '</span><span class="new_ep_ep_size">' + ep.size + '</span><span class="new_ep_ep_dl"><a href="/get/' + ep.id + '/"><img src="https://s.gks.gs/static/themes/sifuture/img/download.png" /></a></span><span class="new_ep_ep_autoget"><a href="#" class="torrent_action_ajax" action="autoget" torrent_id="' + ep.id + '"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></span><span class="new_ep_ep_bookmark"><a href="#" class="torrent_action_ajax" action="booktorrent" torrent_id="' + ep.id + '"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></span></div></div>';
 					});
 				});
 			}
@@ -641,7 +641,7 @@ modules.global = {
 
 		var buildNewEpisodesPannel = function() {
 			dbg("[new_ep] Building pannel");
-			$("#contenu").append('<div id="new_episodes_pannel"><div class="new_ep_header">GKSi - Derniers épisodes</div><div class="new_ep_content"><table>' + populateNewEpisodesPannel() + '</table></div><div class="new_ep_buttons"><input type="button" class="new_ep_refresh fine" value=" Rafraîchir " title="Force la récupération des derniers épisodes publiés. En cas d\'absence de résultats, la dernière liste sera conservée" /><input type="button" class="new_ep_clear fine" value=" Vider " /><input type="button" class="new_ep_close fine" value=" Fermer " /></div></div>');
+			$("#contenu").append('<div id="new_episodes_pannel"><div class="new_ep_header">GKSi - Derniers épisodes</div><div class="new_ep_content">' + populateNewEpisodesPannel() + '</div><div class="new_ep_buttons"><input type="button" class="new_ep_refresh fine" value=" Rafraîchir " title="Force la récupération des derniers épisodes publiés. En cas d\'absence de résultats, la dernière liste sera conservée" /><input type="button" class="new_ep_clear fine" value=" Vider " /><input type="button" class="new_ep_close fine" value=" Fermer " /></div></div>');
 
 			var pannel = $("#new_episodes_pannel");
 			$(".new_ep_refresh").click(function() {
@@ -652,7 +652,7 @@ modules.global = {
 				if(confirm("Êtes-vous sur de vider la liste ?")) {
 					gData.set("episodes", "episodes_size", 0);
 					gData.set("episodes", "episodes", {});
-					$("#new_episodes_pannel .new_ep_content table").html(populateNewEpisodesPannel());
+					$("#new_episodes_pannel .new_ep_content").html(populateNewEpisodesPannel());
 				}
 			});
 			$(".new_ep_close").click(function() {
@@ -661,7 +661,7 @@ modules.global = {
 
 			pannel.on("click", ".torrent_action_ajax", function(e) {
 				dbg("[new_ep] Native func");
-				var funct = "function() { AddGet('" + $(this).attr("torrent_id") + "', '" + $(this).attr("action") + "', '" + $(this).parents("tr").prev().text() + "'); }";
+				var funct = "function() { AddGet('" + $(this).attr("torrent_id") + "', '" + $(this).attr("action") + "', '" + $(this).parents(".new_ep_ep_details").prev().text() + "'); }";
 				insertScript("native_action", funct, true);
 				return false;
 			}).on("click", function(e) {
@@ -747,7 +747,7 @@ modules.global = {
 			}
 
 			if($("#new_episodes_pannel").length) {
-				$("#new_episodes_pannel .new_ep_content table").html(populateNewEpisodesPannel());
+				$("#new_episodes_pannel .new_ep_content").html(populateNewEpisodesPannel());
 			}
 		});
 
