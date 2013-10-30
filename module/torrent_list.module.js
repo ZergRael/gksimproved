@@ -525,13 +525,17 @@ modules.torrent_list = {
 					var img = new Image();
 					var i = 0;
 					img.onload = function() {
-						if(this.height <= 80 && ++i < imgs.length) {
+						if(this.height <= 154 && ++i < imgs.length) {
 							dbg("[preview] Too small");
 							this.src = imgs[i];
 						}
 						else if(this.height > 80) {
 							dbg("[preview] Perfect :: size [" + this.width + "x" + this.height + "]");
-							previewDiv.offset({ left: pos.left - 6 - Math.min(this.width, MAX_WIDTH) });
+							var top = pos.top, scrollTop = (document.body.scrollTop || document.documentElement.scrollTop), windowHeight = $(window).height(), resizedHeight = (this.width > 300 ? this.height * (300 / this.width) : this.height);
+							if(top + resizedHeight + 4 > scrollTop + windowHeight) {
+								top = (scrollTop + windowHeight) - resizedHeight - 4;
+							}
+							previewDiv.offset({ top: top, left: pos.left - 6 - Math.min(this.width, MAX_WIDTH) });
 							$("#gksi_preview_" + torrentId + " img").replaceWith(this);
 						}
 						else {
