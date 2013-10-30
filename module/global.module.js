@@ -533,7 +533,7 @@ modules.global = {
 			});
 
 			dbg("[new_ep] Check new episodes");
-			utils.post({ host: "https://api.thetabx.net", path: "/gks/check_new_episodes/1/" + gData.get("episodes", "last_check") }, { tv_shows: compressedShowList, comp: newEpSelectors }, function(data) {
+			utils.post({ host: "https://api.thetabx.net", path: "/gks/check_new_episodes/1/" + gData.get("episodes", "last_check") }, { tv_shows: compressedShowList }, function(data) {
 				dbg("[new_ep] Got data from api");
 				if(data && data.status == "OK") {
 					dbg("[new_ep] Data is looking good");
@@ -548,6 +548,7 @@ modules.global = {
 						dbg("[new_ep] Nothing new");
 						return;
 					}
+
 					gData.set("episodes", "episodes_size", data.ep_count);
 					gData.set("episodes", "episodes", data.episodes);
 					$(document).trigger("gksi_new_episodes");
@@ -605,7 +606,29 @@ modules.global = {
 				content = 'La liste est vide !<br />Les premières vérifications de nouveaux épisodes peuvent nécessiter quelques heures pour prendre en compte les séries inconnues.';
 			}
 			else {
-				$.each(storedEpisodes, function(showId, showData) {
+				// For some reason, Chrome automatically orders Hash on key value.
+				// We need to get the show name, order this, and make a showId array based on this order
+				var orderedShowsNames = []
+				$.each(showsData, function(showId, showData) {
+					orderedShowsNames.push(showData.name);
+				});
+				orderedShowsNames.sort();
+
+				var orderedShowsIds = [];
+				$.each(showsData, function(showId, showData) {
+					$.each(orderedShowsNames, function(i, showName) {
+						if(showData.name == showName) {
+							orderedShowsIds[i] = showId;
+							return;
+						}
+					});
+				});
+
+				$.each(orderedShowsIds, function(i, showId) {
+					if(!storedEpisodes[showId]) {
+						return;
+					}
+					var showData = storedEpisodes[showId];
 					content += '<tr class="new_ep_show_header"><td colspan="5">' + showsData[showId].name + '</td></tr>';
 					$.each(showData, function(i, ep) {
 						content += '<tr><td class="new_ep_ep_title" colspan="5"><a href="/torrent/' + ep.id + '/">' + ep.name + '</a></td></tr><tr><td class="new_ep_ep_date">' + ep.date + '</td><td>' + ep.size + '</td><td><a href="/get/' + ep.id + '/"><img src="https://s.gks.gs/static/themes/sifuture/img/download.png" /></a></td><td><a href="#" class="torrent_action_ajax" action="autoget" torrent_id="' + ep.id + '"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td><td><a href="#" class="torrent_action_ajax" action="booktorrent" torrent_id="' + ep.id + '"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></td></tr>';

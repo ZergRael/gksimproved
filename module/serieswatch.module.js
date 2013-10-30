@@ -15,7 +15,6 @@ modules.serieswatch = {
 		dbg("[Init] Loading module");
 		// Loading all functions used
 
-		var globalId = -1;
 		var storeWatchedShows = function() {
 			dbg("[store] Looking for new shows");
 			$("#torrent_list tr:nth-child(2n)").each(function() {
@@ -25,9 +24,6 @@ modules.serieswatch = {
 					watchedListSize++;
 				}
 			});
-			if(!watchedList[globalId]) {
-				watchedList[globalId] = {};
-			}
 			saveWatchedList();
 		};
 
