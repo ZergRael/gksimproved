@@ -7,6 +7,10 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+
+
+### Changelog
+**0.4.0**
 - Bookmarks : Mise en valeur du dernier torrent téléchargé
 - Bookmarks : Tri des torrents par clic d'entête de colonne
 - Endless scrolling : Bug fixes en tout genre
@@ -20,8 +24,6 @@ Voir topic associé.
 - Logs : Correction des liens sur les lignes ajoutées par autorefresh
 - Torrent list : Ajout d'une preview de l'image principale de la fiche torrent par mouseover sur le [+]
 
-
-### Changelog
 **0.3.6**
 - Account : Preview du custom menu et de la signature
 - Global : Correction de l'espace manquant dans les stats réelles

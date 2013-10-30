@@ -14,6 +14,10 @@ modules.serieswatch = {
 
 		dbg("[Init] Loading module");
 		// Loading all functions used
+		if(!opt.get("global", "check_episodes")) {
+			dbg("[Init] Not needed. Abort");
+			return;
+		}
 
 		var storeWatchedShows = function() {
 			dbg("[store] Looking for new shows");

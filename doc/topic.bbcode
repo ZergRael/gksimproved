@@ -3,7 +3,7 @@ Salutations à tous !
 
 Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. Toujours en beta mais un jour peut-être une version stable arrivera ;)
 
-Version actuelle : 0.3.7 - 07/10/2013 - Licence MIT
+Version actuelle : 0.4.0 - 30/10/2013 - Licence MIT
 
 [size=6]Téléchargement[/size] :
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
@@ -42,6 +42,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Auto-refresh[/i] : Rafraîchissement automatique des derniers torrents et mise en avant
 > [i]Icone bookmark[/i] : Affichage d'une icone indiquant les torrents déjà bookmarkés (requiert la visite de la page https://gks.gs/bookmark/)
 > [i]Exclusion[/i] : Exclut certains résultats en fonction d'une chaîne de caractères
+> [i]Preview[/i] : Préviualisation de l'image principale de la fiche torrent par mouseover sur le [+]
 
 [b]* Snatched[/b]
 - Page des snatched -- https://gks.gs/snatched/
@@ -111,13 +112,15 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 
 > [i]Suppression par catégorie[/i] : Supprime les 40 premiers bookmarks d'une catégorie - ravomavain
 > [i]Ajout en autoget[/i] : Ajoute les 15 premiers bookmarks dans l'autoget puis les supprime - ravomavain
+> [i]Mise en valeur[/i] : Le dernier bookmark téléchargé sera coloré pour le retrouver après un alt-tab
+> [i]Tri par colonne[/i] : Permet de trier les bookmarks par Nom, Date d'ajout, Taille, Seed, Leech
 
 [b]* Logs[/b]
 - Page des logs -- https://gks.gs/logs/
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Boutons personnalisables de remontée en haut de page & de pause
 > [i]Filtres[/i] : Affichage de certains types de logs
-> [i]Liens fiches[/i] : Liens automatiques sur les fiches torrents pour les lignes upload et edit
+> [i]Liens fiches[/i] : Liens automatiques sur les fiches torrents / summaries / requests
 
 [b]* Peers[/b]
 - Torrents en seed -- https://gks.gs/m/peers/
@@ -132,6 +135,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Liste des images -- https://gks.gs/m/images/
 - Liste des uploads -- https://gks.gs/m/uploads/
 - Dupecheck -- https://gks.gs/dupecheck/
+- Reseeds -- https://gks.gs/reseed.php
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Boutons personnalisables de remontée en haut de page & de pause
 
@@ -146,6 +150,8 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 > [i]Validation des formulaires[/i] : Valide les formulaires (commentaires/posts/etc) avec ctrl+entrée
 > [i]Raccourcis BBCode[/i] : Permet d'ajouter les balises BBCode avec les raccourcis Ctrl + (b/u/i/q)
 > [i]Stats réelles[/i] : Affiche vos upload, download et ratio réels - requêtes exclues. Mis à jour toutes les 24h
+> [i]Buffer[/i] : Ajoute le buffer en mouseover sur le UL/DL
+> [i]Notification épisodes[/i] : Vérifie régulièrement la présence de nouveaux épisodes en fonction des séries suivies
 
 [size=6]Les options[/size]
 [b]Voir le [url=https://gks.gs/wiki/?id=389]wiki[/url] pour plus d'explications[/b]
@@ -164,13 +170,26 @@ De plus, il arrive que Firefox ne soit plus capable de conserver le localStorage
 [spoil]Update: Deleting the permissions.sqlite file in the Firefox proflie directory resolves the issue. The easiest way to get there is to enter about:support in the browser's address bar. Locate the show folder button under Application Basics and click on it. Close Firefox afterwards, delete the permissions.sqlite file, and restart the browser.[/spoil]
 
 [size=6]Changelog :[/size]
+[b]* 0.4.0 - 30/10/2013[/b]
+- Bookmarks : Mise en valeur du dernier torrent téléchargé
+- Bookmarks : Tri des torrents par clic d'entête de colonne
+- Endless scrolling : Bug fixes en tout genre
+- Endless scrolling : Ajout sur /reseed.php
+- Global : Affichage du buffer par mouseover sur l'upload/download de l'entête
+- Global : Ajout du buffer réel avec les stats réelles
+- Global : Tentative de correction du récupérateur de stats réelles et du badge snatched
+- Global : Ajout d'un système de vérification des derniers épisodes des séries suivies
+- Logs : Lien sur les id de summary
+- Logs : Lien de recherche sur les titres de requests
+- Logs : Correction des liens sur les lignes ajoutées par autorefresh
+- Torrent list : Ajout d'une preview de l'image principale de la fiche torrent par mouseover sur le [+]
+[spoil]
 [b]* 0.3.6 - 07/10/2013[/b]
 - Account : Preview du custom menu et de la signature
 - Global : Correction de l'espace manquant dans les stats réelles
 - Logs : Texte en bas de page mis à jour en fonction du filtrage
 - Torrent list : Ajout d'une option pour la prise en compte de la casse sur le filtre par exclusion de chaîne de caractères
 - Torrent list : Un clic sur l'étoile des bookmarks supprime le bookmark en question
-[spoil]
 [b]* 0.3.5 - 28/09/2013[/b]
 - Bookmarks : Rafraichissement de la liste interne à chaque ajout de bookmark - L'étoile devrait apparaître directement
 - Global : Possibilité de transformer les loupes en boutons de recherche dans les champs de l'entête (Torrents/Requests/Summary/etc)
