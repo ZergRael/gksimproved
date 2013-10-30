@@ -536,7 +536,7 @@ modules.torrent_list = {
 								top = (scrollTop + windowHeight) - resizedHeight - 4;
 							}
 							previewDiv.offset({ top: top, left: pos.left - 6 - Math.min(this.width, MAX_WIDTH) });
-							$("#gksi_preview_" + torrentId + " img").replaceWith(this);
+							$("#gksi_preview_" + torrentId + " img").attr("src", this.src);
 						}
 						else {
 							dbg("[preview] Nothing was big enough");
