@@ -34,6 +34,7 @@
         "module/bookmark.module.js",
         "module/m_account.module.js",
         "module/serieswatch.module.js",
+        "module/wiki.module.js",
         "loader.js"
       ]
     }

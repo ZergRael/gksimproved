@@ -7,6 +7,8 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+- Wiki : Barre de BBCode avec raccourcis claviers à l'edit
+
 
 
 ### Changelog
