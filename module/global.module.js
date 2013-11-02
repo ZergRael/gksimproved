@@ -537,18 +537,21 @@ modules.global = {
 				dbg("[new_ep] Got data from api");
 				if(data && data.status == "OK") {
 					dbg("[new_ep] Data is looking good");
+					gData.setFresh("episodes");
+
 					if(force) {
 						$(".new_ep_refresh").prop("disabled", false);
-						gData.set("episodes", "last_display", new Date().getTime());
+						gData.set("episodes", "hasUnseenData", false);
 					}
-					else {
-						gData.setFresh("episodes");
-					}
+
 					if(data.ep_count == 0) {
 						dbg("[new_ep] Nothing new");
 						return;
 					}
 
+					if(!force) {
+						gData.set("episodes", "hasUnseenData", true);
+					}
 					gData.set("episodes", "episodes_size", data.ep_count);
 					gData.set("episodes", "episodes", data.episodes);
 					$(document).trigger("gksi_new_episodes");
@@ -560,7 +563,7 @@ modules.global = {
 		var buildNewEpisodesButton = function() {
 			if(opt.get("global", "check_episodes")) {
 				dbg("[new_ep] Build dem fixed button");
-				var buttonClass = (gData.get("episodes", "last_check") > gData.get("episodes", "last_display") ? 'new_episodes_new' : 'new_episodes_old');
+				var buttonClass = (gData.get("episodes", "hasUnseenData") ? 'new_episodes_new' : 'new_episodes_old');
 				$("#contenu").append('<a id="new_episodes_button" class="' + buttonClass + '" href="#"></a>');
 				var button = $("#new_episodes_button");
 				button.click(toggleNewEpisodesPannel).animate({left: pannelButtonOldPos}).hover(function() {
@@ -572,7 +575,7 @@ modules.global = {
 						button.stop().animate({left: pannelButtonOldPos});
 					}
 				});
-				if(buttonClass == "new_episodes_new") {
+				if(gData.get("episodes", "hasUnseenData")) {
 					button.animate({left: pannelButtonNewPos});
 				}
 			}
@@ -652,6 +655,7 @@ modules.global = {
 				if(confirm("Êtes-vous sur de vider la liste ?")) {
 					gData.set("episodes", "episodes_size", 0);
 					gData.set("episodes", "episodes", {});
+					gData.set("episodes", "hasUnseenData", false);
 					$("#new_episodes_pannel .new_ep_content").html(populateNewEpisodesPannel());
 				}
 			});
@@ -696,7 +700,7 @@ modules.global = {
 
 		var pannelHiddenPos = -432, displayPos = -2;
 		var showNewEpisodesPannel = function() {
-			gData.set("episodes", "last_display", new Date().getTime());
+			gData.set("episodes", "hasUnseenData", false);
 			dbg("[new_ep] Showing pannel");
 			$("#new_episodes_pannel").show().animate({left: displayPos});
 		};

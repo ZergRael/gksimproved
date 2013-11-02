@@ -162,8 +162,9 @@ var gData = {
 			global_conf: {},
 			episodes: {},
 			episodes_size: 0,
-			last_check: new Date().getTime(),
-			last_display: 0
+			hasUnseenData: false,
+			last_display: 0,
+			last_check: new Date().getTime()
 		}
 	},
 	setFresh: function(m) {
