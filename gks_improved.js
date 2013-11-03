@@ -185,7 +185,7 @@ var insertCSS = function() {
 		"#gksi_copyright { text-align: right; font-size: 0.8em; margin-top: -11px; } " +
 		".gksi_edit_title { display: block; width: 100%; margin-top: 12px; } " +
 		".gksi_edit_textarea { display: block; width: 100%; min-height: 240px; min-width: 360px; margin-right: -4px!important; } " +
-		".gksi_preview { position: absolute; } " +
+		".gksi_preview { position: absolute; z-index: 160; } " +
 		".gksi_preview img { max-width: 300px; } " +
 		"#gksi_marker { max-width: 310px; } " +
 
