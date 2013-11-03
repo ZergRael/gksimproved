@@ -655,7 +655,7 @@ modules.torrent_list = {
 
 		$("#torrent_list").on("mouseenter", "a", showTorrentComments)
 			.on("click", "a.autoget_link", autogetOnClick)
-			.on("mouseenter mouseleave", 'img[src="https://s.gks.gs/static/themes/sifuture/img/cross.png"]', previewTorrent);
+			.on("mouseenter mouseleave", 'img[alt="+"]', previewTorrent);
 
 		startAutorefresh();
 
