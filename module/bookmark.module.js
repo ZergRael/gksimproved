@@ -163,6 +163,7 @@ modules.bookmark = {
 					break;
 			}
 			$("#torrent tbody:first").html($("#torrent tbody:first tr").sort(sortFunc));
+			$(".dl a").click(setHighlight);
 		};
 
 		$("#torrent tbody tr td.name a[onclick]").on('click', function(){
