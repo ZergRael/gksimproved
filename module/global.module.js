@@ -652,12 +652,10 @@ modules.global = {
 				checkForNewEpisodes(true);
 			});
 			$(".new_ep_clear").click(function() {
-				if(confirm("Êtes-vous sur de vider la liste ?")) {
-					gData.set("episodes", "episodes_size", 0);
-					gData.set("episodes", "episodes", {});
-					gData.set("episodes", "hasUnseenData", false);
-					$("#new_episodes_pannel .new_ep_content").html(populateNewEpisodesPannel());
-				}
+				gData.set("episodes", "episodes_size", 0);
+				gData.set("episodes", "episodes", {});
+				gData.set("episodes", "hasUnseenData", false);
+				$("#new_episodes_pannel .new_ep_content").html(populateNewEpisodesPannel());
 			});
 			$(".new_ep_close").click(function() {
 				hideNewEpisodesPannel();
