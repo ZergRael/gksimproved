@@ -7,11 +7,17 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
-- Wiki : Barre de BBCode avec raccourcis claviers à l'edit
-
 
 
 ### Changelog
+**0.4.3**
+- Bookmarks : Correction de la mise en valeur après le tri
+- Global : Correction du bouton de l'episode watcher
+- Global : Retrait de la confirmation lors du vidage de l'episode watcher
+- Torrent list : Correction du z-index sur la preview
+- Torrent list : Correction de la preview bloquée en cas de clic sur le [+]
+- Wiki : Barre de BBCode avec raccourcis claviers à l'edit
+
 **0.4.2**
 - Global : Correction de la transparence des fenêtres avec les différents CSS
 - Torrent list : Correction d'une erreur de DOM sur la preview avec Chromium
