@@ -77,11 +77,13 @@ modules.serieswatch = {
 
 			$("#torrent_list .watcher_config span").click(function() {
 				var block = $("#" + $(this).attr("conf_type") + "_conf_" + $(this).attr("show_id"));
+				$(".gksi_valid").removeClass("gksi_valid");
 				if(block.is(":visible")) {
 					$(".watcher_config_block").hide();
 				}
 				else {
 					$(".watcher_config_block").hide();
+					$(this).addClass("gksi_valid");
 					block.show();
 				}
 			});
@@ -133,11 +135,13 @@ modules.serieswatch = {
 
 			$(".watcher_config_global span").click(function() {
 				var block = $("#" + $(this).attr("conf_type") + "_conf_global");
+				$(".gksi_valid").removeClass("gksi_valid");
 				if(block.is(":visible")) {
 					$(".watcher_config_global_block").hide();
 				}
 				else {
 					$(".watcher_config_global_block").hide();
+					$(this).addClass("gksi_valid");
 					block.show();
 				}
 			});
