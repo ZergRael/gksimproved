@@ -484,8 +484,14 @@ modules.global = {
 			});
 		};
 
+		var bufferEmpty = true;
+		var buildBufferDiv = function() {
+			$("#userlink li:nth(1)").after('<li id="user_buffer"></li>');
+		};
+
 		var showBuffer = function() {
-			if(!$("#user_buffer").length) {
+			if(bufferEmpty) {
+				bufferEmpty = false;
 				var bufferVal = utils.strToSize($("#userlink .uploaded:first").text()).koTot - utils.strToSize($("#userlink .downloaded:first").text()).koTot;
 				dbg("[buffer] Found a dispBuffer of [" + bufferVal + "] ko");
 				var bufferUnit = 1;
@@ -497,7 +503,7 @@ modules.global = {
 				if(opt.get(module_name, "real_upload") && gData.get("real_stats", "real_buffer")) {
 					bufferText += ' / <span id="user_real_buffer" class="' + (gData.get("real_stats", "real_buffer").indexOf("-") == -1 ? 'uploaded' : 'downloaded') + '">' + gData.get("real_stats", "real_buffer") + '</span>';
 				}
-				$(this).after('<li id="user_buffer">Buffer: ' + bufferText + '</li>');
+				$("#user_buffer").html("Buffer: " + bufferText);
 			}
 			else {
 				$("#user_buffer").show();
@@ -733,7 +739,9 @@ modules.global = {
 			}
 			return false;
 		});
+
 		if(opt.get(module_name, "buffer")) {
+			buildBufferDiv();
 			$("#userlink li:nth(1)").hover(showBuffer, function() {
 				$("#user_buffer").hide();
 			});

@@ -7,6 +7,7 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+- Global : Améliorations diverses pour le support des CSS perso
 
 
 ### Changelog
