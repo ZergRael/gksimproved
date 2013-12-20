@@ -5,7 +5,7 @@ import distutils.dir_util
 import distutils.file_util
 import json
 
-sdkDir = "addon-sdk-1.14"
+sdkDir = "addon-sdk-1.15"
 firefoxDir = "ff_gksi"
 chromeDir = "gksimproved"
 
@@ -31,7 +31,7 @@ def run():
 		json.dump(package, content_file, indent=2)
 
 	print("Update main.js")
-	mainPrefix = '// Import the page-mod API\nvar pageMod = require("page-mod");\n// Import the self API\nvar self = require("self");\n\npageMod.PageMod({\n  include: ["*.gks.gs", "*.s.gks.gs"],\n  contentScriptFile: ['
+	mainPrefix = '// Import the page-mod API\nvar pageMod = require("sdk/page-mod");\n// Import the self API\nvar self = require("sdk/self");\n\npageMod.PageMod({\n  include: ["*.gks.gs", "*.s.gks.gs"],\n  contentScriptFile: ['
 	mainMid = "\n  ],\n  contentScriptOptions: {"
 	mainSuffix = "\n  }\n});"
 

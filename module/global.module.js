@@ -489,6 +489,15 @@ modules.global = {
 			$("#userlink li:nth(1)").after('<li id="user_buffer"></li>');
 		};
 
+		var buildBuffer = function() {
+			if(opt.get(module_name, "buffer")) {
+				buildBufferDiv();
+				$("#userlink li:nth(1)").hover(showBuffer, function() {
+					$("#user_buffer").hide();
+				});
+			}
+		};
+
 		var showBuffer = function() {
 			if(bufferEmpty) {
 				bufferEmpty = false;
@@ -740,16 +749,10 @@ modules.global = {
 			return false;
 		});
 
-		if(opt.get(module_name, "buffer")) {
-			buildBufferDiv();
-			$("#userlink li:nth(1)").hover(showBuffer, function() {
-				$("#user_buffer").hide();
-			});
-		}
-
 		listenToCtrlEnter();
 		listenToBBCodeShortcuts();
 		insertRealStats();
+		buildBuffer();
 		fetchBookmarks();
 		addSeachButtons();
 		refreshBookmarksOnBookmark();
