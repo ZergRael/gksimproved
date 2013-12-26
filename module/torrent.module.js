@@ -127,6 +127,13 @@ modules.torrent = {
 			dbg("[edit_mp_comment] Frame built");
 		};
 
+		var addBookmarkStar = function() {
+			var bookmarkedTorrents = gData.get("bookmarks", "torrents");
+			if(bookmarkedTorrents.indexOf(torrentId) != -1) {
+				$("#contenu .separate:first").prepend('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
+			}
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -144,6 +151,7 @@ modules.torrent = {
 
 		appendQuickComment();
 		proposeWarn();
+		addBookmarkStar();
 
 		dbg("[Init] Ready");
 	}
