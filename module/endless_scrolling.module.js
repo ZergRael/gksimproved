@@ -20,6 +20,9 @@ modules.endless_scrolling = {
 		{ path_name: "/m/peers/snatched", options: {
 			opt_name: "snatched", loading: '.pager_align', pagination: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1
 		} },
+		{ path_name: "/my/history/\\d+/uploads", options: {
+			opt_name: "history_up", loading: '.pager_align', pagination: ".pager_align", domExtract: "#torrent_list tbody tr", domInsertion: "#torrent_list tbody", cancelQ: true, pageModifier: -1
+		} },
 		{ path_name: "/logs/", options: {
 			opt_name: "logs", loading: '.pager_align', pagination: '.pager_align', domExtract: "tbody tr:not(:first)", domInsertion: "tbody", pageModifier: -1
 		} },
@@ -33,7 +36,7 @@ modules.endless_scrolling = {
 			opt_name: "uploads", loading: '.pager_align', pagination: '.pager_align', domExtract: "#torrent_list tr", domInsertion: "#torrent_list", cancelQ: true, cancelAmp: true, pageModifier: -1, notListeningToTrigger: true
 		} },
 		{ path_name: "/m/peers/", options: {
-			opt_name: "snatched", loading: '.pager_align', pagination: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, cancelAmp: true, pageModifier: -1
+			opt_name: "peers", loading: '.pager_align', pagination: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, cancelAmp: true, pageModifier: -1
 		} },
 		{ path_name: "/dupecheck/", options: {
 			opt_name: "dupecheck", loading: '.pager_align', pagination: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1, notListeningToTrigger: true

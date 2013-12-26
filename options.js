@@ -19,10 +19,12 @@ var opt = {
 				viewforum:   { defaultVal: true, showInOptions: true, dispText: "Forums : Liste des topics", tooltip: "https://gks.gs/forums.php?action=viewforum" },
 				viewtopic:   { defaultVal: true, showInOptions: true, dispText: "Forums : Lecture de topic", tooltip: "https://gks.gs/forums.php?action=viewtopic" },
 				snatched:    { defaultVal: true, showInOptions: true, dispText: "Snatched : Liste", tooltip: "https://gks.gs/m/peers/snatched" },
+				history_up:  { defaultVal: true, showInOptions: true, dispText: "Historique : Uploads", tooltip: "/my/history/<id_user>/uploads" },
 				logs:        { defaultVal: true, showInOptions: true, dispText: "Logs : Liste", tooltip: "https://gks.gs/logs/" },
 				req:         { defaultVal: true, showInOptions: true, dispText: "Requests : Liste", tooltip: "https://gks.gs/req/" },
 				images:      { defaultVal: true, showInOptions: true, dispText: "Images : Liste", tooltip: "https://gks.gs/m/images/" },
 				uploads:     { defaultVal: true, showInOptions: true, dispText: "Uploads : Liste", tooltip: "https://gks.gs/m/uploads/" },
+				peers:       { defaultVal: true, showInOptions: true, dispText: "Peers : Liste", tooltip: "https://gks.gs/m/peers/" },
 				dupecheck:   { defaultVal: true, showInOptions: true, dispText: "Dupecheck : Liste", tooltip: "https://gks.gs/dupecheck/" },
 				reseed:      { defaultVal: true, showInOptions: true, dispText: "Reseed : Liste", tooltip: "https://gks.gs/reseed.php" }
 			} },
