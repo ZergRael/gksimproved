@@ -225,7 +225,7 @@ modules.torrent_list = {
 			// eg: Date[torrent] = 1/1/2013 23:59, Date[now] = 2/1/2013 1:01 => day_difference() == 1 => fallback to hours => (24 + 1 - 23) => 2h
 			// In fact, it's 1h02m but it's closer than 1day
 			// In the same thinking process, it can return 24h since it's still viable and more precise than 1day -- Won't return > 24h
-			var now = new Date();
+			var now = siteRelativeDate;
 			if(now.getFullYear() > dateMatch[3]) {
 				return (now.getFullYear() - dateMatch[3]) == 1 && (now.getMonth() + 1 - dateMatch[2]) <= 0 ? (12 + now.getMonth() + 1 - dateMatch[2]) + "mo" : (now.getFullYear() - dateMatch[3]) + "a";
 			}
@@ -337,6 +337,7 @@ modules.torrent_list = {
 						else {
 							dbg("[auto_refresh] Nothing new");
 						}
+						refreshDate();
 						recalcAgeColumn();
 					}
 					else {
@@ -373,6 +374,7 @@ modules.torrent_list = {
 					if(insertionData.length) {
 						dbg("[TorrentMark] Insert torrents");
 						$("#torrent_list").append(insertionData);
+						refreshDate();
 						tagTorrents();
 						addAutogetColumn();
 						addAgeColumn();
@@ -548,6 +550,11 @@ modules.torrent_list = {
 			}
 		};
 
+		var siteRelativeDate = utils.getSiteRelativeDate();
+		var refreshDate = function() {
+			siteRelativeDate = utils.getSiteRelativeDate();
+		};
+
 		var markerButton =  '<a id="torrent_marker_button" href="#">Marquer torrent</a> |';
 		var finderButton = '<a id="torrent_finder_button" href="#">Retrouver torrent</a> | ';
 		var filterButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Filtre Freeleech</label> |<input id="filter_scene" type="checkbox" ' + (opt.get(module_name, "filtering_scene") ? 'checked="checked" ' : ' ') + '/><label for="filter_scene">Filtre Scene</label> |';
@@ -662,6 +669,7 @@ modules.torrent_list = {
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
 			$("#find_marked_torrent_span").remove();
+			refreshDate();
 			tagTorrents();
 			addAutogetColumn();
 			addAgeColumn();
