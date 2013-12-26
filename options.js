@@ -18,6 +18,7 @@ var opt = {
 				sphinx:      { defaultVal: true, showInOptions: true, dispText: "Torrents : Recherche", tooltip: "https://gks.gs/sphinx/" },
 				viewforum:   { defaultVal: true, showInOptions: true, dispText: "Forums : Liste des topics", tooltip: "https://gks.gs/forums.php?action=viewforum" },
 				viewtopic:   { defaultVal: true, showInOptions: true, dispText: "Forums : Lecture de topic", tooltip: "https://gks.gs/forums.php?action=viewtopic" },
+				forum_search:{ defaultVal: true, showInOptions: true, dispText: "Forums : Recherche", tooltip: "https://gks.gs/forums.php?action=search" },
 				snatched:    { defaultVal: true, showInOptions: true, dispText: "Snatched : Liste", tooltip: "https://gks.gs/m/peers/snatched" },
 				history_up:  { defaultVal: true, showInOptions: true, dispText: "Historique : Uploads", tooltip: "/my/history/<id_user>/uploads" },
 				logs:        { defaultVal: true, showInOptions: true, dispText: "Logs : Liste", tooltip: "https://gks.gs/logs/" },

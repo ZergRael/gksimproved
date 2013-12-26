@@ -12,10 +12,13 @@ modules.endless_scrolling = {
 			opt_name: "sphinx", loading: '.pager_align', pagination: ".pager_align", domExtract: "#torrent_list tr", domInsertion: "#torrent_list", canSuggest: true, pageModifier: -1
 		} },
 		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: {
-			opt_name: "viewforum", loading: '.thin table', pagination: '.linkbox:nth(1), .linkbox:nth(2)', loadingAfter: true, domExtract: 'tbody tr:not(.colhead)', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 180, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/, endOfStream: 'No posts to display!'
+			opt_name: "viewforum", loading: '.thin table', pagination: '.linkbox:nth(1), .linkbox:nth(2)', loadingAfter: true, domExtract: 'tbody tr:not(.colhead)', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 180, stopInsertBottomOffset: 100, endOfStream: 'No posts to display!'
 		} },
 		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: {
-			opt_name: "viewtopic", loading: '.thin table:last', pagination: '.linkbox', loadingAfter: true, domExtract: '.thin table', domInsertion: '.thin table:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100, lastPageRegex: /\[(\d+)\]\s*$/
+			opt_name: "viewtopic", loading: '.thin table:last', pagination: '.linkbox', loadingAfter: true, domExtract: '.thin table', domInsertion: '.thin table:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100
+		} },
+		{ path_name: "/forums.php", params: { action: 'search' }, options: {
+			opt_name: "forum_search", loading: '.thin table:last', pagination: '.linkbox', loadingAfter: true, domExtract: 'table:last tr:not(.colhead)', domInsertion: '.thin tr:last', insertAfter: true, scrollOffset: 600, stopInsertBottomOffset: 100
 		} },
 		{ path_name: "/m/peers/snatched", options: {
 			opt_name: "snatched", loading: '.pager_align', pagination: ".pager_align", domExtract: ".table100 tbody tr", domInsertion: ".table100 tbody", cancelQ: true, pageModifier: -1
