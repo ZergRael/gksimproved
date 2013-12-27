@@ -132,6 +132,16 @@ modules.torrent = {
 			if(bookmarkedTorrents.indexOf(torrentId) != -1) {
 				$("#contenu .separate:first").prepend('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
 			}
+
+			var suggest_torrent = $("#suggest_torrent li");
+			if(suggest_torrent && suggest_torrent.length > 0) {
+				suggest_torrent.each(function() {
+					var sTorrentId = $(this).find("a:last").attr("href").match(/\/torrent\/(\d+)/)[1];
+					if(bookmarkedTorrents.indexOf(sTorrentId) != -1) {
+						$(this).find("a:first").after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
+					}
+				});
+			}
 		};
 
 		dbg("[Init] Starting");
