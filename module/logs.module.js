@@ -126,7 +126,7 @@ modules.logs = {
 		$(mOptions.buttons).prepend(buttons);
 
 		$("#auto_refresh").change(function() {
-			opt.set(module_name, "auto_refresh", $(this).attr("checked") == "checked" ? true : false);
+			opt.set(module_name, "auto_refresh", $(this).prop("checked"));
 			dbg("[auto_refresh] is " + opt.get(module_name, "auto_refresh"));
 			if(opt.get(module_name, "auto_refresh")) {
 				autoRefresh();

@@ -234,7 +234,7 @@ modules.snatched = {
 
 		// Deleted torrents filtering
 		$("#filter_deleted").change(function() {
-			opt.set(module_name, "filtering_deleted", $(this).attr("checked") == "checked" ? true : false);
+			opt.set(module_name, "filtering_deleted", $(this).prop("checked"));
 			dbg("[DeleteFilter] is " + opt.get(module_name, "filtering_deleted"));
 			if(opt.get(module_name, "filtering_deleted")) {
 				filterDeleted();
@@ -250,7 +250,7 @@ modules.snatched = {
 		filterDeleted();
 
 		$("#filter_seed").change(function() {
-			opt.set(module_name, "filtering_seed", $(this).attr("checked") == "checked" ? true : false);
+			opt.set(module_name, "filtering_seed", $(this).prop("checked"));
 			dbg("[SeedFilter] is " + opt.get(module_name, "filtering_seed"));
 			if(opt.get(module_name, "filtering_seed")) {
 				filterInSeed();
@@ -266,7 +266,7 @@ modules.snatched = {
 		filterInSeed();
 
 		$("#filter_no_comp").change(function() {
-			opt.set(module_name, "filtering_no_comp", $(this).attr("checked") == "checked" ? true : false);
+			opt.set(module_name, "filtering_no_comp", $(this).prop("checked"));
 			dbg("[NCFilter] is " + opt.get(module_name, "filtering_no_comp"));
 			if(opt.get(module_name, "filtering_no_comp")) {
 				filterNonCompleted();
@@ -282,7 +282,7 @@ modules.snatched = {
 		filterNonCompleted();
 
 		$("#filter_no_hnr").change(function() {
-			opt.set(module_name, "filtering_no_hnr", $(this).attr("checked") == "checked" ? true : false);
+			opt.set(module_name, "filtering_no_hnr", $(this).prop("checked"));
 			dbg("[H&RFilter] is " + opt.get(module_name, "filtering_no_hnr"));
 			if(opt.get(module_name, "filtering_no_hnr")) {
 				filterNonHnR();

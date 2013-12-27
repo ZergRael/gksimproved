@@ -14,7 +14,7 @@ modules.global = {
 
 		var listenToCtrlEnter = function() {
 			dbg("[CtrlEnterValidator] Listening to keys");
-			$('textarea').live('keydown', function(e) {
+			$(document).on('keydown', 'textarea', function(e) {
 				if(!opt.get(module_name, "form_validation") || (!e.ctrlKey && !e.metaKey)) {
 					return;
 				}
@@ -31,7 +31,7 @@ modules.global = {
 
 		var listenToBBCodeShortcuts = function() {
 			dbg("[BBCodeShortcuts] Listening to keys");
-			$("form textarea").live('keydown', function(e) {
+			$(document).on('keydown', "form textarea", function(e) {
 				if(!opt.get(module_name, "bbcode_shortcuts") || (!e.ctrlKey && !e.metaKey)) {
 					return;
 				}
@@ -157,7 +157,7 @@ modules.global = {
 									state = $(this).val();
 								}
 								else {
-									state = $(this).attr("checked") == "checked" ? true : false;
+									state = $(this).prop("checked");
 								}
 								opt.set(module_name, option, state);
 								utils.dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
@@ -176,12 +176,12 @@ modules.global = {
 								if(childs.length) {
 									$.each(childs, function(i, child) {
 										if(state) {
-											$("#gksi_" + module_name + "_" + child).attr("disabled", false);
+											$("#gksi_" + module_name + "_" + child).prop("disabled", false);
 										}
 										else {
-											$("#gksi_" + module_name + "_" + child).attr("checked", false);
+											$("#gksi_" + module_name + "_" + child).prop("checked", false);
 											$("#gksi_" + module_name + "_" + child).triggerHandler("change");
-											$("#gksi_" + module_name + "_" + child).attr("disabled", true);
+											$("#gksi_" + module_name + "_" + child).prop("disabled", true);
 										}
 									});
 								}
@@ -209,7 +209,7 @@ modules.global = {
 							$.each(oData.sub_options, function(s_option, s_oData) {
 								$("#gksi_" + module_name + "_" + option + "_" + s_option).change(function() {
 									if(s_oData.showInOptions) {
-										opt.sub_set(module_name, option, s_option, $(this).attr("checked") == "checked" ? true : false);
+										opt.sub_set(module_name, option, s_option, $(this).prop("checked"));
 										utils.dbg(module_name, "[" + option + "][" + s_option + "] is " + opt.sub_get(module_name, option, s_option));
 									}
 								});
@@ -465,7 +465,7 @@ modules.global = {
 		};
 
 		var refreshBookmarksOnBookmark = function() {
-			$("a[onclick]").live("click", function() {
+			$(document).on("click", "a[onclick]", function() {
 				var aLink = $(this);
 				if(aLink.attr("onclick").indexOf("booktorrent") != -1) {
 					dbg("[bookmarkRefresh] Bookmark added - Force refresh");

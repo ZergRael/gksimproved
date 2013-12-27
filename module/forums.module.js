@@ -59,7 +59,7 @@ modules.forums = {
 		// Execute functions
 
 		if(mOptions.isTopic) {
-			$(".toggleSignature").live("click", function() {
+			$(document).on("click", ".toggleSignature", function() {
 				dbg("[hide_signatures] Toggle signature");
 				$(this).parent().find(".signature").toggle();
 				return false;

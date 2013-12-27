@@ -383,7 +383,7 @@ modules.endless_scrolling = {
 			// Remap href links to scroll to offset instead of load a new page
 			// We don't modify links, just add a click listenner and prevent the browser to change page if we can scroll
 			if(mOptions.pagination && opt.get(module_name, "adapt_url")) {
-				$(mOptions.pagination + " a").live("click", function() {
+				$(document).on("click", mOptions.pagination + " a", function() {
 					var href = $(this).attr("href");
 					var hrefPage = href.match(/page=(\d+)/);
 					if(hrefPage.length) {
@@ -418,7 +418,7 @@ modules.endless_scrolling = {
 			}
 		});
 
-		$("a[onclick]").live("click", function() {
+		$(document).on("click", "a[onclick]", function() {
 			var onClickFunction = $(this).attr("onclick");
 			if((onClickFunction.indexOf("Quote") != -1 || onClickFunction.indexOf("insertion") != -1) && $("textarea").length) {
 				wentToPageBottom = true;

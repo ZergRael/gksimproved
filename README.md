@@ -7,7 +7,13 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+- Endless scrolling : Ajout sur la recherche forum
+- Endless scrolling : Ajout sur l'historique des uploads utilisateur
 - Global : Améliorations diverses pour le support des CSS perso
+- Global : Migration sur jQuery 2.0
+- Torrent : Ajout de l'étoile bookmark dans le header de la fiche torrent
+- Torrent : Ajout de l'étoile bookmark dans les suggestions des fiches torrent
+- Torrent list : Correction de la colonne d'age pour prendre en compte les timezone
 
 
 ### Changelog

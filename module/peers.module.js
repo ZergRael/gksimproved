@@ -97,7 +97,7 @@ modules.peers = {
 		};
 
 		var onFilterActiveChange = function() {
-			opt.set(module_name, "filtering_active", $(this).attr("checked") == "checked" ? true : false);
+			opt.set(module_name, "filtering_active", $(this).prop("checked"));
 			dbg("[ActiveFilter] is " + opt.get(module_name, "filtering_active"));
 			if(opt.get(module_name, "filtering_active")) {
 				filterActive();

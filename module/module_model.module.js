@@ -22,7 +22,7 @@ modules.module_ = {
 		$(mOptions.buttons).before(buttons);
 
 		$("#but_id").change(function() {
-			opt.set(module_name, "o", $(this).attr("checked") == "checked" ? true : false);
+			opt.set(module_name, "o", $(this).prop("checked"));
 			dbg("[o] is " + o);
 		});
 

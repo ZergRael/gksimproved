@@ -643,7 +643,7 @@ modules.torrent_list = {
 			if(e.which == 13) { applyStringFilter(); }
 		});
 		$("#auto_refresh").change(function() {
-			opt.set(module_name, "auto_refresh", $(this).attr("checked") == "checked" ? true : false);
+			opt.set(module_name, "auto_refresh", $(this).prop("checked"));
 			dbg("[auto_refresh] is " + opt.get(module_name, "auto_refresh"));
 			if(opt.get(module_name, "auto_refresh")) {
 				dbg("[auto_refresh] Starting");
