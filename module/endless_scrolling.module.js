@@ -341,6 +341,9 @@ modules.endless_scrolling = {
 		var processData = function(data, page_n) {
 			dbg("[data_processor] Found first dom element - Tagging it");
 			data.first().addClass("dom_page_start").data("page", page_n);
+			if(modules[module_name].preInsertion) {
+				data = modules[module_name].preInsertion(data);
+			}
 			return data;
 		};
 

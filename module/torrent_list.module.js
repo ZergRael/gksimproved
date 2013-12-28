@@ -18,23 +18,31 @@ modules.torrent_list = {
 
 		dbg("[Init] Loading module");
 
-		var even = false; // :nth-child(2n) doesn't work on odd ES'd pages
-		var tagTorrents = function() {
+		var torrentList = [];
+		var tagTorrents = function(torrentLines) {
 			dbg("[tagTorrents] Scanning torrents");
 			var bookmarksList = gData.get("bookmarks", "torrents");
 			var bookmarksIdsList = gData.get("bookmarks", "bookmarkIds");
-			$("tbody tr.head_torrent:not(.page_tagged)").nextAll(":nth-child(2n" + (even ? "+1" : "") + ")").each(function() {
-				var classIs = "";
-				var torrentTr = $(this);
-				var imgs = torrentTr.find("img");
+			var jumpMe = true;
+			torrentLines.each(function() {
+				if(jumpMe) {
+					jumpMe = false;
+					return;
+				}
+				jumpMe = true;
+
+				var node = $(this);
+				var t = {node: node, name: node.find("strong").text(), status: {}, shown: true, nextNode: node.next()};
+				var imgs = node.find("img");
 				$.each(imgs, function() {
 					if(bookmarksList) {
 						var imgId = $(this).attr("id");
 						if(imgId) {
 							var id = imgId.substring(6);
+							t.id = id;
 							if(bookmarksList.indexOf(id) != -1) {
 								if(bookmarksIdsList && bookmarksIdsList[id]) {
-									torrentTr.find("img:first").after($('<a href="#"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a>').click(function() {
+									node.find("img:first").after($('<a href="#"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a>').click(function() {
 										$(this).remove();
 										utils.grabPage({host: pageUrl.host, path: "/ajax.php", params: {action: "del", type: "delbookmark", tid: bookmarksIdsList[id]}}, function(data) {
 											bookmarksList.splice(bookmarksList.indexOf(id), 1);
@@ -49,88 +57,131 @@ modules.torrent_list = {
 									}));
 								}
 								else {
-									torrentTr.find("img:first").after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
+									node.find("img:first").after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
 								}
-								classIs += "t_bookmark ";
+								t.status.bookmark = true;
 							}
 						}
 					}
 					switch($(this).attr("alt")) {
 						case "New !":
-							classIs += "t_new ";
+							t.status.new = true;
 							break;
 						case "Nuke ! ":
-							classIs += "t_nuke ";
+							t.status.nuke = true;
 							break;
 						case "FreeLeech":
-							classIs += "t_freeleech ";
+							t.status.freeleech = true;
 							break;
 						case "Scene":
-							classIs += "t_scene";
+							t.status.scene = true;
 					}
 				});
-
-				if(classIs != "") {
-					torrentTr.addClass(classIs);
-					torrentTr.next().addClass(classIs);
-				}
+				t.status.string = "";
+				torrentList.push(t);
 			});
-			$("tbody tr.head_torrent").addClass("page_tagged");
-			even = !even;
 			dbg("[tagTorrents] Ended scanning");
+			return torrentLines;
+		};
+		modules.endless_scrolling.preInsertion = tagTorrents;
+
+		var filtersChanged = function() {
+			refreshFilterSet();
+			dbg("[Filters] Filters ready");
+			applyFilters();
+			dbg("[Filters] Done");
 		};
 
-		var unfilterFL = function() {
-			$("tbody tr" + (opt.get(module_name, "filtering_scene") ? ".t_scene:not(.t_freeleech)" : "")).show();
-		};
-
-		var unfilterScene = function() {
-			$("tbody tr" + (opt.get(module_name, "filtering_fl") ? ".t_freeleech:not(.t_scene)" : "")).show();
-		};
-
-		var applyFilters = function() {
-			if(!mOptions.canFilter) {
-				return;
+		var basicFilters = {freeleech: 0, scene: 0};
+		var stringFilters = {original: "", ready: false};
+		var refreshFilterSet = function() {
+			basicFilters = {freeleech: opt.get(module_name, "filter_fl"), scene: opt.get(module_name, "filter_scene")};
+			var stringFilterString = $("#filter_string").val();
+			onlyReq = 0;
+			var noFilterActive = true;
+			for(filter in basicFilters) {
+				if(basicFilters[filter] == 1) {
+					onlyReq++;
+				}
+				if(basicFilters[filter] > 0) {
+					noFilterActive = false;
+				}
 			}
-
-			if(opt.get(module_name, "filtering_fl") || opt.get(module_name, "filtering_scene")) {
-				$("tbody tr:not(:first):not(.gksi_imdb_head):not(" + (opt.get(module_name, "filtering_fl") ? ".t_freeleech" : "") + (opt.get(module_name, "filtering_scene") ? ".t_scene" : "") + ")").hide();
+			if(stringFilterString != stringFilters.original) {
+				stringFilters = compileStringFilter(stringFilterString);
 			}
-		};
-
-		var applyStringFilter = function() {
-			if(!mOptions.canFilter || !opt.get(module_name, "exclude_string")) {
-				return;
+			if(stringFilters.ready) {
+				noFilterActive = false;
 			}
-
-			var caseSensitive = opt.get(module_name, "case_sensitive");
-			var excludeVal = $("#filter_string").val();
-			if(!excludeVal)
-				return;
-			if(!caseSensitive) { excludeVal = excludeVal.toLowerCase(); }
-			dbg("[StringFilter] Filtering (" + excludeVal + ")");
-			if(excludeVal.trim() == "") {
-				$("tbody tr:not(:first):not(.gksi_imdb_head)" + (opt.get(module_name, "filtering_fl") ? ".t_freeleech" : "") + (opt.get(module_name, "filtering_scene") ? ".t_scene" : "")).show();
+			if(noFilterActive) {
+				$("#torrent_marker_button").show();
+				$("#torrent_finder_button").show();
 			}
 			else {
-				var odd = false;
-				$("tbody tr:not(:first):not(.gksi_imdb_head)" + (opt.get(module_name, "filtering_fl") ? ".t_freeleech" : "") + (opt.get(module_name, "filtering_scene") ? ".t_scene" : "")).each(function() {
-					var t = $(this);
-					if(t.hasClass("head_torrent")) { return; }
-					if(odd) {
-						odd = false;
-						return;
-					}
-					if(caseSensitive ? t.find("strong").text().indexOf(excludeVal) != -1 : t.find("strong").text().toLowerCase().indexOf(excludeVal) != -1) {
-						t.hide().next().hide();
-					}
-					else {
-						t.show().next().show();
-					}
-					odd = true;
-				});
+				$("#torrent_marker_button").hide();
+				$("#torrent_finder_button").hide();
 			}
-			dbg("[StringFilter] Done");
+		};
+
+		var onlyReq;
+		var applyFilters = function() {
+			var showTorrents = [];
+			var hideTorrents = [];
+			var caseSensitive = opt.get(module_name, "case_sensitive");
+			var defaultShown = onlyReq == 0;
+			$.each(torrentList, function(i, t) {
+				var shouldShow = defaultShown;
+
+				// Basic filters
+				var requiredOnlys = onlyReq;
+				for(filter in basicFilters) {
+					var filterStatus = basicFilters[filter];
+					if(filterStatus == 1) {
+						if(t.status[filter]) {
+							if(--requiredOnlys == 0) {
+								shouldShow = true;
+							}
+						}
+					}
+					else if(filterStatus == 2) {
+						if(t.status[filter]) {
+							shouldShow = false;
+						}
+					}
+				}
+
+				// String filter
+				if(shouldShow && stringFilters.ready) {
+					shouldShow = caseSensitive ? t.name.indexOf(stringFilters.proper) == -1 : t.name.toLowerCase().indexOf(stringFilters.proper) == -1
+				}
+
+				if(shouldShow && !t.shown) {
+					t.shown = true;
+					showTorrents.push(t.node, t.nextNode);
+				}
+				if(!shouldShow && t.shown) {
+					t.shown = false;
+					hideTorrents.push(t.node, t.nextNode);
+				}
+			});
+
+			if(showTorrents.length > 0) {
+				dbg("[Filters] Showing some " + showTorrents.length);
+				$.each(showTorrents, function() { $(this).show(); });
+			}
+			if(hideTorrents.length > 0) {
+				dbg("[Filters] Hiding some " + hideTorrents.length);
+				$.each(hideTorrents, function() { $(this).hide(); });
+			}
+		};
+
+		var compileStringFilter = function(str) {
+			var compiledFilter = {original: str, proper: "", ready: false};
+			compiledFilter.proper = (opt.get(module_name, "case_sensitive") ? str : str.toLowerCase()).trim();
+			if(compiledFilter.proper != "") {
+				compiledFilter.ready = true;
+			}
+			return compiledFilter;
 		};
 
 		var addAgeColumn = function() {
@@ -373,13 +424,11 @@ modules.torrent_list = {
 					var insertionData = $(data).find("#torrent_list tr");
 					if(insertionData.length) {
 						dbg("[TorrentMark] Insert torrents");
-						$("#torrent_list").append(insertionData);
+						$("#torrent_list").append(tagTorrents(insertionData));
 						refreshDate();
-						tagTorrents();
 						addAutogetColumn();
 						addAgeColumn();
 						applyFilters();
-						applyStringFilter();
 						dbg("[TorrentMark] Blocking endless scrolling");
 						avoidEndlessScrolling = true;
 						findTorrent(pageNumber + 1);
@@ -557,10 +606,10 @@ modules.torrent_list = {
 
 		var markerButton =  '<a id="torrent_marker_button" href="#">Marquer torrent</a> |';
 		var finderButton = '<a id="torrent_finder_button" href="#">Retrouver torrent</a> | ';
-		var filterButtons = '<input id="filter_fl" type="checkbox" ' + (opt.get(module_name, "filtering_fl") ? 'checked="checked" ' : ' ') + '/><label for="filter_fl">Filtre Freeleech</label> |<input id="filter_scene" type="checkbox" ' + (opt.get(module_name, "filtering_scene") ? 'checked="checked" ' : ' ') + '/><label for="filter_scene">Filtre Scene</label> |';
+		var filterButtons = '<span class="g_filter g_filter_' + opt.get(module_name, "filter_fl") + '" opt="filter_fl">Freeleech</span> | <span class="g_filter g_filter_' + opt.get(module_name, "filter_scene") + '" opt="filter_scene">Scene</span> |';
 		var stringFilterInput = '<input type="text" id="filter_string" placeholder="Exclure" size="12" />| ';
 		var bookmarkButton = '<a href="#" id="bookmarkvisibletorrents">Bookmarker 40 premiers</a> | ';
-		var refreshButton = '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/><label for="auto_refresh">Auto refresh</label> |';
+		var refreshButton = '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/><label for="auto_refresh">Auto refresh</label> | ';
 		var buttons = "";
 
 		dbg("[Init] Starting");
@@ -589,59 +638,26 @@ modules.torrent_list = {
 		$("#torrent_marker_button").click(mark_first_torrent);
 		$("#torrent_finder_button").click(find_marked_torrent);
 
-		if(opt.get(module_name, "filtering_fl") || opt.get(module_name, "filtering_scene")) {
-			$("#torrent_marker_button").hide();
-			$("#torrent_finder_button").hide();
-		}
-
 		// FreeLeech torrents filtering
-		$("#filter_fl").change(function() {
-			opt.set(module_name, "filtering_fl", $(this).attr("checked") == "checked" ? true : false);
-			dbg("[FilterFL] is " + opt.get(module_name, "filtering_fl"));
-			if(opt.get(module_name, "filtering_fl")) {
-				dbg("[FLFilter] Filtering FL");
-				applyFilters();
-				$("#torrent_marker_button").hide();
-				$("#torrent_finder_button").hide();
-				dbg("[FLFilter] Ended filtering");
-				$(document).trigger("es_dom_process_done");
-			}
-			else {
-				dbg("[FLFilter] Unfiltering FL");
-				unfilterFL();
-				applyStringFilter();
-				$("#torrent_marker_button").show();
-				$("#torrent_finder_button").show();
-				dbg("[FLFilter] Ended unfiltering");
-				$(document).trigger("es_dom_process_done");
-			}
+		$(".g_filter").click(function() {
+			var button = $(this);
+			var optName = button.attr("opt");
+			var optStatus = opt.get(module_name, optName);
+			button.removeClass("g_filter_" + optStatus);
+			optStatus = ++optStatus > 2 ? 0 : optStatus;
+			opt.set(module_name, optName, optStatus);
+			dbg("[Filters] " + optName + " is " + opt.get(module_name, optName));
+			button.addClass("g_filter_" + optStatus);
+			filtersChanged();
+			$(document).trigger("es_dom_process_done");
 		});
-		$("#filter_scene").change(function() {
-			opt.set(module_name, "filtering_scene", $(this).attr("checked") == "checked" ? true : false);
-			dbg("[FilterScene] is " + opt.get(module_name, "filtering_scene"));
-			if(opt.get(module_name, "filtering_scene")) {
-				dbg("[SceneFilter] Filtering Scene");
-				applyFilters();
-				$("#torrent_marker_button").hide();
-				$("#torrent_finder_button").hide();
-				dbg("[SceneFilter] Ended filtering");
-				$(document).trigger("es_dom_process_done");
-			}
-			else {
-				dbg("[SceneFilter] Unfiltering Scene");
-				unfilterScene();
-				applyStringFilter();
-				$("#torrent_marker_button").show();
-				$("#torrent_finder_button").show();
-				dbg("[SceneFilter] Ended unfiltering");
-				$(document).trigger("es_dom_process_done");
-			}
-		});
-		$("#filter_string").on("change", applyStringFilter).on("keydown", function(e) {
+
+		$("#filter_string").on("change", filtersChanged).on("keydown", function(e) {
 			if(e.which == 13) { e.preventDefault(); }
 		}).on("keyup", function(e) {
-			if(e.which == 13) { applyStringFilter(); }
+			if(e.which == 13) { filtersChanged(); }
 		});
+
 		$("#auto_refresh").change(function() {
 			opt.set(module_name, "auto_refresh", $(this).prop("checked"));
 			dbg("[auto_refresh] is " + opt.get(module_name, "auto_refresh"));
@@ -654,11 +670,11 @@ modules.torrent_list = {
 				clearInterval(autorefreshInterval);
 			}
 		});
-		tagTorrents();
+		tagTorrents($("tbody tr"));
+		filtersChanged();
 		columnSorter();
 		addAutogetColumn();
 		addAgeColumn();
-		applyFilters();
 
 		$("#torrent_list").on("mouseenter", "a", showTorrentComments)
 			.on("click", "a.autoget_link", autogetOnClick)
@@ -670,11 +686,9 @@ modules.torrent_list = {
 			dbg("[endless_scrolling] Module specific functions");
 			$("#find_marked_torrent_span").remove();
 			refreshDate();
-			tagTorrents();
 			addAutogetColumn();
 			addAgeColumn();
 			applyFilters();
-			applyStringFilter();
 			$(document).trigger("es_dom_process_done");
 		});
 

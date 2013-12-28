@@ -37,8 +37,8 @@ var opt = {
 		torrent_list: {
 			imdb_suggest:       { defaultVal: true, showInOptions: true, dispText: "Suggestions de recherche grâce à IMDB" },
 			imdb_auto_add:      { defaultVal: false, showInOptions: true, dispText: "Ajouter le résultat de la meilleure correspondance IMDB", parent: "imdb_suggest", indicateParent: true },
-			filtering_fl:       { defaultVal: false, showInOptions: false },
-			filtering_scene:    { defaultVal: false, showInOptions: false },
+			filter_fl:          { defaultVal: 0, showInOptions: false },
+			filter_scene:       { defaultVal: 0, showInOptions: false },
 			auto_refresh:       { defaultVal: false, showInOptions: false },
 			auto_refresh_color: { defaultVal: "#ffa500", showInOptions: true, type: "text", width: 5, regex: /^#[0-9A-Fa-f]{3}$|^#[0-9A-Fa-f]{6}$/, dispText: "Couleur (hexa) de la mise en avant des lignes lors de l'auto-refresh" },
 			age_column:         { defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent" },

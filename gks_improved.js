@@ -228,6 +228,9 @@ var insertCSS = function() {
 		// Torrent list
 		".torrent_mark_found { background-color: lightgreen !important; } " +
 		".bookmark_highlight { background-color: lightgreen; } " +
+		".g_filter { border: 1px solid gray; border-radius: 3px; padding: 1px; cursor: pointer; } " +
+		".g_filter_1 { background-color: lightgreen; } " +
+		".g_filter_2 { background-color: lightcoral; } " +
 
 		// Aura
 		"#gksi_aura_controls thead th { width: 33%; } " +
