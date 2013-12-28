@@ -121,7 +121,6 @@ modules.badges = {
 					{ url: "epenis", tip: "E-p&eacute;nis : Vous aimez faire des concours hein ? },
 					{ url: "eboobz", tip: "E-Boobz : Vous aimez faire des concours hein ?" }*/
 				],
-				dom: false,
 				name: "dl_ratio"
 			},
 			{	// Karma -- 8
@@ -132,7 +131,6 @@ modules.badges = {
 					{ url: "karmamaster", trigger: 100000, tip: "Karma Master : +100 000 de karma atteint" },
 					{ url: "karmajedi", trigger: 500000, tip: "Yoda : + 500 000 de karma atteint !" }
 				],
-				dom: false,
 				val: utils.getKarmaTotal(),
 				name: "karma"
 			},
@@ -157,15 +155,12 @@ modules.badges = {
 					{ url: "ircaddict", trigger: 50000, tip: "IRC Addict : 50000 mots ! Grand orateur !" },
 					{ url: "ircgod", trigger: 100000, tip: "IRC God : 100000 mots ! On entend que vous !" }
 				],
-				p_nth: 20,
-				modifier: { ".usr-invited_by": 1 },
-				regex: /([\d,]+)/,
 				name: "irc_w"
 			}
 		];
 
 		var badgesReqParse = [
-			{ url: "/users/" + userId, sections: [1, 2, 3, 5, 8, 9, 10] },
+			{ url: "/users/" + userId, sections: [1, 2, 3, 5, 8, 9] },
 			{ url: "/m/account/twits", sections: [4] },
 			{ url: "/m/account/", sections: [6] }
 		];
