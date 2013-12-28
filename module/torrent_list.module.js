@@ -344,9 +344,9 @@ modules.torrent_list = {
 			return false;
 		};
 
-		var autorefreshInterval;
+		var autorefreshInterval, isRefreshable = false;
 		var startAutorefresh = function() {
-			if(!opt.get(module_name, "auto_refresh") || !mOptions.canRefresh) {
+			if(!opt.get(module_name, "auto_refresh") || !mOptions.canRefresh || !isRefreshable) {
 				return;
 			}
 
@@ -643,7 +643,8 @@ modules.torrent_list = {
 			}
 			buttons += markerButton;
 		}
-		if(mOptions.canRefresh) {
+		if(!pageUrl.params || !pageUrl.params.sort || (pageUrl.params.sort == "id" && pageUrl.params.order == "desc")) { isRefreshable = true; }
+		if(mOptions.canRefresh && isRefreshable) {
 			buttons += refreshButton;
 		}
 		if(mOptions.canFilter) {
