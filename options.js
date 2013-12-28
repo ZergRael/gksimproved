@@ -43,6 +43,7 @@ var opt = {
 			auto_refresh_color: { defaultVal: "#ffa500", showInOptions: true, type: "text", width: 5, regex: /^#[0-9A-Fa-f]{3}$|^#[0-9A-Fa-f]{6}$/, dispText: "Couleur (hexa) de la mise en avant des lignes lors de l'auto-refresh" },
 			age_column:         { defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent" },
 			autoget_column:     { defaultVal: false, showInOptions: true, dispText: "Colonne de boutons d'ajout direct à l'autoget" },
+			bookmark_column:    { defaultVal: false, showInOptions: true, dispText: "Colonne de boutons d'ajout direct aux bookmarks" },
 			torrent_marker:     { defaultVal: false, showInOptions: false },
 			t_marker_button:    { defaultVal: true, showInOptions: true, dispText: "Afficher les boutons torrent marker/finder" },
 			direct_comments:    { defaultVal: false, showInOptions: true, dispText: "Afficher les commentaires au survol" },

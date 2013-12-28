@@ -42,19 +42,7 @@ modules.torrent_list = {
 							t.id = id;
 							if(bookmarksList.indexOf(id) != -1) {
 								if(bookmarksIdsList && bookmarksIdsList[id]) {
-									node.find("img:first").after($('<a href="#"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a>').click(function() {
-										$(this).remove();
-										utils.grabPage({host: pageUrl.host, path: "/ajax.php", params: {action: "del", type: "delbookmark", tid: bookmarksIdsList[id]}}, function(data) {
-											bookmarksList.splice(bookmarksList.indexOf(id), 1);
-											gData.set("bookmarks", "torrents", bookmarksList);
-											delete bookmarksIdsList[id];
-											gData.set("bookmarks", "bookmarkIds", bookmarksIdsList);
-											insertScript("del_bookmark_" + id, function() {
-												Notifier.success("Bookmark supprimé", 'Suppression OK');
-											}, true);
-										});
-										return false;
-									}));
+									node.find("img:first").after($('<img class="remove_bookmark_star" src="' + chrome.extension.getURL("images/bookmark.png") + '" />').click(removeBookmarkOnStarClick));
 								}
 								else {
 									node.find("img:first").after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
@@ -84,6 +72,23 @@ modules.torrent_list = {
 			return torrentLines;
 		};
 		modules.endless_scrolling.preInsertion = tagTorrents;
+
+		var removeBookmarkOnStarClick = function() {
+			var id = $(this).prev().attr("id").substring(6);
+			$(this).remove();
+			var bookmarksList = gData.get("bookmarks", "torrents");
+			var bookmarksIdsList = gData.get("bookmarks", "bookmarkIds");
+			utils.grabPage({host: pageUrl.host, path: "/ajax.php", params: {action: "del", type: "delbookmark", tid: bookmarksIdsList[id]}}, function(data) {
+				bookmarksList.splice(bookmarksList.indexOf(id), 1);
+				gData.set("bookmarks", "torrents", bookmarksList);
+				delete bookmarksIdsList[id];
+				gData.set("bookmarks", "bookmarkIds", bookmarksIdsList);
+				insertScript("del_bookmark_" + id, function() {
+					Notifier.success("Bookmark supprimé", 'Suppression OK');
+				}, true);
+			});
+			return false;
+		};
 
 		var filtersChanged = function() {
 			refreshFilterSet();
@@ -344,6 +349,59 @@ modules.torrent_list = {
 			return false;
 		};
 
+		var addBookmarkColumn = function() {
+			if(!opt.get(module_name, "bookmark_column")) {
+				return;
+			}
+
+			dbg("[bookmark_column] Started");
+			var alreadyProcessed = false;
+			$("tbody tr").each(function() { // Process all data & skip already processed, is strangely faster than processing data before insertion
+				if($(this).hasClass("head_torrent")) {
+					if($(this).hasClass("bookmark_done")) { // If this td head is already processed, assume the same for the whole page
+						dbg("[bookmark_column] Already processed page");
+						alreadyProcessed = true;
+						return;
+					}
+					dbg("[bookmark_column] Processing");
+					$(this).find("td:nth(1)").after('<td class="bookmark_torrent_head">Bkm</td>');
+					$(this).addClass("bookmark_done");
+					alreadyProcessed = false;
+				}
+				else {
+					if(alreadyProcessed) { // Wait until we get to the new page
+						return;
+					}
+
+					var tds = $(this).find("td");
+					if(tds.first().hasClass("alt1")) { // Don't mind the hidden td
+						return;
+					}
+
+					var autogetTdNumber = 0;
+					if(tds.eq(1).hasClass("name_torrent_1")) { // Keep background-color alternance
+						autogetTdNumber = 1;
+					}
+
+					tds.eq(1).after('<td class="bookmark_torrent_' + autogetTdNumber + '"><a href="#" class="bookmark_link"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></td>');
+				}
+			});
+			dbg("[bookmark_column] Ended");
+		};
+
+		var bookmarkOnClick = function() {
+			var td = $(this).parent().parent().find("td:nth(1)");
+			var funct = "function() { AddGet('" + td.find("img:first").attr("id").substring(6) + "', 'booktorrent', '" + $.trim(td.find("a:first").text()) + "'); }";
+			insertScript("bookmark_native", funct, true);
+			dbg("[bookmarkRefresh] Bookmark added - Force refresh");
+			modules.global.fetchBookmarks(true);
+			var cross = $(this).parents("tr").find("td:nth(1) img:nth(0)");
+			if(cross && gData.get("bookmarks", "torrents").indexOf(cross.attr("id").substring(6)) == -1) {
+				cross.after('<img class="remove_bookmark_star" src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
+			}
+			return false;
+		};
+
 		var autorefreshInterval, isRefreshable = false;
 		var startAutorefresh = function() {
 			if(!opt.get(module_name, "auto_refresh") || !mOptions.canRefresh || !isRefreshable) {
@@ -427,6 +485,7 @@ modules.torrent_list = {
 						$("#torrent_list").append(tagTorrents(insertionData));
 						refreshDate();
 						addAutogetColumn();
+						addBookmarkColumn();
 						addAgeColumn();
 						applyFilters();
 						dbg("[TorrentMark] Blocking endless scrolling");
@@ -695,10 +754,13 @@ modules.torrent_list = {
 		filtersChanged();
 		columnSorter();
 		addAutogetColumn();
+		addBookmarkColumn();
 		addAgeColumn();
 
 		$("#torrent_list").on("mouseenter", "a", showTorrentComments)
 			.on("click", "a.autoget_link", autogetOnClick)
+			.on("click", "a.bookmark_link", bookmarkOnClick)
+			.on("click", "a.remove_bookmark_star", removeBookmarkOnStarClick)
 			.on("mouseenter mouseleave", 'img[alt="+"]', previewTorrent);
 
 		startAutorefresh();
@@ -708,6 +770,7 @@ modules.torrent_list = {
 			$("#find_marked_torrent_span").remove();
 			refreshDate();
 			addAutogetColumn();
+			addBookmarkColumn();
 			addAgeColumn();
 			applyFilters();
 			$(document).trigger("es_dom_process_done");

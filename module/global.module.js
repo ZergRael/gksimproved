@@ -407,6 +407,7 @@ modules.global = {
 				parseBookmarks($(data).find("#torrent tbody:first tr"));
 			});
 		}
+		modules.global.fetchBookmarks = fetchBookmarks;
 
 		var parseBookmarks = function(torrents) {
 			gData.setFresh("bookmarks");
@@ -473,7 +474,7 @@ modules.global = {
 					if($(this).parent().hasClass("added")) {
 						var cross = $(this).parents("tr").prev().find("td:nth(1) img:nth(0)");
 						if(cross && gData.get("bookmarks", "torrents").indexOf(cross.attr("id").substring(6)) == -1) {
-							cross.after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
+							cross.after('<img class="remove_bookmark_star" src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
 						}
 					}
 				}
