@@ -58,7 +58,6 @@ modules.snatched = {
 				var shouldShow = true;
 
 				// Basic filters
-				var requiredOnlys = onlyReq;
 				for(filter in basicFilters) {
 					var filterStatus = basicFilters[filter];
 					if(filterStatus == 1) {
