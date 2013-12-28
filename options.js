@@ -52,10 +52,10 @@ var opt = {
 			case_sensitive:     { defaultVal: true, showInOptions: true, dispText: "Prendre en compte la casse", parent: "exclude_string", indicateParent: true }
 		},
 		snatched: {
-			filtering_deleted:  { defaultVal: true, showInOptions: false },
-			filtering_seed:     { defaultVal: false, showInOption: false },
-			filtering_no_comp:  { defaultVal: false, showInOption: false },
-			filtering_no_hnr:   { defaultVal: false, showInOption: false }
+			filter_deleted:  { defaultVal: 2, showInOptions: false },
+			filter_seed:     { defaultVal: 0, showInOption: false },
+			filter_complete: { defaultVal: 0, showInOption: false },
+			filter_hnr:      { defaultVal: 0, showInOption: false }
 		},
 		twits: {
 			twit_auto_complete: { defaultVal: true, showInOptions: true, dispText: "Auto-complétion des twits" },

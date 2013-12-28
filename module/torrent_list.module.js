@@ -102,12 +102,8 @@ modules.torrent_list = {
 		var refreshFilterSet = function() {
 			basicFilters = {freeleech: opt.get(module_name, "filter_fl"), scene: opt.get(module_name, "filter_scene")};
 			var stringFilterString = $("#filter_string").val();
-			onlyReq = 0;
 			var noFilterActive = true;
 			for(filter in basicFilters) {
-				if(basicFilters[filter] == 1) {
-					onlyReq++;
-				}
 				if(basicFilters[filter] > 0) {
 					noFilterActive = false;
 				}
@@ -128,24 +124,19 @@ modules.torrent_list = {
 			}
 		};
 
-		var onlyReq;
 		var applyFilters = function() {
 			var showTorrents = [];
 			var hideTorrents = [];
 			var caseSensitive = opt.get(module_name, "case_sensitive");
-			var defaultShown = onlyReq == 0;
 			$.each(torrentList, function(i, t) {
-				var shouldShow = defaultShown;
+				var shouldShow = true;
 
 				// Basic filters
-				var requiredOnlys = onlyReq;
 				for(filter in basicFilters) {
 					var filterStatus = basicFilters[filter];
 					if(filterStatus == 1) {
-						if(t.status[filter]) {
-							if(--requiredOnlys == 0) {
-								shouldShow = true;
-							}
+						if(!t.status[filter]) {
+							shouldShow = false;
 						}
 					}
 					else if(filterStatus == 2) {

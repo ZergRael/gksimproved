@@ -17,6 +17,8 @@ Voir topic associé.
 - Torrent list : Correction de la colonne d'age pour prendre en compte les timezone
 - Torrent list : Refonte du système de filtres - Devrait être plus rapide et compréhensible
 - Torrent list : Amélioration de la preview pour séléctionner l'image la plus intéressante de la fiche torrent
+- Torrent list : Ajout d'une colonne de bookmarks
+- Snatched : Refonte du système de filtres
 
 
 ### Changelog

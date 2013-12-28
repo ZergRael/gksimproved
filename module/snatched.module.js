@@ -14,76 +14,83 @@ modules.snatched = {
 
 		dbg("[Init] Loading module");
 
-		var tagTorrents = function() {
+		var torrentList = [];
+		var tagTorrents = function(torrentLines) {
 			dbg("[TorrentTag] Scanning");
-			$(".table100 tbody tr").each(function() {
-				var t = $(this);
-				$(this).find("td").each(function(i) {
+			$(torrentLines).each(function() {
+				var node = $(this);
+				var t = {node: node, status: {}, shown: true};
+				node.find("td").each(function(i) {
 					if(i == 0 && $(this).text() == "Torrent Supprimé") {
-						t.addClass("t_deleted");
+						t.status.deleted = true;
 					}
 					if(i == 1 && $(this).find('img').attr('src') == "https://s.gks.gs/static/themes/sifuture/img/validate.png") {
-						t.addClass("t_seeding");
+						t.status.seeding = true;
 					}
-					if(i == 5 && $(this).text() == "Non Complété") {
-						t.addClass("t_not_completed");
+					if(i == 5 && $(this).text() != "Non Complété") {
+						t.status.completed = true;
 					}
-					if(i == 5 && !$(this).find("img").length) {
-						t.addClass("t_not_hnr");
+					if(i == 5 && $(this).find("img").length) {
+						t.status.hnr = true;
 					}
-				})
+				});
+				torrentList.push(t);
 			});
 			dbg("[TorrentTag] Ended scanning");
+			return torrentLines;
+		};
+		modules.endless_scrolling.preInsertion = tagTorrents;
+
+		var filtersChanged = function() {
+			refreshFilterSet();
+			applyFilters();
 		};
 
-		var filterDeleted = function() {
-			if(!opt.get(module_name, "filtering_deleted")) {
-				return;
-			}
+		var basicFilters = {deleted: 2, seeding: 0, completed: 0, hnr: 0};
+		var refreshFilterSet = function() {
+			basicFilters = {deleted: opt.get(module_name, "filter_deleted"), seeding: opt.get(module_name, "filter_seed"), completed: opt.get(module_name, "filter_complete"), hnr:opt.get(module_name, "filter_hnr") };
+		}
 
-			dbg("[DeleteFilter] Scanning for deleted");
-			$(".t_deleted").hide();
-			dbg("[DeleteFilter] Ended filtering");
-		};
+		var applyFilters = function() {
+			var showTorrents = [];
+			var hideTorrents = [];
+			$.each(torrentList, function(i, t) {
+				var shouldShow = true;
 
-		var filterInSeed = function() {
-			if(!opt.get(module_name, "filtering_seed")) {
-				return;
-			}
+				// Basic filters
+				var requiredOnlys = onlyReq;
+				for(filter in basicFilters) {
+					var filterStatus = basicFilters[filter];
+					if(filterStatus == 1) {
+						if(!t.status[filter]) {
+							shouldShow = false;
+						}
+					}
+					else if(filterStatus == 2) {
+						if(t.status[filter]) {
+							shouldShow = false;
+						}
+					}
+				}
 
-			dbg("[SeedFilter] Scanning for seeding");
-			$(".t_seeding").hide();
-			dbg("[SeedFilter] Ended filtering");
-		};
-
-		var filterNonCompleted = function() {
-			if(!opt.get(module_name, "filtering_no_comp")) {
-				return;
-			}
-
-			dbg("[NCFilter] Scanning for non completed");
-			$(".t_not_completed").hide();
-			dbg("[NCFilter] Ended filtering");
-		};
-
-		var filterNonHnR = function() {
-			if(!opt.get(module_name, "filtering_no_hnr")) {
-				return;
-			}
-
-			dbg("[NCFilter] Scanning for non H&R");
-			$(".t_not_hnr").hide();
-			dbg("[NCFilter] Ended filtering");
-		};
-
-
-		var unFilter = function() {
-			$(".table100 tbody tr").each(function() {
-				var t = $(this);
-				if(!((t.hasClass("t_deleted") && opt.get(module_name, "filtering_deleted")) || (t.hasClass("t_seeding") && opt.get(module_name, "filtering_seed")) || (t.hasClass("t_not_completed") && opt.get(module_name, "filtering_no_comp")) || (t.hasClass("t_not_hnr") && opt.get(module_name, "filtering_no_hnr")))) {
-					t.show();
+				if(shouldShow && !t.shown) {
+					t.shown = true;
+					showTorrents.push(t.node, t.nextNode);
+				}
+				if(!shouldShow && t.shown) {
+					t.shown = false;
+					hideTorrents.push(t.node, t.nextNode);
 				}
 			});
+
+			if(showTorrents.length > 0) {
+				dbg("[Filters] Showing some " + showTorrents.length);
+				$.each(showTorrents, function() { $(this).show(); });
+			}
+			if(hideTorrents.length > 0) {
+				dbg("[Filters] Hiding some " + hideTorrents.length);
+				$.each(hideTorrents, function() { $(this).hide(); });
+			}
 		};
 
 		var bytesToInt = function(str) {
@@ -194,7 +201,7 @@ modules.snatched = {
 					torrentsTR = $(data).find(".table100 tbody tr")
 					if(torrentsTR && torrentsTR.length) {
 						dbg("[AllPagesGrab] Got data - Inserting")
-						$(".table100 tbody").append(torrentsTR);
+						$(".table100 tbody").append(tagTorrents(torrentsTR));
 					}
 					else {
 						dbg("[AllPagesGrab] No more data");
@@ -204,10 +211,7 @@ modules.snatched = {
 					if(pageLoaded == maxPage) {
 						$(".page_loading").remove();
 						dbg("[AllPagesGrab] Grabbing ended");
-						tagTorrents();
-						filterDeleted();
-						filterInSeed();
-						filterNonCompleted();
+						applyFilters();
 						sortData();
 						$(document).trigger("es_dom_process_done");
 					}
@@ -221,7 +225,7 @@ modules.snatched = {
 
 		dbg("[Init] Starting");
 		// Adding buttons
-		var torrentButtons = ' | <input id="filter_deleted" type="checkbox" ' + (opt.get(module_name, "filtering_deleted") ? 'checked="checked" ' : ' ') + '/><label for="filter_deleted">Cacher les supprimés</label> ' + ' | <input id="filter_seed" type="checkbox" ' + (opt.get(module_name, "filtering_seed") ? 'checked="checked" ' : ' ') + '/><label for="filter_seed">Cacher les torrents en seed</label> ' + ' | <input id="filter_no_comp" type="checkbox" ' + (opt.get(module_name, "filtering_no_comp") ? 'checked="checked" ' : ' ') + '/><label for="filter_no_comp">Cacher les non completés</label> ' + ' | <input id="filter_no_hnr" type="checkbox" ' + (opt.get(module_name, "filtering_no_hnr") ? 'checked="checked" ' : ' ') + '/><label for="filter_no_hnr">N\'afficher que les H&R</label> ' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
+		var torrentButtons = ' | <span class="g_filter g_filter_' + opt.get(module_name, "filter_deleted") + '" opt="filter_deleted">Supprimés</span> | <span class="g_filter g_filter_' + opt.get(module_name, "filter_seed") + '" opt="filter_seed">En seed</span> | <span class="g_filter g_filter_' + opt.get(module_name, "filter_complete") + '" opt="filter_complete">Completés</span> | <span class="g_filter g_filter_' + opt.get(module_name, "filter_hnr") + '" opt="filter_hnr">Hit&Run</span>' + (canGrabAllPages ? '<span id="grabAllPagesSpan"> | <a href="#" id="grabAllPages">Récupérer toutes les pages</a></span>' : '');
 		var colSortButtons = [ {n: 1, id: "sortName", nom: "Nom"}, {n: 3, id: "sortUL", nom: "UL"}, {n: 4, id: "sortDL", nom: "DL"}, {n: 5, id: "sortRDL", nom: "Real DL"}, {n: 6, id: "sortST", nom: "SeedTime"}, {n: 7, id: "sortRatio", nom: "Ratio"}
 		];
 
@@ -229,73 +233,6 @@ modules.snatched = {
 		$.each(colSortButtons, function(k, v) {
 			$(".table100 thead tr th:nth-child(" + v.n + ")").wrapInner('<a id="' + v.id + '" class="sortCol" href="#">');
 		});
-
-		tagTorrents();
-
-		// Deleted torrents filtering
-		$("#filter_deleted").change(function() {
-			opt.set(module_name, "filtering_deleted", $(this).prop("checked"));
-			dbg("[DeleteFilter] is " + opt.get(module_name, "filtering_deleted"));
-			if(opt.get(module_name, "filtering_deleted")) {
-				filterDeleted();
-				$(document).trigger("es_dom_process_done");
-			}
-			else {
-				dbg("[DeleteFilter] Unfiltering deleted");
-				unFilter();
-				dbg("[DeleteFilter] Ended unfiltering");
-				$(document).trigger("es_dom_process_done");
-			}
-		});
-		filterDeleted();
-
-		$("#filter_seed").change(function() {
-			opt.set(module_name, "filtering_seed", $(this).prop("checked"));
-			dbg("[SeedFilter] is " + opt.get(module_name, "filtering_seed"));
-			if(opt.get(module_name, "filtering_seed")) {
-				filterInSeed();
-				$(document).trigger("es_dom_process_done");
-			}
-			else {
-				dbg("[SeedFilter] Unfiltering Seeding");
-				unFilter();
-				dbg("[SeedFilter] Ended unfiltering");
-				$(document).trigger("es_dom_process_done");
-			}
-		});
-		filterInSeed();
-
-		$("#filter_no_comp").change(function() {
-			opt.set(module_name, "filtering_no_comp", $(this).prop("checked"));
-			dbg("[NCFilter] is " + opt.get(module_name, "filtering_no_comp"));
-			if(opt.get(module_name, "filtering_no_comp")) {
-				filterNonCompleted();
-				$(document).trigger("es_dom_process_done");
-			}
-			else {
-				dbg("[NCFilter] Unfiltering non completed");
-				unFilter();
-				dbg("[NCFilter] Ended unfiltering");
-				$(document).trigger("es_dom_process_done");
-			}
-		});
-		filterNonCompleted();
-
-		$("#filter_no_hnr").change(function() {
-			opt.set(module_name, "filtering_no_hnr", $(this).prop("checked"));
-			dbg("[H&RFilter] is " + opt.get(module_name, "filtering_no_hnr"));
-			if(opt.get(module_name, "filtering_no_hnr")) {
-				filterNonHnR();
-				$(document).trigger("es_dom_process_done");
-			}
-			else {
-				dbg("[NCFilter] Unfiltering non H&R");
-				unFilter();
-				dbg("[NCFilter] Ended unfiltering");
-				$(document).trigger("es_dom_process_done");
-			}
-		});
-		filterNonHnR();
 
 		// Sort on column click
 		$(".sortCol").click(function() {
@@ -315,13 +252,25 @@ modules.snatched = {
 			$("#grabAllPages").click(grabAllPages);
 		}
 
+		$(".g_filter").click(function() {
+			var button = $(this);
+			var optName = button.attr("opt");
+			var optStatus = opt.get(module_name, optName);
+			button.removeClass("g_filter_" + optStatus);
+			optStatus = ++optStatus > 2 ? 0 : optStatus;
+			opt.set(module_name, optName, optStatus);
+			dbg("[Filters] " + optName + " is " + opt.get(module_name, optName));
+			button.addClass("g_filter_" + optStatus);
+			filtersChanged();
+			$(document).trigger("es_dom_process_done");
+		});
+
+		tagTorrents($(".table100 tbody tr"));
+		filtersChanged();
+
 		$(document).on("endless_scrolling_insertion_done", function() {
 			dbg("[endless_scrolling] Module specific functions");
-			tagTorrents();
-			filterDeleted();
-			filterInSeed();
-			filterNonCompleted();
-			filterNonHnR();
+			applyFilters();
 			sortData();
 			canGrabAllPages = false;
 			$("#grabAllPagesSpan").remove();
