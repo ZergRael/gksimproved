@@ -43,9 +43,9 @@ modules.serieswatch = {
 			}
 		};
 
-		var bulkSave = false;
+		var pauseSave = false;
 		var saveWatchedList = function() {
-			if(bulkSave) {
+			if(pauseSave) {
 				return;
 			}
 			dbg("[save]");
@@ -54,115 +54,171 @@ modules.serieswatch = {
 			gData.set("episodes", "shows_list_size", watchedListSize);
 		};
 
-		var newEpSelectors = modules.serieswatch.newEpSelectors;
-		var writeConfig = function() {
+		var newEpSelectors = modules[module_name].newEpSelectors;
+		var displayConfig = function() {
 			dbg("[store] Showing config options");
+			$(".head_torrent td:nth(1)").after('<td class="watcher_config_head">EW</td>')
 			$("#torrent_list tr:nth-child(2n)").each(function() {
 				var showId = $.trim($(this).find("td:nth(0)").text());
 
-				var configHeaders = '<input class="watcher_config_show" type="checkbox" ' + (watchedList[showId].on ? 'checked' : '') + ' value="' + showId + '" id="watcher_config_' + showId + '" /><label for="watcher_config_' + showId + '">Suivi</label>', configContent = "";
+				var configShow = [], configSelectors = [], configContent = [];
+				configShow.push('<span class="watcher_config_show' + (watchedList[showId].on ? ' gksi_valid' : '') + '" show_id="' + showId + '">Suivi</span> ');
+				configSelectors.push('<div class="watcher_config_selectorblock">');
 				$.each(newEpSelectors, function(type, selectors) {
-					configHeaders += '<span class="' + type + '_conf" conf_type="' + type + '" show_id="' + showId + '">' + type + '</span>';
-					configContent += '<div id="' + type + '_conf_' + showId + '" conf_type="' + type + '" show_id="' + showId + '" class="watcher_config_block">';
+					configSelectors.push('<span class="watcher_config_selector" conf_type="' + type + '" show_id="' + showId + '">' + type + '</span>');
+					configContent.push('<div id="' + type + '_conf_' + showId + '" conf_type="' + type + '" show_id="' + showId + '" class="watcher_config_block">');
 					var checkedArray = watchedList[showId][type];
 					var confArray = [];
 					$.each(selectors, function(i, inputName) {
-						confArray.push('<input type="checkbox" ' + (!checkedArray || checkedArray.indexOf(inputName) != -1 ? 'checked' : '') + ' value="' + inputName + '" id="watcher_config_' + type + '_' + showId + '_' + i + '" /><label for="watcher_config_' + type + '_' + showId + '_' + i + '">' + inputName + '</label>');
+						confArray.push('<span class="watcher_config_cont' + (!checkedArray || checkedArray.indexOf(inputName) != -1 ? ' gksi_valid' : '') + '" input_name="' + inputName + '">' + inputName + '</span>');
 					});
-					configContent += confArray.join("") + '</div>'
+					configContent.push(confArray.join(" ") + '</div>');
 				});
-				$(this).find("td:nth(1) a:first").after('<div class="watcher_config">' + configHeaders + configContent + '</div>');
+				configSelectors.push('</div>');
+				$(this).find("td:nth(1)").after('<td class="watcher_config">' + [configShow.join(" "), configSelectors.join(" "), configContent.join("")].join("") + '</td>');
 				$("span[show_id=" + showId + "]").toggle(watchedList[showId].on);
 			});
 
-			$("#torrent_list .watcher_config span").click(function() {
-				var block = $("#" + $(this).attr("conf_type") + "_conf_" + $(this).attr("show_id"));
-				$(".gksi_valid").removeClass("gksi_valid");
-				if(block.is(":visible")) {
-					$(".watcher_config_block").hide();
+			$("#torrent_list .watcher_config_show").click(function() {
+				var node = $(this);
+				var showId = node.attr("show_id");
+				if(node.hasClass("gksi_valid")) {
+					node.removeClass("gksi_valid");
+					node.next(".watcher_config_selectorblock").hide();
+					node.parent().find(".watcher_config_selector").removeClass("gksi_selected");
+					node.nextAll(".watcher_config_block").hide();
+					watchedList[showId].on = false;
 				}
 				else {
-					$(".watcher_config_block").hide();
-					$(this).addClass("gksi_valid");
-					block.show();
-				}
-			});
-
-			$("#torrent_list .watcher_config input").change(function() {
-				if($(this).hasClass("watcher_config_show")) {
-					var v = $(this).prop("checked")
-					var showId = $(this).val();
-					watchedList[showId].on = v;
-					$("span[show_id=" + showId + "]").toggle(v);
-				}
-				else {
-					var catChecked = [];
-					var parentDiv = $(this).parent();
-					var showId = parentDiv.attr("show_id");
-					var confType = parentDiv.attr("conf_type");
-					parentDiv.find("input").each(function() {
-						if($(this).prop("checked")) {
-							catChecked.push($(this).attr("value"));
-						}
-					});
-					if(catChecked.length == 0) {
-						$(this).prop("checked", true);
-						return;
-					}
-					if(newEpSelectors[confType].length != catChecked.length) {
-						watchedList[showId][confType] = catChecked;
-					}
-					else {
-						delete watchedList[showId][confType]
-					}
+					node.addClass("gksi_valid");
+					node.next(".watcher_config_selectorblock").show();
+					watchedList[showId].on = true;
 				}
 				saveWatchedList();
 			});
 
-			var configHeaders = "", configContent = "";
+			$("#torrent_list .watcher_config_selector").click(function() {
+				var node = $(this);
+				var showId = node.attr("show_id");
+				var confType = node.attr("conf_type");
+				node.siblings(".watcher_config_selector").removeClass("gksi_selected");
+				node.parent().nextAll(".watcher_config_block").hide();
+				if(node.hasClass("gksi_selected")) {
+					node.removeClass("gksi_selected");
+				}
+				else {
+					node.addClass("gksi_selected");
+					$("#" + confType + "_conf_" + showId).show();
+				}
+			});
+
+			$("#torrent_list .watcher_config_cont").click(function() {
+				var node = $(this);
+				var showId = node.parent().attr("show_id");
+				var confType = node.parent().attr("conf_type");
+
+				var catChecked = [];
+				if(node.hasClass("gksi_valid")) {
+					node.removeClass("gksi_valid");
+				}
+				else {
+					node.addClass("gksi_valid");
+				}
+
+				node.parent().find(".watcher_config_cont").each(function() {
+					if($(this).hasClass("gksi_valid")) {
+						catChecked.push($(this).attr("input_name"));
+					}
+				});
+
+				if(catChecked.length == 0) {
+					node.addClass("gksi_valid");
+					return;
+				}
+
+				if(newEpSelectors[confType].length != catChecked.length) {
+					watchedList[showId][confType] = catChecked;
+				}
+				else {
+					delete watchedList[showId][confType];
+				}
+				saveWatchedList();
+			});
+
+			var header = $(".watcher_config_head"), timeoutRef;
+			$(".watcher_config").hover(function() {
+				clearTimeout(timeoutRef);
+				header.text("Episode watcher");
+				header.css({ width: 375 });
+			}, function() {
+				timeoutRef = setTimeout(function() {
+					$(".watcher_config_selector").removeClass("gksi_selected");
+					$(".watcher_config_block").hide();
+					header.text("EW");
+					header.css({ width: 38 });
+				}, 400);
+			});
+		};
+
+		var displayGlobalConfig = function() {
+			var configHeaders = [], configContent = [];
 			$.each(newEpSelectors, function(type, selectors) {
-				configHeaders += '<span class="' + type + '_conf" conf_type="' + type + '">' + type + '</span>';
-				configContent += '<div id="' + type + '_conf_global" conf_type="' + type + '" class="watcher_config_block watcher_config_global_block">';
+				configHeaders.push('<span class="watcher_config_selector_global" conf_type="' + type + '">' + type + '</span>');
+				configContent.push('<div id="' + type + '_conf_global" conf_type="' + type + '" class="watcher_config_global_block">');
 
 				var checkedArray = globalConf[type];
 				var confArray = [];
 				$.each(selectors, function(i, inputName) {
-					confArray.push('<input type="checkbox" ' + (!checkedArray || checkedArray.indexOf(inputName) != -1 ? 'checked' : '') + ' value="' + inputName + '" id="watcher_config_' + type + '_' + i + '" /><label for="watcher_config_' + type + '_' + i + '">' + inputName + '</label>');
+					confArray.push('<span class="watcher_config_cont_global' + (!checkedArray || checkedArray.indexOf(inputName) != -1 ? ' gksi_valid' : '') + '" input_name="' + inputName + '">' + inputName + '</span>');
 				});
-				configContent += confArray.join("") + '</div>'
+				configContent.push(confArray.join(" ") + '</div>');
 			});
-			$("#contenu .separate:first").append('<div class="watcher_config watcher_config_global">' + configHeaders + configContent + '</div>');
+			$("#contenu .separate:first").append('<div class="watcher_config watcher_config_global">' + configHeaders.join(" ") + configContent.join("") + '</div>');
 
-			$(".watcher_config_global span").click(function() {
-				var block = $("#" + $(this).attr("conf_type") + "_conf_global");
-				$(".gksi_valid").removeClass("gksi_valid");
-				if(block.is(":visible")) {
-					$(".watcher_config_global_block").hide();
+			$(".watcher_config_selector_global").click(function() {
+				var node = $(this);
+				var confType = node.attr("conf_type");
+				node.siblings(".watcher_config_selector_global").removeClass("gksi_selected");
+				node.nextAll(".watcher_config_global_block").hide();
+				if(node.hasClass("gksi_selected")) {
+					node.removeClass("gksi_selected");
 				}
 				else {
-					$(".watcher_config_global_block").hide();
-					$(this).addClass("gksi_valid");
-					block.show();
+					node.addClass("gksi_selected");
+					$("#" + confType + "_conf_global").show();
 				}
 			});
 
-			$(".watcher_config_global input").change(function() {
+			$(".watcher_config_cont_global").click(function() {
+				var node = $(this);
+				var confType = node.parent().attr("conf_type");
+				var node = $(this);
+				var confType = node.parent().attr("conf_type");
+				var turnGreen = !node.hasClass("gksi_valid");
+
 				var catChecked = [];
-				var parentDiv = $(this).parent();
-				var confType = parentDiv.attr("conf_type");
-				parentDiv.find("input").each(function() {
-					if($(this).prop("checked")) {
-						catChecked.push($(this).attr("value"));
+				if(turnGreen) {
+					node.addClass("gksi_valid");
+				}
+				else {
+					node.removeClass("gksi_valid");
+				}
+
+				node.parent().find(".watcher_config_cont_global").each(function() {
+					if($(this).hasClass("gksi_valid")) {
+						catChecked.push($(this).attr("input_name"));
 					}
 				});
+
 				if(catChecked.length == 0) {
-					$(this).prop("checked", true);
+					node.addClass("gksi_valid");
 					return;
 				}
-				bulkSave = true;
-				$("#torrent_list .watcher_config input[value=" + $(this).val() + "]").prop("checked", $(this).prop("checked")).trigger("change");
+
+				pauseSave = true;
+				$("#torrent_list .watcher_config_cont[input_name=" + node.attr("input_name") + "]" + (turnGreen ? "" : ".gksi_valid")).click();
+				pauseSave = false;
 				globalConf[confType] = catChecked;
-				bulkSave = false;
 				saveWatchedList();
 			});
 		};
@@ -174,7 +230,8 @@ modules.serieswatch = {
 		var watchedList = gData.get("episodes", "shows_list");
 		var watchedListSize = gData.get("episodes", "shows_list_size");
 		storeWatchedShows();
-		writeConfig();
+		displayConfig();
+		displayGlobalConfig();
 		$("#torrent_list a").on("click", removeOnUnfollow);
 
 		dbg("[Init] Ready");

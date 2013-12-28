@@ -10,6 +10,7 @@ Voir topic associé.
 - Badges : Suppression du tracking sur le badge IRC, la stat associée a disparu :(
 - Endless scrolling : Ajout sur la recherche forum
 - Endless scrolling : Ajout sur l'historique des uploads utilisateur
+- Episode watcher : Réécriture complète du panneau de configuration pour satisfaire les petites résolutions
 - Global : Améliorations diverses pour le support des CSS perso
 - Global : Migration sur jQuery 2.0
 - Torrent : Ajout de l'étoile bookmark dans le header de la fiche torrent

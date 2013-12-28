@@ -207,15 +207,19 @@ var insertCSS = function() {
 		".new_ep_ep_bookmark { padding-left: 30px; } " +
 		".new_ep_buttons { text-align: center; border-bottom-right-radius: inherit; padding-top: 4px; padding-bottom: 4px; border-top: 1px dotted black; } " +
 		// Watcher page config
-		".watcher_config { text-align: right; margin-top: -20px; margin-right: 6px; } " +
-		".watcher_config span { cursor: pointer; margin-left: 6px; border: 1px dotted gray; padding: 1px; } " +
-		".watcher_config_block { display: none; position: relative; } " +
+		".watcher_config_head { width: 38px; font-weight: bold; } " +
+		".watcher_config { text-align: right; padding: 4px !important; overflow: hidden; white-space: nowrap; } " +
+		".watcher_config span { cursor: pointer; border: 1px dotted gray; padding: 1px; } " +
+		".watcher_config_selectorblock { display: inline-block; } " +
+		".watcher_config_block { padding-top: 6px; display: none; } " +
+		".watcher_config_global_block { padding-top: 6px; display: none; } " +
 
 		// Badges
 		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; } " +
 		".gksi_progress_bar { background-color: orange; height: 11px; border-radius: 1px; margin-bottom: -11px; } " +
 		".gksi_progress_numbers { position: relative; } " +
 		".gksi_valid { background-color: lightgreen; } " +
+		".gksi_selected { background-color: aquamarine; } " +
 
 		// Torrent list columns
 		".age_torrent_head { width: 40px; text-align: center; font-weight: bold; } " +
