@@ -7,6 +7,7 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+- Badges : Suppression du tracking sur le badge IRC, la stat associée a disparu :(
 - Endless scrolling : Ajout sur la recherche forum
 - Endless scrolling : Ajout sur l'historique des uploads utilisateur
 - Global : Améliorations diverses pour le support des CSS perso
@@ -14,6 +15,8 @@ Voir topic associé.
 - Torrent : Ajout de l'étoile bookmark dans le header de la fiche torrent
 - Torrent : Ajout de l'étoile bookmark dans les suggestions des fiches torrent
 - Torrent list : Correction de la colonne d'age pour prendre en compte les timezone
+- Torrent list : Refonte du système de filtres - Devrait être plus rapide et compréhensible
+- Torrent list : Amélioration de la preview pour séléctionner l'image la plus intéressante de la fiche torrent
 
 
 ### Changelog

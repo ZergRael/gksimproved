@@ -536,7 +536,8 @@ modules.torrent_list = {
 			dbg("[BookmarkVisibleTorrents] Sent");
 		};
 
-		var MAX_WIDTH = 300;
+		var MAX_WIDTH = 300, MIN_HEIGHT = 154, WANTED_HEIGHT = 317;
+		var whitelistUrls = ["thetvdb.com", "allocine.fr", "tvrage.com", "betaseries.com"];
 		var previewTorrent = function(e) {
 			if(!opt.get(module_name, "preview")) {
 				return;
@@ -573,14 +574,28 @@ modules.torrent_list = {
 					}
 
 					dbg("[preview] Got torrent info with some imgs");
-					var img = new Image();
-					var i = 0;
+					var img = new Image(), i = 0, maybeSrc = false, forceSmall = false;
 					img.onload = function() {
-						if(this.height <= 154 && ++i < imgs.length) {
+						for(url in whitelistUrls) {
+							if(this.src.indexOf(whitelistUrls[url]) != -1) { forceSmall = true; }
+						}
+						if(this.height <= MIN_HEIGHT && ++i < imgs.length) {
 							dbg("[preview] Too small");
 							this.src = imgs[i];
 						}
-						else if(this.height > 154) {
+						else if(this.height > MIN_HEIGHT && this.height <= WANTED_HEIGHT && !forceSmall) {
+							dbg("[preview] Meh :: size [" + this.width + "x" + this.height + "] Keep it, it may be useful");
+							maybeSrc = this.src;
+							if(++i < imgs.length) {
+								this.src = imgs[i];
+							}
+							else {
+								dbg("[preview] No images left, fallback")
+								forceSmall = true;
+								this.onload();
+							}
+						}
+						else if(this.height > WANTED_HEIGHT || forceSmall) {
 							dbg("[preview] Perfect :: size [" + this.width + "x" + this.height + "]");
 							var top = pos.top, scrollTop = (document.body.scrollTop || document.documentElement.scrollTop), windowHeight = $(window).height(), resizedHeight = (this.width > 300 ? this.height * (300 / this.width) : this.height);
 							if(top + resizedHeight + 4 > scrollTop + windowHeight) {
@@ -588,6 +603,11 @@ modules.torrent_list = {
 							}
 							previewDiv.offset({ top: top, left: pos.left - 6 - Math.min(this.width, MAX_WIDTH) });
 							$("#gksi_preview_" + torrentId + " img").attr("src", this.src);
+						}
+						else if(maybeSrc) {
+							dbg("[preview] Ok, backup to maybeSrc");
+							forceSmall = true;
+							this.src = maybeSrc;
 						}
 						else {
 							dbg("[preview] Nothing was big enough");
