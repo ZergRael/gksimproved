@@ -2,8 +2,8 @@ modules.forums = {
 	name: "forums",
 	dText: "Forums",
 	pages: [
-		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { buttons: '.linkbox:first' } },
-		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: '.linkbox:first', isTopic : true } }
+		{ path_name: "/forums.php", params: { action: 'viewforum' }, options: { buttons: '.linkbox:first', isForum: true } },
+		{ path_name: "/forums.php", params: { action: 'viewtopic' }, options: { buttons: '.linkbox:first', isTopic: true } }
 	],
 	loaded: false,
 	loadModule: function(mOptions) {
@@ -55,6 +55,13 @@ modules.forums = {
 			}
 		};
 
+		var duplicateMarkRead = function() {
+			if(opt.get(module_name, "duplicate_markread") && mOptions.isForum) {
+				var boxes = $(".linkbox");
+				boxes.first().append(" -- " + boxes.last().html());
+			}
+		};
+
 		dbg("[Init] Starting");
 		// Execute functions
 
@@ -66,6 +73,7 @@ modules.forums = {
 			});
 		}
 		filterSignatures();
+		duplicateMarkRead();
 		$(document).scroll(function() {
 			adjustScrolling();
 		});
