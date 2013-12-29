@@ -38,15 +38,17 @@ var startAll = function() {
 	$(document).trigger("scroll").trigger("gksi_ready");
 };
 
+var requiredLoads = 2;
+var warmUp = function() {
+	if(--requiredLoads == 0) {
+		startAll();
+	}
+};
+
 if($("#body").length) {
 	dbg("[Loaded] Started");
 	// Load all options
-	opt.load(function() {
-		dbg("[Loader] Loaded opt");
-		// Load global saved data
-		gData.load(function() {
-			dbg("[Loader] Loaded gData");
-			startAll();
-		});
-	});
+	opt.load(warmUp);
+	// Load global saved data
+	gData.load(warmUp);
 }
