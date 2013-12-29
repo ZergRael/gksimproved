@@ -237,6 +237,7 @@ modules.torrent_list = {
 		var addColumns = function() {
 			var autogetCol = opt.get(module_name, "autoget_column");
 			var bookmarkCol = opt.get(module_name, "bookmark_column");
+			var nfoCol = opt.get(module_name, "nfo_column");
 			var ageCol = opt.get(module_name, "age_column");
 			dbg("[columns] Started");
 			var alreadyProcessed = false;
@@ -254,6 +255,9 @@ modules.torrent_list = {
 					}
 					if(bookmarkCol) {
 						nameTd.after('<td class="bookmark_torrent_head">Bkm</td>');
+					}
+					if(nfoCol) {
+						nameTd.after('<td class="nfo_torrent_head">Nfo</td>');
 					}
 					if(ageCol) {
 						nameTd.after('<td class="age_torrent_head">Age</td>');
@@ -281,6 +285,9 @@ modules.torrent_list = {
 					}
 					if(bookmarkCol) {
 						tds.eq(1).after('<td class="bookmark_torrent_' + tdNumber + '"><a href="#" class="bookmark_link"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></td>');
+					}
+					if(nfoCol) {
+						tds.eq(1).after('<td class="nfo_torrent_' + tdNumber + '"><a href="#" class="nfo_link"><img src="https://s.gks.gs/static/themes/sifuture/img/types/nfo.png" /></a></td>');
 					}
 					if(ageCol) {
 						var dateMatch = $(this).next().text().match(/(\d+)\/(\d+)\/(\d+) à (\d+):(\d+)/);
@@ -330,6 +337,23 @@ modules.torrent_list = {
 			return false;
 		};
 
+		var nfoOnClick = function() {
+			var td = $(this).parent().parent().find("td:nth(1)");
+			var name = td.text();
+			var id = td.find("img:first").attr("id").substring(6);
+			var nfoUrl = utils.parseUrl("https://gks.gs/nfo/" + id + "/_nfo");
+			utils.grabPage(nfoUrl, function(data) {
+				$("#gksi_t_nfo").remove();
+				var html = '<pre class="nfo g_nfo">' + $(data).find("pre").text() + '</pre>';
+				// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
+				appendFrame({ id: "t_nfo", title: "NFO du torrent" + name, data: html, relativeToWindow: true, top: 20, left: true, css: { maxHeight: 600 }, removeOnOutsideClick: true });
+				$("#gksi_t_nfo").mouseleave(function() {
+					$(this).remove();
+				});
+			});
+			return false;
+		};
+
 		var autorefreshInterval, isRefreshable = false;
 		var startAutorefresh = function() {
 			if(!opt.get(module_name, "auto_refresh") || !mOptions.canRefresh || !isRefreshable) {
@@ -359,6 +383,9 @@ modules.torrent_list = {
 									}
 									if(opt.get(module_name, "bookmark_column")) {
 										torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="bookmark_link"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></td>');
+									}
+									if(opt.get(module_name, "nfo_column")) {
+										torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="nfo_link"><img src="https://s.gks.gs/static/themes/sifuture/img/types/nfo.png" /></a></td>');
 									}
 									if(opt.get(module_name, "age_column")) {
 										torrentNameTd.after('<td class="age_torrent_1">frais</td>');
@@ -687,6 +714,7 @@ modules.torrent_list = {
 		$("#torrent_list").on("mouseenter", "a", showTorrentComments)
 			.on("click", "a.autoget_link", autogetOnClick)
 			.on("click", "a.bookmark_link", bookmarkOnClick)
+			.on("click", "a.nfo_link", nfoOnClick)
 			.on("click", "a.remove_bookmark_star", removeBookmarkOnStarClick)
 			.on("mouseenter mouseleave", 'img[alt="+"]', previewTorrent);
 

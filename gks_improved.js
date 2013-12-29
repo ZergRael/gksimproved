@@ -231,6 +231,10 @@ var insertCSS = function() {
 		".bookmark_torrent_head { width: 30px; text-align: center; font-weight: bold; } " +
 		".bookmark_torrent_0 { width: 30px; text-align: center; } " +
 		".bookmark_torrent_1 { width: 30px; text-align: center; background-color: #f6f6f6; } " +
+		".nfo_torrent_head { width: 30px; text-align: center; font-weight: bold; } " +
+		".nfo_torrent_0 { width: 30px; text-align: center; } " +
+		".nfo_torrent_1 { width: 30px; text-align: center; background-color: #f6f6f6; } " +
+		".g_nfo { width: auto; } " +
 		".remove_bookmark_star { cursor: pointer; } " +
 
 		// Torrent list

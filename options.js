@@ -44,6 +44,7 @@ var opt = {
 			age_column:         { defaultVal: false, showInOptions: true, dispText: "Ajout d'une colonne d'age du torrent" },
 			autoget_column:     { defaultVal: false, showInOptions: true, dispText: "Colonne de boutons d'ajout direct à l'autoget" },
 			bookmark_column:    { defaultVal: false, showInOptions: true, dispText: "Colonne de boutons d'ajout direct aux bookmarks" },
+			nfo_column:         { defaultVal: false, showInOptions: true, dispText: "Colonne de liens vers le NFO" },
 			torrent_marker:     { defaultVal: false, showInOptions: false },
 			t_marker_button:    { defaultVal: true, showInOptions: true, dispText: "Afficher les boutons torrent marker/finder" },
 			direct_comments:    { defaultVal: false, showInOptions: true, dispText: "Afficher les commentaires au survol" },
