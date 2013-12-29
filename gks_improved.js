@@ -157,105 +157,105 @@ var appendFrame = function(o) {
 // Default GKSi CSS
 var insertCSS = function() {
 	dbg("Inserting custom CSS");
-	$("head").append("<style id='gksi_css'>" +
+	$("head").append(["<style id='gksi_css'>",
 		// Back to top button
-		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "/to_top_small.png") + ") no-repeat; } " +
+		"#backTopButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:10px; overflow:hidden; width:39px; height:39px; border:none; text-indent:100%; background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "/to_top_small.png") + ") no-repeat; }",
 		// Endless scrolling pauser button
-		"#esPauseButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:42px; overflow:hidden; width:26px; height:39px; border:none; text-indent:100%; } " +
-		".esButtonPaused { background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "/endless_scrolling_paused.png") + ") no-repeat; } " +
-		".esButtonActive { background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "/endless_scrolling_active.png") + ") no-repeat; } " +
+		"#esPauseButton { display:none; text-decoration:none; position:fixed; bottom:10px; right:42px; overflow:hidden; width:26px; height:39px; border:none; text-indent:100%; }",
+		".esButtonPaused { background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "/endless_scrolling_paused.png") + ") no-repeat; }",
+		".esButtonActive { background:url(" + chrome.extension.getURL("images/" + opt.get("endless_scrolling", "button_style") + "/endless_scrolling_active.png") + ") no-repeat; }",
 
 		// Frames
-		".gksi_frame { z-index: 10; position: absolute; } " +
-		".gksi_frame_content { width: auto; padding: 12px; } " +
-		".gksi_frame_header { padding-top: 6px; padding-bottom: 6px; } " +
-		//".gksi_frame_data { } " +
-		".gksi_frame_section_header { border-bottom: 1px solid; font-weight: bold; padding-top: 6px; } " +
+		".gksi_frame { z-index: 10; position: absolute; }",
+		".gksi_frame_content { width: auto; padding: 12px; }",
+		".gksi_frame_header { padding-top: 6px; padding-bottom: 6px; }",
+		//".gksi_frame_data { }",
+		".gksi_frame_section_header { border-bottom: 1px solid; font-weight: bold; padding-top: 6px; }",
 		".gksi_frame_buttons { padding-top: 9px; text-align: center; } " +
-		//"#gksi_suggest { } " +
-		//"#gksi_suggest_data { } " +
-		//"#gksi_options { } " +
-		"#gksi_options_data { min-height: 96px; } " +
-		".gksi_options_header_button { display: inline-block; background-color:#f5f5f5; border:1px solid #dedede; border-top:1px solid #eee; border-left:1px solid #eee; font-weight:bold; color:#565656; cursor:pointer; padding:5px 10px 6px 7px; } " +
-		".gksi_options_header_button_selected { background-color:#6299c5; color:#fff; } " +
-		".gksi_options_sub { font-size: 0.9em; padding-left: 12px; } " +
-		".gksi_options_sub input { margin:2px; } " +
-		".gksi_option_required { text-decoration: underline; } " +
-		".gksi_opt_has_parent { margin-left: 12px; } " +
-		"#gksi_copyright { text-align: right; font-size: 0.8em; margin-top: -11px; } " +
-		".gksi_edit_title { display: block; width: 100%; margin-top: 12px; } " +
-		".gksi_edit_textarea { display: block; width: 100%; min-height: 240px; min-width: 360px; margin-right: -4px!important; } " +
-		".gksi_preview { position: absolute; z-index: 160; } " +
-		".gksi_preview img { max-width: 300px; } " +
-		"#gksi_marker { max-width: 310px; } " +
+		//"#gksi_suggest { }",
+		//"#gksi_suggest_data { }",
+		//"#gksi_options { }",
+		"#gksi_options_data { min-height: 96px; }",
+		".gksi_options_header_button { display: inline-block; background-color:#f5f5f5; border:1px solid #dedede; border-top:1px solid #eee; border-left:1px solid #eee; font-weight:bold; color:#565656; cursor:pointer; padding:5px 10px 6px 7px; }",
+		".gksi_options_header_button_selected { background-color:#6299c5; color:#fff; }",
+		".gksi_options_sub { font-size: 0.9em; padding-left: 12px; }",
+		".gksi_options_sub input { margin:2px; }",
+		".gksi_option_required { text-decoration: underline; }",
+		".gksi_opt_has_parent { margin-left: 12px; }",
+		"#gksi_copyright { text-align: right; font-size: 0.8em; margin-top: -11px; }",
+		".gksi_edit_title { display: block; width: 100%; margin-top: 12px; }",
+		".gksi_edit_textarea { display: block; width: 100%; min-height: 240px; min-width: 360px; margin-right: -4px!important; }",
+		".gksi_preview { position: absolute; z-index: 160; }",
+		".gksi_preview img { max-width: 300px; }",
+		"#gksi_marker { max-width: 310px; }",
 
 		// New episodes button
-		"#new_episodes_button { z-index: 120; background-color: #333; position:fixed; top:104px; left:-72px; overflow:hidden; width:64px; height:64px; border: 1px solid black; border-top-right-radius: 15px; border-bottom-right-radius: 15px; padding-right: 4px; } " +
-		".new_episodes_new { background:url(" + chrome.extension.getURL("images/watch_new.png") + ") no-repeat; } " +
-		".new_episodes_old { background:url(" + chrome.extension.getURL("images/watch.png") + ") no-repeat; } " +
+		"#new_episodes_button { z-index: 120; background-color: #333; position:fixed; top:104px; left:-72px; overflow:hidden; width:64px; height:64px; border: 1px solid black; border-top-right-radius: 15px; border-bottom-right-radius: 15px; padding-right: 4px; }",
+		".new_episodes_new { background:url(" + chrome.extension.getURL("images/watch_new.png") + ") no-repeat; }",
+		".new_episodes_old { background:url(" + chrome.extension.getURL("images/watch.png") + ") no-repeat; }",
 		// New episodes pannel
-		"#new_episodes_pannel { display: none; z-index: 140; position: fixed; width: 430px; top: 100px; left: -432px; border: 1px solid black; border-top-right-radius: 15px; border-bottom-right-radius: 15px; } " +
-		".new_ep_header { text-align: center; font-size: 1.9em; border-top-right-radius: 12px; padding-bottom: 4px; line-height: normal; border-bottom: 1px dotted black; } " +
-		".new_ep_content { padding: 6px; color: black; min-height: 20px; max-height: 460px; overflow: auto; } " +
-		".new_ep_show_header { font-size: 1.2em; font-weight: bold; } " +
-		".new_ep_ep_block { border-top: 1px dashed black; padding-bottom: 6px; } " +
-		".new_ep_ep_title { padding-left: 6px; word-wrap: break-word; } " +
-		".new_ep_ep_details { padding-left: 16px; } " +
-		".new_ep_ep_size { display: inline-block; padding-left: 60px; width: 90px; } " +
-		".new_ep_ep_dl { padding-left: 30px; } " +
-		".new_ep_ep_autoget { padding-left: 30px; } " +
-		".new_ep_ep_bookmark { padding-left: 30px; } " +
-		".new_ep_buttons { text-align: center; border-bottom-right-radius: inherit; padding-top: 4px; padding-bottom: 4px; border-top: 1px dotted black; } " +
+		"#new_episodes_pannel { display: none; z-index: 140; position: fixed; width: 430px; top: 100px; left: -432px; border: 1px solid black; border-top-right-radius: 15px; border-bottom-right-radius: 15px; }",
+		".new_ep_header { text-align: center; font-size: 1.9em; border-top-right-radius: 12px; padding-bottom: 4px; line-height: normal; border-bottom: 1px dotted black; }",
+		".new_ep_content { padding: 6px; color: black; min-height: 20px; max-height: 460px; overflow: auto; }",
+		".new_ep_show_header { font-size: 1.2em; font-weight: bold; }",
+		".new_ep_ep_block { border-top: 1px dashed black; padding-bottom: 6px; }",
+		".new_ep_ep_title { padding-left: 6px; word-wrap: break-word; }",
+		".new_ep_ep_details { padding-left: 16px; }",
+		".new_ep_ep_size { display: inline-block; padding-left: 60px; width: 90px; }",
+		".new_ep_ep_dl { padding-left: 30px; }",
+		".new_ep_ep_autoget { padding-left: 30px; }",
+		".new_ep_ep_bookmark { padding-left: 30px; }",
+		".new_ep_buttons { text-align: center; border-bottom-right-radius: inherit; padding-top: 4px; padding-bottom: 4px; border-top: 1px dotted black; }",
 		// Watcher page config
-		".watcher_config_head { width: 38px; font-weight: bold; } " +
-		".watcher_config { text-align: right; padding: 4px !important; overflow: hidden; white-space: nowrap; } " +
-		".watcher_config span { cursor: pointer; border: 1px dotted gray; padding: 1px; } " +
-		".watcher_config_selectorblock { display: inline-block; } " +
-		".watcher_config_block { padding-top: 6px; display: none; } " +
-		".watcher_config_global_block { padding-top: 6px; display: none; } " +
+		".watcher_config_head { width: 38px; font-weight: bold; }",
+		".watcher_config { text-align: right; padding: 4px !important; overflow: hidden; white-space: nowrap; }",
+		".watcher_config span { cursor: pointer; border: 1px dotted gray; padding: 1px; }",
+		".watcher_config_selectorblock { display: inline-block; }",
+		".watcher_config_block { padding-top: 6px; display: none; }",
+		".watcher_config_global_block { padding-top: 6px; display: none; }",
 
 		// Badges
-		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; } " +
-		".gksi_progress_bar { background-color: orange; height: 11px; border-radius: 1px; margin-bottom: -11px; } " +
-		".gksi_progress_numbers { position: relative; } " +
-		".gksi_valid { background-color: lightgreen; } " +
-		".gksi_selected { background-color: aquamarine; } " +
+		".gksi_progress_area { margin-top: 4px; display: inline-block; width: 90px; border-radius: 2px; padding: 1px; border: 1px solid gray; font-size: 9px; }",
+		".gksi_progress_bar { background-color: orange; height: 11px; border-radius: 1px; margin-bottom: -11px; }",
+		".gksi_progress_numbers { position: relative; }",
+		".gksi_valid { background-color: lightgreen; }",
+		".gksi_selected { background-color: aquamarine; }",
 
 		// Torrent list columns
-		".age_torrent_head { width: 40px; text-align: center; font-weight: bold; } " +
-		".age_torrent_0 { width: 40px; text-align: center; } " +
-		".age_torrent_1 { width: 40px; text-align: center; background-color: #f6f6f6; } " +
-		".autoget_torrent_head { width: 26px; text-align: center; font-weight: bold; } " +
-		".autoget_torrent_0 { width: 26px; text-align: center; } " +
-		".autoget_torrent_1 { width: 26px; text-align: center; background-color: #f6f6f6; } " +
-		".bookmark_torrent_head { width: 30px; text-align: center; font-weight: bold; } " +
-		".bookmark_torrent_0 { width: 30px; text-align: center; } " +
-		".bookmark_torrent_1 { width: 30px; text-align: center; background-color: #f6f6f6; } " +
-		".nfo_torrent_head { width: 30px; text-align: center; font-weight: bold; } " +
-		".nfo_torrent_0 { width: 30px; text-align: center; } " +
-		".nfo_torrent_1 { width: 30px; text-align: center; background-color: #f6f6f6; } " +
-		".g_nfo { width: auto; } " +
-		".remove_bookmark_star { cursor: pointer; } " +
+		".age_torrent_head { width: 40px; text-align: center; font-weight: bold; }",
+		".age_torrent_0 { width: 40px; text-align: center; }",
+		".age_torrent_1 { width: 40px; text-align: center; background-color: #f6f6f6; }",
+		".autoget_torrent_head { width: 26px; text-align: center; font-weight: bold; }",
+		".autoget_torrent_0 { width: 26px; text-align: center; }",
+		".autoget_torrent_1 { width: 26px; text-align: center; background-color: #f6f6f6; }",
+		".bookmark_torrent_head { width: 30px; text-align: center; font-weight: bold; }",
+		".bookmark_torrent_0 { width: 30px; text-align: center; }",
+		".bookmark_torrent_1 { width: 30px; text-align: center; background-color: #f6f6f6; }",
+		".nfo_torrent_head { width: 30px; text-align: center; font-weight: bold; }",
+		".nfo_torrent_0 { width: 30px; text-align: center; }",
+		".nfo_torrent_1 { width: 30px; text-align: center; background-color: #f6f6f6; }",
+		".g_nfo { width: auto; }",
+		".remove_bookmark_star { cursor: pointer; }",
 
 		// Torrent list
-		".torrent_mark_found { background-color: lightgreen !important; } " +
-		".bookmark_highlight { background-color: lightgreen; } " +
-		".g_filter { border: 1px solid gray; border-radius: 3px; padding: 1px; cursor: pointer; } " +
-		".g_filter_1 { background-color: lightgreen; } " +
-		".g_filter_2 { background-color: lightcoral; } " +
+		".torrent_mark_found { background-color: lightgreen !important; }",
+		".bookmark_highlight { background-color: lightgreen; }",
+		".g_filter { border: 1px solid gray; border-radius: 3px; padding: 1px; cursor: pointer; }",
+		".g_filter_1 { background-color: lightgreen; }",
+		".g_filter_2 { background-color: lightcoral; }",
 
 		// Aura
-		"#gksi_aura_controls thead th { width: 33%; } " +
-		"#gksi_aura_controls tbody td { vertical-align: inherit; } " +
-		".gksi_aura_result { font-weight: bold; } " +
+		"#gksi_aura_controls thead th { width: 33%; }",
+		"#gksi_aura_controls tbody td { vertical-align: inherit; }",
+		".gksi_aura_result { font-weight: bold; }",
 
 		// Misc
-		".halfOpacity { opacity: 0.4; } " +
-		".resume_endless_scrolling { font-size: 1.4em; font-weight: bold; } " +
-		".bold { font-weight: bold; } " +
-		".search_button { display: inline-block; position: relative; top: 3px; left: 19px; width: 16px; height: 17px; margin-left: -16px; } " +
-		".search_button_usable { cursor: pointer; } " +
-		"</style>");
+		".halfOpacity { opacity: 0.4; }",
+		".resume_endless_scrolling { font-size: 1.4em; font-weight: bold; }",
+		".bold { font-weight: bold; }",
+		".search_button { display: inline-block; position: relative; top: 3px; left: 19px; width: 16px; height: 17px; margin-left: -16px; }",
+		".search_button_usable { cursor: pointer; }",
+		"</style>"].join(" "));
 };
 
 // Custom CSS insertion, mostly used by the frame builder
