@@ -60,6 +60,12 @@ def run():
 
 	os.chdir(os.path.join("..", firefoxDir))
 	try :
+		cuddlefish.run(["--force-mobile", "--update-url", "https://thetabx.net/gksi/update/check/%APP_OS%/%CURRENT_APP_VERSION%/%ITEM_VERSION%/", "xpi"])
+	except SystemExit:
+		print("Copy mobile .xpi")
+		distutils.file_util.copy_file("gksimproved.xpi", os.path.join("..", chromeDir, "build", "gksimproved.mobile.xpi"))
+
+	try :
 		cuddlefish.run(["--update-url", "https://thetabx.net/gksi/update/check/%APP_OS%/%CURRENT_APP_VERSION%/%ITEM_VERSION%/", "xpi"])
 	except SystemExit:
 		print("Copy .xpi")
