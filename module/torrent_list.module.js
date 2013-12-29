@@ -152,19 +152,13 @@ modules.torrent_list = {
 
 				// String filter
 				if(shouldShow && stringFilters.ready) {
-					for(i in stringFilters.filters) {
-						if(shouldShow) {
-							var f = stringFilters.filters[i];
+					for(i in stringFilters.orFilters) { // Loop all || blocks
+						for(j in stringFilters.orFilters[i]) { // Loop && blocks
+							var f = stringFilters.orFilters[i][j];
 							if(f.fType == 0) {
-								if(f.operator == 0) {
-									shouldShow = (t[f.prop] < f.val);
-								}
-								else if(f.operator == 1) {
-									shouldShow = (t[f.prop] == f.val);
-								}
-								else if(f.operator == 2) {
-									shouldShow = (t[f.prop] > f.val);
-								}
+								if(f.operator == 0) { shouldShow = (t[f.prop] < f.val); }
+								else if(f.operator == 1) { shouldShow = (t[f.prop] == f.val); }
+								else if(f.operator == 2) { shouldShow = (t[f.prop] > f.val); }
 							}
 							else if(f.fType == 1) {
 								shouldShow = (t.lName.indexOf(f.str) == -1);
@@ -172,9 +166,16 @@ modules.torrent_list = {
 							else if(f.fType == 2) {
 								shouldShow = (t.lName.indexOf(f.str) > -1);
 							}
+
+							if(!shouldShow) { // In a &&, stop loop as soon as one member is false
+								break;
+							}
+						}
+
+						if(shouldShow) { // In a ||, stop loop as soon as one && block is true
+							break;
 						}
 					}
-					//shouldShow = t.lName.indexOf(stringFilters.proper) == -1
 				}
 
 				if(shouldShow && !t.shown) {
@@ -197,51 +198,46 @@ modules.torrent_list = {
 			}
 		};
 
+		var filterProperties = {c: 'completed', s: 'seed', l: 'leech'};
+		var filterOperators = {'<': 0, '=': 1, '>': 2};
 		var compileStringFilter = function(str) {
 			var sFilter = {original: str, proper: "", ready: false};
 			sFilter.proper = str.toLowerCase().trim();
 			if(sFilter.proper != "") {
 				sFilter.ready = true;
-				sFilter.filters = [];
-				var filterSplit = sFilter.proper.split(/&+/);
-				for(i in filterSplit) {
-					var f = {};
-					var s = filterSplit[i].trim();
-					var nFilter = s.match(/\b([csl])([<=>])(\d+)\b/);
-					if(nFilter) {
-						f.fType = 0;
-						switch(nFilter[1]) {
-							case 'c': f.prop = "completed";
-								break;
-							case 's': f.prop = "seed";
-								break;
-							case 'l': f.prop = "leech";
-								break;
+				sFilter.orFilters = [];
+				var orSplit = sFilter.proper.split("||");
+				for(i in orSplit) {
+					var sOr = orSplit[i].trim();
+					var andSplit = sOr.split("&&");
+					var andFilters = [];
+					for(j in andSplit) {
+						var s = andSplit[j].trim();
+						var f = {};
+						var nFilter = s.match(/\b([csl])([<=>])(\d+)\b/);
+						if(nFilter) {
+							f.fType = 0;
+							f.prop = filterProperties[nFilter[1]];
+							f.operator = filterOperators[nFilter[2]];
+							f.val = Number(nFilter[3]);
+							dbg("[StringFilter] " + f.prop + " " + f.operator + " " + f.val);
 						}
-						switch(nFilter[2]) {
-							case '<': f.operator = 0;
-								break;
-							case '=': f.operator = 1;
-								break;
-							case '>': f.operator = 2;
-							break;
+						else if(s.indexOf("!") == 0) {
+							f.fType = 1;
+							f.str = s.substring(1);
+							dbg("[StringFilter] NOT " + f.str);
 						}
-						f.val = nFilter[3];
-						dbg("[StringFilter] " + f.prop + " " + ['<', '=', '>'][f.operator] + " " + f.val);
+						else {
+							f.fType = 2;
+							f.str = s;
+							dbg("[StringFilter] " + f.str);
+						}
+						andFilters.push(f);
 					}
-					else if(s.indexOf("!") == 0) {
-						f.fType = 1;
-						f.str = s.substring(1);
-						dbg("[StringFilter] NOT " + f.str);
-					}
-					else {
-						f.fType = 2;
-						f.str = s;
-						dbg("[StringFilter] " + f.str);
-					}
-					sFilter.filters.push(f);
+					sFilter.orFilters.push(andFilters);
 				}
 			}
+			dbg(sFilter);
 			return sFilter;
 		};
 
@@ -707,7 +703,7 @@ modules.torrent_list = {
 		var markerButton =  '<a id="torrent_marker_button" href="#">Marquer torrent</a> |';
 		var finderButton = '<a id="torrent_finder_button" href="#">Retrouver torrent</a> | ';
 		var filterButtons = '<span class="g_filter g_filter_' + opt.get(module_name, "filter_fl") + '" opt="filter_fl">Freeleech</span> | <span class="g_filter g_filter_' + opt.get(module_name, "filter_scene") + '" opt="filter_scene">Scene</span> |';
-		var stringFilterInput = '<input type="text" id="filter_string" placeholder="Filtre" size="12" title="Options de filtrage\nComplétés : c<10\nSeeders : s=1\nLeechers : l>12\nChaine de caractères\nOpérateurs : &!\n\nExemple : DVDRiP sans VO avec +10 seeders\n\'dvdrip & !vo & s>10\'" />| ';
+		var stringFilterInput = '<input type="text" id="filter_string" placeholder="Filtre" size="12" title="Options de filtrage\nComplétés : c<10\nSeeders : s=1\nLeechers : l>12\nChaine de caractères\nOpérateurs : && || !\n\nExemples :\nDVDRiP ou BDRiP avec +10 seeders\n\'dvdrip || bdrip && s>10\'\n\nExclure FUNKY et CARPEDIEM\n\'!funky && !carpediem\'" />| ';
 		var bookmarkButton = '<a href="#" id="bookmarkvisibletorrents">Bookmarker 40 premiers</a> | ';
 		var refreshButton = '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/><label for="auto_refresh">Auto refresh</label> | ';
 		var buttons = "";
