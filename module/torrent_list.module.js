@@ -180,65 +180,6 @@ modules.torrent_list = {
 			return compiledFilter;
 		};
 
-		var addAgeColumn = function() {
-			if(!opt.get(module_name, "age_column")) {
-				return;
-			}
-
-			dbg("[AgeCol] Started dating torrents");
-			var alreadyDated = false;
-			$("tbody tr").each(function() { // Process all data & skip already dated, is strangely faster than processing data before insertion
-				if($(this).hasClass("head_torrent")) {
-					if($(this).hasClass("age_done")) { // If this td head is already dated, assume the same for the whole page
-						dbg("[AgeCol] Already dated page");
-						alreadyDated = true;
-						return;
-					}
-					dbg("[AgeCol] Date calculation");
-					$(this).find("td:nth(1)").after('<td class="age_torrent_head">Age</td>');
-					$(this).addClass("age_done");
-					alreadyDated = false;
-				}
-				else {
-					if(alreadyDated) { // Wait until we get to the new page
-						return;
-					}
-
-					var tds = $(this).find("td");
-					if(tds.first().hasClass("alt1")) { // Don't mind the hidden td
-						return;
-					}
-					var ageTdNumber = 0;
-					if(tds.eq(1).hasClass("name_torrent_1")) { // Keep background-color alternance
-						ageTdNumber = 1;
-					}
-
-					var dateMatch = $(this).next().text().match(/(\d+)\/(\d+)\/(\d+) à (\d+):(\d+)/);
-					if(!dateMatch || !dateMatch.length) { // This should never happen
-						return;
-					}
-
-					// Append our age td
-					tds.eq(1).after('<td class="age_torrent_' + ageTdNumber + '">' + simpleDateToDiff(dateMatch) + '</td>');
-				}
-			});
-
-			if(!$(".age_torrent_head:first").find("a").length && mOptions.canSort) {
-				var sortedUrl = utils.clone(pageUrl);
-				sortedUrl.path = sortedUrl.path == "/" ? "/browse/" : sortedUrl.path;
-				sortedUrl.params = sortedUrl.params || {};
-				sortedUrl.params.page = 0;
-				sortedUrl.params.sort = (pageUrl.path == "/sphinx/" ? "date" : "id");
-				sortedUrl.params.order = "desc";
-				if(pageUrl.params && pageUrl.params.sort == (pageUrl.path == "/sphinx/" ? "date" : "id") && pageUrl.params.order != "asc") {
-					sortedUrl.params.order = "asc";
-				}
-
-				$(".age_torrent_head:first").wrapInner('<a href="' + utils.craftUrl(sortedUrl) + '"></a>');
-			}
-			dbg("[AgeCol] Ended");
-		};
-
 		var recalcAgeColumn = function() {
 			if(!opt.get(module_name, "age_column")) {
 				return;
@@ -293,23 +234,31 @@ modules.torrent_list = {
 			}
 		};
 
-		var addAutogetColumn = function() {
-			if(!opt.get(module_name, "autoget_column")) {
-				return;
-			}
-
-			dbg("[autoget_column] Started");
+		var addColumns = function() {
+			var autogetCol = opt.get(module_name, "autoget_column");
+			var bookmarkCol = opt.get(module_name, "bookmark_column");
+			var ageCol = opt.get(module_name, "age_column");
+			dbg("[columns] Started");
 			var alreadyProcessed = false;
 			$("tbody tr").each(function() { // Process all data & skip already processed, is strangely faster than processing data before insertion
 				if($(this).hasClass("head_torrent")) {
-					if($(this).hasClass("autoget_done")) { // If this td head is already processed, assume the same for the whole page
-						dbg("[autoget_column] Already processed page");
+					if($(this).hasClass("colmuns_done")) { // If this td head is already processed, assume the same for the whole page
+						dbg("[columns] Already processed page");
 						alreadyProcessed = true;
 						return;
 					}
-					dbg("[autoget_column] Processing");
-					$(this).find("td:nth(1)").after('<td class="autoget_torrent_head">Get</td>');
-					$(this).addClass("autoget_done");
+					dbg("[columns] Processing");
+					var nameTd = $(this).find("td:nth(1)");
+					if(autogetCol) {
+						nameTd.after('<td class="autoget_torrent_head">Get</td>');
+					}
+					if(bookmarkCol) {
+						nameTd.after('<td class="bookmark_torrent_head">Bkm</td>');
+					}
+					if(ageCol) {
+						nameTd.after('<td class="age_torrent_head">Age</td>');
+					}
+					$(this).addClass("colmuns_done");
 					alreadyProcessed = false;
 				}
 				else {
@@ -322,15 +271,43 @@ modules.torrent_list = {
 						return;
 					}
 
-					var autogetTdNumber = 0;
+					var tdNumber = 0;
 					if(tds.eq(1).hasClass("name_torrent_1")) { // Keep background-color alternance
-						autogetTdNumber = 1;
+						tdNumber = 1;
 					}
 
-					tds.eq(1).after('<td class="autoget_torrent_' + autogetTdNumber + '"><a href="#" class="autoget_link"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td>');
+					if(autogetCol) {
+						tds.eq(1).after('<td class="autoget_torrent_' + tdNumber + '"><a href="#" class="autoget_link"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td>');
+					}
+					if(bookmarkCol) {
+						tds.eq(1).after('<td class="bookmark_torrent_' + tdNumber + '"><a href="#" class="bookmark_link"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></td>');
+					}
+					if(ageCol) {
+						var dateMatch = $(this).next().text().match(/(\d+)\/(\d+)\/(\d+) à (\d+):(\d+)/);
+						if(!dateMatch || !dateMatch.length) { // This should never happen
+							return;
+						}
+
+						// Append our age td
+						tds.eq(1).after('<td class="age_torrent_' + tdNumber + '">' + simpleDateToDiff(dateMatch) + '</td>');
+					}
 				}
 			});
-			dbg("[autoget_column] Ended");
+
+			if(ageCol && !$(".age_torrent_head:first").find("a").length && mOptions.canSort) {
+				var sortedUrl = utils.clone(pageUrl);
+				sortedUrl.path = sortedUrl.path == "/" ? "/browse/" : sortedUrl.path;
+				sortedUrl.params = sortedUrl.params || {};
+				sortedUrl.params.page = 0;
+				sortedUrl.params.sort = (pageUrl.path == "/sphinx/" ? "date" : "id");
+				sortedUrl.params.order = "desc";
+				if(pageUrl.params && pageUrl.params.sort == (pageUrl.path == "/sphinx/" ? "date" : "id") && pageUrl.params.order != "asc") {
+					sortedUrl.params.order = "asc";
+				}
+
+				$(".age_torrent_head:first").wrapInner('<a href="' + utils.craftUrl(sortedUrl) + '"></a>');
+			}
+			dbg("[columns] Ended");
 		};
 
 		var autogetOnClick = function() {
@@ -338,46 +315,6 @@ modules.torrent_list = {
 			var funct = "function() { AddGet('" + td.find("img:first").attr("id").substring(6) + "', 'autoget', '" + $.trim(td.find("a:first").text()) + "'); }";
 			insertScript("autoget_native", funct, true);
 			return false;
-		};
-
-		var addBookmarkColumn = function() {
-			if(!opt.get(module_name, "bookmark_column")) {
-				return;
-			}
-
-			dbg("[bookmark_column] Started");
-			var alreadyProcessed = false;
-			$("tbody tr").each(function() { // Process all data & skip already processed, is strangely faster than processing data before insertion
-				if($(this).hasClass("head_torrent")) {
-					if($(this).hasClass("bookmark_done")) { // If this td head is already processed, assume the same for the whole page
-						dbg("[bookmark_column] Already processed page");
-						alreadyProcessed = true;
-						return;
-					}
-					dbg("[bookmark_column] Processing");
-					$(this).find("td:nth(1)").after('<td class="bookmark_torrent_head">Bkm</td>');
-					$(this).addClass("bookmark_done");
-					alreadyProcessed = false;
-				}
-				else {
-					if(alreadyProcessed) { // Wait until we get to the new page
-						return;
-					}
-
-					var tds = $(this).find("td");
-					if(tds.first().hasClass("alt1")) { // Don't mind the hidden td
-						return;
-					}
-
-					var autogetTdNumber = 0;
-					if(tds.eq(1).hasClass("name_torrent_1")) { // Keep background-color alternance
-						autogetTdNumber = 1;
-					}
-
-					tds.eq(1).after('<td class="bookmark_torrent_' + autogetTdNumber + '"><a href="#" class="bookmark_link"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></td>');
-				}
-			});
-			dbg("[bookmark_column] Ended");
 		};
 
 		var bookmarkOnClick = function() {
@@ -419,6 +356,9 @@ modules.torrent_list = {
 									var torrentNameTd = torrentTR.find("td:nth(1)");
 									if(opt.get(module_name, "autoget_column")) {
 										torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="autoget_link"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td>');
+									}
+									if(opt.get(module_name, "bookmark_column")) {
+										torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="bookmark_link"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></td>');
 									}
 									if(opt.get(module_name, "age_column")) {
 										torrentNameTd.after('<td class="age_torrent_1">frais</td>');
@@ -475,9 +415,7 @@ modules.torrent_list = {
 						dbg("[TorrentMark] Insert torrents");
 						$("#torrent_list").append(tagTorrents(insertionData));
 						refreshDate();
-						addAutogetColumn();
-						addBookmarkColumn();
-						addAgeColumn();
+						addColumns();
 						applyFilters();
 						dbg("[TorrentMark] Blocking endless scrolling");
 						avoidEndlessScrolling = true;
@@ -744,9 +682,7 @@ modules.torrent_list = {
 		tagTorrents($("tbody tr"));
 		filtersChanged();
 		columnSorter();
-		addAutogetColumn();
-		addBookmarkColumn();
-		addAgeColumn();
+		addColumns();
 
 		$("#torrent_list").on("mouseenter", "a", showTorrentComments)
 			.on("click", "a.autoget_link", autogetOnClick)
@@ -760,9 +696,7 @@ modules.torrent_list = {
 			dbg("[endless_scrolling] Module specific functions");
 			$("#find_marked_torrent_span").remove();
 			refreshDate();
-			addAutogetColumn();
-			addBookmarkColumn();
-			addAgeColumn();
+			addColumns();
 			applyFilters();
 			$(document).trigger("es_dom_process_done");
 		});
