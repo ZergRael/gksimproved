@@ -31,9 +31,32 @@ def run():
 		json.dump(package, content_file, indent=2)
 
 	print("Update main.js")
-	mainPrefix = '// Import the page-mod API\nvar pageMod = require("sdk/page-mod");\n// Import the self API\nvar self = require("sdk/self");\n\npageMod.PageMod({\n  include: ["*.gks.gs", "*.s.gks.gs"],\n  contentScriptFile: ['
-	mainMid = "\n  ],\n  contentScriptOptions: {"
-	mainSuffix = "\n  }\n});"
+	mainPrefix = '\n'.join([
+		'// Import the page-mod API',
+		'var pageMod = require("sdk/page-mod");',
+		'// Import the self API',
+		'var self = require("sdk/self");',
+		'// Import simple-storage API',
+		'var sstorage = require("sdk/simple-storage");',
+		'pageMod.PageMod({',
+		'  include: ["*.gks.gs", "*.s.gks.gs"],',
+		'  contentScriptFile: [',])
+	mainMid = '\n'.join([
+		'',
+		'  ],',
+		'  contentScriptOptions: {'])
+	mainSuffix = '\n'.join([
+		'',
+		'  },',
+		'  onAttach: function(worker) {',
+		'    worker.port.on("storageGet", function(key) {',
+		'      worker.port.emit("storageGet" + key, sstorage.storage[key]);',
+		'    });',
+		'    worker.port.on("storageSet", function(obj) {',
+		'      sstorage.storage[obj.key] = obj.val;',
+		'    });',
+		'  }',
+		'});'])
 
 	main = mainPrefix
 	for js in manifest["content_scripts"][0]["js"] :

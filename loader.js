@@ -1,4 +1,6 @@
-if($("#body").length) {
+var startAll = function() {
+	// Insert custom CSS
+	insertCSS();
 	$.each(modules, function(module_name, m) {
 		if(!m.pages) {
 			m.loadModule();
@@ -34,4 +36,17 @@ if($("#body").length) {
 		});
 	});
 	$(document).trigger("scroll").trigger("gksi_ready");
+};
+
+if($("#body").length) {
+	dbg("[Loaded] Started");
+	// Load all options
+	opt.load(function() {
+		dbg("[Loader] Loaded opt");
+		// Load global saved data
+		gData.load(function() {
+			dbg("[Loader] Loaded gData");
+			startAll();
+		});
+	});
 }

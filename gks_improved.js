@@ -15,6 +15,31 @@ if(typeof chrome == "undefined") {
 			getURL: function(str) {
 				return self.options[str];
 			}
+		},
+		storage: {
+			local: {
+				set: function(obj, callback) {
+					for(key in obj) {
+						var storedObj = {key: key, val: obj[key]}
+						console.log(storedObj);
+						self.port.emit('storageSet', storedObj);
+					}
+					if(callback) {
+						callback();
+					}
+				},
+				get: function(key, callback) {
+					var returnObj = {};
+					self.port.on('storageGet' + key, function(obj) {
+						returnObj[key] = obj;
+						if(callback) {
+							console.log(returnObj);
+							callback(returnObj);
+						}
+					});
+					self.port.emit('storageGet', key);
+				}
+			}
 		}
 	};
 }
@@ -296,12 +321,7 @@ var insertDivs = function() {
 dbg("[Init] Starting the engine");
 // Parse our url string from the browser
 var pageUrl = utils.parseUrl(window.location.href);
-// Load all options
-opt.load();
-// Load global saved data
-gData.load();
-// Insert custom CSS and divs
-insertCSS();
+// Insert custom divs, CSS is delayed until opts are loaded
 insertDivs();
 // Each module will be inserted in the modules object for an easier inter-modules communication
 var modules = {};

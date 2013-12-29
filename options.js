@@ -113,12 +113,12 @@ var opt = {
 	// Sets value(v) for module(m) & option(o)
 	set: function(m, o, v) {
 		this.options[m][o].val = v;
-		utils.storage.set(m, this.options[m]);
+		this.save(m);
 	},
 	// Sets value(v) for module(m) & option(o) & sub option(s)
 	sub_set: function(m, o, s, v) {
 		this.options[m][o].sub_options[s].val = v;
-		utils.storage.set(m, this.options[m]);
+		this.save(m);
 	},
 	// Sets on change callback(c) for module(m) & option(o)
 	setCallback: function(m, o, c) {
@@ -128,16 +128,37 @@ var opt = {
 	setData: function(m, o, name, data) {
 		this.options[m][o][name] = data;
 	},
-	// Populate all options values by extracting from localStorage or default value
-	load: function() {
+	// Sends to storage
+	save: function(m) {
+		utils.storage.set(m, this.options[m]);
+	},
+	// Populate all options values by extracting from storage or default value
+	load: function(callback) {
+		var requiredCallbacks = 0;
 		$.each(this.options, function(m, opts) {
-			var values = utils.storage.get(m);
-			$.each(opts, function(o, v) {
-				opt.options[m][o].val = (values && values[o] != undefined ? values[o] : v.defaultVal);
-				if(v.sub_options) {
-					$.each(v.sub_options, function(s_o, s_v) {
-						opt.options[m][o].sub_options[s_o].val = (values && values[o + '_' + s_o] != undefined ? values[o + '_' + s_o] : s_v.defaultVal);
-					});
+			requiredCallbacks++;
+			utils.storage.get(m, function(obj) {
+				var values = obj[m], legValues;
+				if(!values) {
+					legValues = utils.storage.legacy.get(m);
+					if(legValues) {
+						values = legValues;
+					}
+				}
+				$.each(opts, function(o, v) {
+					opt.options[m][o].val = (values && values[o] != undefined ? values[o] : v.defaultVal);
+					if(v.sub_options) {
+						$.each(v.sub_options, function(s_o, s_v) {
+							opt.options[m][o].sub_options[s_o].val = (values && values[o + '_' + s_o] != undefined ? values[o + '_' + s_o] : s_v.defaultVal);
+						});
+					}
+				});
+				if(legValues) {
+					opt.save(m);
+					utils.storage.legacy.rm(m);
+				}
+				if(--requiredCallbacks == 0) {
+					callback();
 				}
 			});
 		});
@@ -177,16 +198,36 @@ var gData = {
 	},
 	set: function(m, o, v) {
 		this.data[m][o] = v;
-		utils.storage.data_set(m, this.data[m]);
+		this.save(m);
 	},
 	get: function(m, o) {
 		return this.data[m][o];
 	},
-	load: function() {
+	save: function(m) {
+		utils.storage.data_set(m, this.data[m]);
+	},
+	load: function(callback) {
+		var requiredCallbacks = 0;
 		$.each(this.data, function(m, data) {
-			var values = utils.storage.data_get(m);
-			$.each(data, function(o, v) {
-				gData.data[m][o] = (values && values[o] != undefined ? values[o] : v);
+			requiredCallbacks++;
+			utils.storage.data_get(m, function(obj) {
+				var values = obj[m], legValues;
+				if(!values) {
+					legValues = utils.storage.legacy.data_get(m);
+					if(legValues) {
+						values = legValues;
+					}
+				}
+				$.each(data, function(o, v) {
+					gData.data[m][o] = (values && values[o] != undefined ? values[o] : v);
+				});
+				if(legValues) {
+					gData.save(m);
+					utils.storage.legacy.data_rm(m);
+				}
+				if(--requiredCallbacks == 0) {
+					callback();
+				}
 			});
 		});
 	}
