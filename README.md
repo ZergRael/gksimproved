@@ -13,12 +13,14 @@ Voir topic associé.
 - Episode watcher : Réécriture complète du panneau de configuration pour satisfaire les petites résolutions
 - Global : Améliorations diverses pour le support des CSS perso
 - Global : Migration sur jQuery 2.0
+- Global : Ajout d'un package Firefox pour Android
 - Torrent : Ajout de l'étoile bookmark dans le header de la fiche torrent
 - Torrent : Ajout de l'étoile bookmark dans les suggestions des fiches torrent
 - Torrent list : Correction de la colonne d'age pour prendre en compte les timezone
 - Torrent list : Refonte du système de filtres - Devrait être plus rapide et compréhensible
 - Torrent list : Amélioration de la preview pour séléctionner l'image la plus intéressante de la fiche torrent
 - Torrent list : Ajout d'une colonne de bookmarks
+- Torrent list : Refonte du filtre par chaîne de caractères
 - Snatched : Refonte du système de filtres
 
 

@@ -33,6 +33,7 @@ modules.torrent_list = {
 
 				var node = $(this);
 				var t = {node: node, name: node.find("strong").text(), status: {}, shown: true, nextNode: node.next()};
+				t.lName = t.name.toLowerCase();
 				var imgs = node.find("img");
 				$.each(imgs, function() {
 					if(bookmarksList) {
@@ -64,6 +65,10 @@ modules.torrent_list = {
 						case "Scene":
 							t.status.scene = true;
 					}
+					var tds = node.find("td");
+					t.completed = Number(tds.eq(5).text().trim());
+					t.seed = Number(tds.eq(6).text().trim());
+					t.leech = Number(tds.eq(7).text().trim());
 				});
 				t.status.string = "";
 				torrentList.push(t);
@@ -127,7 +132,6 @@ modules.torrent_list = {
 		var applyFilters = function() {
 			var showTorrents = [];
 			var hideTorrents = [];
-			var caseSensitive = opt.get(module_name, "case_sensitive");
 			$.each(torrentList, function(i, t) {
 				var shouldShow = true;
 
@@ -148,7 +152,29 @@ modules.torrent_list = {
 
 				// String filter
 				if(shouldShow && stringFilters.ready) {
-					shouldShow = caseSensitive ? t.name.indexOf(stringFilters.proper) == -1 : t.name.toLowerCase().indexOf(stringFilters.proper) == -1
+					for(i in stringFilters.filters) {
+						if(shouldShow) {
+							var f = stringFilters.filters[i];
+							if(f.fType == 0) {
+								if(f.operator == 0) {
+									shouldShow = (t[f.prop] < f.val);
+								}
+								else if(f.operator == 1) {
+									shouldShow = (t[f.prop] == f.val);
+								}
+								else if(f.operator == 2) {
+									shouldShow = (t[f.prop] > f.val);
+								}
+							}
+							else if(f.fType == 1) {
+								shouldShow = (t.lName.indexOf(f.str) == -1);
+							}
+							else if(f.fType == 2) {
+								shouldShow = (t.lName.indexOf(f.str) > -1);
+							}
+						}
+					}
+					//shouldShow = t.lName.indexOf(stringFilters.proper) == -1
 				}
 
 				if(shouldShow && !t.shown) {
@@ -172,12 +198,51 @@ modules.torrent_list = {
 		};
 
 		var compileStringFilter = function(str) {
-			var compiledFilter = {original: str, proper: "", ready: false};
-			compiledFilter.proper = (opt.get(module_name, "case_sensitive") ? str : str.toLowerCase()).trim();
-			if(compiledFilter.proper != "") {
-				compiledFilter.ready = true;
+			var sFilter = {original: str, proper: "", ready: false};
+			sFilter.proper = str.toLowerCase().trim();
+			if(sFilter.proper != "") {
+				sFilter.ready = true;
+				sFilter.filters = [];
+				var filterSplit = sFilter.proper.split(/&+/);
+				for(i in filterSplit) {
+					var f = {};
+					var s = filterSplit[i].trim();
+					var nFilter = s.match(/\b([csl])([<=>])(\d+)\b/);
+					if(nFilter) {
+						f.fType = 0;
+						switch(nFilter[1]) {
+							case 'c': f.prop = "completed";
+								break;
+							case 's': f.prop = "seed";
+								break;
+							case 'l': f.prop = "leech";
+								break;
+						}
+						switch(nFilter[2]) {
+							case '<': f.operator = 0;
+								break;
+							case '=': f.operator = 1;
+								break;
+							case '>': f.operator = 2;
+							break;
+						}
+						f.val = nFilter[3];
+						dbg("[StringFilter] " + f.prop + " " + ['<', '=', '>'][f.operator] + " " + f.val);
+					}
+					else if(s.indexOf("!") == 0) {
+						f.fType = 1;
+						f.str = s.substring(1);
+						dbg("[StringFilter] NOT " + f.str);
+					}
+					else {
+						f.fType = 2;
+						f.str = s;
+						dbg("[StringFilter] " + f.str);
+					}
+					sFilter.filters.push(f);
+				}
 			}
-			return compiledFilter;
+			return sFilter;
 		};
 
 		var recalcAgeColumn = function() {
@@ -642,7 +707,7 @@ modules.torrent_list = {
 		var markerButton =  '<a id="torrent_marker_button" href="#">Marquer torrent</a> |';
 		var finderButton = '<a id="torrent_finder_button" href="#">Retrouver torrent</a> | ';
 		var filterButtons = '<span class="g_filter g_filter_' + opt.get(module_name, "filter_fl") + '" opt="filter_fl">Freeleech</span> | <span class="g_filter g_filter_' + opt.get(module_name, "filter_scene") + '" opt="filter_scene">Scene</span> |';
-		var stringFilterInput = '<input type="text" id="filter_string" placeholder="Exclure" size="12" />| ';
+		var stringFilterInput = '<input type="text" id="filter_string" placeholder="Filtre" size="12" title="Options de filtrage\nComplétés : c<10\nSeeders : s=1\nLeechers : l>12\nChaine de caractères\nOpérateurs : &!\n\nExemple : DVDRiP sans VO avec +10 seeders\n\'dvdrip & !vo & s>10\'" />| ';
 		var bookmarkButton = '<a href="#" id="bookmarkvisibletorrents">Bookmarker 40 premiers</a> | ';
 		var refreshButton = '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/><label for="auto_refresh">Auto refresh</label> | ';
 		var buttons = "";
@@ -664,7 +729,7 @@ modules.torrent_list = {
 		}
 		if(mOptions.canFilter) {
 			buttons += filterButtons;
-			if(opt.get(module_name, "exclude_string")) {
+			if(opt.get(module_name, "filter_string")) {
 				buttons += stringFilterInput;
 			}
 		}
