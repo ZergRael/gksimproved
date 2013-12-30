@@ -66,6 +66,7 @@ modules.torrent_list = {
 							t.status.scene = true;
 					}
 					var tds = node.find("td");
+					t.comments = Number(tds.eq(3).text().trim());
 					t.completed = Number(tds.eq(5).text().trim());
 					t.seed = Number(tds.eq(6).text().trim());
 					t.leech = Number(tds.eq(7).text().trim());
@@ -100,6 +101,7 @@ modules.torrent_list = {
 			dbg("[Filters] Filters ready");
 			applyFilters();
 			dbg("[Filters] Done");
+			$(document).trigger("es_dom_process_done");
 		};
 
 		var basicFilters = {freeleech: 0, scene: 0};
@@ -198,7 +200,7 @@ modules.torrent_list = {
 			}
 		};
 
-		var filterProperties = {c: 'completed', s: 'seed', l: 'leech'};
+		var filterProperties = {c: 'completed', s: 'seed', l: 'leech', m: 'comments'};
 		var filterOperators = {'<': 0, '=': 1, '>': 2};
 		var compileStringFilter = function(str) {
 			var sFilter = {original: str, proper: "", ready: false};
@@ -214,7 +216,7 @@ modules.torrent_list = {
 					for(j in andSplit) {
 						var s = andSplit[j].trim();
 						var f = {};
-						var nFilter = s.match(/\b([csl])([<=>])(\d+)\b/);
+						var nFilter = s.match(/\b([cslm])\s*([<=>])\s*(\d+)\b/);
 						if(nFilter) {
 							f.fType = 0;
 							f.prop = filterProperties[nFilter[1]];
@@ -703,7 +705,7 @@ modules.torrent_list = {
 		var markerButton =  '<a id="torrent_marker_button" href="#">Marquer torrent</a> |';
 		var finderButton = '<a id="torrent_finder_button" href="#">Retrouver torrent</a> | ';
 		var filterButtons = '<span class="g_filter g_filter_' + opt.get(module_name, "filter_fl") + '" opt="filter_fl">Freeleech</span> | <span class="g_filter g_filter_' + opt.get(module_name, "filter_scene") + '" opt="filter_scene">Scene</span> |';
-		var stringFilterInput = '<input type="text" id="filter_string" placeholder="Filtre" size="12" title="Options de filtrage\nComplétés : c<10\nSeeders : s=1\nLeechers : l>12\nChaine de caractères\nOpérateurs : && || !\n\nExemples :\nDVDRiP ou BDRiP avec +10 seeders\n\'dvdrip || bdrip && s>10\'\n\nExclure FUNKY et CARPEDIEM\n\'!funky && !carpediem\'" />| ';
+		var stringFilterInput = '<input type="text" id="filter_string" placeholder="Filtre" size="12" title="Options de filtrage\nComplétés : c<10\nSeeders : s=1\nLeechers : l>12\nCommentaires : m>0\nChaine de caractères\nOpérateurs : && || !\n\nExemples :\nDVDRiP ou BDRiP avec +10 seeders\n\'dvdrip || bdrip && s>10\'\n\nExclure FUNKY et CARPEDIEM\n\'!funky && !carpediem\'" />| ';
 		var bookmarkButton = '<a href="#" id="bookmarkvisibletorrents">Bookmarker 40 premiers</a> | ';
 		var refreshButton = '<input id="auto_refresh" type="checkbox" ' + (opt.get(module_name, "auto_refresh") ? 'checked="checked" ' : ' ') + '/><label for="auto_refresh">Auto refresh</label> | ';
 		var buttons = "";
@@ -746,7 +748,6 @@ modules.torrent_list = {
 			dbg("[Filters] " + optName + " is " + opt.get(module_name, optName));
 			button.addClass("g_filter_" + optStatus);
 			filtersChanged();
-			$(document).trigger("es_dom_process_done");
 		});
 
 		$("#filter_string").on("change", filtersChanged).on("keydown", function(e) {

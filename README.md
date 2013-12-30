@@ -14,6 +14,8 @@ Voir topic associé.
 - Global : Améliorations diverses pour le support des CSS perso
 - Global : Migration sur jQuery 2.0
 - Global : Ajout d'un package Firefox pour Android
+- Global : Utilisation du stockage interne aux extension Chrome/Firefox - Adieu localStorage
+- Global : Ajout d'un import/export des options
 - Torrent : Ajout de l'étoile bookmark dans le header de la fiche torrent
 - Torrent : Ajout de l'étoile bookmark dans les suggestions des fiches torrent
 - Torrent list : Correction de la colonne d'age pour prendre en compte les timezone
