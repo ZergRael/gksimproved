@@ -97,6 +97,9 @@ modules.torrent_list = {
 		};
 
 		var filtersChanged = function() {
+			if(!torrentList.length) {
+				return;
+			}
 			refreshFilterSet();
 			dbg("[Filters] Filters ready");
 			applyFilters();
