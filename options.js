@@ -162,6 +162,34 @@ var opt = {
 				}
 			});
 		});
+	},
+	exportAll: function() {
+		var tempStore = {};
+		$.each(this.options, function(m, opts) {
+			tempStore[m] = {};
+			$.each(opts, function(o, v) {
+				tempStore[m][o] = v.val;
+				if(v.sub_options) {
+					$.each(v.sub_options, function(s_o, s_v) {
+						tempStore[m][o + '_' + s_o] = s_v.val;
+					});
+				}
+			});
+		});
+		return tempStore;
+	},
+	importAll: function(obj) {
+		$.each(this.options, function(m, opts) {
+			$.each(opts, function(o, v) {
+				opt.options[m][o].val = (obj[m] && obj[m][o] != undefined ? obj[m][o] : v.defaultVal);
+				if(v.sub_options) {
+					$.each(v.sub_options, function(s_o, s_v) {
+						opt.options[m][o].sub_options[s_o].val = (obj[m] && obj[m][o + '_' + s_o] != undefined ? obj[m][o + '_' + s_o] : s_v.defaultVal);
+					});
+				}
+			});
+			opt.save(m);
+		});
 	}
 };
 
@@ -229,6 +257,17 @@ var gData = {
 					callback();
 				}
 			});
+		});
+	},
+	exportAll: function() {
+		return this.data;
+	},
+	importAll: function(obj) {
+		$.each(this.data, function(m, data) {
+			$.each(data, function(o, v) {
+				gData.data[m][o] = (obj[m] && obj[m][o] != undefined ? obj[m][o] : v);
+			});
+			gData.save(m);
 		});
 	}
 };

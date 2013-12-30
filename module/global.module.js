@@ -134,11 +134,13 @@ modules.global = {
 			var onCloseCallback = function() {
 				var section = $(".gksi_options_header_button_selected").attr("section");
 				opt.set(module_name, "options_section", section);
-			}
+			};
+
+			var buttons = [ { b_id: "im_export", b_text: "Importer/Exporter", b_callback: createImportExportFrame } ];
 
 			// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
 			var copyright = '<a href="/forums.php?action=viewtopic&topicid=6336">GKSi</a> by <a href="/users/2360140">ZergRael</a>'
-			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "navigation", top: 8, left: 230, header: optionsFrameHeader, onCloseCallback: onCloseCallback, underButtonsText: copyright });
+			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "navigation", top: 8, left: 230, buttons: buttons, header: optionsFrameHeader, onCloseCallback: onCloseCallback, underButtonsText: copyright });
 
 			$.each(opt.options, function(module_name, options) {
 				if(!$("#gksi_options_data_" + module_name).length) {
@@ -242,8 +244,7 @@ modules.global = {
 				else {
 					$(".gksi_options_section").show();
 				}
-			}, function() {
-			});
+			}, function() {});
 
 			var section = opt.get(module_name, "options_section");
 			if(section) {
@@ -256,11 +257,59 @@ modules.global = {
 			dbg("[Options] Frame ready");
 		};
 
+		var createImportExportFrame = function() {
+			$("#gksi_options_close").click();
+
+			dbg("[Export] Generate link");
+			var savedData = { opt: opt.exportAll(), gData: gData.exportAll() };
+			var blob = new Blob([JSON.stringify(savedData)], {type: "application/json"});
+			var url  = URL.createObjectURL(blob);
+
+			var frameData = [
+				'<div class="gksi_frame_section_header">Exporter</div>',
+				'<a href="' + url + '" download="gksi.backup.json">Télécharger l\'export des options</a>',
+				'<div class="gksi_frame_section_header">Importer</div>',
+				'<input id="import_file" type="file" />',
+				'<div id="import_result"></div>'
+			];
+			appendFrame({ id: "im_export", title: "GKSi Import/Export", data: frameData.join(""), relativeToId: "navigation", top: 8, left: 230 });
+			$("#import_file").change(function() {
+				var result = $("#import_result");
+				dbg("[Import] Got file");
+				result.html("Ouverture du fichier");
+				var fileInput = $(this).get(0).files[0];
+				if(fileInput) {
+					var reader = new FileReader();
+					reader.onload = function(e) {
+						dbg("[Import] Reading file");
+						result.html(result.html() + "<br />Lecture en cours");
+						var file = e.target.result;
+						if(file) {
+							var obj = JSON.parse(file);
+							if(obj && obj["opt"]) {
+								dbg("[Import] Importing opt");
+								result.html(result.html() + "<br />Import des options");
+								opt.importAll(obj["opt"]);
+							}
+							if(obj && obj["gData"]) {
+								dbg("[Import] Importing gData");
+								result.html(result.html() + "<br />Import des données");
+								gData.importAll(obj["gData"]);
+							}
+						}
+						result.html(result.html() + "<br />Importation terminée. La page va être rafraîchie.");
+						setTimeout(function() { window.location.reload() }, 5000);
+					};
+					reader.readAsText(fileInput);
+				}
+			});
+		};
+
 		var timeOffsets = {
 			"bookmarks": 24 * 60 * 60 * 1000,
 			"real_stats": 24 * 60 * 60 * 1000,
 			"episodes": 2 * 60 * 60 * 1000
-		}
+		};
 		var isDataUsable = function(data) {
 			return new Date().getTime() < (gData.get(data, "last_check") + timeOffsets[data]);
 		};
@@ -406,7 +455,7 @@ modules.global = {
 			utils.grabPage(snatchedUrl, function(data) {
 				parseBookmarks($(data).find("#torrent tbody:first tr"));
 			});
-		}
+		};
 		modules.global.fetchBookmarks = fetchBookmarks;
 
 		var parseBookmarks = function(torrents) {
