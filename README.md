@@ -7,6 +7,10 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+
+
+### Changelog
+**1.0.0**
 - Badges : Suppression du tracking sur le badge IRC, la stat associée a disparu :(
 - Endless scrolling : Ajout sur la recherche forum
 - Endless scrolling : Ajout sur l'historique des uploads utilisateur
@@ -20,13 +24,11 @@ Voir topic associé.
 - Torrent : Ajout de l'étoile bookmark dans les suggestions des fiches torrent
 - Torrent list : Correction de la colonne d'age pour prendre en compte les timezone
 - Torrent list : Refonte du système de filtres - Devrait être plus rapide et compréhensible
-- Torrent list : Amélioration de la preview pour séléctionner l'image la plus intéressante de la fiche torrent
+- Torrent list : Amélioration de la preview pour sélectionner l'image la plus intéressante de la fiche torrent
 - Torrent list : Ajout d'une colonne de bookmarks
 - Torrent list : Refonte du filtre par chaîne de caractères
 - Snatched : Refonte du système de filtres
 
-
-### Changelog
 **0.4.3**
 - Bookmarks : Correction de la mise en valeur après le tri
 - Global : Correction du bouton de l'episode watcher

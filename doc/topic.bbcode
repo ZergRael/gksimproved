@@ -1,20 +1,21 @@
-[center][img]https://s.gks.gs/img/img/01-2013/gks_improved_48.png[/img][size=6]GKSimproved[/size] [size=5](beta)[/size][/center]
+[center][img]https://s.gks.gs/img/img/12-2013/gks_improved_64.png[/img][size=6]GKSimproved[/size][/center]
 Salutations à tous !
 
-Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment. Toujours en beta mais un jour peut-être une version stable arrivera ;)
+Voici donc [b]GKSimproved[/b], une extension Chrome et Firefox uniquement pour le moment.
 
-Version actuelle : 0.4.3 - 16/11/2013 - Licence MIT
+Version actuelle : 1.0.0 - 30/12/2013 - Licence MIT
 
 [size=6]Téléchargement[/size] :
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf][b]Page Chrome Webstore[/b][/url]
-* [url=https://github.com/ZergRael/gksimproved/raw/master/build/gksimproved.xpi][b]Extension Firefox[/b][/url]
+* [url=https://github.com/ZergRael/gksimproved/raw/master/build/gksimproved.xpi][b]Extension Firefox[/b][/url] - Firefox 16.0 minimum
+* [url=https://github.com/ZergRael/gksimproved/raw/master/build/gksimproved.mobile.xpi][b]Extension Firefox pour Android[/b][/url] - Firefox Mobile 16.0 minimum
 * [url=https://github.com/ZergRael/gksimproved]Page GitHub[/url]
 * [url=https://gks.gs/wiki/?id=389]Page Wiki[/url] - Thx @Speederman
 
 [size=6]Présentation :[/size]
 L'extension se base sur un ensemble de scripts Javascript avec l'aide de la libraire jQuery. Cette librairie permet de simplifier le code tout en ajoutant des fonctions très pratiques ainsi que quelques suggestions glanées sur le forum.
 
-J'ai développé l'ensemble de ces scripts, même si j'ai récupéré quelques parties que j'avais déjà codé auparavant. Le code est entièrement sous licence MIT, donc gratuit et réutilisable.
+J'ai développé l'ensemble de ces scripts, même si j'ai récupéré quelques parties que j'avais déjà codé auparavant. Le code est entièrement sous licence MIT, donc totalement opensource.
 
 La plupart des options sont sauvegardées entre chaque utilisation.
 
@@ -72,6 +73,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 [b]* Forums[/b]
 - Liste des topics -- /forums.php?action=viewforum&forumid=<id_forum>
 - Posts d'un topic -- /forums.php?action=viewtopic&topicid=<id_topic>
+- Recherche -- https://gks.gs/forums.php?action=search
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Bouton de remontée en haut de page
 > [i]Cacheur de signatures[/i] : Permet de cacher les signatures au clic
@@ -136,6 +138,7 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 - Liste des uploads -- https://gks.gs/m/uploads/
 - Dupecheck -- https://gks.gs/dupecheck/
 - Reseeds -- https://gks.gs/reseed.php
+- Liste des uploads d'un user -- /my/history/<user_id>/uploads
 
 > [i]Endless Scrolling[/i] : Arrivé en fin de page, la page suivante est ajoutée à la suite - Boutons personnalisables de remontée en haut de page & de pause
 
@@ -158,17 +161,11 @@ La plupart des options sont sauvegardées entre chaque utilisation.
 [img]https://s.gks.gs/img/img/10-2013/GKSi_options.gif[/img]
 
 [size=6]TODO list:[/size]
-- Moar comments
-- Optimisations
+- Nope
 
 - Proposez vos idées ! Tant que l'option est réalisable à partir de javascript et ne tire pas trop sur les serveurs, pourquoi pas ?
 
 [size=6]FAQ :[/size]
-> [i]Firefox ne sauvegarde pas les options[/i] :
-- Les options sont sauvegardées dans le localStorage, une sorte de gros cookie. Il faut donc que les cookies soient acceptés pour GKS.
-De plus, il arrive que Firefox ne soit plus capable de conserver le localStorage entre chaque redémarrage, voir [url=http://www.ghacks.net/2012/11/22/firefox-not-saving-cookie-exceptions-anymore/]ici[/url]. Merci @Masta77
-[spoil]Update: Deleting the permissions.sqlite file in the Firefox proflie directory resolves the issue. The easiest way to get there is to enter about:support in the browser's address bar. Locate the show folder button under Application Basics and click on it. Close Firefox afterwards, delete the permissions.sqlite file, and restart the browser.[/spoil]
-
 > [i]Impossible d'installer le .xpi pour Firefox[/i] :
 [spoil][quote=Uncut][color=royalblue][b][size=4]Si ça peut t'aider:[/size][/b][/color]
 [img]https://s.gks.gs/img/img/10-2013/rQ64bFa.png[/img]
@@ -179,6 +176,25 @@ En tout cas pour moi ça a fonctionné comme ça.[/size][/b][/color][/quote][/sp
 Merci @Uncut
 
 [size=6]Changelog :[/size]
+[b]* 1.0.0 - 30/12/2013[/b]
+- Badges : Suppression du tracking sur le badge IRC, la stat associée a disparu :(
+- Endless scrolling : Ajout sur la recherche forum
+- Endless scrolling : Ajout sur l'historique des uploads utilisateur
+- Episode watcher : Réécriture complète du panneau de configuration pour satisfaire les petites résolutions
+- Global : Améliorations diverses pour le support des CSS perso
+- Global : Migration sur jQuery 2.0
+- Global : Ajout d'un package Firefox pour Android
+- Global : Utilisation du stockage interne aux extension Chrome/Firefox - Adieu localStorage
+- Global : Ajout d'un import/export des options
+- Torrent : Ajout de l'étoile bookmark dans le header de la fiche torrent
+- Torrent : Ajout de l'étoile bookmark dans les suggestions des fiches torrent
+- Torrent list : Correction de la colonne d'age pour prendre en compte les timezone
+- Torrent list : Refonte du système de filtres - Devrait être plus rapide et compréhensible
+- Torrent list : Amélioration de la preview pour sélectionner l'image la plus intéressante de la fiche torrent
+- Torrent list : Ajout d'une colonne de bookmarks
+- Torrent list : Refonte du filtre par chaîne de caractères
+- Snatched : Refonte du système de filtres
+[spoil]
 [b]* 0.4.3 - 16/11/2013[/b]
 - Bookmarks : Correction de la mise en valeur après le tri
 - Global : Correction du bouton de l'episode watcher
@@ -205,7 +221,6 @@ Merci @Uncut
 - Logs : Lien de recherche sur les titres de requests
 - Logs : Correction des liens sur les lignes ajoutées par autorefresh
 - Torrent list : Ajout d'une preview de l'image principale de la fiche torrent par mouseover sur le [+]
-[spoil]
 [b]* 0.3.6 - 07/10/2013[/b]
 - Account : Preview du custom menu et de la signature
 - Global : Correction de l'espace manquant dans les stats réelles

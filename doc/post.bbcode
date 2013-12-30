@@ -1,23 +1,61 @@
 [size=4][b]Nouvelle version dispo ![/b][/size]
 
-[b]* 0.4.3 - 16/11/2013[/b]
-- Bookmarks : Correction de la mise en valeur après le tri
-- Global : Correction du bouton de l'episode watcher
-- Global : Retrait de la confirmation lors du vidage de l'episode watcher
-- Torrent list : Correction du z-index sur la preview
-- Torrent list : Correction de la preview bloquée en cas de clic sur le [+]
-- Wiki : Barre de BBCode avec raccourcis claviers à l'edit
+[b]* 1.0.0 - 30/12/2013[/b]
+- Badges : Suppression du tracking sur le badge IRC, la stat associée a disparu :(
+- Endless scrolling : Ajout sur la recherche forum
+- Endless scrolling : Ajout sur l'historique des uploads utilisateur
+- Episode watcher : Réécriture complète du panneau de configuration pour satisfaire les petites résolutions
+- Global : Améliorations diverses pour le support des CSS perso
+- Global : Migration sur jQuery 2.0
+- Global : Ajout d'un package Firefox pour Android
+- Global : Utilisation du stockage interne aux extension Chrome/Firefox - Adieu localStorage
+- Global : Ajout d'un import/export des options
+- Torrent : Ajout de l'étoile bookmark dans le header de la fiche torrent
+- Torrent : Ajout de l'étoile bookmark dans les suggestions des fiches torrent
+- Torrent list : Correction de la colonne d'age pour prendre en compte les timezone
+- Torrent list : Refonte du système de filtres - Devrait être plus rapide et compréhensible
+- Torrent list : Amélioration de la preview pour sélectionner l'image la plus intéressante de la fiche torrent
+- Torrent list : Ajout d'une colonne de bookmarks
+- Torrent list : Refonte du filtre par chaîne de caractères
+- Snatched : Refonte du système de filtres
 
 [b]Chrome [/b]:
-* La mise à jour sera automatique au prochain reboot
+* La mise à jour sera automatique dans les prochaines heures
 * [url=https://chrome.google.com/webstore/detail/gksimproved/apnkcicdcpgpkepmabmlggcgmacjalaf]Page Chrome Webstore[/url]
 
 [b]Firefox [/b]:
-* N'oubliez pas que l'addon est passé en auto-hébergement depuis la 0.3.2 ;)
-* La mise à jour est automatique pour ceux déjà en 0.3.2+
+* La mise à jour sera automatique dans les prochaines heures
 * [url=https://github.com/ZergRael/gksimproved/raw/master/build/gksimproved.xpi]Téléchargement direct[/url]
 
+[b]Firefox pour Android[/b]:
+* Bonne chance aux courageux aventuriers
+* [url=https://github.com/ZergRael/gksimproved/raw/master/build/gksimproved.xpi]Téléchargement direct[/url]
+
+[b]Twits en tout genre[/b]
+@foxtom La colonne de bookmarks est arrivé, l'autorefresh avec tri est parti et la version Android pointe son nez
+@Uncut Les options de l'entête ont beaucoup rétréci, j'espère que ce sera suffisant
+@champaf Ai corrigé la preview pour les team à grosses bannières
+@Bz064 J'ai tenté un parser d'expressions sur le filtre, résultat je l'ai transformé en filtre simple et non plus en exclusion. Plus d'infos au mouseover ;)
+@Masta77 Les étoiles bookmark sont là (header torrent et torrents suggerés) ainsi que l'export/import des options (qui n'utilisent plus le localStorage et ont moins de risques de se faire dégommer)
+@hydrog3n Etant donné que https://gks.gs/m/peers/snatched est plus une page de monitoring que de téléchargement, j'ai préféré ne pas rajouter de boutons supplémentaires.
+@eMusclor Done l'ES sur https://gks.gs/forums.php?action=search&type=title&search=&type=title
+@Falcon561 Done l'ES sur https://gks.gs/my/history/3233/uploads et consorts. Combo la colonne de l'Episode Watcher est plus petite et se cache quand elle n'est pas utilisée
+@dionysos Done la colonne de NFO
+@thetorf "Marquer tous les sujets comme lus" même en haut de page avec l'option kivabien
+@xenon974 Ok, c'était tordu à rajouter mais ça devrait fonctionner automatiquement
+@PopStar007 Tu risques de pas être très content parce que j'ai préféré ne pas suivre ta suggestion. Le filtre scene permet d'obtenir les releases scene, et un pack c'est pas vraiment une release scene. De plus, ce filtre n'est visiblement pas trop apprécié. Et enfin, créer une whitelist des team scene serait sacrément case-pieds.
+
+Aux modos, désolé le mass twit, c'est une grosse release.
+
 [b]Infos importantes[/b]
-* Correctifs uniquement
+* La page de configuration de l'Episode Watcher ne devrait plus être aussi giant et ne se montrer que lorsqu'elle est utile
+* jQuery 2.0 n'apporte pas grand chose, mais ça me broutait de voir une ancienne version traîner
+* Firefox pour Android, c'est pas vraiment génial mais ça fonctionne. Par contre, j'aurais du mal a en assurer le support.
+* Les options n'utilisent plus le localStorage, les cookies peuvent être dévorés sans souci, les options resteront. De plus, en cas de problème ou de transfert browser, l'import/export est dispo
+* La preview fait de son mieux pour trouver une image intéressante dans les fiches, mais il arrive qu'elle se plante encore, hésitez pas à venir rapporter ses boulettes
+* Les filtres https://gks.gs/m/peers/snatched et https://gks.gs/browse/ ont pris un sacré coup dans les dents, mais je les trouve plus compréhensibles : vert on garde, rouge ça dégage, blanc osef.
+* Le filtre chaîne de caractères ne fonctionne plus par exclusion mais plus comme un moteur de recherche. Son tooltip est assez explicite.
+Filtrage sur les noms de torrent, le nombre de commentaires, de complétés, de seeders et/ou de leechers.
+Exemple : Un DVDRip sans AC3 avec quelques(3+) leechers sans être un torrent mort : 'dvdrip && !ac3 && l>3 && s>0'
 
 N'hésitez pas à proposer vos suggestions :)
