@@ -5,7 +5,7 @@ import distutils.dir_util
 import distutils.file_util
 import json
 
-sdkDir = "addon-sdk-1.15"
+sdkDir = "addon-sdk-1.14"
 firefoxDir = "ff_gksi"
 chromeDir = "gksimproved"
 

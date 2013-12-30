@@ -92,7 +92,6 @@ modules.endless_scrolling = {
 			pagerData.maxPage = maxPage;
 
 			dbg("[page_extract] Done");
-			//dbg(pagerData);
 		};
 
 		// Builds a A from pageId
@@ -180,7 +179,6 @@ modules.endless_scrolling = {
 			}
 
 			$(mOptions.pagination).html(paginateBarHtml);
-			//dbg(paginateBarHtml);
 		};
 
 		var defaultScrollOffset = 200;
@@ -254,7 +252,6 @@ modules.endless_scrolling = {
 				wentToPageBottom = true;
 			}
 
-			//dbg("[EndlessScrolling] Scrolled");
 			if((scrollTop + window.innerHeight > document.documentElement.scrollHeight - (mOptions.scrollOffset ? mOptions.scrollOffset : defaultScrollOffset)) && !loadingPage) {
 				dbg("[EndlessScrolling] Loading next page");
 				// Prevent further unneeded fetching
