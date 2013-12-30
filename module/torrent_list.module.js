@@ -18,11 +18,11 @@ modules.torrent_list = {
 
 		dbg("[Init] Loading module");
 
-		var torrentList = [];
+		var torrentList = [], bookmarksList, bookmarksIdsList;
 		var tagTorrents = function(torrentLines) {
 			dbg("[tagTorrents] Scanning torrents");
-			var bookmarksList = gData.get("bookmarks", "torrents");
-			var bookmarksIdsList = gData.get("bookmarks", "bookmarkIds");
+			bookmarksList = gData.get("bookmarks", "torrents");
+			bookmarksIdsList = gData.get("bookmarks", "bookmarkIds");
 			var jumpMe = true;
 			torrentLines.each(function() {
 				if(jumpMe) {
@@ -31,59 +31,62 @@ modules.torrent_list = {
 				}
 				jumpMe = true;
 
-				var node = $(this);
-				var t = {node: node, name: node.find("strong").text(), status: {}, shown: true, nextNode: node.next()};
-				t.lName = t.name.toLowerCase();
-				var imgs = node.find("img");
-				$.each(imgs, function() {
-					if(bookmarksList) {
-						var imgId = $(this).attr("id");
-						if(imgId) {
-							var id = imgId.substring(6);
-							t.id = id;
-							if(bookmarksList.indexOf(id) != -1) {
-								if(bookmarksIdsList && bookmarksIdsList[id]) {
-									node.find("img:first").after($('<img class="remove_bookmark_star" src="' + chrome.extension.getURL("images/bookmark.png") + '" />').click(removeBookmarkOnStarClick));
-								}
-								else {
-									node.find("img:first").after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
-								}
-								t.status.bookmark = true;
-							}
-						}
-					}
-					switch($(this).attr("alt")) {
-						case "New !":
-							t.status.new = true;
-							break;
-						case "Nuke ! ":
-							t.status.nuke = true;
-							break;
-						case "FreeLeech":
-							t.status.freeleech = true;
-							break;
-						case "Scene":
-							t.status.scene = true;
-					}
-					var tds = node.find("td");
-					t.comments = Number(tds.eq(3).text().trim());
-					t.completed = Number(tds.eq(5).text().trim());
-					t.seed = Number(tds.eq(6).text().trim());
-					t.leech = Number(tds.eq(7).text().trim());
-				});
-				t.status.string = "";
-				torrentList.push(t);
+				torrentList.push(tagTorrent($(this)));
 			});
 			dbg("[tagTorrents] Ended scanning");
 			return torrentLines;
 		};
 		modules.endless_scrolling.preInsertion = tagTorrents;
 
+		var tagTorrent = function(node) {
+			var t = {node: node, name: node.find("strong").text(), status: {}, shown: true, nextNode: node.next()};
+			t.lName = t.name.toLowerCase();
+			var imgs = node.find("img");
+			$.each(imgs, function() {
+				if(bookmarksList) {
+					var imgId = $(this).attr("id");
+					if(imgId) {
+						var id = imgId.substring(6);
+						t.id = id;
+						if(bookmarksList.indexOf(id) != -1) {
+							if(bookmarksIdsList && bookmarksIdsList[id]) {
+								node.find("img:first").after($('<img class="remove_bookmark_star" src="' + chrome.extension.getURL("images/bookmark.png") + '" />').click(removeBookmarkOnStarClick));
+							}
+							else {
+								node.find("img:first").after('<img src="' + chrome.extension.getURL("images/bookmark.png") + '" />');
+							}
+							t.status.bookmark = true;
+						}
+					}
+				}
+				switch($(this).attr("alt")) {
+					case "New !":
+						t.status.new = true;
+						break;
+					case "Nuke ! ":
+						t.status.nuke = true;
+						break;
+					case "FreeLeech":
+						t.status.freeleech = true;
+						break;
+					case "Scene":
+						t.status.scene = true;
+				}
+				var tds = node.find("td");
+				t.comments = Number(tds.eq(3).text().trim());
+				t.completed = Number(tds.eq(5).text().trim());
+				t.seed = Number(tds.eq(6).text().trim());
+				t.leech = Number(tds.eq(7).text().trim());
+			});
+			t.status.string = "";
+			return t;
+		};
+
 		var removeBookmarkOnStarClick = function() {
 			var id = $(this).prev().attr("id").substring(6);
 			$(this).remove();
-			var bookmarksList = gData.get("bookmarks", "torrents");
-			var bookmarksIdsList = gData.get("bookmarks", "bookmarkIds");
+			bookmarksList = gData.get("bookmarks", "torrents");
+			bookmarksIdsList = gData.get("bookmarks", "bookmarkIds");
 			utils.grabPage({host: pageUrl.host, path: "/ajax.php", params: {action: "del", type: "delbookmark", tid: bookmarksIdsList[id]}}, function(data) {
 				bookmarksList.splice(bookmarksList.indexOf(id), 1);
 				gData.set("bookmarks", "torrents", bookmarksList);
@@ -461,6 +464,7 @@ modules.torrent_list = {
 								$("#torrent_list tr:first").after(torrentTR);
 								$("#torrent_list tr:last").remove();
 								insertedTrs = true;
+								torrentList.unshift(tagTorrent(torrentTR));
 							}
 						});
 						if(insertedTrs) {
