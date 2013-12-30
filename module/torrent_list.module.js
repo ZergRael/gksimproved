@@ -429,7 +429,7 @@ modules.torrent_list = {
 					torrentsTR = $(data).find("#torrent_list tr");
 					dbg("[auto_refresh] Got data");
 					if(torrentsTR && torrentsTR.length) {
-						var firstTorrentId = Number($("#torrent_list tr:nth(1)").find("td:nth(1) img:first").attr("id").substring(6));
+						var firstTorrentId = torrentList[0].id;
 						var foundFirst = false;
 						var insertedTrs = false;
 						$(torrentsTR.get().reverse()).each(function() {
