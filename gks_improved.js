@@ -10,38 +10,64 @@ var dbg = function(str) {
 
 // Firefox hacks to simulate chrome APIs
 if(typeof chrome == "undefined") {
-	var chrome = {
-		extension: {
-			getURL: function(str) {
-				return self.options[str];
-			}
-		},
-		storage: {
-			local: {
-				set: function(obj, callback) {
-					for(key in obj) {
-						var storedObj = {key: key, val: obj[key]}
-						console.log(storedObj);
-						self.port.emit('storageSet', storedObj);
-					}
-					if(callback) {
-						callback();
-					}
-				},
-				get: function(key, callback) {
-					var returnObj = {};
-					self.port.on('storageGet' + key, function(obj) {
-						returnObj[key] = obj;
-						if(callback) {
-							console.log(returnObj);
-							callback(returnObj);
+	if(safari) {
+		var chrome = {
+			extension: {
+				getURL: function(str) {
+					return safari.extension.baseURI + str;
+				}
+			},
+			storage: {
+				local: {
+					set: function(obj, callback) {
+						for(key in obj) {
+							localStorage[key] = JSON.stringify(obj[key])
 						}
-					});
-					self.port.emit('storageGet', key);
+						if(callback) {
+							callback();
+						}
+					},
+					get: function(key, callback) {
+						var returnObj = {};
+						returnObj[key] = JSON.parse(localStorage[key])
+						callback(returnObj);
+					}
 				}
 			}
-		}
-	};
+		};
+	}
+	else {
+		var chrome = {
+			extension: {
+				getURL: function(str) {
+					return self.options[str];
+				}
+			},
+			storage: {
+				local: {
+					set: function(obj, callback) {
+						for(key in obj) {
+							var storedObj = {key: key, val: obj[key]}
+							self.port.emit('storageSet', storedObj);
+						}
+						if(callback) {
+							callback();
+						}
+					},
+					get: function(key, callback) {
+						var returnObj = {};
+						self.port.on('storageGet' + key, function(obj) {
+							returnObj[key] = obj;
+							if(callback) {
+								callback(returnObj);
+							}
+						});
+						self.port.emit('storageGet', key);
+					}
+				}
+			}
+		};
+	}
 }
 
 $(document).trigger("gksi_started");
