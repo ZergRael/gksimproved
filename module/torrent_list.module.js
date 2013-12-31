@@ -121,7 +121,7 @@ modules.torrent_list = {
 					noFilterActive = false;
 				}
 			}
-			if(stringFilterString != stringFilters.original) {
+			if(opt.get(module_name, "filter_string") && stringFilterString != stringFilters.original) {
 				stringFilters = compileStringFilter(stringFilterString);
 			}
 			if(stringFilters.ready) {
