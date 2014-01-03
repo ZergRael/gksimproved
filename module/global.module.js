@@ -542,7 +542,7 @@ modules.global = {
 		var buildBuffer = function() {
 			if(opt.get(module_name, "buffer")) {
 				buildBufferDiv();
-				$("#userlink li:nth(1)").hover(showBuffer, function() {
+				$("#userlink .uploaded, #userlink .downloaded").hover(showBuffer, function() {
 					$("#user_buffer").hide();
 				});
 			}
