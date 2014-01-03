@@ -73,7 +73,7 @@ modules.twits = {
 
 				iPseudo = iPseudo >= pseudos_matchs.length - 1 ? 0 : iPseudo + 1;
 				dbg("[AutoCTwit] Found a match : [" + textToAutoc + "] > " + pseudos_matchs[iPseudo]);
-				qp.val(qp_text.substr(0, matchStart) + pseudos_matchs[iPseudo] + (iPseudo == 0 ? '' : ' ') + qp_text.substr(matchStart + textToAutoc.length + (iPseudo == 1 ? 0 : 1)));
+				qp.val(qp_text.substr(0, matchStart) + pseudos_matchs[iPseudo] + (iPseudo === 0 ? '' : ' ') + qp_text.substr(matchStart + textToAutoc.length + (iPseudo == 1 ? 0 : 1)));
 			}
 			else {
 				iPseudo = false;
@@ -158,7 +158,7 @@ modules.twits = {
 						}
 					}, 100, postId);
 					
-				}
+				};
 				var bindEditButton = function() {
 					// On edit validation
 					$("#bar" + postId + " input:nth(1)").click(function() {

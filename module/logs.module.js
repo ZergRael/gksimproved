@@ -63,7 +63,7 @@ modules.logs = {
 			$.each(filtersArray, function(filter, filterData) {
 				filterData.show = !opt.get(module_name, filter);
 				filterData.lastStatus = filterData.show;
-			})
+			});
 		};
 
 		var refreshFilters = function(notAnInput) {

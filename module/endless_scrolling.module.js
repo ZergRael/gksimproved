@@ -122,11 +122,12 @@ modules.endless_scrolling = {
 			}
 
 			dbg("[pagination_rewrite] We're at [" + thisPage + "] in [" + pagerData.firstPage + "/" + pagerData.maxPage + "]");
-			var maxPagesToShow = 5;
-			var pagesEachSide = (maxPagesToShow - 1) / 2;
-			var pagesToShow = [];
-			var addLeft = 0;
-			for(var i = thisPage - pagesEachSide; i <= thisPage + pagesEachSide; i++) {
+			var maxPagesToShow = 5,
+				pagesEachSide = (maxPagesToShow - 1) / 2,
+				pagesToShow = [],
+				addLeft = 0,
+				i;
+			for(i = thisPage - pagesEachSide; i <= thisPage + pagesEachSide; i++) {
 				while(i < pagerData.firstPage) {
 					i++;
 					pagesEachSide++;
@@ -134,7 +135,7 @@ modules.endless_scrolling = {
 				pagesToShow.push(i);
 			}
 
-			for(var i = 0; i < pagesToShow.length; i++) {
+			for(i = 0; i < pagesToShow.length; i++) {
 				if(pagesToShow[i] && pagesToShow[i] > pagerData.maxPage) {
 					pagesToShow.splice(i, 1);
 					addLeft++;
@@ -142,7 +143,7 @@ modules.endless_scrolling = {
 				}
 			}
 
-			for(var i = 1; i <= addLeft; i++) {
+			for(i = 1; i <= addLeft; i++) {
 				if(pagesToShow[0] == pagerData.firstPage) {
 					break;
 				}
@@ -157,7 +158,7 @@ modules.endless_scrolling = {
 				paginateBar.push({pageId: thisPage - 1, prec: true});
 				hasPrec = true;
 			}
-			for(var i in pagesToShow) {
+			for(i in pagesToShow) {
 				paginateBar.push({pageId: pagesToShow[i], thisPage: (pagesToShow[i] == thisPage)});
 			}
 			if(thisPage != pagerData.maxPage) {
@@ -167,10 +168,10 @@ modules.endless_scrolling = {
 			}
 
 			var paginateBarHtml = "";
-			for(var i = 0; i < paginateBar.length; i++) {
+			for(i = 0; i < paginateBar.length; i++) {
 				paginateBarHtml += pageToLink(paginateBar[i]);
 				if(i == paginateBar.length - 1) { }
-				else if(i == 0 && hasPrec || i == paginateBar.length - 2 && hasNext) {
+				else if(i === 0 && hasPrec || i == paginateBar.length - 2 && hasNext) {
 					paginateBarHtml += " ";
 				}
 				else {
@@ -277,8 +278,8 @@ modules.endless_scrolling = {
 				// Fetching
 				utils.grabPage(nextUrl, function(data, page_n) {
 					// Extract needed data
-					insertionData = $(data).find(mOptions.domExtract)
-					dbg("[EndlessScrolling] Grab ended")
+					insertionData = $(data).find(mOptions.domExtract);
+					dbg("[EndlessScrolling] Grab ended");
 					if(insertionData && insertionData.length && !(mOptions.endOfStream && insertionData.text().indexOf(mOptions.endOfStream) != -1)) {
 						// We use a generic function we can cycle because of the pause_scrolling
 						insertAjaxData(insertionData, page_n);
@@ -423,7 +424,7 @@ modules.endless_scrolling = {
 			if((onClickFunction.indexOf("Quote") != -1 || onClickFunction.indexOf("insertion") != -1) && $("textarea").length) {
 				wentToPageBottom = true;
 			}
-		})
+		});
 
 		// Listen to after dom modifications by other modules
 		$(document).on("es_dom_process_done", function() {

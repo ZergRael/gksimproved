@@ -46,9 +46,9 @@ modules.peers = {
 				dbg("[AllPagesGrab] Grabbing page " + i);
 				var pageLoaded = 0;
 				utils.grabPage(nextUrl, function(data, pageNumber) {
-					torrentsTR = $(data).find(".table100 tbody tr")
+					torrentsTR = $(data).find(".table100 tbody tr");
 					if(torrentsTR && torrentsTR.length) {
-						dbg("[AllPagesGrab] Got data (" + pageNumber + "/" + maxPage + ") - Inserting")
+						dbg("[AllPagesGrab] Got data (" + pageNumber + "/" + maxPage + ") - Inserting");
 						$(".table100 tbody").append(torrentsTR);
 					}
 					else {

@@ -20,8 +20,8 @@ if(typeof chrome == "undefined") {
 			storage: {
 				local: {
 					set: function(obj, callback) {
-						for(key in obj) {
-							localStorage[key] = JSON.stringify(obj[key])
+						for(var key in obj) {
+							localStorage[key] = JSON.stringify(obj[key]);
 						}
 						if(callback) {
 							callback();
@@ -29,7 +29,7 @@ if(typeof chrome == "undefined") {
 					},
 					get: function(key, callback) {
 						var returnObj = {};
-						returnObj[key] = JSON.parse(localStorage[key])
+						returnObj[key] = JSON.parse(localStorage[key]);
 						callback(returnObj);
 					}
 				}
@@ -46,8 +46,8 @@ if(typeof chrome == "undefined") {
 			storage: {
 				local: {
 					set: function(obj, callback) {
-						for(key in obj) {
-							var storedObj = {key: key, val: obj[key]}
+						for(var key in obj) {
+							var storedObj = {key: key, val: obj[key]};
 							self.port.emit('storageSet', storedObj);
 						}
 						if(callback) {
@@ -184,9 +184,9 @@ var appendFrame = function(o) {
 			var cssColor = $(cssId).css("background-color");
 			if(cssColor != transparentCss && cssColor != transparentCssFirefox) {
 				dbg("[frame_builder] Took " + cssId + " background-color");
-				colorRGBA = cssColor.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\.\d]+)\s*\)$/i)
+				colorRGBA = cssColor.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\.\d]+)\s*\)$/i);
 				if(colorRGBA) {
-					cssColor = "rgba(" + colorRGBA[1] + "," + colorRGBA[2] + "," + colorRGBA[3] + ",1)"
+					cssColor = "rgba(" + colorRGBA[1] + "," + colorRGBA[2] + "," + colorRGBA[3] + ",1)";
 				}
 				// Instead of creating style on frame, let's append to our custom CSS area
 				appendCSS('.gksi_frame_content { background-color: ' + cssColor + '; } ');
@@ -222,7 +222,7 @@ var insertCSS = function() {
 		".gksi_frame_header { padding-top: 6px; padding-bottom: 6px; }",
 		//".gksi_frame_data { }",
 		".gksi_frame_section_header { border-bottom: 1px solid; font-weight: bold; padding-top: 6px; }",
-		".gksi_frame_buttons { padding-top: 9px; text-align: center; } " +
+		".gksi_frame_buttons { padding-top: 9px; text-align: center; } ",
 		//"#gksi_suggest { }",
 		//"#gksi_suggest_data { }",
 		//"#gksi_options { }",

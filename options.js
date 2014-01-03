@@ -146,10 +146,10 @@ var opt = {
 					}
 				}
 				$.each(opts, function(o, v) {
-					opt.options[m][o].val = (values && values[o] != undefined ? values[o] : v.defaultVal);
+					opt.options[m][o].val = (values && values[o] !== undefined ? values[o] : v.defaultVal);
 					if(v.sub_options) {
 						$.each(v.sub_options, function(s_o, s_v) {
-							opt.options[m][o].sub_options[s_o].val = (values && values[o + '_' + s_o] != undefined ? values[o + '_' + s_o] : s_v.defaultVal);
+							opt.options[m][o].sub_options[s_o].val = (values && values[o + '_' + s_o] !== undefined ? values[o + '_' + s_o] : s_v.defaultVal);
 						});
 					}
 				});
@@ -157,7 +157,7 @@ var opt = {
 					opt.save(m);
 					utils.storage.legacy.rm(m);
 				}
-				if(--requiredCallbacks == 0) {
+				if(--requiredCallbacks === 0) {
 					callback();
 				}
 			});
@@ -181,10 +181,10 @@ var opt = {
 	importAll: function(obj) {
 		$.each(this.options, function(m, opts) {
 			$.each(opts, function(o, v) {
-				opt.options[m][o].val = (obj[m] && obj[m][o] != undefined ? obj[m][o] : v.defaultVal);
+				opt.options[m][o].val = (obj[m] && obj[m][o] !== undefined ? obj[m][o] : v.defaultVal);
 				if(v.sub_options) {
 					$.each(v.sub_options, function(s_o, s_v) {
-						opt.options[m][o].sub_options[s_o].val = (obj[m] && obj[m][o + '_' + s_o] != undefined ? obj[m][o + '_' + s_o] : s_v.defaultVal);
+						opt.options[m][o].sub_options[s_o].val = (obj[m] && obj[m][o + '_' + s_o] !== undefined ? obj[m][o + '_' + s_o] : s_v.defaultVal);
 					});
 				}
 			});
@@ -247,13 +247,13 @@ var gData = {
 					}
 				}
 				$.each(data, function(o, v) {
-					gData.data[m][o] = (values && values[o] != undefined ? values[o] : v);
+					gData.data[m][o] = (values && values[o] !== undefined ? values[o] : v);
 				});
 				if(legValues) {
 					gData.save(m);
 					utils.storage.legacy.data_rm(m);
 				}
-				if(--requiredCallbacks == 0) {
+				if(--requiredCallbacks === 0) {
 					callback();
 				}
 			});
@@ -265,7 +265,7 @@ var gData = {
 	importAll: function(obj) {
 		$.each(this.data, function(m, data) {
 			$.each(data, function(o, v) {
-				gData.data[m][o] = (obj[m] && obj[m][o] != undefined ? obj[m][o] : v);
+				gData.data[m][o] = (obj[m] && obj[m][o] !== undefined ? obj[m][o] : v);
 			});
 			gData.save(m);
 		});

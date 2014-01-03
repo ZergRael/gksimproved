@@ -10,7 +10,7 @@ modules.snatched = {
 		var module_name = this.name;
 		var dbg = function(str) {
 			utils.dbg(module_name, str);
-		}
+		};
 
 		dbg("[Init] Loading module");
 
@@ -21,7 +21,7 @@ modules.snatched = {
 				var node = $(this);
 				var t = {node: node, status: {}, shown: true};
 				node.find("td").each(function(i) {
-					if(i == 0 && $(this).text() == "Torrent Supprimé") {
+					if(i === 0 && $(this).text() == "Torrent Supprimé") {
 						t.status.deleted = true;
 					}
 					if(i == 1 && $(this).find('img').attr('src') == "https://s.gks.gs/static/themes/sifuture/img/validate.png") {
@@ -49,7 +49,7 @@ modules.snatched = {
 		var basicFilters = {deleted: 2, seeding: 0, completed: 0, hnr: 0};
 		var refreshFilterSet = function() {
 			basicFilters = {deleted: opt.get(module_name, "filter_deleted"), seeding: opt.get(module_name, "filter_seed"), completed: opt.get(module_name, "filter_complete"), hnr:opt.get(module_name, "filter_hnr") };
-		}
+		};
 
 		var applyFilters = function() {
 			var showTorrents = [];
@@ -58,7 +58,7 @@ modules.snatched = {
 				var shouldShow = true;
 
 				// Basic filters
-				for(filter in basicFilters) {
+				for(var filter in basicFilters) {
 					var filterStatus = basicFilters[filter];
 					if(filterStatus == 1) {
 						if(!t.status[filter]) {
@@ -109,15 +109,15 @@ modules.snatched = {
 				return oInt * 1073741824;
 			}
 			return oInt;
-		}
+		};
 
 		var dateToInt = function(str) {
 			if(str == "Non Complété") {
 				return 0;
 			}
 			var regStr = str.match(/(?:(\d+) années?)?(?:, )?(?:(\d+) mois)?(?:, )?(?:(\d+) semaines?)?(?:, )?(?:(\d+) jours?)?(?:, )?(?:(\d+) heures?)?(?:, )?(?:(\d+) minutes?)?(?:, )?(?:(\d+) secs?)?/);
-			return ((regStr[1] ? Number(regStr[1]) : 0) * 31104000 + (regStr[2] ? Number(regStr[2]) : 0) * 2592000 + (regStr[3] ? Number(regStr[3]) : 0) * 604800 + (regStr[4] ? Number(regStr[4]) : 0) * 86400 + (regStr[5] ? Number(regStr[5]) : 0) * 3600 + (regStr[6] ? Number(regStr[6]) : 0) * 60 + (regStr[7] ? Number(regStr[7]) : 0))
-		}
+			return ((regStr[1] ? Number(regStr[1]) : 0) * 31104000 + (regStr[2] ? Number(regStr[2]) : 0) * 2592000 + (regStr[3] ? Number(regStr[3]) : 0) * 604800 + (regStr[4] ? Number(regStr[4]) : 0) * 86400 + (regStr[5] ? Number(regStr[5]) : 0) * 3600 + (regStr[6] ? Number(regStr[6]) : 0) * 60 + (regStr[7] ? Number(regStr[7]) : 0));
+		};
 
 		var sort = false;
 		var sortData = function() {
@@ -176,7 +176,7 @@ modules.snatched = {
 		};
 
 		var maxPage = modules["endless_scrolling"].maxPage, thisPage = modules["endless_scrolling"].thisPage;
-		var canGrabAllPages = (!pageUrl.params || pageUrl.params.page == 0);
+		var canGrabAllPages = (!pageUrl.params || pageUrl.params.page === 0);
 		var grabAllPages = function() {
 			loadingPage = true;
 
@@ -197,9 +197,9 @@ modules.snatched = {
 				dbg("[AllPagesGrab] Grabbing page " + i);
 				var pageLoaded = 0;
 				utils.grabPage(nextUrl, function(data) {
-					torrentsTR = $(data).find(".table100 tbody tr")
+					torrentsTR = $(data).find(".table100 tbody tr");
 					if(torrentsTR && torrentsTR.length) {
-						dbg("[AllPagesGrab] Got data - Inserting")
+						dbg("[AllPagesGrab] Got data - Inserting");
 						$(".table100 tbody").append(tagTorrents(torrentsTR));
 					}
 					else {

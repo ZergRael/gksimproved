@@ -40,7 +40,7 @@ var startAll = function() {
 
 var requiredLoads = 2;
 var warmUp = function() {
-	if(--requiredLoads == 0) {
+	if(--requiredLoads === 0) {
 		startAll();
 	}
 };

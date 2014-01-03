@@ -26,7 +26,7 @@ modules.module_ = {
 				// Try to get some results from IMDB: 4 + 4 max
 				utils.grabPage({ host: "https://api.thetabx.net", path: "/imdb/translate/3/" + encodeURIComponent(searchQuery) }, function(imdb) {
 					dbg("[QuerySuggest] Got data back");
-					if(!imdb.results || imdb.results.length == 0) {
+					if(!imdb.results || imdb.results.length === 0) {
 						$("#gksi_suggest_data").html("Désolé, rien trouvé !");
 						return;
 					}
@@ -46,7 +46,7 @@ modules.module_ = {
 					// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
 					$("#gksi_suggest_data").html(suggestionsHtml);
 
-					if(opt.get(module_name, "imdb_auto_add") && modules.endless_scrolling.maxPage == 0 && imdb.levenshtein && imdb.levenshtein.bestTitle) {
+					if(opt.get(module_name, "imdb_auto_add") && modules.endless_scrolling.maxPage === 0 && imdb.levenshtein && imdb.levenshtein.bestTitle) {
 						dbg("[QueryTranslate] Looks like we can grab bestTranslation [" + imdb.levenshtein.bestTitle + "] results");
 						var bestMatchUrl = utils.clone(pageUrl);
 						bestMatchUrl.params.q = encodeURIComponent(imdb.levenshtein.bestTitle); // From remote translation analysis - levenshtein
@@ -78,7 +78,7 @@ modules.module_ = {
 						});
 					}
 					else {
-						dbg("[QueryTranslate] Not even trying")
+						dbg("[QueryTranslate] Not even trying");
 					}
 				});
 			}
@@ -95,7 +95,7 @@ modules.module_ = {
 				// Try to get some results from IMDB: 4 + 4 max
 				utils.grabPage({ host: "http://api.discogs.com", path: "/database/search", params: { q: encodeURIComponent(searchQuery), per_page: MAX_RESULTS } }, function(discogs) {
 					dbg("[QuerySuggest] Got data back");
-					if(!discogs.results || discogs.results.length == 0) {
+					if(!discogs.results || discogs.results.length === 0) {
 						$("#gksi_suggest_data").html("Désolé, rien trouvé !");
 						return;
 					}

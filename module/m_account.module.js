@@ -26,7 +26,7 @@ modules.m_account = {
 
 			var lastInput;
 			if(lastSignatureInput != input) {
-				utils.delay(function() { 
+				utils.delay(function() {
 					utils.post({ host: pageUrl.host, path: "/ajax.php", params: { action: "preview" }}, { body: input }, function(data) {
 						outputArea.html(data);
 					});

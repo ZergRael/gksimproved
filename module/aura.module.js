@@ -121,9 +121,9 @@ modules.aura = {
 			insertScript("update_tablesorter", function(){
 				var table = $('#myauracalc');
 				$("thead tr th.tablesorter-header", table).each(function(i){
-					$(this).removeClass("tablesorter-header tablesorter-headerSortUp tablesorter-headerSortDown")
+					$(this).removeClass("tablesorter-header tablesorter-headerSortUp tablesorter-headerSortDown");
 					$(this).unbind('click mousedown');
-					var div = $(this).find('.tablesorter-header-inner')
+					var div = $(this).find('.tablesorter-header-inner');
 					if($(div).length){
 						$(this).html( $(div).text() );
 					}

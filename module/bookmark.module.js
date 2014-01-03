@@ -172,10 +172,12 @@ modules.bookmark = {
 
 		dbg("[Init] Starting");
 		// Execute functions
-		var buttons = ' | <a href="#" id="AutoGetAll">AutoGet 15 premiers</a>'
-					+ ' <input id="delete_get" type="checkbox" ' + (opt.get(module_name, "delete_get") ? 'checked="checked" ' : ' ') + '/><label for="delete_get">Supprimer après ajout</label>'
-					+ ' | <a href="#" id="delallcat">Supprimer ces bookmarks</a>';
-		$(mOptions.buttons).after(buttons);
+		var buttons = [
+			' | <a href="#" id="AutoGetAll">AutoGet 15 premiers</a>',
+			' <input id="delete_get" type="checkbox" ' + (opt.get(module_name, "delete_get") ? 'checked="checked" ' : ' ') + '/><label for="delete_get">Supprimer après ajout</label>',
+			' | <a href="#" id="delallcat">Supprimer ces bookmarks</a>'
+		];
+		$(mOptions.buttons).after(buttons.join(""));
 		var colSortButtons = [ "sortName", "sortDate", "sortSize", "sortS", "sortL" ];
 		var i = 0;
 		$("#torrent thead td").each(function() {

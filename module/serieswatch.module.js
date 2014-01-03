@@ -57,7 +57,7 @@ modules.serieswatch = {
 		var newEpSelectors = modules[module_name].newEpSelectors;
 		var displayConfig = function() {
 			dbg("[store] Showing config options");
-			$(".head_torrent td:nth(1)").after('<td class="watcher_config_head">EW</td>')
+			$(".head_torrent td:nth(1)").after('<td class="watcher_config_head">EW</td>');
 			$("#torrent_list tr:nth-child(2n)").each(function() {
 				var showId = $.trim($(this).find("td:nth(0)").text());
 
@@ -131,7 +131,7 @@ modules.serieswatch = {
 					}
 				});
 
-				if(catChecked.length == 0) {
+				if(catChecked.length === 0) {
 					node.addClass("gksi_valid");
 					return;
 				}
@@ -192,8 +192,6 @@ modules.serieswatch = {
 			$(".watcher_config_cont_global").click(function() {
 				var node = $(this);
 				var confType = node.parent().attr("conf_type");
-				var node = $(this);
-				var confType = node.parent().attr("conf_type");
 				var turnGreen = !node.hasClass("gksi_valid");
 
 				var catChecked = [];
@@ -210,7 +208,7 @@ modules.serieswatch = {
 					}
 				});
 
-				if(catChecked.length == 0) {
+				if(catChecked.length === 0) {
 					node.addClass("gksi_valid");
 					return;
 				}

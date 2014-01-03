@@ -62,7 +62,7 @@ modules.global = {
 				dbg("[BBCodeShortcuts] Got a BBCode key : " + bbcode);
 				var i = 1;
 				var dom_smileys = $(this);
-				while(dom_smileys.siblings(".bbsmiles").length == 0 && i < 4) {
+				while(dom_smileys.siblings(".bbsmiles").length === 0 && i < 4) {
 					dom_smileys = dom_smileys.parent();
 					i++;
 				}
@@ -139,7 +139,7 @@ modules.global = {
 			var buttons = [ { b_id: "im_export", b_text: "Importer/Exporter", b_callback: createImportExportFrame } ];
 
 			// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
-			var copyright = '<a href="/forums.php?action=viewtopic&topicid=6336">GKSi</a> by <a href="/users/2360140">ZergRael</a>'
+			var copyright = '<a href="/forums.php?action=viewtopic&topicid=6336">GKSi</a> by <a href="/users/2360140">ZergRael</a>';
 			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "navigation", top: 8, left: 230, buttons: buttons, header: optionsFrameHeader, onCloseCallback: onCloseCallback, underButtonsText: copyright });
 
 			$.each(opt.options, function(module_name, options) {
@@ -195,7 +195,7 @@ modules.global = {
 								if(oData.regex) {
 									if(!oData.regex.test(val)) {
 										opt.set(module_name, option, oData.defaultVal);
-										$("#gksi_" + module_name + "_" + option).val(opt.get(module_name, option))
+										$("#gksi_" + module_name + "_" + option).val(opt.get(module_name, option));
 										return;
 									}
 								}
@@ -251,7 +251,7 @@ modules.global = {
 				$(".gksi_options_header_button[section=" + section + "]").trigger("mouseenter");
 			}
 			else {
-				$(".gksi_options_header_button:first-child").trigger("mouseenter")
+				$(".gksi_options_header_button:first-child").trigger("mouseenter");
 			}
 
 			dbg("[Options] Frame ready");
@@ -298,7 +298,7 @@ modules.global = {
 							}
 						}
 						result.html(result.html() + "<br />Importation terminée. La page va être rafraîchie.");
-						setTimeout(function() { window.location.reload() }, 5000);
+						setTimeout(function() { window.location.reload(); }, 5000);
 					};
 					reader.readAsText(fileInput);
 				}
@@ -323,7 +323,7 @@ modules.global = {
 			dbg("[real_stats] Started");
 			if(!isDataUsable("real_stats")) {
 				parseRealStats(function() {
-					writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio"), gData.get("real_stats", "real_buffer"))
+					writeRealStats(gData.get("real_stats", "real_upload"), gData.get("real_stats", "real_download"), gData.get("real_stats", "real_ratio"), gData.get("real_stats", "real_buffer"));
 				});
 			}
 			else {
@@ -500,7 +500,7 @@ modules.global = {
 		};
 
 		var onSearchInput = function(val, searchDiv) {
-			if(val != "" && val != "Torrents" && val != "Requests" && val != "Summary" && val != "Forums" && val != "Wiki" && val != "Logs") {
+			if(val !== "" && val != "Torrents" && val != "Requests" && val != "Summary" && val != "Forums" && val != "Wiki" && val != "Logs") {
 				var button = searchDiv.find(".search_button");
 				if(!button.hasClass("search_button_usable")) {
 					button.addClass("search_button_usable").click(function() {
@@ -590,7 +590,7 @@ modules.global = {
 						compressedShowList[showId][type] = 0;
 						$.each(selectors, function(i, inputName) {
 							if(showData[type].indexOf(inputName) != -1) {
-								compressedShowList[showId][type] |= (1 << i)
+								compressedShowList[showId][type] |= (1 << i);
 							}
 						});
 					});
@@ -609,7 +609,7 @@ modules.global = {
 						gData.set("episodes", "hasUnseenData", false);
 					}
 
-					if(data.ep_count == 0) {
+					if(data.ep_count === 0) {
 						dbg("[new_ep] Nothing new");
 						return;
 					}
@@ -676,7 +676,7 @@ modules.global = {
 			else {
 				// For some reason, Chrome automatically orders Hash on key value.
 				// We need to get the show name, order this, and make a showId array based on this order
-				var orderedShowsNames = []
+				var orderedShowsNames = [];
 				$.each(showsData, function(showId, showData) {
 					orderedShowsNames.push(showData.name);
 				});
@@ -747,9 +747,9 @@ modules.global = {
 				$.each(cssTries, function(i, cssId) {
 					var cssColor = $(cssId).css("background-color");
 					if(cssColor != transparentCss && cssColor != transparentCssFirefox) {
-						colorRGBA = cssColor.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\.\d]+)\s*\)$/i)
+						colorRGBA = cssColor.match(/^rgba\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\.\d]+)\s*\)$/i);
 						if(colorRGBA) {
-							cssColor = "rgba(" + colorRGBA[1] + "," + colorRGBA[2] + "," + colorRGBA[3] + ",1)"
+							cssColor = "rgba(" + colorRGBA[1] + "," + colorRGBA[2] + "," + colorRGBA[3] + ",1)";
 						}
 						// Instead of creating style on frame, let's append to our custom CSS area
 						appendCSS('#new_episodes_pannel { background-color: ' + cssColor + '; } ');
@@ -770,7 +770,7 @@ modules.global = {
 
 		var hideNewEpisodesPannel = function() {
 			dbg("[new_ep] Hiding pannel");
-			var button = $("#new_episodes_button")
+			var button = $("#new_episodes_button");
 			if(button.hasClass("new_episodes_new")) {
 				button.removeClass("new_episodes_new").addClass("new_episodes_old");
 			}

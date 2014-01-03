@@ -14,7 +14,7 @@ modules.torrent_list = {
 		var module_name = this.name;
 		var dbg = function(str) {
 			utils.dbg(module_name, str);
-		}
+		};
 
 		dbg("[Init] Loading module");
 
@@ -116,7 +116,7 @@ modules.torrent_list = {
 			basicFilters = {freeleech: opt.get(module_name, "filter_fl"), scene: opt.get(module_name, "filter_scene")};
 			var stringFilterString = $("#filter_string").val();
 			var noFilterActive = true;
-			for(filter in basicFilters) {
+			for(var filter in basicFilters) {
 				if(basicFilters[filter] > 0) {
 					noFilterActive = false;
 				}
@@ -140,11 +140,11 @@ modules.torrent_list = {
 		var applyFilters = function() {
 			var showTorrents = [];
 			var hideTorrents = [];
-			$.each(torrentList, function(i, t) {
+			$.each(torrentList, function(index, t) {
 				var shouldShow = true;
 
 				// Basic filters
-				for(filter in basicFilters) {
+				for(var filter in basicFilters) {
 					var filterStatus = basicFilters[filter];
 					if(filterStatus == 1) {
 						if(!t.status[filter]) {
@@ -160,11 +160,11 @@ modules.torrent_list = {
 
 				// String filter
 				if(shouldShow && stringFilters.ready) {
-					for(i in stringFilters.orFilters) { // Loop all || blocks
-						for(j in stringFilters.orFilters[i]) { // Loop && blocks
+					for(var i in stringFilters.orFilters) { // Loop all || blocks
+						for(var j in stringFilters.orFilters[i]) { // Loop && blocks
 							var f = stringFilters.orFilters[i][j];
-							if(f.fType == 0) {
-								if(f.operator == 0) { shouldShow = (t[f.prop] < f.val); }
+							if(f.fType === 0) {
+								if(f.operator === 0) { shouldShow = (t[f.prop] < f.val); }
 								else if(f.operator == 1) { shouldShow = (t[f.prop] == f.val); }
 								else if(f.operator == 2) { shouldShow = (t[f.prop] > f.val); }
 							}
@@ -211,15 +211,15 @@ modules.torrent_list = {
 		var compileStringFilter = function(str) {
 			var sFilter = {original: str, proper: "", ready: false};
 			sFilter.proper = str.toLowerCase().trim();
-			if(sFilter.proper != "") {
+			if(sFilter.proper !== "") {
 				sFilter.ready = true;
 				sFilter.orFilters = [];
 				var orSplit = sFilter.proper.split("||");
-				for(i in orSplit) {
+				for(var i in orSplit) {
 					var sOr = orSplit[i].trim();
 					var andSplit = sOr.split("&&");
 					var andFilters = [];
-					for(j in andSplit) {
+					for(var j in andSplit) {
 						var s = andSplit[j].trim();
 						var f = {};
 						var nFilter = s.match(/\b([cslm])\s*([<=>])\s*(\d+)\b/);
@@ -230,7 +230,7 @@ modules.torrent_list = {
 							f.val = Number(nFilter[3]);
 							dbg("[StringFilter] " + f.prop + " " + f.operator + " " + f.val);
 						}
-						else if(s.indexOf("!") == 0) {
+						else if(s.indexOf("!") === 0) {
 							f.fType = 1;
 							f.str = s.substring(1);
 							dbg("[StringFilter] NOT " + f.str);
@@ -561,11 +561,11 @@ modules.torrent_list = {
 
 					$(this).wrapInner('<a href="' + utils.craftUrl(sortedUrl) + '"></a>');
 				}
-			})
+			});
 		};
 
 		var showTorrentComments = function() {
-			var commLink = $(this)
+			var commLink = $(this);
 			if(opt.get(module_name, "direct_comments") && commLink.attr("href").match(/\/com\//) && commLink.text() != "0") {
 				var commUrl = utils.parseUrl("https://gks.gs" + commLink.attr("href"));
 				utils.grabPage(commUrl, function(data) {
@@ -661,7 +661,7 @@ modules.torrent_list = {
 					dbg("[preview] Got torrent info with some imgs");
 					var img = new Image(), i = 0, maybeSrc = false, forceSmall = false;
 					img.onload = function() {
-						for(url in whitelistUrls) {
+						for(var url in whitelistUrls) {
 							if(this.src.indexOf(whitelistUrls[url]) != -1) { forceSmall = true; }
 						}
 						if(this.height <= MIN_HEIGHT && ++i < imgs.length) {
@@ -675,7 +675,7 @@ modules.torrent_list = {
 								this.src = imgs[i];
 							}
 							else {
-								dbg("[preview] No images left, fallback")
+								dbg("[preview] No images left, fallback");
 								forceSmall = true;
 								this.onload();
 							}
@@ -720,7 +720,7 @@ modules.torrent_list = {
 		dbg("[Init] Starting");
 
 		// Adding buttons
-		if(mOptions.canMark && (!pageUrl.params || !pageUrl.params.page || pageUrl.params.page == 0) && (!pageUrl.params || !pageUrl.params.sort || (pageUrl.params.sort == "id" && (!pageUrl.params.order || pageUrl.params.order == "desc"))) && opt.get(module_name, "t_marker_button")) {
+		if(mOptions.canMark && (!pageUrl.params || !pageUrl.params.page || pageUrl.params.page === 0) && (!pageUrl.params || !pageUrl.params.sort || (pageUrl.params.sort == "id" && (!pageUrl.params.order || pageUrl.params.order == "desc"))) && opt.get(module_name, "t_marker_button")) {
 			var torrentIdMark = opt.get(module_name, "torrent_marker");
 			var firstTorrentId = Number($("tbody tr:nth(1) td:nth(1) a").attr("href").match(/\/torrent\/(\d+)\//)[1]);
 			if(torrentIdMark !== false && firstTorrentId - torrentIdMark < 2000) {
