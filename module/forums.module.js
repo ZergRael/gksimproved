@@ -9,8 +9,8 @@ modules.forums = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -44,7 +44,7 @@ modules.forums = {
 				return;
 			}
 
-			dbg("[adjustScrolling] Found hash : " + scrollingUrl.hash);
+			dbg("[adjustScrolling] Found hash : %s", scrollingUrl.hash);
 			//$(document).scrollTop($('a[href="#post336526"]').offset().top - $("#entete").height() - 15);
 
 			var hashTarget = $('a[href="' + scrollingUrl.hash + '"]');

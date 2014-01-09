@@ -8,8 +8,8 @@ modules.serieswatch = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -35,7 +35,7 @@ modules.serieswatch = {
 			if($(this).attr("href").indexOf("&del") != -1) {
 				var showId = $.trim($(this).parents("tr").find("td:nth(0)").text());
 				if(watchedList[showId]) {
-					dbg("[removeShow] Removed " + showId);
+					dbg("[removeShow] Removed %d", showId);
 					delete watchedList[showId];
 					watchedListSize--;
 					saveWatchedList();

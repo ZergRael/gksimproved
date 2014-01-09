@@ -8,8 +8,8 @@ modules.torrent = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");

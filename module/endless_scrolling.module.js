@@ -52,8 +52,8 @@ modules.endless_scrolling = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -121,7 +121,7 @@ modules.endless_scrolling = {
 				return;
 			}
 
-			dbg("[pagination_rewrite] We're at [" + thisPage + "] in [" + pagerData.firstPage + "/" + pagerData.maxPage + "]");
+			dbg("[pagination_rewrite] We're at [%d] in [%d/%d]", thisPage, pagerData.firstPage, pagerData.maxPage);
 			var maxPagesToShow = 5,
 				pagesEachSide = (maxPagesToShow - 1) / 2,
 				pagesToShow = [],
@@ -150,7 +150,7 @@ modules.endless_scrolling = {
 
 				pagesToShow.unshift(pagesToShow[0] - 1);
 			}
-			dbg("[pagination_rewrite] Rewriting with " + pagesToShow.join(', '));
+			dbg("[pagination_rewrite] Rewriting with %s", pagesToShow.join(', '));
 
 			var paginateBar = [], hasPrec = false, hasNext = false;
 			if(thisPage != pagerData.firstPage) {
@@ -207,7 +207,7 @@ modules.endless_scrolling = {
 
 				// Looks like we changed page, updates
 				if(lookingAtPage != previousLookedPage) {
-					dbg("[adapt_url] Looking at page " + lookingAtPage);
+					dbg("[adapt_url] Looking at page %d", lookingAtPage);
 
 					// Update URL
 					var thisUrl = utils.clone(pageUrl);
@@ -369,7 +369,7 @@ modules.endless_scrolling = {
 
 		// Returns the offset for a specific page
 		var getOffsetByPage = function(pageSearch) {
-			dbg("[adapt_url] Looking for page " + pageSearch + " in offsets object");
+			dbg("[adapt_url] Looking for page %d in offsets object", pageSearch);
 			var offset = false;
 			$.each(insertedOffsets, function(top, page) {
 				if(page == pageSearch) {
@@ -390,7 +390,7 @@ modules.endless_scrolling = {
 					if(hrefPage.length) {
 						toTop = getOffsetByPage(hrefPage[1]);
 						if(toTop !== false) {
-							dbg("[adapt_url] Found it. Scrolling to " + toTop);
+							dbg("[adapt_url] Found it. Scrolling to %d", toTop);
 							$(document).scrollTop(toTop);
 							return false;
 						}
@@ -408,7 +408,7 @@ modules.endless_scrolling = {
 
 		this.maxPage = pagerData.maxPage;
 		this.thisPage = pagerData.thisPage;
-		dbg("[EndlessScrolling] url relative pages : " + pagerData.thisPage + "/" + pagerData.maxPage);
+		dbg("[EndlessScrolling] url relative pages : %d/%d", pagerData.thisPage, pagerData.maxPage);
 		$(document).scroll(jOnScroll);
 
 		// Auto endless scrolling pause if any textarea has been focused - mostly forums usage

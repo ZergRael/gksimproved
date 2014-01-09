@@ -8,8 +8,8 @@ modules.aura = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -26,7 +26,7 @@ modules.aura = {
 			input_val = Number(input_val);
 			if(input_val > karma) {
 				var hours = (input_val - karma) / aura;
-				dbg("[karmaGoal] Got [" + hours + "] hours");
+				dbg("[karmaGoal] Got [%s] hours", hours);
 				var days = hours / 24;
 				var months = days / 30.43;
 				$("#gksi_karmagoal_time").text(Math.floor(months) + " mois, " + Math.floor(days % 30.43) + " jours, " + Math.floor(hours % 24) + " heures");
@@ -42,11 +42,11 @@ modules.aura = {
 			if(!size) {
 				return;
 			}
-			dbg("[agProgress] Found [" + size.goTot + "] Go");
+			dbg("[agProgress] Found [%s] Go", size.goTot);
 
 			var AGText = $("#myauracalc tfoot td:nth(4)").text();
 			ag500 = Number(AGText.replace(',', ''));
-			dbg("[agProgress] Found [" + ag500 + "] Ag/500");
+			dbg("[agProgress] Found [%s] Ag/500", ag500);
 
 			// In case we have > 500 torrents, just inverse the aura function
 			//B = 50 * (2/pi) * arctan (Ag / 300)
@@ -54,11 +54,11 @@ modules.aura = {
 			//tan(B / (50 * (2/pi))) * 300 = Ag
 
 			ag = Math.tan(aura / (50 * (2 / Math.PI))) * 300;
-			dbg("[agProgress] Deduced [" + ag + "] Ag");
+			dbg("[agProgress] Deduced [%s] Ag", ag);
 
 			agProgress = ag500 / size.goTot;
 			$("#gksi_auragoal_progression").text(agProgress);
-			dbg("[agProgress] Got [" + agProgress + "] Ag/Go");
+			dbg("[agProgress] Got [%s] Ag/Go", agProgress);
 		};
 
 		// DL to reach set aura
@@ -74,7 +74,7 @@ modules.aura = {
 				//Ag = tan( B / (50 * (2/pi))) * 300
 				var goalAg = Math.tan(input_val / (50 * (2 / Math.PI))) * 300;
 				var auraGoal = (goalAg - ag) / agProgress;
-				dbg("[auraGoal] Got [(" + goalAg + " - " + ag + ") / " + agProgress + "] = [" + auraGoal + "]");
+				dbg("[auraGoal] Got [(%s - %s) / %s] = [%s]", goalAg, ag, agProgress, auraGoal);
 				$("#gksi_auragoal_go").text(Math.round(auraGoal * 100) / 100);
 			}
 		};
@@ -105,12 +105,12 @@ modules.aura = {
 
 				//A = (1-10^(-Ti/4))*Si*(1+sqrt(2)*10^(-((Ni-1)/(7-1))))
 				var aTorrent = (1 - Math.pow(10, - date.weekTot / 4)) * size.goTot * (1 + Math.sqrt(2) * Math.pow(10, -((seeds - 1) / (7 - 1))));
-				dbg("[auraTorrent] Got [" + size.goTot + "] Go | [" + date.weekTot + "] Weeks | [" + seeds + "] Seeds => A = [" + aTorrent + "]");
+				dbg("[auraTorrent] Got [%s] Go | [%s] Weeks | [%s] Seeds => A = [%s]", size.goTot, date.weekTot, seeds, aTorrent);
 
 				var estAg = ag + aTorrent;
 				//B = 50 * (2/pi) * arctan (Ag / 300)
 				var estAura = 50 * (2 / Math.PI) * Math.atan(estAg / 300);
-				dbg("[auraTorrent] ag [" + ag + "] -> [" + estAg + "] | aura [" + aura + "] -> [" + estAura + "]");
+				dbg("[auraTorrent] ag [%s] -> [%s] | aura [%s] -> [%s]", ag, estAg, aura, estAura);
 				$("#gksi_auratorrent_aura").text(Math.round(estAura * 1000) / 1000);
 				ready = true;
 			});
@@ -188,9 +188,9 @@ modules.aura = {
 		$("#gksi_auratorrent_input").keyup(calcAuraTorrent);
 
 		var karma = utils.getKarmaTotal();
-		dbg("[Karma] Parsed [" + karma + "]");
+		dbg("[Karma] Parsed [%s]", karma);
 		var aura = utils.getAura();
-		dbg("[Aura] Parsed [" + aura + "]");
+		dbg("[Aura] Parsed [%s]", aura);
 
 		$("#gksi_karmagoal_input").trigger("keyup");
 		calcAgProgress();

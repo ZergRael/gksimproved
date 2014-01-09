@@ -7,8 +7,8 @@ modules.logs = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -127,7 +127,7 @@ modules.logs = {
 
 		$("#auto_refresh").change(function() {
 			opt.set(module_name, "auto_refresh", $(this).prop("checked"));
-			dbg("[auto_refresh] is " + opt.get(module_name, "auto_refresh"));
+			dbg("[auto_refresh] is %s", opt.get(module_name, "auto_refresh"));
 			if(opt.get(module_name, "auto_refresh")) {
 				autoRefresh();
 			}

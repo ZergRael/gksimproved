@@ -8,8 +8,8 @@ modules.module_ = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -23,7 +23,7 @@ modules.module_ = {
 
 		$("#but_id").change(function() {
 			opt.set(module_name, "o", $(this).prop("checked"));
-			dbg("[o] is " + o);
+			dbg("[o] is %s", o);
 		});
 
 		dbg("[Init] Ready");

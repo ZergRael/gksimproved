@@ -5,8 +5,8 @@ modules.global = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -59,7 +59,7 @@ modules.global = {
 				}
 
 				e.preventDefault();
-				dbg("[BBCodeShortcuts] Got a BBCode key : " + bbcode);
+				dbg("[BBCodeShortcuts] Got a BBCode key : %s", bbcode);
 				var i = 1;
 				var dom_smileys = $(this);
 				while(dom_smileys.siblings(".bbsmiles").length === 0 && i < 4) {
@@ -162,7 +162,7 @@ modules.global = {
 									state = $(this).prop("checked");
 								}
 								opt.set(module_name, option, state);
-								utils.dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
+								utils.dbg(module_name, "[%s] is %s", option, opt.get(module_name, option));
 								if(oData.callback) {
 									oData.callback(state);
 								}
@@ -200,7 +200,7 @@ modules.global = {
 									}
 								}
 								opt.set(module_name, option, val);
-								utils.dbg(module_name, "[" + option + "] is " + opt.get(module_name, option));
+								utils.dbg(module_name, "[%s] is %s", option, opt.get(module_name, option));
 								if(oData.callback) {
 									oData.callback(state);
 								}
@@ -212,7 +212,7 @@ modules.global = {
 								$("#gksi_" + module_name + "_" + option + "_" + s_option).change(function() {
 									if(s_oData.showInOptions) {
 										opt.sub_set(module_name, option, s_option, $(this).prop("checked"));
-										utils.dbg(module_name, "[" + option + "][" + s_option + "] is " + opt.sub_get(module_name, option, s_option));
+										utils.dbg(module_name, "[%s][%s] is %s", option, s_option, opt.sub_get(module_name, option, s_option));
 									}
 								});
 							});
@@ -332,7 +332,7 @@ modules.global = {
 		};
 
 		var writeRealStats = function(uploadStr, downloadStr, ratioStr, bufferStr) {
-			dbg("[real_stats] Insert " + uploadStr + " / " + downloadStr + " / " + ratioStr + " / " + bufferStr);
+			dbg("[real_stats] Insert %s/%s/%s/%s", uploadStr, downloadStr, ratioStr, bufferStr);
 			$("#userlink li:nth(1) span:nth(0)").after(' / <span class="uploaded">' + uploadStr + '</span>');
 			$("#userlink li:nth(1) span:nth(2)").after(' / <span class="downloaded">' + downloadStr + '</span>');
 			var ratioClass = Math.round(ratioStr * 10);
@@ -347,14 +347,14 @@ modules.global = {
 			var maxPage = gData.get("real_stats", "max_snatched_pages"), actualMaxPage = maxPage, realUpload = 0, realDownload = 0, realSnatched = 0, grabbedPages = 0;
 
 			var appendToVals = function(p, maxP, up, dl, snatched) {
-				dbg("[real_stats] page [" + p + "] came back");
+				dbg("[real_stats] page [%d] came back", p);
 				actualMaxPage = Math.max(maxP, p);
 				realUpload += up;
 				realDownload += dl;
 				realSnatched += snatched;
 				grabbedPages++;
 				if(grabbedPages > maxPage) {
-					dbg("[real_stats] Last page came in :: We got [" + grabbedPages + "] pages :: Last pageId displayed was [" + actualMaxPage + "] :: We expected [" + maxPage + "]");
+					dbg("[real_stats] Last page came in :: We got [%d] pages :: Last pageId displayed was [%d] :: We expected [%d]", grabbedPages, actualMaxPage, maxPage);
 					if(actualMaxPage > maxPage) {
 						dbg("[real_stats] Try again then");
 						gData.set("real_stats", "max_snatched_pages", actualMaxPage);
@@ -375,7 +375,7 @@ modules.global = {
 				}
 			};
 
-			dbg("[real_stats] Fetching [" + maxPage + "] pages");
+			dbg("[real_stats] Fetching [%d] pages", maxPage);
 			for (var i = 0; i <= maxPage; i++) {
 				parseSnatchedPage(i, appendToVals, 2);
 			}
@@ -384,7 +384,7 @@ modules.global = {
 
 		var parseSnatchedPage = function(page, callback, remainingTries) {
 			if(!remainingTries) { return ; }
-			dbg("[real_stats] Grabing page [" + page + "] with [" + remainingTries + "] tries remaining");
+			dbg("[real_stats] Grabing page [%d] with [%d] tries remaining", page, remainingTries);
 			utils.grabPage({ host: pageUrl.host, path: "/m/peers/snatched", params: { page: page }, cancelQ: true }, function(data, returnedPage) {
 				var pager_align = $(data).find(".pager_align a");
 				var maxPage = 0, realUpload = 0, realDownload = 0, realSnatched = 0;
@@ -477,7 +477,7 @@ modules.global = {
 			});
 			gData.set("bookmarks", "torrents", torrentIds);
 			gData.set("bookmarks", "bookmarkIds", bookmarkIds);
-			dbg("[parseBookmarks] Found " + torrentIds.length + " bookmarks");
+			dbg("[parseBookmarks] Found %d bookmarks", torrentIds.length);
 		};
 		modules.global.parseBookmarks = parseBookmarks;
 
@@ -552,7 +552,7 @@ modules.global = {
 			if(bufferEmpty) {
 				bufferEmpty = false;
 				var bufferVal = utils.strToSize($("#userlink .uploaded:first").text()).koTot - utils.strToSize($("#userlink .downloaded:first").text()).koTot;
-				dbg("[buffer] Found a dispBuffer of [" + bufferVal + "] ko");
+				dbg("[buffer] Found a dispBuffer of [%s] ko", bufferVal);
 				var bufferUnit = 1;
 				while(bufferVal > 1024 || bufferVal < -1024) {
 					bufferUnit++;

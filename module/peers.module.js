@@ -7,8 +7,8 @@ modules.peers = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -43,12 +43,12 @@ modules.peers = {
 			$(mOptions.loading).before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Hachage positronique de l\'ensemble des pages</p>');
 			for(var i = 1; i <= maxPage; i++) {
 				nextUrl.params.page = i;
-				dbg("[AllPagesGrab] Grabbing page " + i);
+				dbg("[AllPagesGrab] Grabbing page %d", i);
 				var pageLoaded = 0;
 				utils.grabPage(nextUrl, function(data, pageNumber) {
 					torrentsTR = $(data).find(".table100 tbody tr");
 					if(torrentsTR && torrentsTR.length) {
-						dbg("[AllPagesGrab] Got data (" + pageNumber + "/" + maxPage + ") - Inserting");
+						dbg("[AllPagesGrab] Got data (%d/%d) - Inserting", pageNumber, maxPage);
 						$(".table100 tbody").append(torrentsTR);
 					}
 					else {
@@ -86,7 +86,7 @@ modules.peers = {
 				speedTotal += Number($(this).find("td:nth(4)").first().text().match(/[\d\.]+/)[0]);
 			});
 
-			dbg("[CalcTotals] Got speed " + speedTotal);
+			dbg("[CalcTotals] Got speed %s", speedTotal);
 			$(".table100 tr:nth(0) th:nth(4)").text("↑ " + Math.round(speedTotal) + " Ko/s");
 		};
 
@@ -98,7 +98,7 @@ modules.peers = {
 
 		var onFilterActiveChange = function() {
 			opt.set(module_name, "filtering_active", $(this).prop("checked"));
-			dbg("[ActiveFilter] is " + opt.get(module_name, "filtering_active"));
+			dbg("[ActiveFilter] is %s", opt.get(module_name, "filtering_active"));
 			if(opt.get(module_name, "filtering_active")) {
 				filterActive();
 				$(document).trigger("es_dom_process_done");

@@ -8,8 +8,8 @@ modules.snatched = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -106,11 +106,11 @@ modules.snatched = {
 			});
 
 			if(showTorrents.length > 0) {
-				dbg("[Filters] Showing some " + showTorrents.length);
+				dbg("[Filters] Showing some %d", showTorrents.length);
 				$.each(showTorrents, function() { $(this).show(); });
 			}
 			if(hideTorrents.length > 0) {
-				dbg("[Filters] Hiding some " + hideTorrents.length);
+				dbg("[Filters] Hiding some %d", hideTorrents.length);
 				$.each(hideTorrents, function() { $(this).hide(); });
 			}
 		};
@@ -192,7 +192,7 @@ modules.snatched = {
 			$(mOptions.loading).before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Hachage positronique de l\'ensemble des pages</p>');
 			for(var i = 1; i <= maxPage; i++) {
 				nextUrl.params.page = i;
-				dbg("[AllPagesGrab] Grabbing page " + i);
+				dbg("[AllPagesGrab] Grabbing page %d", i);
 				var pageLoaded = 0;
 				utils.grabPage(nextUrl, function(data) {
 					torrentsTR = $(data).find(".table100 tbody tr");
@@ -238,7 +238,7 @@ modules.snatched = {
 			button.removeClass("g_filter_" + optStatus);
 			optStatus = ++optStatus > 2 ? 0 : optStatus;
 			opt.set(module_name, optName, optStatus);
-			dbg("[Filters] " + optName + " is " + opt.get(module_name, optName));
+			dbg("[Filters] %s is %s", optName, opt.get(module_name, optName));
 			button.addClass("g_filter_" + optStatus);
 			filtersChanged();
 			$(document).trigger("es_dom_process_done");

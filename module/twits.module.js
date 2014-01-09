@@ -12,8 +12,8 @@ modules.twits = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -38,7 +38,7 @@ modules.twits = {
 				var matchingAtToAuto = -1, lastMatchEnd = 0, matchStart = 0;
 				$.each(matchingAts, function(i, atPseudo) {
 					matchStart = qp_text.indexOf(atPseudo, lastMatchEnd);
-					dbg("[AutoCTwit] Finding the right match [" + atPseudo + "] " + matchStart + " <= " + selStart + " <= " + (matchStart + (atPseudo.length + 1)));
+					dbg("[AutoCTwit] Finding the right match [%s] %d <= %d <= %d", atPseudo, matchStart, selStart, matchStart + (atPseudo.length + 1));
 					if(matchStart <= selStart && selStart <= matchStart + (atPseudo.length + 1)) {
 						matchingAtToAuto = i;
 						dbg("[AutoCTwit] Got it !");
@@ -72,7 +72,7 @@ modules.twits = {
 				}
 
 				iPseudo = iPseudo >= pseudos_matchs.length - 1 ? 0 : iPseudo + 1;
-				dbg("[AutoCTwit] Found a match : [" + textToAutoc + "] > " + pseudos_matchs[iPseudo]);
+				dbg("[AutoCTwit] Found a match : [%s] > %s", textToAutoc, pseudos_matchs[iPseudo]);
 				qp.val(qp_text.substr(0, matchStart) + pseudos_matchs[iPseudo] + (iPseudo === 0 ? '' : ' ') + qp_text.substr(matchStart + textToAutoc.length + (iPseudo == 1 ? 0 : 1)));
 			}
 			else {
@@ -103,7 +103,7 @@ modules.twits = {
 				post.html(post.html().replace(/\B@([\w]+)/gi, function(match, m1) {
 					var user = pseudos[m1.toLowerCase()];
 					if(user) {
-						dbg("[TwitColorize] Found a match : " + m1);
+						dbg("[TwitColorize] Found a match : %s", m1);
 						return '@<a href="' + user.url + '"><span class="' + user.class + '">' + m1 + '</span></a>';
 					}
 					else {
@@ -144,7 +144,7 @@ modules.twits = {
 			var postId = $(this).attr("href").substr(5);
 			// If the editbox poped
 			if($("#editbox" + postId).length) {
-				dbg("[AutoCTwit] Editbox poped (" + postId + ") - Listening to keydown");
+				dbg("[AutoCTwit] Editbox poped (%s) - Listening to keydown", postId);
 				// Listen for twit autocomplete in editbox
 				$("#editbox" + postId).keydown(jOnKeydown);
 

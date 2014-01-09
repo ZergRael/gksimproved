@@ -9,8 +9,8 @@ modules.module_ = {
 		this.loaded = true;
 		//var module_name = this.name;
 		var module_name = "torrent_list";
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -19,7 +19,7 @@ modules.module_ = {
 		var suggestMore = function() {
 			var searchQuery = $("#searchinput").val();
 			if(searchQuery) {
-				dbg("[QuerySuggest] Query : " + searchQuery);
+				dbg("[QuerySuggest] Query : %s", searchQuery);
 				loadingHtml = '<center><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Analyse des entrailles d\'IMDB</center>';
 				appendFrame({ title: "GKSi IMDB Suggestions", data: loadingHtml, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
 
@@ -32,7 +32,7 @@ modules.module_ = {
 					}
 					var suggestions = [];
 					$.each(imdb.results, function(imdbId, movie) {
-						dbg("[QuerySuggest] IMDB [ " + imdbId + " ]");
+						dbg("[QuerySuggest] IMDB [ %s ]", imdbId);
 						$.each(movie, function(titleType, title) {
 							suggestions.push(title);
 						});
@@ -47,7 +47,7 @@ modules.module_ = {
 					$("#gksi_suggest_data").html(suggestionsHtml);
 
 					if(opt.get(module_name, "imdb_auto_add") && modules.endless_scrolling.maxPage === 0 && imdb.levenshtein && imdb.levenshtein.bestTitle) {
-						dbg("[QueryTranslate] Looks like we can grab bestTranslation [" + imdb.levenshtein.bestTitle + "] results");
+						dbg("[QueryTranslate] Looks like we can grab bestTranslation [%s] results", imdb.levenshtein.bestTitle);
 						var bestMatchUrl = utils.clone(pageUrl);
 						bestMatchUrl.params.q = encodeURIComponent(imdb.levenshtein.bestTitle); // From remote translation analysis - levenshtein
 						$("#torrent_list").before('<p class="pager_align page_loading"><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Recherche supraluminique des traductions</p>');
@@ -88,7 +88,7 @@ modules.module_ = {
 		var suggestDiscogsMore = function() {
 			var searchQuery = $("#searchinput").val();
 			if(searchQuery) {
-				dbg("[QuerySuggest] Query : " + searchQuery);
+				dbg("[QuerySuggest] Query : %s", searchQuery);
 				loadingHtml = '<center><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Analyse des entrailles de Discogs</center>';
 				appendFrame({ title: "GKSi - Fiches Discogs", data: loadingHtml, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
 

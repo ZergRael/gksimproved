@@ -7,8 +7,8 @@ modules.bookmark = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -34,7 +34,7 @@ modules.bookmark = {
 					});
 				}
 			});
-			dbg("[AutoGetAll] Sending "+actions.length+" requests");
+			dbg("[AutoGetAll] Sending %d requests", actions.length);
 			utils.multiGet(actions, function(){
 				dbg("[AutoGetAll] Done");
 				insertScript("autoget_notify", function() {
@@ -61,7 +61,7 @@ modules.bookmark = {
 					tid: tid
 				});
 			});
-			dbg("[DelAllCat] Sending "+actions.length+" requests");
+			dbg("[DelAllCat] Sending %d requests", actions.length);
 			utils.multiGet(actions, function(){
 				dbg("[DelAllCat] Done");
 				$(cat+" tbody:first tr[id^=book]").remove();
@@ -191,7 +191,7 @@ modules.bookmark = {
 		$("#delallcat").click(DelAllCat);
 		$("#delete_get").change(function() {
 			opt.set(module_name, "delete_get", $(this).is(":checked"));
-			dbg("[DeleteGet] is " + opt.get(module_name, "delete_get"));
+			dbg("[DeleteGet] is %s", opt.get(module_name, "delete_get"));
 		});
 		$(".dl a").click(setHighlight);
 		$(".sortCol").click(sortColumnClick);

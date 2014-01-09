@@ -4,8 +4,8 @@ var DEBUG = true;
 // Options are ready but not loaded
 
 // Debug print function for the main, will be overwriten in modules
-var dbg = function(str) {
-	utils.dbg("main", str);
+var dbg = function() {
+	utils.dbg("main", arguments);
 };
 
 // Firefox hacks to simulate chrome APIs

@@ -9,8 +9,8 @@ modules.badges = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		var userId = utils.getUserId();
@@ -183,7 +183,7 @@ modules.badges = {
 						// Find directly by dom
 						if(badgeBlock.dom) {
 							badgeBlock.strVal = jData.find(badgeBlock.dom).text().match(badgeBlock.regex)[1];
-							dbg("[progress] " + badgeBlock.name + " >> Got value [" + badgeBlock.strVal + "](" + typeof badgeBlock.strVal + ")");
+							dbg("[progress] %s >> Got value [%s]", badgeBlock.name, badgeBlock.strVal);
 						}
 
 						// Find by p:nth
@@ -197,7 +197,7 @@ modules.badges = {
 								});
 							}
 							badgeBlock.strVal = jData.find("#contenu p:nth(" + badgeBlock.p_nth + ")").text().match(badgeBlock.regex)[1];
-							dbg("[progress] " + badgeBlock.name + " >> Got value [" + badgeBlock.strVal + "](" + typeof badgeBlock.strVal + ")");
+							dbg("[progress] %s >> Got value [%s]", badgeBlock.name, badgeBlock.strVal);
 						}
 					});
 				},

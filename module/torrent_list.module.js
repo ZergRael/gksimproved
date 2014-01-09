@@ -12,8 +12,8 @@ modules.torrent_list = {
 	loadModule: function(mOptions) {
 		this.loaded = true;
 		var module_name = this.name;
-		var dbg = function(str) {
-			utils.dbg(module_name, str);
+		var dbg = function() {
+			utils.dbg(module_name, arguments);
 		};
 
 		dbg("[Init] Loading module");
@@ -197,11 +197,11 @@ modules.torrent_list = {
 			});
 
 			if(showTorrents.length > 0) {
-				dbg("[Filters] Showing some " + showTorrents.length);
+				dbg("[Filters] Showing some %d", showTorrents.length);
 				$.each(showTorrents, function() { $(this).show(); });
 			}
 			if(hideTorrents.length > 0) {
-				dbg("[Filters] Hiding some " + hideTorrents.length);
+				dbg("[Filters] Hiding some %d", hideTorrents.length);
 				$.each(hideTorrents, function() { $(this).hide(); });
 			}
 		};
@@ -228,24 +228,23 @@ modules.torrent_list = {
 							f.prop = filterProperties[nFilter[1]];
 							f.operator = filterOperators[nFilter[2]];
 							f.val = Number(nFilter[3]);
-							dbg("[StringFilter] " + f.prop + " " + f.operator + " " + f.val);
+							dbg("[StringFilter] %s %s %s", f.prop, f.operator, f.val);
 						}
 						else if(s.indexOf("!") === 0) {
 							f.fType = 1;
 							f.str = s.substring(1);
-							dbg("[StringFilter] NOT " + f.str);
+							dbg("[StringFilter] NOT %s", f.str);
 						}
 						else {
 							f.fType = 2;
 							f.str = s;
-							dbg("[StringFilter] " + f.str);
+							dbg("[StringFilter] %s", f.str);
 						}
 						andFilters.push(f);
 					}
 					sFilter.orFilters.push(andFilters);
 				}
 			}
-			dbg(sFilter);
 			return sFilter;
 		};
 
@@ -669,7 +668,7 @@ modules.torrent_list = {
 							this.src = imgs[i];
 						}
 						else if(this.height > MIN_HEIGHT && this.height <= WANTED_HEIGHT && !forceSmall) {
-							dbg("[preview] Meh :: size [" + this.width + "x" + this.height + "] Keep it, it may be useful");
+							dbg("[preview] Meh :: size [%d x %d] Keep it, it may be useful", this.width, this.height);
 							maybeSrc = this.src;
 							if(++i < imgs.length) {
 								this.src = imgs[i];
@@ -681,7 +680,7 @@ modules.torrent_list = {
 							}
 						}
 						else if(this.height > WANTED_HEIGHT || forceSmall) {
-							dbg("[preview] Perfect :: size [" + this.width + "x" + this.height + "]");
+							dbg("[preview] Perfect :: size [%d x %d]", this.width, this.height);
 							var top = pos.top, scrollTop = (document.body.scrollTop || document.documentElement.scrollTop), windowHeight = $(window).height(), resizedHeight = (this.width > 300 ? this.height * (300 / this.width) : this.height);
 							if(top + resizedHeight + 4 > scrollTop + windowHeight) {
 								top = (scrollTop + windowHeight) - resizedHeight - 4;
@@ -752,7 +751,7 @@ modules.torrent_list = {
 			button.removeClass("g_filter_" + optStatus);
 			optStatus = ++optStatus > 2 ? 0 : optStatus;
 			opt.set(module_name, optName, optStatus);
-			dbg("[Filters] " + optName + " is " + opt.get(module_name, optName));
+			dbg("[Filters] %s is %s", optName, opt.get(module_name, optName));
 			button.addClass("g_filter_" + optStatus);
 			filtersChanged();
 		});
@@ -765,7 +764,7 @@ modules.torrent_list = {
 
 		$("#auto_refresh").change(function() {
 			opt.set(module_name, "auto_refresh", $(this).prop("checked"));
-			dbg("[auto_refresh] is " + opt.get(module_name, "auto_refresh"));
+			dbg("[auto_refresh] is %s", opt.get(module_name, "auto_refresh"));
 			if(opt.get(module_name, "auto_refresh")) {
 				dbg("[auto_refresh] Starting");
 				startAutorefresh();
