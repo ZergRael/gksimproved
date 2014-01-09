@@ -7,6 +7,11 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+- Global : Ajout des version Opera 15+ et Safari
+- Global : Correction du buffer pour les CSS custom
+- Snatched : Amélioration du tri
+- Sphinx : Correction d'une erreur en cas de recherche vide
+- Torrent list : Correction de l'autorefresh
 
 
 ### Changelog
