@@ -135,8 +135,8 @@ var opt = {
 	// Populate all options values by extracting from storage or default value
 	load: function(callback) {
 		var requiredCallbacks = 0;
+		$.each(this.options, function(m, opts) { requiredCallbacks++; });
 		$.each(this.options, function(m, opts) {
-			requiredCallbacks++;
 			utils.storage.get(m, function(obj) {
 				var values = obj[m], legValues;
 				if(!values) {
@@ -236,8 +236,8 @@ var gData = {
 	},
 	load: function(callback) {
 		var requiredCallbacks = 0;
+		$.each(this.data, function(m, data) { requiredCallbacks++; });
 		$.each(this.data, function(m, data) {
-			requiredCallbacks++;
 			utils.storage.data_get(m, function(obj) {
 				var values = obj[m], legValues;
 				if(!values) {

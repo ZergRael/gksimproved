@@ -1,5 +1,6 @@
 var startAll = function() {
 	// Insert custom CSS
+	dbg("[Loader] Starting");
 	insertCSS();
 	$.each(modules, function(module_name, m) {
 		if(!m.pages) {
@@ -36,6 +37,7 @@ var startAll = function() {
 		});
 	});
 	$(document).trigger("scroll").trigger("gksi_ready");
+	dbg("[Loader] Ready");
 };
 
 var requiredLoads = 2;
@@ -46,7 +48,7 @@ var warmUp = function() {
 };
 
 if($("#body").length) {
-	dbg("[Loaded] Started");
+	dbg("[Loader] Loading");
 	// Load all options
 	opt.load(warmUp);
 	// Load global saved data
