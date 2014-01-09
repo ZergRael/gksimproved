@@ -7,14 +7,16 @@ Améliore et facilite la navigation sur certaines parties de gks.gs
 Voir topic associé.
 
 ### TODO.done
+
+
+### Changelog
+**1.0.1**
 - Global : Ajout des version Opera 15+ et Safari
 - Global : Correction du buffer pour les CSS custom
 - Snatched : Amélioration du tri
 - Sphinx : Correction d'une erreur en cas de recherche vide
 - Torrent list : Correction de l'autorefresh
 
-
-### Changelog
 **1.0.0**
 - Badges : Suppression du tracking sur le badge IRC, la stat associée a disparu :(
 - Endless scrolling : Ajout sur la recherche forum
