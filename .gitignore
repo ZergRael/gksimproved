@@ -1,4 +1,5 @@
 test_data/
+build/
 *.pyc
 
 .zip
