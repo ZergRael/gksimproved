@@ -10,6 +10,9 @@ Voir topic associé.
 
 
 ### Changelog
+**1.0.2**
+- Correction d'un bug majeur sous Firefox
+
 **1.0.1**
 - Global : Ajout des version Opera 15+ et Safari
 - Global : Correction du buffer pour les CSS custom
