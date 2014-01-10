@@ -8,9 +8,9 @@ var dbg = function() {
 	utils.dbg("main", arguments);
 };
 
-// Firefox hacks to simulate chrome APIs
+// Hacks to simulate chrome APIs
 if(typeof chrome == "undefined") {
-	if(safari) {
+	if(typeof safari != "undefined") {
 		var chrome = {
 			extension: {
 				getURL: function(str) {
@@ -36,7 +36,7 @@ if(typeof chrome == "undefined") {
 			}
 		};
 	}
-	else {
+	else if(typeof self != "undefined") {
 		var chrome = {
 			extension: {
 				getURL: function(str) {
@@ -67,6 +67,9 @@ if(typeof chrome == "undefined") {
 				}
 			}
 		};
+	}
+	else {
+		throw "Unsupported browser";
 	}
 }
 
