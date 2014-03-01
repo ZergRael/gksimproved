@@ -282,23 +282,26 @@ modules.torrent_list = {
 			// In fact, it's 1h02m but it's closer than 1day
 			// In the same thinking process, it can return 24h since it's still viable and more precise than 1day -- Won't return > 24h
 			var now = siteRelativeDate;
-			if(now.getFullYear() > dateMatch[3]) {
-				return (now.getFullYear() - dateMatch[3]) == 1 && (now.getMonth() + 1 - dateMatch[2]) <= 0 ? (12 + now.getMonth() + 1 - dateMatch[2]) + "mo" : (now.getFullYear() - dateMatch[3]) + "a";
+			var was = new Date(dateMatch[3], dateMatch[2] - 1, dateMatch[1], dateMatch[4], dateMatch[5]);
+
+			var diff = Math.round(now - was) / 1000;
+			if(diff < 60) { // Less than 1min
+				return "frais";
 			}
-			else if(now.getMonth() + 1 > dateMatch[2]) {
-				return (now.getMonth() + 1 - dateMatch[2]) == 1 && (now.getDate() - dateMatch[1]) <= 0 ? ((new Date(dateMatch[3], dateMatch[2] + 1, 0).getDate()) + now.getDate() - dateMatch[1]) + "j" : (now.getMonth() + 1 - dateMatch[2]) + "mo";
+			else if(diff < 3600) { // Less than 1h
+				return Math.round(diff / 60) + "min";
 			}
-			else if(now.getDate() > dateMatch[1]) {
-				return (now.getDate() - dateMatch[1]) == 1 && (now.getHours() - dateMatch[4]) <= 0 ? (24 + now.getHours() - dateMatch[4]) + "h" : (now.getDate() - dateMatch[1]) + "j";
+			else if(diff < 86400) { // Less than 1d
+				return Math.round(diff / 3600) + "h";
 			}
-			else if(now.getHours() > dateMatch[4]) {
-				return (now.getHours() - dateMatch[4]) == 1 && (now.getMinutes() - dateMatch[5]) <= 0 ? (60 + now.getMinutes() - dateMatch[5]) + "min" : (now.getHours() - dateMatch[4]) + "h";
+			else if(diff < 2592000) { // Less than 1mo(30d)
+				return Math.round(diff / 86400) + "j";
 			}
-			else if(now.getMinutes() > dateMatch[5]) {
-				return (now.getMinutes() - dateMatch[5]) + "min";
+			else if(diff < 31536000) {
+				return Math.round(diff / 2592000) + "mo";
 			}
 			else {
-				return "frais";
+				return Math.round(diff / 31536000) + "a";
 			}
 		};
 
