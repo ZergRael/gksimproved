@@ -13,7 +13,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://petit.kiwi/*"],
+
       "js": [
         "lib/jquery-2.0.3.min.js",
         "lib/jquery.tiptip.js",
