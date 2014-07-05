@@ -28,7 +28,7 @@ modules.snatched = {
 							t.status.deleted = true;
 						}
 					}
-					else if(i == 1 && $(this).find('img').attr('src') == "https://s.gks.gs/static/themes/sifuture/img/validate.png") {
+					else if(i == 1 && $(this).find('img').attr('src') == _sUrl + "/static/themes/sifuture/img/validate.png") {
 						t.status.seeding = true;
 					}
 					else if(i == 2) {

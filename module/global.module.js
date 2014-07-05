@@ -139,8 +139,8 @@ modules.global = {
 			var buttons = [ { b_id: "im_export", b_text: "Importer/Exporter", b_callback: createImportExportFrame } ];
 
 			// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
-			var copyright = '<a href="/forums.php?action=viewtopic&topicid=6336">GKSi</a> by <a href="/users/2360140">ZergRael</a>';
-			appendFrame({ id: "options", title: "GKSi Options", data: optionsFrameData, relativeToId: "navigation", top: 8, left: 230, buttons: buttons, header: optionsFrameHeader, onCloseCallback: onCloseCallback, underButtonsText: copyright });
+			var copyright = '<a href="/forums.php?action=viewtopic&topicid=6336">KWi</a> by <a href="/users/2360140">ZergRael</a>';
+			appendFrame({ id: "options", title: "KWi Options", data: optionsFrameData, relativeToId: "navigation", top: 8, left: 230, buttons: buttons, header: optionsFrameHeader, onCloseCallback: onCloseCallback, underButtonsText: copyright });
 
 			$.each(opt.options, function(module_name, options) {
 				if(!$("#gksi_options_data_" + module_name).length) {
@@ -420,6 +420,7 @@ modules.global = {
 		var computeRealStats = function(realUpload, realDownload, realSnatched) {
 			dbg("[real_stats] Computing");
 			var realRatio = Math.round((realUpload / realDownload) * 100) / 100;
+			if(!isFinite(realRatio)) { realRatio = 9999; }
 			var realBuffer = realUpload - realDownload;
 			var uploadUnit = 0, downloadUnit = 0, bufferUnit = 0;
 			while(realUpload > 1024) {
@@ -699,7 +700,7 @@ modules.global = {
 					var showData = storedEpisodes[showId];
 					content += '<div class="new_ep_show_header">' + showsData[showId].name + '</div>';
 					$.each(showData, function(i, ep) {
-						content += '<div class="new_ep_ep_block"><a class="new_ep_ep_title" href="/torrent/' + ep.id + '/">' + ep.name + '</a></span><div class="new_ep_ep_details"><span class="new_ep_ep_date">' + ep.date + '</span><span class="new_ep_ep_size">' + ep.size + '</span><span class="new_ep_ep_dl"><a href="/get/' + ep.id + '/"><img src="https://s.gks.gs/static/themes/sifuture/img/download.png" /></a></span><span class="new_ep_ep_autoget"><a href="#" class="torrent_action_ajax" action="autoget" torrent_id="' + ep.id + '"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></span><span class="new_ep_ep_bookmark"><a href="#" class="torrent_action_ajax" action="booktorrent" torrent_id="' + ep.id + '"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></span></div></div>';
+						content += '<div class="new_ep_ep_block"><a class="new_ep_ep_title" href="/torrent/' + ep.id + '/">' + ep.name + '</a></span><div class="new_ep_ep_details"><span class="new_ep_ep_date">' + ep.date + '</span><span class="new_ep_ep_size">' + ep.size + '</span><span class="new_ep_ep_dl"><a href="/get/' + ep.id + '/"><img src="' + _sUrl + '/static/themes/sifuture/img/download.png" /></a></span><span class="new_ep_ep_autoget"><a href="#" class="torrent_action_ajax" action="autoget" torrent_id="' + ep.id + '"><img src="' + _sUrl + '/static/themes/sifuture/img/rss2.png" /></a></span><span class="new_ep_ep_bookmark"><a href="#" class="torrent_action_ajax" action="booktorrent" torrent_id="' + ep.id + '"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></span></div></div>';
 					});
 				});
 			}
@@ -709,7 +710,7 @@ modules.global = {
 
 		var buildNewEpisodesPannel = function() {
 			dbg("[new_ep] Building pannel");
-			$("#contenu").append('<div id="new_episodes_pannel"><div class="new_ep_header">GKSi - Derniers épisodes</div><div class="new_ep_content">' + populateNewEpisodesPannel() + '</div><div class="new_ep_buttons"><input type="button" class="new_ep_refresh fine" value=" Rafraîchir " title="Force la récupération des derniers épisodes publiés. En cas d\'absence de résultats, la dernière liste sera conservée" /><input type="button" class="new_ep_clear fine" value=" Vider " /><input type="button" class="new_ep_close fine" value=" Fermer " /></div></div>');
+			$("#contenu").append('<div id="new_episodes_pannel"><div class="new_ep_header">KWi - Derniers épisodes</div><div class="new_ep_content">' + populateNewEpisodesPannel() + '</div><div class="new_ep_buttons"><input type="button" class="new_ep_refresh fine" value=" Rafraîchir " title="Force la récupération des derniers épisodes publiés. En cas d\'absence de résultats, la dernière liste sera conservée" /><input type="button" class="new_ep_clear fine" value=" Vider " /><input type="button" class="new_ep_close fine" value=" Fermer " /></div></div>');
 
 			var pannel = $("#new_episodes_pannel");
 			$(".new_ep_refresh").click(function() {
@@ -781,7 +782,7 @@ modules.global = {
 		dbg("[Init] Starting");
 		// Execute functions
 
-		var optionsFrameButtons = '<li><a href="#" id="options_gksi">GKSi Options</a></li>';
+		var optionsFrameButtons = '<li><a href="#" id="options_gksi">KWi Options</a></li>';
 		$("#navig_bloc_user ul").append(optionsFrameButtons);
 		$("#options_gksi").click(function() {
 			if($("#gksi_options").length) {

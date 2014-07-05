@@ -39,7 +39,7 @@ def run():
 		'// Import simple-storage API',
 		'var sstorage = require("sdk/simple-storage");',
 		'pageMod.PageMod({',
-		'  include: ["*.gks.gs", "*.s.gks.gs"],',
+		'  include: ["*.petit.kiwi", "*.s.petit.kiwi"],',
 		'  contentScriptFile: [',])
 	mainMid = '\n'.join([
 		'',

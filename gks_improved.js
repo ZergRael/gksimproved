@@ -48,7 +48,7 @@ if(typeof chrome == "undefined") {
 					set: function(obj, callback) {
 						for(var key in obj) {
 							var storedObj = {key: key, val: obj[key]};
-							self.port.emit('storageSet', storedObj);
+							self.port.emit("storageSet", storedObj);
 						}
 						if(callback) {
 							callback();
@@ -56,13 +56,13 @@ if(typeof chrome == "undefined") {
 					},
 					get: function(key, callback) {
 						var returnObj = {};
-						self.port.on('storageGet' + key, function(obj) {
+						self.port.on("storageGet" + key, function(obj) {
 							returnObj[key] = obj;
 							if(callback) {
 								callback(returnObj);
 							}
 						});
-						self.port.emit('storageGet', key);
+						self.port.emit("storageGet", key);
 					}
 				}
 			}
@@ -97,7 +97,7 @@ var insertScript = function (id, f, removeAfterUse) {
 // { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], onCloseCallback, underButtonsText }, removeOnOutsideClick
 var appendFrame = function(o) {
 	// Build custom buttons
-	var additionnalButtons = '';
+	var additionnalButtons = "";
 	if(o.buttons) {
 		$.each(o.buttons, function(i, button) {
 			additionnalButtons += '<input type="button" id="gksi_' + o.id + '_' + button.b_id + '" class="fine" value=" ' + button.b_text + ' "> ';
@@ -350,6 +350,7 @@ var insertDivs = function() {
 dbg("[Init] Starting the engine");
 // Parse our url string from the browser
 var pageUrl = utils.parseUrl(window.location.href);
+var _sUrl = window.location.protocol + "//s." + window.location.host;
 // Insert custom divs, CSS is delayed until opts are loaded
 insertDivs();
 // Each module will be inserted in the modules object for an easier inter-modules communication

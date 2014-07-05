@@ -262,7 +262,7 @@ modules.badges = {
 						return;
 					}
 
-					img.attr("src", "https://s.gks.gs/static/images/badges/" + b.url + ".png");
+					img.attr("src", _sUrl + "/static/images/badges/" + b.url + ".png");
 					img.addClass("halfOpacity");
 				});
 			});
@@ -312,7 +312,7 @@ modules.badges = {
 				show_missing_images();
 			}
 			else {
-				$(".halfOpacity").attr("src", "https://s.gks.gs/static/images/badges/soon.png");
+				$(".halfOpacity").attr("src", _sUrl + "/static/images/badges/soon.png");
 				$(".halfOpacity").removeClass("halfOpacity");
 			}
 		});

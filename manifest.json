@@ -1,6 +1,6 @@
 {
-  "name": "GKSimproved",
-  "short_name": "GKSi",
+  "name": "KWimproved",
+  "short_name": "KWi",
   "author": "ZergRael",
   "version": "1.0.2",
   "update_url": "https://thetabx.net/gksi/update/nex",
@@ -13,7 +13,7 @@
   },
   "content_scripts": [
     {
-      "matches": ["https://gks.gs/*"],
+      "matches": ["https://petit.kiwi/*"],
       "js": [
         "lib/jquery-2.0.3.min.js",
         "lib/jquery.tiptip.js",

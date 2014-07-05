@@ -15,7 +15,7 @@ modules.torrent = {
 		dbg("[Init] Loading module");
 		// Loading all functions used
 
-		appendNativeScript("https://s.gks.gs/static/js/forums.js?v=2");
+		appendNativeScript(_sUrl + "/static/js/forums.js?v=2");
 
 		var torrentId = pageUrl.path.match(/\/torrent\/(\d+)/)[1];
 		var torrentName = $("#contenu p[class=separate]:first").text().replace(/\s+$/, "");
@@ -121,7 +121,7 @@ modules.torrent = {
 				}
 				$(frame_id).remove();
 			};
-			var edit_frame = { id: "edit_cant_comment_mp", title: "GKSi : Edition du MP à envoyer", data: edit_frame_data, relativeToId: "torrent_comments", top: -400, left: 0, buttons: [ { b_id: "save", b_text: "Enregistrer", b_callback: save_callback } ] };
+			var edit_frame = { id: "edit_cant_comment_mp", title: "KWi : Edition du MP à envoyer", data: edit_frame_data, relativeToId: "torrent_comments", top: -400, left: 0, buttons: [ { b_id: "save", b_text: "Enregistrer", b_callback: save_callback } ] };
 			// { id, classes, title, header, data, relativeToId, relativeToObj, relativeToWindow, top, left, css, buttons = [ /* close is by default */ { b_id, b_text, b_callback} ], underButtonsText }
 			appendFrame(edit_frame);
 			dbg("[edit_mp_comment] Frame built");

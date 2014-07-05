@@ -13,21 +13,21 @@ var opt = {
 		},
 		endless_scrolling : {
 			endless_scrolling:  { defaultVal: true, showInOptions: true, dispText: "Endless scrolling sur les pages compatibles", sub_options: {
-				main:        { defaultVal: true, showInOptions: true, dispText: "Page d'accueil", tooltip: "https://gks.gs/" },
-				browse:      { defaultVal: true, showInOptions: true, dispText: "Torrents : Parcourir", tooltip: "https://gks.gs/browse/" },
-				sphinx:      { defaultVal: true, showInOptions: true, dispText: "Torrents : Recherche", tooltip: "https://gks.gs/sphinx/" },
-				viewforum:   { defaultVal: true, showInOptions: true, dispText: "Forums : Liste des topics", tooltip: "https://gks.gs/forums.php?action=viewforum" },
-				viewtopic:   { defaultVal: true, showInOptions: true, dispText: "Forums : Lecture de topic", tooltip: "https://gks.gs/forums.php?action=viewtopic" },
-				forum_search:{ defaultVal: true, showInOptions: true, dispText: "Forums : Recherche", tooltip: "https://gks.gs/forums.php?action=search" },
-				snatched:    { defaultVal: true, showInOptions: true, dispText: "Snatched : Liste", tooltip: "https://gks.gs/m/peers/snatched" },
+				main:        { defaultVal: true, showInOptions: true, dispText: "Page d'accueil", tooltip: "/" },
+				browse:      { defaultVal: true, showInOptions: true, dispText: "Torrents : Parcourir", tooltip: "/browse/" },
+				sphinx:      { defaultVal: true, showInOptions: true, dispText: "Torrents : Recherche", tooltip: "/sphinx/" },
+				viewforum:   { defaultVal: true, showInOptions: true, dispText: "Forums : Liste des topics", tooltip: "/forums.php?action=viewforum" },
+				viewtopic:   { defaultVal: true, showInOptions: true, dispText: "Forums : Lecture de topic", tooltip: "/forums.php?action=viewtopic" },
+				forum_search:{ defaultVal: true, showInOptions: true, dispText: "Forums : Recherche", tooltip: "/forums.php?action=search" },
+				snatched:    { defaultVal: true, showInOptions: true, dispText: "Snatched : Liste", tooltip: "/m/peers/snatched" },
 				history_up:  { defaultVal: true, showInOptions: true, dispText: "Historique : Uploads", tooltip: "/my/history/<id_user>/uploads" },
-				logs:        { defaultVal: true, showInOptions: true, dispText: "Logs : Liste", tooltip: "https://gks.gs/logs/" },
-				req:         { defaultVal: true, showInOptions: true, dispText: "Requests : Liste", tooltip: "https://gks.gs/req/" },
-				images:      { defaultVal: true, showInOptions: true, dispText: "Images : Liste", tooltip: "https://gks.gs/m/images/" },
-				uploads:     { defaultVal: true, showInOptions: true, dispText: "Uploads : Liste", tooltip: "https://gks.gs/m/uploads/" },
-				peers:       { defaultVal: true, showInOptions: true, dispText: "Peers : Liste", tooltip: "https://gks.gs/m/peers/" },
-				dupecheck:   { defaultVal: true, showInOptions: true, dispText: "Dupecheck : Liste", tooltip: "https://gks.gs/dupecheck/" },
-				reseed:      { defaultVal: true, showInOptions: true, dispText: "Reseed : Liste", tooltip: "https://gks.gs/reseed.php" }
+				logs:        { defaultVal: true, showInOptions: true, dispText: "Logs : Liste", tooltip: "/logs/" },
+				req:         { defaultVal: true, showInOptions: true, dispText: "Requests : Liste", tooltip: "/req/" },
+				images:      { defaultVal: true, showInOptions: true, dispText: "Images : Liste", tooltip: "/m/images/" },
+				uploads:     { defaultVal: true, showInOptions: true, dispText: "Uploads : Liste", tooltip: "/m/uploads/" },
+				peers:       { defaultVal: true, showInOptions: true, dispText: "Peers : Liste", tooltip: "/m/peers/" },
+				dupecheck:   { defaultVal: true, showInOptions: true, dispText: "Dupecheck : Liste", tooltip: "/dupecheck/" },
+				reseed:      { defaultVal: true, showInOptions: true, dispText: "Reseed : Liste", tooltip: "/reseed.php" }
 			} },
 			adapt_url:          { defaultVal: true, showInOptions: true, dispText: "Adapter l'url en fonction de la page vue avec l'ES", parent: "endless_scrolling" },
 			pagination_rewrite: { defaultVal: false, showInOptions: true, dispText: "Adapter la pagination en fonction de la page vue avec l'ES", parent: "adapt_url", indicateParent: true },
@@ -75,7 +75,7 @@ var opt = {
 		torrent: {
 			quick_comment:      { defaultVal: true, showInOptions: true, dispText: "Afficher la boite de commentaire rapide sur les fiches torrent" },
 			comment_mp_title:   { defaultVal: "[Torrent #%id_torrent%] Commentaires désactivés", showInOptions: false },
-			comment_mp_text:    { defaultVal: "Salutations !\n\nIl semblerait qu'un des torrents que vous avez posté n'accepte pas les commentaires :\n[url=%url_torrent%]%titre_torrent%[/url]\n\nSerait-il possible d'y remédier ?\n[url=https://gks.gs/m/account/paranoia]Réglage de la paranoïa[/url]\n\nMerci :)", showInOptions: false }
+			comment_mp_text:    { defaultVal: "Salutations !\n\nIl semblerait qu'un des torrents que vous avez posté n'accepte pas les commentaires :\n[url=%url_torrent%]%titre_torrent%[/url]\n\nSerait-il possible d'y remédier ?\n[url=/m/account/paranoia]Réglage de la paranoïa[/url]\n\nMerci :)", showInOptions: false }
 		},
 		badges: {
 			progress:           { defaultVal: false, showInOptions: true, dispText: "Afficher la progression sous les badges" },
@@ -138,13 +138,7 @@ var opt = {
 		$.each(this.options, function(m, opts) { requiredCallbacks++; });
 		$.each(this.options, function(m, opts) {
 			utils.storage.get(m, function(obj) {
-				var values = obj[m], legValues;
-				if(!values) {
-					legValues = utils.storage.legacy.get(m);
-					if(legValues) {
-						values = legValues;
-					}
-				}
+				var values = obj[m];
 				$.each(opts, function(o, v) {
 					opt.options[m][o].val = (values && values[o] !== undefined ? values[o] : v.defaultVal);
 					if(v.sub_options) {
@@ -153,10 +147,6 @@ var opt = {
 						});
 					}
 				});
-				if(legValues) {
-					opt.save(m);
-					utils.storage.legacy.rm(m);
-				}
 				if(--requiredCallbacks === 0) {
 					callback();
 				}
@@ -239,20 +229,10 @@ var gData = {
 		$.each(this.data, function(m, data) { requiredCallbacks++; });
 		$.each(this.data, function(m, data) {
 			utils.storage.data_get(m, function(obj) {
-				var values = obj[m], legValues;
-				if(!values) {
-					legValues = utils.storage.legacy.data_get(m);
-					if(legValues) {
-						values = legValues;
-					}
-				}
+				var values = obj[m];
 				$.each(data, function(o, v) {
 					gData.data[m][o] = (values && values[o] !== undefined ? values[o] : v);
 				});
-				if(legValues) {
-					gData.save(m);
-					utils.storage.legacy.data_rm(m);
-				}
 				if(--requiredCallbacks === 0) {
 					callback();
 				}

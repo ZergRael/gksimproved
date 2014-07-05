@@ -2,9 +2,9 @@ modules.torrent_list = {
 	name: "torrent_list",
 	dText: "Liste torrents",
 	pages: [
-		{ path_name: "/", options: { buttons: '#sort', canRefresh: true, canMark: true, canFilter: true, canSort: true } },
-		{ path_name: "/browse/", options: { buttons: '#sort p', canRefresh: true, canMark: true, canFilter: true, canSort: true } },
-		{ path_name: "/sphinx/", options: { buttons: 'form[name="getpack"] div', canFilter: true, canSort: true } },
+		{ path_name: "/", options: { buttons: "#sort", canRefresh: true, canMark: true, canFilter: true, canSort: true } },
+		{ path_name: "/browse/", options: { buttons: "#sort p", canRefresh: true, canMark: true, canFilter: true, canSort: true } },
+		{ path_name: "/sphinx/", options: { buttons: "form[name='getpack'] div", canFilter: true, canSort: true } },
 		{ path_name: "/summary/", options: { } },
 		{ path_name: "/m/uploads/", options: { canSort: true } }
 	],
@@ -352,13 +352,13 @@ modules.torrent_list = {
 					}
 
 					if(autogetCol) {
-						tds.eq(1).after('<td class="autoget_torrent_' + tdNumber + '"><a href="#" class="autoget_link"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td>');
+						tds.eq(1).after('<td class="autoget_torrent_' + tdNumber + '"><a href="#" class="autoget_link"><img src="' + _sUrl + '/static/themes/sifuture/img/rss2.png" /></a></td>');
 					}
 					if(bookmarkCol) {
 						tds.eq(1).after('<td class="bookmark_torrent_' + tdNumber + '"><a href="#" class="bookmark_link"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></td>');
 					}
 					if(nfoCol) {
-						tds.eq(1).after('<td class="nfo_torrent_' + tdNumber + '"><a href="#" class="nfo_link"><img src="https://s.gks.gs/static/themes/sifuture/img/types/nfo.png" /></a></td>');
+						tds.eq(1).after('<td class="nfo_torrent_' + tdNumber + '"><a href="#" class="nfo_link"><img src="' + _sUrl + '/static/themes/sifuture/img/types/nfo.png" /></a></td>');
 					}
 					if(ageCol) {
 						var dateMatch = $(this).next().text().match(/(\d+)\/(\d+)\/(\d+) à (\d+):(\d+)/);
@@ -412,7 +412,7 @@ modules.torrent_list = {
 			var td = $(this).parent().parent().find("td:nth(1)");
 			var name = td.text();
 			var id = td.find("img:first").attr("id").substring(6);
-			var nfoUrl = utils.parseUrl("https://gks.gs/nfo/" + id + "/_nfo");
+			var nfoUrl = utils.parseUrl("/nfo/" + id + "/_nfo");
 			utils.grabPage(nfoUrl, function(data) {
 				$("#gksi_t_nfo").remove();
 				var html = '<pre class="nfo g_nfo">' + $(data).find("pre").text() + '</pre>';
@@ -450,13 +450,13 @@ modules.torrent_list = {
 								if(!torrentTR.find(".alt1").length) {
 									var torrentNameTd = torrentTR.find("td:nth(1)");
 									if(opt.get(module_name, "autoget_column")) {
-										torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="autoget_link"><img src="https://s.gks.gs/static/themes/sifuture/img/rss2.png" /></a></td>');
+										torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="autoget_link"><img src="' + _sUrl + '/static/themes/sifuture/img/rss2.png" /></a></td>');
 									}
 									if(opt.get(module_name, "bookmark_column")) {
 										torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="bookmark_link"><img src="' + chrome.extension.getURL("images/bookmark.png") + '" /></a></td>');
 									}
 									if(opt.get(module_name, "nfo_column")) {
-										torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="nfo_link"><img src="https://s.gks.gs/static/themes/sifuture/img/types/nfo.png" /></a></td>');
+										torrentNameTd.after('<td class="autoget_torrent_1"><a href="#" class="nfo_link"><img src="' + _sUrl + '/static/themes/sifuture/img/types/nfo.png" /></a></td>');
 									}
 									if(opt.get(module_name, "age_column")) {
 										torrentNameTd.after('<td class="age_torrent_1">frais</td>');

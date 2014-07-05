@@ -21,7 +21,7 @@ modules.module_ = {
 			if(searchQuery) {
 				dbg("[QuerySuggest] Query : %s", searchQuery);
 				loadingHtml = '<center><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Analyse des entrailles d\'IMDB</center>';
-				appendFrame({ title: "GKSi IMDB Suggestions", data: loadingHtml, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
+				appendFrame({ title: "KWi IMDB Suggestions", data: loadingHtml, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
 
 				// Try to get some results from IMDB: 4 + 4 max
 				utils.grabPage({ host: "https://api.thetabx.net", path: "/imdb/translate/3/" + encodeURIComponent(searchQuery) }, function(imdb) {
@@ -55,7 +55,7 @@ modules.module_ = {
 							var dataFrame = $(data).find("#torrent_list");
 							var header = dataFrame.find("tr:first");
 							if(header.length) {
-								header.find(".name_torrent_head").text(header.find(".name_torrent_head").text() + " - GKSi IMDB [ " + imdb.levenshtein.bestTitle + " ]");
+								header.find(".name_torrent_head").text(header.find(".name_torrent_head").text() + " - KWi IMDB [ " + imdb.levenshtein.bestTitle + " ]");
 								header.addClass("gksi_imdb_head");
 							}
 							var insertionData = dataFrame.find("tr");
@@ -90,7 +90,7 @@ modules.module_ = {
 			if(searchQuery) {
 				dbg("[QuerySuggest] Query : %s", searchQuery);
 				loadingHtml = '<center><img src="' + chrome.extension.getURL("images/loading.gif") + '" /><br />Analyse des entrailles de Discogs</center>';
-				appendFrame({ title: "GKSi - Fiches Discogs", data: loadingHtml, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
+				appendFrame({ title: "KWi - Fiches Discogs", data: loadingHtml, id: "suggest", relativeToId: "searchinput", top: -14, left: 400 });
 
 				// Try to get some results from IMDB: 4 + 4 max
 				utils.grabPage({ host: "http://api.discogs.com", path: "/database/search", params: { q: encodeURIComponent(searchQuery), per_page: MAX_RESULTS } }, function(discogs) {
